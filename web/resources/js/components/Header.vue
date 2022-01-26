@@ -1,3 +1,3 @@
 <template>
-    <h1>Project</h1> 
+    <h1>VizHD</h1> 
 </template> 
