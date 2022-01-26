@@ -16,4 +16,5 @@ mix.browserSync({
     open: false // ブラウザを自動で開かない
 })
 .js('resources/js/app.js', 'public/js').vue()
+.sass('resources/sass/app.scss', 'public/css')
 .version();
