@@ -1,17 +1,12 @@
 <template>
-  <div>   
-    <main>
-      <v-app> 
-        <div class="d-inline-flex flex-row">
-            <Navbar />
-          <div class="d-flex flex-column">
-            <Header />
-            <RouterView />
-          </div>        
-        </div>
-      </v-app>
-    </main>
-  </div>
+  <v-app id="inspire">
+    <Navbar :drawer="drawer" />
+    <Header @clickMenu="isDrawer"/>
+    <v-main>
+      <RouterView />
+    </v-main>
+
+  </v-app>
 </template>
 
 <script>
@@ -22,6 +17,12 @@ export default {
   components: {
     Header,
     Navbar,
+  },
+  data: () => ({ drawer: false }),
+  methods: {
+    isDrawer: function(){
+        this.drawer = !this.drawer 
+    }
   }
 }
 </script>

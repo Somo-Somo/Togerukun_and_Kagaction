@@ -30,7 +30,6 @@ export default {
   props: {
     card: {
       type: String,
-      required: true
     }
   }
 }
