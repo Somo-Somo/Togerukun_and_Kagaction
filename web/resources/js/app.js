@@ -5,10 +5,17 @@ import Vue from 'vue'
 import router from './router'
 // ルートコンポーネントをインポートする
 import App from './App.vue'
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
+import '@mdi/font/css/materialdesignicons.css';
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
+
+Vue.use(Vuetify);
 
 new Vue({
-  el: '#app',
-  router, // ルーティングの定義を読み込む
-  components: { App }, // ルートコンポーネントの使用を宣言する
-  template: '<App />' // ルートコンポーネントを描画する
+    vuetify: new Vuetify(),
+    el: '#app',
+    router, // ルーティングの定義を読み込む
+    components: { App }, // ルートコンポーネントの使用を宣言する
+    template: '<App />' // ルートコンポーネントを描画する
 })
