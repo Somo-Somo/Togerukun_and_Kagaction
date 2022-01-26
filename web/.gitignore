@@ -1,6 +1,8 @@
 /node_modules
 /public/hot
 /public/storage
+/public/js/app.js
+/public/mix-manifest.json
 /storage/*.key
 /vendor
 .env
@@ -13,3 +15,5 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+../database/transactions/neo4j/neostore.transaction.db.0
+../database/transactions/system/neostore.transaction.db.0
