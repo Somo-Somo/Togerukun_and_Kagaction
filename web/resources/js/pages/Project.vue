@@ -1,16 +1,5 @@
 <template>
   <v-app id="inspire">
-      <h1>Project</h1>
-    <v-system-bar app>
-      <v-spacer></v-spacer>
-
-      <v-icon>mdi-square</v-icon>
-
-      <v-icon>mdi-circle</v-icon>
-
-      <v-icon>mdi-triangle</v-icon>
-    </v-system-bar>
-
     <v-main>
       <v-container
         class="py-8 px-6"

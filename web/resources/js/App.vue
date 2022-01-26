@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div>   
     <main>
-      <div class="container">
-        <v-app>
+      <div class="container"> 
+        <v-app> 
         <Navbar />
-        <RouterView />
+        <Header />
+        <RouterView />        
         </v-app>
       </div>
     </main>
@@ -12,13 +13,13 @@
 </template>
 
 <script>
+import Header from './components/Header.vue'
 import Navbar from './components/Navbar.vue'
 
 export default {
   components: {
+    Header,
     Navbar,
   }
 }
-
-
 </script>
