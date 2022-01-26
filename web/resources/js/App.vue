@@ -1,13 +1,15 @@
 <template>
   <div>   
     <main>
-      <div class="container"> 
-        <v-app> 
-        <Navbar />
-        <Header />
-        <RouterView />        
-        </v-app>
-      </div>
+      <v-app> 
+        <v-container class="d-inline-flex flex-row">
+            <Navbar />
+          <div class="d-flex flex-column">
+            <Header />
+            <RouterView />
+          </div>        
+        </v-container>
+      </v-app>
     </main>
   </div>
 </template>
