@@ -2,13 +2,13 @@
   <div>   
     <main>
       <v-app> 
-        <v-container class="d-inline-flex flex-row">
+        <div class="d-inline-flex flex-row">
             <Navbar />
           <div class="d-flex flex-column">
             <Header />
             <RouterView />
           </div>        
-        </v-container>
+        </div>
       </v-app>
     </main>
   </div>
