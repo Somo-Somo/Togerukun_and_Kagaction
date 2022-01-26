@@ -18,7 +18,7 @@ export default {
     Header,
     Navbar,
   },
-  data: () => ({ drawer: false }),
+  data: () => ({ drawer: true }),
   methods: {
     isDrawer: function(){
         this.drawer = !this.drawer 
