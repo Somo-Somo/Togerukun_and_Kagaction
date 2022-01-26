@@ -10,6 +10,7 @@
         "production": "mix --production"
     },
     "devDependencies": {
+        "@mdi/font": "^6.5.95",
         "axios": "^0.21",
         "browser-sync": "^2.27.7",
         "browser-sync-webpack-plugin": "^2.3.0",
