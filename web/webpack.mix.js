@@ -1,5 +1,5 @@
 const mix = require('laravel-mix');
-
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -11,9 +11,14 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.webpackConfig({
+    plugins: [
+        new VuetifyLoaderPlugin(),
+    ],
+});
 mix.browserSync({
     proxy: '0.0.0.0:8080', // アプリの起動アドレス
     open: false // ブラウザを自動で開かない
-})
-.js('resources/js/app.js', 'public/js').vue()
-.version();
+}).js('resources/js/app.js', 'public/js').vue()
+    .sass('resources/sass/app.scss', 'public/css')
+    .version();
