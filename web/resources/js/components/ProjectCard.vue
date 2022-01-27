@@ -1,5 +1,4 @@
 <template>
-  <v-row>
     <v-card>
       <v-subheader>{{ card }}</v-subheader>
 
@@ -22,7 +21,6 @@
         </template>
       </v-list>
     </v-card>
-  </v-row>
 </template>
 
 <script>

@@ -1,13 +1,9 @@
 <template>
-  <v-app id="inspire">
-    <v-main>
-      <v-container class="py-8 px-6" fluid>
+      <v-container class="d-flex flex-column justify-center my-8 px-md-16" fluid>
         <v-col v-for="card in cards" :key="card" :card="card" cols="12">
           <ProjectCards />
         </v-col>
       </v-container>
-    </v-main>
-  </v-app>
 </template>
 
 <script>
