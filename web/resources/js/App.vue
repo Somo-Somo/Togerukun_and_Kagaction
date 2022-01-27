@@ -2,10 +2,9 @@
   <v-app id="inspire">
     <Navbar :drawer="drawer" />
     <Header @clickMenu="isDrawer"/>
-    <v-main>
+    <v-main class="my-md-2">
       <RouterView />
     </v-main>
-
   </v-app>
 </template>
 
