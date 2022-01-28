@@ -10,13 +10,11 @@
 
 <script>
 import Header from './components/Header.vue'
-import HeaderSp from './components/sp/HeaderSp.vue'
 import Navbar from './components/Navbar.vue'
 
 export default {
   components: {
     Header,
-    HeaderSp,
     Navbar,
   },
   data: () => ({ drawer: true }),
