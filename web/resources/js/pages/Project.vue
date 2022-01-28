@@ -13,18 +13,22 @@
       <v-icon size="24">mdi-plus-circle</v-icon>
     </div>
     <v-col class="px-md-0" v-for="card in cards" :key="card" :card="card" cols="12">
-      <ProjectCards />
+    <v-card elevation="2">
+      <v-list style="height:80px">
+          <v-list-item style="height:64px">
+            <v-list-item-content>
+              <v-list-item-title><p class="font-weight-black ma-0">Message</p></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+      </v-list>
+    </v-card>
     </v-col>
   </v-container>
 </template>
 
 <script>
-import ProjectCards from "../components/ProjectCard.vue";
 
 export default {
-  components: {
-    ProjectCards,
-  },
   data: () => ({
     cards: ["Today", "Yesterday"],
   }),
