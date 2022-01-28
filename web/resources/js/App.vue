@@ -5,7 +5,7 @@
     <v-main class="my-md-2">
       <RouterView />
     </v-main>
-    <Footer class="hidden-md-and-up"/>
+    <Footer/>
   </v-app>
 </template>
 
