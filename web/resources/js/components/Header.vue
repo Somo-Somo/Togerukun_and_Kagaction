@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar style="height: 72px" color="white" elevation="0" app>
+  <v-app-bar class="hidden-sm-and-down" style="height: 72px" color="white" elevation="0" app>
     <v-app-bar-nav-icon
       @click="$emit('clickMenu')"
       class="mt-3"
