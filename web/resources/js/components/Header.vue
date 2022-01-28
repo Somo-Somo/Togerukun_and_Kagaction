@@ -5,7 +5,7 @@
       class="mt-3"
     ></v-app-bar-nav-icon>
     <v-toolbar-title class="mt-3" >
-        <h2>VizHD</h2>
+        <h2>プロジェクト</h2>
     </v-toolbar-title>
   </v-app-bar>
 </template> 
