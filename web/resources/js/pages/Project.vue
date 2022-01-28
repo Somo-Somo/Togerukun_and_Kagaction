@@ -20,8 +20,8 @@
       cols="12"
     >
       <v-card class="rounded" outlined>
-        <v-list style="height: 80px">
-          <v-list-item style="height: 64px">
+        <v-list class="py-0" style="height: 80px">
+          <v-list-item style="height: 80px" link>
             <v-list-item-content>
               <v-list-item-title
                 ><p class="font-weight-black ma-0">
@@ -33,27 +33,18 @@
         </v-list>
       </v-card>
     </v-col>
-    <v-col class="px-md-0" cols="12">
-      <v-card class="rounded d-flex justify-space-around" outlined>
-        <v-list style="height: 80px">
-          <v-list-item style="height: 64px">
-              <v-icon class="pa-2">mdi-plus</v-icon>
-            <v-list-item-content>
-              <v-list-item-title
-                ><p class="grey--text font-weight-bold ma-0 pa-2">プロジェクトを追加する</p></v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-card>
-    </v-col>
+    <AddCard />
   </v-container>
 </template>
 
 <script>
+import AddCard from "../components/AddCard.vue";
 export default {
+  components: {
+    AddCard,
+  },
   data: () => ({
-    cards: ["Today", "Yesterday"],
+    cards: ["VizHD", "開発", "マーケティング"],
   }),
 };
 </script>
