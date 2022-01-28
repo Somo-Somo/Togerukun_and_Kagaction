@@ -12,7 +12,7 @@
       >
       <v-icon size="24">mdi-plus-circle</v-icon>
     </div>
-    <v-col v-for="card in cards" :key="card" :card="card" cols="12">
+    <v-col class="px-md-0" v-for="card in cards" :key="card" :card="card" cols="12">
       <ProjectCards />
     </v-col>
   </v-container>
