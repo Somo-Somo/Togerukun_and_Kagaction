@@ -29,6 +29,7 @@
                 </p></v-list-item-title
               >
             </v-list-item-content>
+            <v-icon>mdi-dots-vertical</v-icon>
           </v-list-item>
         </v-list>
       </v-card>
