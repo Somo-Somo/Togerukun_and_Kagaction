@@ -31,14 +31,14 @@
           >プロジェクト</v-subheader
         >
         <v-list-item
-          v-for="[icon, text] in projects"
-          :key="icon"
+          v-for="text in projects"
+          :key="text"
           class="d-flex px-8"
           style="height: 48px"
           link
         >
           <v-list-item-icon class="align-self-center mr-6">
-            <v-icon color="teal lighten-5">{{ icon }}</v-icon>
+            <v-icon color="teal lighten-5">mdi-folder-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-content class="align-self-center">
             <v-list-item-title>{{ text }}</v-list-item-title>
@@ -82,18 +82,18 @@ export default {
       ["mdi-help-circle-outline", "ガイド"],
     ],
     projects: [
-      ["mdi-folder-outline", "VizHD"],
-      ["mdi-folder-outline", "開発"],
-      ["mdi-folder-outline", "マーケティング"],
-      ["mdi-folder-outline", "VizHD"],
-      ["mdi-folder-outline", "開発"],
-      ["mdi-folder-outline", "マーケティング"],
-      ["mdi-folder-outline", "VizHD"],
-      ["mdi-folder-outline", "開発"],
-      ["mdi-folder-outline", "マーケティング"],
-      ["mdi-folder-outline", "VizHD"],
-      ["mdi-folder-outline", "開発"],
-      ["mdi-folder-outline", "マーケティング"],
+      "VizHD",
+      "開発",
+      "マーケティング",
+      "VizHD",
+      "開発",
+      "マーケティング",
+      "VizHD",
+      "開発",
+      "マーケティング",
+      "VizHD",
+      "開発",
+      "マーケティング",
     ],
   }),
 };

@@ -1,6 +1,6 @@
 <template>
   <v-container
-    class="d-flex flex-column justify-center my-8 px-md-16"
+    class="d-flex flex-column justify-center py-6 my-md-2 px-md-16"
     style="max-width: 900px"
     fluid
   >
@@ -10,7 +10,7 @@
           プロジェクト一覧
         </p></v-subheader
       >
-      <v-icon size="24">mdi-plus-circle</v-icon>
+      <v-icon class="px-2 px-md-0" size="24">mdi-plus-circle</v-icon>
     </div>
     <v-col
       class="px-md-0"
