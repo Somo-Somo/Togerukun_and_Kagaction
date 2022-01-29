@@ -1,16 +1,70 @@
 <template>
-    <v-col class="px-md-0" cols="12"> 
-      <v-card class="rounded" outlined>
+  <div class="text-center">
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
+    
+      <template v-slot:activator="{ on, attrs }">
+        <v-col class="px-md-0" cols="12">
+        <v-card
+        class="rounded"
+          v-bind="attrs"
+          v-on="on"
+          outlined
+        >
         <v-list class="py-0" style="height: 80px">
-          <v-list-item  class="d-flex justify-space-around" style="height: 80px" width="100%" link>
-              <v-icon class="pa-2">mdi-plus</v-icon>
-            <v-list-item-content>
-              <v-list-item-title
-                ><p class="grey--text font-weight-bold ma-0 pa-2">プロジェクトを追加する</p></v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
+        <v-list-item
+          class="d-flex justify-space-around"
+          style="height: 80px"
+          link
+        >
+        <v-icon class="pa-2">mdi-plus</v-icon>
+        <v-list-item-content>
+          <v-list-item-title>
+            <p class="grey--text font-weight-bold ma-0 pa-2">
+          プロジェクトを追加する
+          </p>
+          </v-list-item-title>
+        </v-list-item-content>
+        </v-list-item>
         </v-list>
+        </v-card>
+        </v-col>
+      </template>
+    
+      <v-card>
+        <v-card-title class="text-h5 grey lighten-2">
+          Privacy Policy
+        </v-card-title>
+
+        <v-card-text>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            text
+            @click="dialog = false"
+          >
+            I accept
+          </v-btn>
+        </v-card-actions>
       </v-card>
-    </v-col>
+    </v-dialog>
+  </div>
 </template>
+
+<script>
+  export default {
+    data () {
+      return {
+        dialog: false,
+      }
+    },
+  }
+</script>

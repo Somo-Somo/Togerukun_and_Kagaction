@@ -7,7 +7,8 @@
     </v-main>
     <Footer/>
   </v-app>
-</template>
+</template>z
+
 
 <script>
 import Header from './components/Header.vue'
