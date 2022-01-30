@@ -1,9 +1,9 @@
 <template>
   <div class="text-center">
-    <v-dialog v-model="dialog" width="500">
-      <!-- 追加するボタン -->
+    <v-dialog v-model="cardForm" width="500">
       <template v-slot:activator="{ on, attrs }">
-        <v-col class="px-md-0" cols="12">
+         <!-- PC版追加ボタン -->
+        <v-col class="px-md-0 hidden-sm-and-down" cols="12">
           <v-card class="rounded" v-bind="attrs" v-on="on" outlined>
             <v-list class="py-0" style="height: 80px">
               <v-list-item
@@ -23,6 +23,20 @@
             </v-list>
           </v-card>
         </v-col>
+        <!-- スマホ版追加ボタン -->
+        <div class="d-flex d-md-none  justify-center pa-6">
+          <v-avatar
+            size="80"
+            color="white"
+            style="position: relative; bottom: -24px; z-index: 10"
+          >
+            <v-avatar size="64" color="#03A9F4" v-bind="attrs" v-on="on">
+              <v-icon size="32" color="white" style="backgroud-color: white">
+                mdi-plus
+              </v-icon>
+            </v-avatar>
+          </v-avatar>
+        </div>
       </template>
       <!-- 追加のフォーム -->
       <v-card ref="form">
@@ -36,10 +50,10 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn @click="dialog = false" text> Cancel </v-btn>
+          <v-btn @click="cardForm = false" text> Cancel </v-btn>
           <v-spacer></v-spacer>
           <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
-          <v-btn color="primary" @click="dialog = false" text> Next </v-btn>
+          <v-btn color="primary" @click="cardForm = false" text> Next </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -48,10 +62,10 @@
 
 <script>
 export default {
-  data() {
-    return {
-      dialog: false,
-    };
+  props: {
+    cardForm: {
+      type: Boolean,
+    },
   },
 };
 </script>

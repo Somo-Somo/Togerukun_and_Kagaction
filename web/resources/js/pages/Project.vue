@@ -22,7 +22,7 @@
       style="height: calc(100vh - 144px); position: relative; top: 48px"
     >
       <Cards />
-       <AddCard />
+       
     </div>
     <!-- スマホ版 -->
     <div
@@ -31,6 +31,7 @@
     >
       <Cards />
     </div>
+    <AddCard  />
   </v-container>
 </template>
 

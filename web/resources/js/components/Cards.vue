@@ -33,7 +33,7 @@ export default {
     AddCard,
   },
   data: () => ({
-    cards: ["VizHD", "開発", "マーケティング", "営業", "CS", "経理"],
+    cards: ["VizHD", "開発", "マーケティング", "営業", "CS", "経理","総務"],
   }),
 };
 </script>
