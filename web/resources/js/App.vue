@@ -7,7 +7,7 @@
     </v-main>
     <Footer/>
   </v-app>
-</template>z
+</template>
 
 
 <script>

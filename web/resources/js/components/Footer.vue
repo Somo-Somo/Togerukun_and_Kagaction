@@ -1,11 +1,11 @@
 <template>
-  <div class="d-flex flex-column d-md-none">
+  <div class="d-flex flex-column d-md-none" style="position:fixed; width:100%; height:80px; bottom:0;">
     <!-- 追加ボタン -->
     <div class="d-flex justify-center pa-6">
       <v-avatar
         size="80"
         color="white"
-        style="position: relative; bottom: 0px; z-index: 10"
+        style="position: relative; bottom: 48px; z-index: 10"
       >
         <v-avatar size="64" color="#03A9F4">
           <v-icon size="32" color="white" style="backgroud-color: white">
