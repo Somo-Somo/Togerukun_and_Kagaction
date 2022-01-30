@@ -39,7 +39,7 @@ export default {
           cardStyle : {
             height: 'calc(100vh - 144px)',
             position: 'relative',
-            top: '48px'
+            top: '56px'
           },
           tabStyle: null
         };
@@ -51,7 +51,7 @@ export default {
           cardStyle : {
             height: 'calc(100vh - 224px)', 
             position: 'relative',
-            top: '40px'
+            top: '56px'
           },
           tabStyle : {
             width: '100vw',
