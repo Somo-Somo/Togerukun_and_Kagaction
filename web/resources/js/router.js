@@ -2,8 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // ページコンポーネントをインポートする
-import Project from './pages/Project.vue'
 import Login from './pages/Login.vue'
+import Project from './pages/Project.vue'
+import HypothesisList from './pages/HypothesisList.vue';
 
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
@@ -18,7 +19,11 @@ const routes = [
     {
         path: '/project',
         component: Project
-    }
+    },
+    {
+        path: '/project/:id',
+        component: HypothesisList
+    },
 ]
 
 // VueRouterインスタンスを作成する
