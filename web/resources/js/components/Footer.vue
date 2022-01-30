@@ -64,14 +64,6 @@
               class="d-flex justify-start px-0"
               style="background-color: #80cbc4"
             >
-              <v-btn
-                width="80"
-                height="56"
-                elevation="0"
-                style="background-color: #80cbc4"
-              >
-                <v-icon size="24">mdi-close</v-icon>
-              </v-btn>
             </v-list-item>
           </div>
         </v-list>
