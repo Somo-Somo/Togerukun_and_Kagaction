@@ -26,7 +26,7 @@
       </template>
       <!-- 追加のフォーム -->
       <v-card ref="form">
-        <v-card-text class="d-flex align-content-center px-9 pt-9 pb-3">
+        <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
           <v-text-field
             class="pa-0 ma-0"
             v-model="message1"
@@ -39,7 +39,7 @@
           <v-btn @click="dialog = false" text> Cancel </v-btn>
           <v-spacer></v-spacer>
           <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
-          <v-btn color="primary" @click="dialog = false" text> Submit </v-btn>
+          <v-btn color="primary" @click="dialog = false" text> Next </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
