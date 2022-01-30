@@ -5,7 +5,7 @@
       class="mt-3 hidden-sm-and-down"
     ></v-app-bar-nav-icon>
     <v-toolbar-title class="mt-3 px-0 ml-md-2">
-        <h2 class="d-flex justify-start">プロジェクト</h2>
+        <h1 class="d-flex justify-start" style="font-size:24px">プロジェクト</h1>
     </v-toolbar-title>
   </v-app-bar>
 </template> 
