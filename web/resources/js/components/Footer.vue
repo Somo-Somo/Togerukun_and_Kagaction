@@ -1,19 +1,5 @@
 <template>
-  <div class="d-flex flex-column d-md-none">
-    <!-- 追加ボタン -->
-    <div class="d-flex justify-center pa-6">
-      <v-avatar
-        size="80"
-        color="white"
-        style="position: relative; bottom: 0px; z-index: 10"
-      >
-        <v-avatar size="64" color="#03A9F4">
-          <v-icon size="32" color="white" style="backgroud-color: white">
-            mdi-pencil-plus
-          </v-icon>
-        </v-avatar>
-      </v-avatar>
-    </div>
+  <div class="d-flex flex-column d-md-none" style="position:fixed; width:100%; height:80px; bottom:0;">
     <!-- フッターとナビゲーション -->
     <v-bottom-navigation
       v-model="value"
@@ -64,14 +50,6 @@
               class="d-flex justify-start px-0"
               style="background-color: #80cbc4"
             >
-              <v-btn
-                width="80"
-                height="56"
-                elevation="0"
-                style="background-color: #80cbc4"
-              >
-                <v-icon size="24">mdi-close</v-icon>
-              </v-btn>
             </v-list-item>
           </div>
         </v-list>

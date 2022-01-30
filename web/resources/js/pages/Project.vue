@@ -1,51 +1,48 @@
 <template>
   <v-container
-    class="d-flex flex-column justify-center py-6 my-md-2 px-md-16"
+    class="d-flex flex-column py-6 my-md-2 px-md-16"
     style="max-width: 900px"
     fluid
   >
-    <div class="d-flex justify-space-between">
-      <v-subheader class="pa-md-0" style="font-size: 1rem"
-        ><p class="ma-0 font-weight-bold" color="grey darken-1">
-          プロジェクト一覧
-        </p></v-subheader
-      >
-      <v-icon class="px-2 px-md-0" size="24">mdi-plus-circle</v-icon>
-    </div>
-    <v-col
-      class="px-md-0"
-      v-for="card in cards"
-      :key="card"
-      :card="card"
-      cols="12"
+    <div
+      class="d-flex justify-space-between"
+      style="position: fixed; width: 772px"
+      absolute
     >
-      <v-card class="rounded" outlined>
-        <v-list class="py-0" style="height: 80px">
-          <v-list-item style="height: 80px" link>
-            <v-list-item-content>
-              <v-list-item-title
-                ><p class="font-weight-black ma-0">
-                  {{ card }}
-                </p></v-list-item-title
-              >
-            </v-list-item-content>
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-list-item>
-        </v-list>
-      </v-card>
-    </v-col>
-    <AddCard />
+      <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
+        <p class="ma-0 font-weight-bold" color="grey darken-1">
+          プロジェクト一覧
+        </p>
+      </v-subheader>
+      <v-icon size="24">mdi-plus-circle</v-icon>
+    </div>
+    <!-- PC版 -->
+    <div
+      class="hidden-sm-and-down overflow-y-auto"
+      style="height: calc(100vh - 144px); position: relative; top: 48px"
+    >
+      <Cards />
+       
+    </div>
+    <!-- スマホ版 -->
+    <div
+      class="d-flex d-md-none justify-center overflow-y-auto"
+      style="height: calc(100vh - 224px);  position: relative; top: 40px"
+    >
+      <Cards />
+    </div>
+    <AddCard  />
   </v-container>
 </template>
 
 <script>
+import Cards from "../components/Cards.vue";
 import AddCard from "../components/AddCard.vue";
+
 export default {
   components: {
-    AddCard,
+    Cards,
+    AddCard
   },
-  data: () => ({
-    cards: ["VizHD", "開発", "マーケティング"],
-  }),
 };
 </script>

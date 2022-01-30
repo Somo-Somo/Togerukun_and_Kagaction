@@ -1,11 +1,11 @@
 <template>
   <div class="hidden-sm-and-down" style="width: 256px">
-    <v-navigation-drawer color="#80CBC4" v-model="drawer" app>
+    <v-navigation-drawer color="#80CBC4" v-model="drawer" app hide-overlay>
       <v-app-bar
         class="d-flex flex-row px-4"
         color="#80CBC4"
         style="height: 72px"
-        elevation="0" 
+        elevation="0"
         absolute
       >
       </v-app-bar>
@@ -26,10 +26,10 @@
         </v-list-item>
       </v-list>
       <v-divider class="mx-6" color="#80CBC4"></v-divider>
-      <v-list class="overflow-y-auto" height="calc(100% - 304px)">
-        <v-subheader class="px-8" style="font-size: 0.75em"
-          >プロジェクト</v-subheader
-        >
+      <v-subheader class="px-8 pt-4" style="font-size: 0.75em"
+        >プロジェクト</v-subheader
+      >
+      <v-list class="overflow-y-auto py-0" height="calc(100% - 304px)">
         <v-list-item
           v-for="text in projects"
           :key="text"
