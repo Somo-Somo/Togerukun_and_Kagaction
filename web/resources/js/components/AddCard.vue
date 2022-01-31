@@ -2,22 +2,10 @@
   <div class="text-center">
     <v-dialog v-model="cardForm" width="500">
       <template v-slot:activator="{ on, attrs }">
-         <!-- PC版追加ボタン -->
-         <NewAdditionalCard :on="on" :attrs="attrs" />
+        <!-- PC版追加ボタン -->
+        <NewAdditionalCard :on="on" :attrs="attrs" />
         <!-- スマホ版追加ボタン -->
-        <div class="d-flex d-md-none  justify-center pa-6">
-          <v-avatar
-            size="80"
-            color="white"
-            style="position: relative; bottom: -24px; z-index: 10"
-          >
-            <v-avatar size="64" color="#03A9F4" v-bind="attrs" v-on="on">
-              <v-icon size="32" color="white" style="backgroud-color: white">
-                mdi-plus
-              </v-icon>
-            </v-avatar>
-          </v-avatar>
-        </div>
+        <SpNewAdditionalBtn :on="on" :attrs="attrs" />
       </template>
       <!-- 追加のフォーム -->
       <v-card ref="form">
@@ -42,16 +30,21 @@
 </template>
 
 <script>
-import NewAdditionalCard from './Cards/NewAddtionalCard.vue'
+import NewAdditionalCard from "./Cards/NewAddtionalCard.vue";
+import NewAdditionalCard from "./Buttons/SpNewAdditionalBtn.vue";
+import SpNewAdditionalBtn from "./SpNewAdditionalBtn.vue";
+
 export default {
   components: {
-    NewAdditionalCard
+    NewAdditionalCard,
+    SpNewAdditionalBtn,
+    SpNewAdditionalBtn,
   },
   data() {
     return {
       on: true,
-      attrs: true
-    }
+      attrs: true,
+    };
   },
   props: {
     cardForm: {
