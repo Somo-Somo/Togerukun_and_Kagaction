@@ -15,9 +15,8 @@
       <v-icon class="hidden-sm-and-down" size="24">mdi-plus-circle</v-icon>
     </div>
     <!-- PC版 -->
-    <div class="overflow-y-auto d-flex" :class="getHypothesisBind.cardClass" :style="getHypothesisBind.cardStyle">
       <Cards />
-    </div>
+
     <AddCard />
   </v-container>
 </template>
