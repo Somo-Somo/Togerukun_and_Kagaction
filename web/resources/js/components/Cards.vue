@@ -3,9 +3,9 @@
     class="overflow-y-auto d-flex"
     :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
   >
-    <v-list class="py-0">
+    <v-list class="py-0" width="100%">
       <v-col class="px-md-0" v-for="card in cards" :key="card" :card="card">
-        <v-card class="rounded" style="width: 80vw" outlined>
+        <v-card class="rounded" outlined>
           <v-list class="py-0" style="height: 80px">
             <v-list-item style="height: 80px" link>
               <v-list-item-content>
@@ -23,8 +23,6 @@
     </v-list>
   </div>
 </template>
-
-
 
 <script>
 import AddCard from "./AddCard.vue";

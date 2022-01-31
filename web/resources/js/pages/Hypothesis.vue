@@ -1,10 +1,14 @@
 <template>
   <v-container
     class="d-flex flex-column py-6 my-md-2 px-md-16"
-    style="max-width: 900px"
+    :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px': ''"
     fluid
   >
-    <div class="d-flex justify-space-between" style="position: fixed" :style="getHypothesisBind.tabStyle">
+    <div
+      class="d-flex justify-space-between"
+      style="position: fixed"
+      :class="$vuetify.breakpoint.mdAndUp ? '' : 'tabStyle' "
+    >
       <v-tabs class="" color="black" center-active>
         <v-tabs-slider color="#80CBC4"></v-tabs-slider>
         <v-tab>Purpose</v-tab>
@@ -15,7 +19,7 @@
       <v-icon class="hidden-sm-and-down" size="24">mdi-plus-circle</v-icon>
     </div>
     <!-- PC版 -->
-      <Cards />
+    <Cards />
 
     <AddCard />
   </v-container>
@@ -30,35 +34,11 @@ export default {
     Cards,
     AddCard,
   },
-  computed: {
-    getHypothesisBind() {
-      if (this.$vuetify.breakpoint.mdAndUp) {
-        return {
-          cardClass: null,
-          cardStyle : {
-            height: 'calc(100vh - 144px)',
-            position: 'relative',
-            top: '56px'
-          },
-          tabStyle: null
-        };
-      } else {
-        return {
-          cardClass: {
-            "justify-content-center": true,
-          },
-          cardStyle : {
-            height: 'calc(100vh - 224px)', 
-            position: 'relative',
-            top: '56px'
-          },
-          tabStyle : {
-            width: '100vw',
-            left: '-36px'
-          }
-        };
-      }
-    },
-  },
 };
 </script>
+
+<style scoped lang='sass'>
+.tabStyle
+  width: 100vw
+  left: -36px
+</style>
