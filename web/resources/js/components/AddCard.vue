@@ -3,26 +3,7 @@
     <v-dialog v-model="cardForm" width="500">
       <template v-slot:activator="{ on, attrs }">
          <!-- PC版追加ボタン -->
-        <v-col class="px-md-0 hidden-sm-and-down" cols="12">
-          <v-card class="rounded" v-bind="attrs" v-on="on" outlined>
-            <v-list class="py-0" style="height: 80px">
-              <v-list-item
-                class="d-flex justify-space-around"
-                style="height: 80px"
-                link
-              >
-                <v-icon class="pa-2">mdi-plus</v-icon>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    <p class="grey--text font-weight-bold ma-0 pa-2">
-                      プロジェクトを追加する
-                    </p>
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-card>
-        </v-col>
+         <NewAdditionalCard :on="on" :attrs="attrs" />
         <!-- スマホ版追加ボタン -->
         <div class="d-flex d-md-none  justify-center pa-6">
           <v-avatar
@@ -61,7 +42,17 @@
 </template>
 
 <script>
+import NewAdditionalCard from './Cards/NewAddtionalCard.vue'
 export default {
+  components: {
+    NewAdditionalCard
+  },
+  data() {
+    return {
+      on: true,
+      attrs: true
+    }
+  },
   props: {
     cardForm: {
       type: Boolean,
