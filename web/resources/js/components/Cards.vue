@@ -1,5 +1,4 @@
 <template>
-
     <v-list class="py-0" width="100%">
       <v-col class="px-md-0" v-for="card in cards" :key="card" :card="card">
         <v-card class="rounded" outlined>
@@ -31,16 +30,3 @@ export default {
   }),
 };
 </script>
-
-
-<style scoped lang='sass'>
-.cardStyle
-  height: calc(100vh - 144px)
-  position: relative
-  top: 56px
-
-.spCardStyle
-  height: calc(100vh - 224px)
-  position: relative
-  top: 56px
-</style>

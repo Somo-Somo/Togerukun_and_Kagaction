@@ -35,7 +35,9 @@
           <NewAdditionalCard :on="on" :attrs="attrs" />
         </div>
         <!-- スマホ版追加ボタン -->
+        
         <SpNewAdditionalBtn :on="on" :attrs="attrs" />
+      
       </template>
       <!-- 追加のフォーム -->
       <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
@@ -78,5 +80,4 @@ export default {
 .spCardStyle
   height: calc(100vh - 224px)
   position: relative
-  top: 56px
 </style>
