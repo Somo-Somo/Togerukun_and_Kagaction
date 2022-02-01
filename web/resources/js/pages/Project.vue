@@ -4,36 +4,42 @@
     style="max-width: 900px"
     fluid
   >
-    <div
-      class="d-flex justify-space-between"
-      style="position: fixed; width: 772px"
-      absolute
-    >
-      <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
-        <p class="ma-0 font-weight-bold" color="grey darken-1">
-          プロジェクト一覧
-        </p>
-      </v-subheader>
-      <v-icon size="24">mdi-plus-circle</v-icon>
-    </div>
-    <div>
-      <v-dialog v-model="inputForm" width="500">
-        <template v-slot:activator="{ on, attrs }">
-          <div
-            class="overflow-y-auto d-flex flex-column"
-            :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
+    <v-dialog v-model="inputForm" width="500">
+      <template v-slot:activator="{ on, attrs }">
+        <div
+          class="d-flex justify-space-between"
+          style="position: fixed; width: 772px"
+          absolute
+        >
+          <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
+            <p class="ma-0 font-weight-bold" color="grey darken-1">
+              プロジェクト一覧
+            </p>
+          </v-subheader>
+          <v-icon
+            class="hidden-sm-and-down my-3"
+            size="24"
+            height="24"
+            v-bind="attrs"
+            v-on="on"
+            >mdi-plus-circle</v-icon
           >
-            <Cards />
-            <!-- PC版追加ボタン -->
-            <NewAdditionalCard :on="on" :attrs="attrs" />
-          </div>
-          <!-- スマホ版追加ボタン -->
-          <SpNewAdditionalBtn :on="on" :attrs="attrs" />
-        </template>
-        <!-- 追加のフォーム -->
-        <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
-      </v-dialog>
-    </div>
+        </div>
+
+        <div
+          class="overflow-y-auto d-flex flex-column"
+          :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
+        >
+          <Cards />
+          <!-- PC版追加カード -->
+          <NewAdditionalCard :on="on" :attrs="attrs" />
+        </div>
+        <!-- スマホ版追加ボタン -->
+        <SpNewAdditionalBtn :on="on" :attrs="attrs" />
+      </template>
+      <!-- 追加のフォーム -->
+      <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
+    </v-dialog>
   </v-container>
 </template>
 

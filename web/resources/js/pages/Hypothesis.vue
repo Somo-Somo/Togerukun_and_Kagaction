@@ -4,40 +4,44 @@
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
-    <div
-      class="d-flex justify-space-between"
-      style="position: fixed"
-      :class="$vuetify.breakpoint.mdAndUp ? 'tabStyle' : 'spTabStyle'"
-      absolute
-    >
-      <v-tabs class="" color="black" center-active>
-        <v-tabs-slider color="#80CBC4"></v-tabs-slider>
-        <v-tab>Purpose</v-tab>
-        <v-tab>Today's Goal</v-tab>
-        <v-tab>Issue</v-tab>
-        <v-tab>Finished</v-tab>
-      </v-tabs>
-      <v-icon class="hidden-sm-and-down" size="24">mdi-plus-circle</v-icon>
-    </div>
-    <!-- PC版 -->
-    <div>
-      <v-dialog v-model="inputForm" width="500">
-        <template v-slot:activator="{ on, attrs }">
-          <div
-            class="overflow-y-auto d-flex flex-column"
-            :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
+    <v-dialog v-model="inputForm" width="500">
+      <template v-slot:activator="{ on, attrs }">
+        <div
+          class="d-flex justify-space-between"
+          style="position: fixed"
+          :class="$vuetify.breakpoint.mdAndUp ? 'tabStyle' : 'spTabStyle'"
+          absolute
+        >
+          <v-tabs class="" color="black" center-active>
+            <v-tabs-slider color="#80CBC4"></v-tabs-slider>
+            <v-tab>Purpose</v-tab>
+            <v-tab>Today's Goal</v-tab>
+            <v-tab>Issue</v-tab>
+            <v-tab>Finished</v-tab>
+          </v-tabs>
+          <v-icon
+            class="hidden-sm-and-down my-3"
+            size="24"
+            height="24"
+            v-bind="attrs"
+            v-on="on"
+            >mdi-plus-circle</v-icon
           >
-            <Cards />
-            <!-- PC版追加ボタン -->
-            <NewAdditionalCard :on="on" :attrs="attrs" />
-          </div>
-          <!-- スマホ版追加ボタン -->
-          <SpNewAdditionalBtn :on="on" :attrs="attrs" />
-        </template>
-        <!-- 追加のフォーム -->
-        <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
-      </v-dialog>
-    </div>
+        </div>
+        <!-- PC版 -->
+        <div
+          class="overflow-y-auto d-flex flex-column"
+          :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
+        >
+          <Cards />
+          <!-- PC版追加カード -->
+          <NewAdditionalCard :on="on" :attrs="attrs" />
+        </div>
+        <!-- スマホ版追加ボタン -->
+        <SpNewAdditionalBtn :on="on" :attrs="attrs" />
+      </template>
+      <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
+    </v-dialog>
   </v-container>
 </template>
 
@@ -60,9 +64,9 @@ export default {
     inputForm: false,
   }),
   methods: {
-    isDisplay : function () {
-      this.inputForm = !this.inputForm
-    }
+    isDisplay: function () {
+      this.inputForm = !this.inputForm;
+    },
   },
 };
 </script>
