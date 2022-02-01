@@ -37,7 +37,6 @@
 
 <script>
 import Cards from "../components/Cards.vue";
-import AddCard from "../components/AddCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpNewAdditionalBtn from "../components/Buttons/SpNewAdditionalBtn.vue";
 import ProjectNameInput from "../components/Forms/ProjectNameInput.vue";
@@ -45,7 +44,6 @@ import ProjectNameInput from "../components/Forms/ProjectNameInput.vue";
 export default {
   components: {
     Cards,
-    AddCard,
     NewAdditionalCard,
     SpNewAdditionalBtn,
     ProjectNameInput,
