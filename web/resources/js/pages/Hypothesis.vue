@@ -1,13 +1,13 @@
 <template>
   <v-container
     class="d-flex flex-column py-6 my-md-2 px-md-16"
-    :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px': ''"
+    :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
     <div
       class="d-flex justify-space-between"
       style="position: fixed"
-      :class="$vuetify.breakpoint.mdAndUp ? '' : 'tabStyle' "
+      :class="$vuetify.breakpoint.mdAndUp ? '' : 'tabStyle'"
     >
       <v-tabs class="" color="black" center-active>
         <v-tabs-slider color="#80CBC4"></v-tabs-slider>
@@ -20,19 +20,45 @@
     </div>
     <!-- PC版 -->
     <Cards />
-
-    <AddCard />
+    <div class="text-center">
+      <v-dialog v-model="inputForm" width="500">
+        <template v-slot:activator="{ on, attrs }">
+          <!-- PC版追加ボタン -->
+          <NewAdditionalCard :on="on" :attrs="attrs" />
+          <!-- スマホ版追加ボタン -->
+          <SpNewAdditionalBtn :on="on" :attrs="attrs" />
+        </template>
+        <!-- 追加のフォーム -->
+        <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
+      </v-dialog>
+    </div>
   </v-container>
 </template>
 
 <script>
 import Cards from "../components/Cards.vue";
 import AddCard from "../components/AddCard.vue";
+import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
+import SpNewAdditionalBtn from "../components/Buttons/SpNewAdditionalBtn.vue";
+import ProjectNameInput from "../components/Forms/ProjectNameInput.vue";
 
 export default {
   components: {
     Cards,
     AddCard,
+    NewAdditionalCard,
+    SpNewAdditionalBtn,
+    ProjectNameInput,
+  },
+  data: () => ({
+    on: true,
+    attrs: true,
+    inputForm: false,
+  }),
+  methods: {
+    isDisplay : function () {
+      this.inputForm = !this.inputForm
+    }
   },
 };
 </script>
