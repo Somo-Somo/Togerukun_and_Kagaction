@@ -16,33 +16,44 @@
       </v-subheader>
       <v-icon size="24">mdi-plus-circle</v-icon>
     </div>
-    <!-- PC版 -->
-    <div
-      class="hidden-sm-and-down overflow-y-auto"
-      style="height: calc(100vh - 144px); position: relative; top: 48px"
-    >
       <Cards />
-       
+    <div class="text-center">
+      <v-dialog v-model="inputForm" width="500">
+        <template v-slot:activator="{ on, attrs }">
+          <!-- PC版追加ボタン -->
+          <NewAdditionalCard :on="on" :attrs="attrs" />
+          <!-- スマホ版追加ボタン -->
+          <SpNewAdditionalBtn :on="on" :attrs="attrs" />
+        </template>
+        <!-- 追加のフォーム -->
+        <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
+      </v-dialog>
     </div>
-    <!-- スマホ版 -->
-    <div
-      class="d-flex d-md-none justify-center overflow-y-auto"
-      style="height: calc(100vh - 224px);  position: relative; top: 40px"
-    >
-      <Cards />
-    </div>
-    <AddCard  />
   </v-container>
 </template>
 
 <script>
 import Cards from "../components/Cards.vue";
-import AddCard from "../components/AddCard.vue";
+import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
+import SpNewAdditionalBtn from "../components/Buttons/SpNewAdditionalBtn.vue";
+import ProjectNameInput from "../components/Forms/ProjectNameInput.vue";
 
 export default {
   components: {
     Cards,
-    AddCard
+    NewAdditionalCard,
+    SpNewAdditionalBtn,
+    ProjectNameInput,
+  },
+    data: () => ({
+    on: true,
+    attrs: true,
+    inputForm: false,
+  }),
+  methods: {
+    isDisplay : function () {
+      this.inputForm = !this.inputForm
+    }
   },
 };
 </script>
