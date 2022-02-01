@@ -16,8 +16,7 @@
       </v-subheader>
       <v-icon size="24">mdi-plus-circle</v-icon>
     </div>
-
-    <div class="">
+    <div>
       <v-dialog v-model="inputForm" width="500">
         <template v-slot:activator="{ on, attrs }">
           <div
