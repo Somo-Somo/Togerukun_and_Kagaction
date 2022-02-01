@@ -1,21 +1,24 @@
 <template>
   <v-container
     class="d-flex flex-column py-6 my-md-2 px-md-16"
-    style="max-width: 900px"
+    :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
     <v-dialog v-model="inputForm" width="500">
       <template v-slot:activator="{ on, attrs }">
         <div
           class="d-flex justify-space-between"
-          style="position: fixed; width: 772px"
+          style="position: fixed"
+          :class="$vuetify.breakpoint.mdAndUp ? 'tabStyle' : 'spTabStyle'"
           absolute
         >
-          <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
-            <p class="ma-0 font-weight-bold" color="grey darken-1">
-              プロジェクト一覧
-            </p>
-          </v-subheader>
+          <v-tabs class="" color="black" center-active>
+            <v-tabs-slider color="#80CBC4"></v-tabs-slider>
+            <v-tab>Purpose</v-tab>
+            <v-tab>Today's Goal</v-tab>
+            <v-tab>Issue</v-tab>
+            <v-tab>Finished</v-tab>
+          </v-tabs>
           <v-icon
             class="hidden-sm-and-down my-3"
             size="24"
@@ -25,7 +28,7 @@
             >mdi-plus-circle</v-icon
           >
         </div>
-
+        <!-- PC版 -->
         <div
           class="overflow-y-auto d-flex flex-column"
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
@@ -35,11 +38,8 @@
           <NewAdditionalCard :on="on" :attrs="attrs" />
         </div>
         <!-- スマホ版追加ボタン -->
-        
         <SpNewAdditionalBtn :on="on" :attrs="attrs" />
-      
       </template>
-      <!-- 追加のフォーム -->
       <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
     </v-dialog>
   </v-container>
@@ -72,6 +72,13 @@ export default {
 </script>
 
 <style scoped lang='sass'>
+.tabStyle
+  width: 772px
+
+.spTabStyle
+  width: 100vw
+  left: -36px
+
 .cardStyle
   height: calc(100vh - 152px)
   position: relative

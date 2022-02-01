@@ -16,6 +16,12 @@
     <style>
         body {
             font-family: 'Nunito', sans-serif;
+            flex: 1;
+          overflow-x: hidden;
+        }
+        main {
+          flex: 1;
+          overflow-x: hidden;
         }
     </style>
 </head>
