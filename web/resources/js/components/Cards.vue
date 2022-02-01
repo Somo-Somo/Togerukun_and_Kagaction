@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="overflow-y-auto d-flex"
-    :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
-  >
+
     <v-list class="py-0" width="100%">
       <v-col class="px-md-0" v-for="card in cards" :key="card" :card="card">
         <v-card class="rounded" outlined>
@@ -21,7 +18,6 @@
         </v-card>
       </v-col>
     </v-list>
-  </div>
 </template>
 
 <script>

@@ -16,12 +16,18 @@
       </v-subheader>
       <v-icon size="24">mdi-plus-circle</v-icon>
     </div>
-      <Cards />
-    <div class="text-center">
+
+    <div class="">
       <v-dialog v-model="inputForm" width="500">
         <template v-slot:activator="{ on, attrs }">
-          <!-- PC版追加ボタン -->
-          <NewAdditionalCard :on="on" :attrs="attrs" />
+          <div
+            class="overflow-y-auto d-flex flex-column"
+            :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
+          >
+            <Cards />
+            <!-- PC版追加ボタン -->
+            <NewAdditionalCard :on="on" :attrs="attrs" />
+          </div>
           <!-- スマホ版追加ボタン -->
           <SpNewAdditionalBtn :on="on" :attrs="attrs" />
         </template>
@@ -45,15 +51,27 @@ export default {
     SpNewAdditionalBtn,
     ProjectNameInput,
   },
-    data: () => ({
+  data: () => ({
     on: true,
     attrs: true,
     inputForm: false,
   }),
   methods: {
-    isDisplay : function () {
-      this.inputForm = !this.inputForm
-    }
+    isDisplay: function () {
+      this.inputForm = !this.inputForm;
+    },
   },
 };
 </script>
+
+<style scoped lang='sass'>
+.cardStyle
+  height: calc(100vh - 152px)
+  position: relative
+  top: 48px
+
+.spCardStyle
+  height: calc(100vh - 224px)
+  position: relative
+  top: 56px
+</style>
