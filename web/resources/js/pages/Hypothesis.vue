@@ -7,7 +7,8 @@
     <div
       class="d-flex justify-space-between"
       style="position: fixed"
-      :class="$vuetify.breakpoint.mdAndUp ? '' : 'tabStyle'"
+      :class="$vuetify.breakpoint.mdAndUp ? 'tabStyle' : 'spTabStyle'"
+      absolute
     >
       <v-tabs class="" color="black" center-active>
         <v-tabs-slider color="#80CBC4"></v-tabs-slider>
@@ -19,12 +20,17 @@
       <v-icon class="hidden-sm-and-down" size="24">mdi-plus-circle</v-icon>
     </div>
     <!-- PC版 -->
-    <Cards />
-    <div class="text-center">
+    <div>
       <v-dialog v-model="inputForm" width="500">
         <template v-slot:activator="{ on, attrs }">
-          <!-- PC版追加ボタン -->
-          <NewAdditionalCard :on="on" :attrs="attrs" />
+          <div
+            class="overflow-y-auto d-flex flex-column"
+            :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
+          >
+            <Cards />
+            <!-- PC版追加ボタン -->
+            <NewAdditionalCard :on="on" :attrs="attrs" />
+          </div>
           <!-- スマホ版追加ボタン -->
           <SpNewAdditionalBtn :on="on" :attrs="attrs" />
         </template>
@@ -63,6 +69,19 @@ export default {
 
 <style scoped lang='sass'>
 .tabStyle
+  width: 772px
+
+.spTabStyle
   width: 100vw
   left: -36px
+
+.cardStyle
+  height: calc(100vh - 152px)
+  position: relative
+  top: 48px
+
+.spCardStyle
+  height: calc(100vh - 224px)
+  position: relative
+  top: 56px
 </style>
