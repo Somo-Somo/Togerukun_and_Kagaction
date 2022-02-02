@@ -1,6 +1,6 @@
 <template>
     <v-list class="py-0" width="100%">
-      <v-col class="px-md-0" v-for="card in cards" :key="card" :card="card">
+      <v-col class="px-md-0" v-for="card in cards" :key="card" :cards="cards">
         <v-card class="rounded" outlined>
           <v-list class="py-0" style="height: 80px">
             <v-list-item style="height: 80px" link>
@@ -21,8 +21,13 @@
 
 <script>
 export default {
-  data: () => ({
-    cards: ["VizHD", "開発", "マーケティング", "営業", "CS", "経理", "総務"],
-  }),
+  props: {
+    cards: {
+      type: Array,
+    },
+    tab : {
+        type: String,
+    }
+  },
 };
 </script>

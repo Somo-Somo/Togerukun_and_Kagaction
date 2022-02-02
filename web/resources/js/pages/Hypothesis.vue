@@ -12,12 +12,11 @@
           :class="$vuetify.breakpoint.mdAndUp ? 'tabStyle' : 'spTabStyle'"
           absolute
         >
-          <v-tabs class="" color="black" center-active>
+          <v-tabs v-model="tab" color="black" center-active>
             <v-tabs-slider color="#80CBC4"></v-tabs-slider>
-            <v-tab>Purpose</v-tab>
-            <v-tab>Today's Goal</v-tab>
-            <v-tab>Issue</v-tab>
-            <v-tab>Finished</v-tab>
+            <v-tab v-for="hypothesis in hypotheses" :key="hypothesis.tab">
+              {{ hypothesis.tab }}
+            </v-tab>
           </v-tabs>
           <v-icon
             class="hidden-sm-and-down my-3"
@@ -33,9 +32,13 @@
           class="overflow-y-auto d-flex flex-column"
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
-          <Cards />
-          <!-- PC版追加カード -->
-          <NewAdditionalCard :on="on" :attrs="attrs" />
+          <v-tabs-items v-model="tab">
+            <v-tab-item v-for="hypothesis in hypotheses" :key="hypothesis.tab">
+                <HypothesisCards :cards="hypothesis.cards" :tab="tab" />
+                 <!-- PC版追加カード -->
+                <NewAdditionalCard :on="on" :attrs="attrs" />
+            </v-tab-item>
+          </v-tabs-items>
         </div>
         <!-- スマホ版追加ボタン -->
         <SpNewAdditionalBtn :on="on" :attrs="attrs" />
@@ -46,14 +49,14 @@
 </template>
 
 <script>
-import Cards from "../components/Cards.vue";
+import HypothesisCards from "../components/Cards/HypothesisCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpNewAdditionalBtn from "../components/Buttons/SpNewAdditionalBtn.vue";
 import ProjectNameInput from "../components/Forms/ProjectNameInput.vue";
 
 export default {
   components: {
-    Cards,
+    HypothesisCards,
     NewAdditionalCard,
     SpNewAdditionalBtn,
     ProjectNameInput,
@@ -62,6 +65,17 @@ export default {
     on: true,
     attrs: true,
     inputForm: false,
+    tab: null,
+    purposeCards: ["天下統一","日本海制圧"],
+    todaysGoalCards: ["aiueo", "kakikukeko"],
+    issueCards: ["アイウエオ", "カキクケコ", "サシスセソ"],
+    finishedCards: ["あいうえお", "かきくけこ"],
+    hypotheses: [
+      { tab: "PURPOSE", cards: ["天下統一","日本海制圧"] },
+      { tab: "TODAY'S GOAL", cards: ["aiueo", "kakikukeko"] },
+      { tab: "ISSUE", cards: ["アイウエオ", "カキクケコ", "サシスセソ"] },
+      { tab: "FINISHED", cards: ["あいうえお", "かきくけこ"], },
+    ],
   }),
   methods: {
     isDisplay: function () {
