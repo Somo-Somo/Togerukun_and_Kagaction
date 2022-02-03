@@ -14,7 +14,7 @@
         >
           <v-tabs v-model="tab" color="black" center-active>
             <v-tabs-slider color="#80CBC4"></v-tabs-slider>
-            <v-tab v-for="hypothesis in hypotheses" :key="hypothesis.tab">
+            <v-tab class="px-3" v-for="hypothesis in hypotheses" :key="hypothesis.tab">
               {{ hypothesis.tab }}
             </v-tab>
           </v-tabs>
@@ -90,8 +90,9 @@ export default {
   width: 772px
 
 .spTabStyle
-  width: 100vw
-  left: -36px
+  width: 96vw
+  left: -4vw
+
 
 .cardStyle
   height: calc(100vh - 152px)
