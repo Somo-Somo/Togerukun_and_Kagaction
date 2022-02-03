@@ -74,7 +74,7 @@ export default {
       { tab: "PURPOSE", cards: ["天下統一","日本海制圧"] },
       { tab: "TODAY'S GOAL", cards: ["aiueo", "kakikukeko"] },
       { tab: "ISSUE", cards: ["アイウエオ", "カキクケコ", "サシスセソ"] },
-      { tab: "FINISHED", cards: ["あいうえお", "かきくけこ"], },
+      { tab: "DONE", cards: ["あいうえお", "かきくけこ"], },
     ],
   }),
   methods: {
