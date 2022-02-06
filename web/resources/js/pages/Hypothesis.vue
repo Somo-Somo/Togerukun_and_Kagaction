@@ -36,7 +36,7 @@
             <v-tab-item v-for="hypothesis in hypotheses" :key="hypothesis.tab">
                 <HypothesisCards :cards="hypothesis.cards" :tab="tab" />
                  <!-- PC版追加カード -->
-                <NewAdditionalCard :on="on" :attrs="attrs" />
+                <NewAdditionalCard :on="on" :attrs="attrs" :category="hypothesis.category" />
             </v-tab-item>
           </v-tabs-items>
         </div>
@@ -71,10 +71,10 @@ export default {
     issueCards: ["アイウエオ", "カキクケコ", "サシスセソ"],
     finishedCards: ["あいうえお", "かきくけこ"],
     hypotheses: [
-      { tab: "PURPOSE", cards: ["天下統一","日本海制圧"] },
-      { tab: "TODAY'S GOAL", cards: ["aiueo", "kakikukeko"] },
-      { tab: "ISSUE", cards: ["アイウエオ", "カキクケコ", "サシスセソ"] },
-      { tab: "DONE", cards: ["あいうえお", "かきくけこ"], },
+      { tab: "GOAL", cards: ["天下統一","日本海制圧"], category: "ゴール" },
+      { tab: "TODAY'S GOAL", cards: ["aiueo", "kakikukeko"], category: "今日の目標"  },
+      { tab: "ISSUE", cards: ["アイウエオ", "カキクケコ", "サシスセソ"], category: "課題"  },
+      { tab: "DONE", cards: ["あいうえお", "かきくけこ"], category: "完了" },
     ],
   }),
   methods: {

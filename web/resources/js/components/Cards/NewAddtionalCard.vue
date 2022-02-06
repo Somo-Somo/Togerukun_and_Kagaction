@@ -11,7 +11,7 @@
           <v-list-item-content>
             <v-list-item-title>
               <p class="grey--text font-weight-bold ma-0 pa-2">
-                プロジェクトを追加する
+                {{category}}を追加する
               </p>
             </v-list-item-title>
           </v-list-item-content>
@@ -29,6 +29,9 @@ export default {
     },
     attrs: {
       type: Boolean,
+    },
+    category: {
+      type: String,
     },
   },
 };
