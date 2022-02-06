@@ -93,7 +93,6 @@ export default {
   width: 96vw
   left: -4vw
 
-
 .cardStyle
   height: calc(100vh - 152px)
   position: relative
