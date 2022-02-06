@@ -26,8 +26,6 @@
             <v-textarea
               label="ゴールを入力"
               class="pa-0 text-h5"
-              padding="0"
-              style="padding: 0 !important"
               rows="1"
               auto-grow
               single-line
@@ -38,7 +36,7 @@
           </div>
           <div class="py-2 d-flex justify-start" :style="$vuetify.breakpoint.mdAndUp ? 'height: 80px' : 'height: 64px'">
             <v-subheader
-              class="my-2 my-md-3 pa-md-0 d-flex align-center"
+              class="my-2 my-md-3 pa-md-0"
               :class="
                 $vuetify.breakpoint.mdAndUp
                   ? 'hypothesisSubTitle'
@@ -59,7 +57,7 @@
           <div class="py-2">
             <div class="d-flex justify-space-between">
               <v-subheader
-                class="pa-md-0 d-flex"
+                class="pa-md-0"
                 :class="
                   $vuetify.breakpoint.mdAndUp
                     ? 'hypothesisSubTitle'
