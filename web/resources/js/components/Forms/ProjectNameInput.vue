@@ -13,18 +13,37 @@
       </v-window-item>
       <v-window-item :value="2">
         <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
-          <v-text-field
-            class="pa-0 ma-0"
-            v-model="secondStepForm"
-            label="テスト"
-            clearable
-          ></v-text-field>
+          <v-expansion-panels>
+            <v-expansion-panel
+              v-for="hypothesis in hypotheses"
+              :key="hypothesis.tab"
+            >
+            <div v-if="hypothesis.tab !== 'DONE'">
+              <v-expansion-panel-header>
+                {{ hypothesis.tab }}
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-simple-table>
+                  <template v-slot:default>
+                    <tbody>
+                      <tr v-for="card in hypothesis.cards" :key="card">
+                        <td>{{ card }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-expansion-panel-content>
+            </div>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-card-text>
       </v-window-item>
     </v-window>
     <v-divider></v-divider>
     <v-card-actions>
-      <v-btn v-if="step === 1" @click="$emit('clickCancel')" text> キャンセル </v-btn>
+      <v-btn v-if="step === 1" @click="$emit('clickCancel')" text>
+        キャンセル
+      </v-btn>
       <v-btn v-else-if="step === 2" @click="step--" text> 戻る </v-btn>
       <v-spacer></v-spacer>
       <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
@@ -55,8 +74,8 @@
 export default {
   data: () => ({
     step: 1,
-    firstStepForm: '',
-    secondStepForm: '',
+    firstStepForm: "",
+    secondStepForm: "",
     nameInputOnly: true,
   }),
   props: {
@@ -64,7 +83,10 @@ export default {
       type: Object,
     },
     inputForm: {
-      type: Boolean
+      type: Boolean,
+    },
+    hypotheses: {
+      type: Object,
     },
   },
   computed: {
@@ -79,21 +101,23 @@ export default {
       }
     },
     secondStepFormIsValid() {
-      if (this.addingForm.category === "ゴール" ||
-          this.addingForm.category === "プロジェクト") {
-        return this.firstStepForm
+      if (
+        this.addingForm.category === "ゴール" ||
+        this.addingForm.category === "プロジェクト"
+      ) {
+        return this.firstStepForm;
       } else {
-        return (this.firstStepForm && this.secondStepForm)
+        return this.firstStepForm && this.secondStepForm;
       }
-    }
+    },
   },
   watch: {
     inputForm(isDisplay) {
       if (!isDisplay) {
-          this.firstStepForm = ''
-          this.secondStepForm = ''
+        this.firstStepForm = "";
+        this.secondStepForm = "";
       }
-    }
-  }
+    },
+  },
 };
 </script>
