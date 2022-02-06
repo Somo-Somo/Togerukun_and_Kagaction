@@ -63,6 +63,9 @@ export default {
     addingForm: {
       type: Object,
     },
+    inputForm: {
+      type: Boolean
+    },
   },
   computed: {
     checkNameInputOnly() {
@@ -84,5 +87,13 @@ export default {
       }
     }
   },
+  watch: {
+    inputForm(isDisplay) {
+      if (!isDisplay) {
+          this.firstStepForm = ''
+          this.secondStepForm = ''
+      }
+    }
+  }
 };
 </script>
