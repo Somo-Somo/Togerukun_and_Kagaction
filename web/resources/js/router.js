@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Login from './pages/Login.vue'
 import Project from './pages/Project.vue'
 import Hypothesis from './pages/Hypothesis.vue';
+import HypothesisDetail from './pages/HypothesisDetail.vue';
 
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
@@ -23,6 +24,10 @@ const routes = [
     {
         path: '/project/:id',
         component: Hypothesis
+    },
+    {
+        path: '/project/:id/:detailId',
+        component: HypothesisDetail
     },
 ]
 
