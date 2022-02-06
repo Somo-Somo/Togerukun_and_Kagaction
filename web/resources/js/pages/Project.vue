@@ -32,7 +32,7 @@
         >
           <Cards />
           <!-- PC版追加カード -->
-          <NewAdditionalCard :on="on" :attrs="attrs" />
+          <NewAdditionalCard :on="on" :attrs="attrs" :category="category" />
         </div>
         <!-- スマホ版追加ボタン -->
         
@@ -62,6 +62,7 @@ export default {
     on: true,
     attrs: true,
     inputForm: false,
+    category: "プロジェクト"
   }),
   methods: {
     isDisplay: function () {
