@@ -8,28 +8,34 @@
       <template v-slot:activator="{ on, attrs }">
         <div
           class="d-flex flex-column"
-          style="position: fixed; width: 772px"
+          style="position: fixed; "
+          :style="$vuetify.breakpoint.mdAndUp ? 'width: 772px' : 'width: 90vw'"
           absolute
         >
-          <div>
-            <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
+          <div class="py-2 d-flex justify-start flex-column">
+            <v-subheader class="pa-md-0 d-flex" :class="$vuetify.breakpoint.mdAndUp ? 'hypothesisSubTitle' : 'spHypothesisSubTitle'"> 
               <p class="ma-0 font-weight-bold" color="grey darken-1">ゴール</p>
             </v-subheader>
-            <v-form>
-              <v-text-field
+              <v-textarea
                 label="ゴールを入力"
+                class="pa-0 text-h5"
+                padding="0"
+                style="padding: 0 !important;"
+                rows="1"
+                auto-grow
                 single-line
                 solo
-              ></v-text-field>
-            </v-form>
+                flat
+                hide-details
+              ></v-textarea>
           </div>
-          <div class="d-flex justify-start">
-            <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
+          <div class="py-2 d-flex justify-start" style="height: 56px">
+            <v-subheader class="my-2 pa-md-0 d-flex align-center" :class="$vuetify.breakpoint.mdAndUp ? 'hypothesisSubTitle' : 'spHypothesisSubTitle'">
               <p class="ma-0 font-weight-bold" color="grey darken-1">現状</p>
             </v-subheader>
-            <v-col>
-              <v-icon>mdi-check-circle-outline</v-icon>
-              <v-icon>mdi-close-circle-outline</v-icon>
+            <v-col class="py-0 py-md-3 px-4 px-md-6">
+              <v-icon class="px-1 my-1" size="32">mdi-check-circle-outline</v-icon>
+              <v-icon class="px-1 my-1" size="32">mdi-close-circle-outline</v-icon>
             </v-col>
           </div>
           <div>
@@ -94,14 +100,13 @@ export default {
 </script>
 
 <style scoped lang='sass'>
-.tabStyle
-    width: 772px
+.hypothesisSubTitle
+    font-size: 18px
 
-.spTabStyle
-    width: 96vw
-    left: -4vw
-
-.cardStyle
+.spHypothesisSubTitle
+    font-size: 14px
+    height: 24px
+    padding: 0 0 0 12px
 
 .spCardStyle
     height: calc(100vh - 224px)
