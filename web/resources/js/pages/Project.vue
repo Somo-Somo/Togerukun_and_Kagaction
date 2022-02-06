@@ -40,7 +40,7 @@
       
       </template>
       <!-- 追加のフォーム -->
-      <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
+      <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" :addingForm="addingForm" />
     </v-dialog>
   </v-container>
 </template>
@@ -62,7 +62,8 @@ export default {
     on: true,
     attrs: true,
     inputForm: false,
-    category: "プロジェクト"
+    addingForm: {category: "プロジェクト"},
+    
   }),
   methods: {
     isDisplay: function () {

@@ -43,7 +43,7 @@
         <!-- スマホ版追加ボタン -->
         <SpNewAdditionalBtn :on="on" :attrs="attrs" />
       </template>
-      <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" :hypothesis="hypotheses[tab]" />
+      <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" :addingForm="hypotheses[tab]" />
     </v-dialog>
   </v-container>
 </template>
