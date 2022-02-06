@@ -12,28 +12,30 @@
         </v-card-text>
       </v-window-item>
       <v-window-item :value="2">
-        <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
+        <v-card-text class="d-flex flex-column">
+          <v-card-title> 「{{addingForm.category}} :{{firstStepForm}}」は何の課題？？ </v-card-title>
+          <v-card-subtitle>{{secondStepForm}}</v-card-subtitle>
           <v-expansion-panels>
             <v-expansion-panel
               v-for="hypothesis in hypotheses"
               :key="hypothesis.tab"
             >
-            <div v-if="hypothesis.tab !== 'DONE'">
-              <v-expansion-panel-header>
-                {{ hypothesis.tab }}
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-simple-table>
-                  <template v-slot:default>
-                    <tbody>
-                      <tr v-for="card in hypothesis.cards" :key="card">
-                        <td>{{ card }}</td>
-                      </tr>
-                    </tbody>
-                  </template>
-                </v-simple-table>
-              </v-expansion-panel-content>
-            </div>
+              <div v-if="hypothesis.tab !== 'DONE'">
+                <v-expansion-panel-header>
+                  {{ hypothesis.tab }}
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <tbody>
+                        <tr v-for="card in hypothesis.cards" :key="card">
+                          <td>{{ card }}</td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </v-expansion-panel-content>
+              </div>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-card-text>
