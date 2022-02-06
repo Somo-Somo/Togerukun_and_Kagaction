@@ -5,7 +5,7 @@
         <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
           <v-text-field
             class="pa-0 ma-0"
-            v-model="message1"
+            v-model="firstStepForm"
             :label="addingForm.category"
             clearable
           ></v-text-field>
@@ -15,7 +15,7 @@
         <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
           <v-text-field
             class="pa-0 ma-0"
-            v-model="message1"
+            v-model="secondStepForm"
             label="テスト"
             clearable
           ></v-text-field>
@@ -29,16 +29,18 @@
       <v-spacer></v-spacer>
       <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
       <v-btn
+        :disabled="!firstStepForm"
         v-if="step === 1 && checkNameInputOnly === false"
-        color="primary"
         @click="step++"
+        color="primary"
         text
       >
         次へ
       </v-btn>
       <v-btn
-        v-else-if="step === 2 || checkNameInputOnly === true"
+        :disabled="!secondStepFormIsValid"
         color="primary"
+        v-else-if="step === 2 || checkNameInputOnly === true"
         @click="$emit('clickNext')"
         text
       >
@@ -53,6 +55,8 @@
 export default {
   data: () => ({
     step: 1,
+    firstStepForm: '',
+    secondStepForm: '',
     nameInputOnly: true,
   }),
   props: {
@@ -71,6 +75,14 @@ export default {
         return false;
       }
     },
+    secondStepFormIsValid() {
+      if (this.addingForm.category === "ゴール" ||
+          this.addingForm.category === "プロジェクト") {
+        return this.firstStepForm
+      } else {
+        return (this.firstStepForm && this.secondStepForm)
+      }
+    }
   },
 };
 </script>
