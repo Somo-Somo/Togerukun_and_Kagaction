@@ -36,7 +36,7 @@
             <v-tab-item v-for="hypothesis in hypotheses" :key="hypothesis.tab">
                 <HypothesisCards :cards="hypothesis.cards" :tab="tab" />
                  <!-- PC版追加カード -->
-                <NewAdditionalCard :on="on" :attrs="attrs" :category="hypothesis.category" />
+                <NewAdditionalCard v-if="tab !== 3 " :on="on" :attrs="attrs" :category="hypothesis.category" />
             </v-tab-item>
           </v-tabs-items>
         </div>
