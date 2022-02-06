@@ -8,33 +8,62 @@
       <template v-slot:activator="{ on, attrs }">
         <div
           class="d-flex flex-column"
-          style="position: fixed; width: 772px"
+          style="position: fixed"
+          :style="$vuetify.breakpoint.mdAndUp ? 'width: 772px' : 'width: calc(100vw - 24px)'"
           absolute
         >
-          <div>
-            <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
+          <div class="py-2 d-flex justify-start flex-column">
+            <v-subheader
+              class="pa-md-0 d-flex"
+              :class="
+                $vuetify.breakpoint.mdAndUp
+                  ? 'hypothesisSubTitle'
+                  : 'spHypothesisSubTitle'
+              "
+            >
               <p class="ma-0 font-weight-bold" color="grey darken-1">ゴール</p>
             </v-subheader>
-            <v-form>
-              <v-text-field
-                label="ゴールを入力"
-                single-line
-                solo
-              ></v-text-field>
-            </v-form>
+            <v-textarea
+              label="ゴールを入力"
+              class="pa-0 text-h5"
+              rows="1"
+              auto-grow
+              single-line
+              solo
+              flat
+              hide-details
+            ></v-textarea>
           </div>
-          <div class="d-flex justify-start">
-            <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
-              <p class="ma-0 font-weight-bold" color="grey darken-1">現状</p>
+          <div class="py-2 d-flex justify-start" :style="$vuetify.breakpoint.mdAndUp ? 'height: 80px' : 'height: 64px'">
+            <v-subheader
+              class="my-2 my-md-3 pa-md-0"
+              :class="
+                $vuetify.breakpoint.mdAndUp
+                  ? 'hypothesisSubTitle'
+                  : 'spHypothesisSubTitle'
+              "
+            >
+              <p class="ma-0 font-weight-bold" color="grey darken-1">結果</p>
             </v-subheader>
-            <v-col>
-              <v-icon>mdi-check-circle-outline</v-icon>
-              <v-icon>mdi-close-circle-outline</v-icon>
+            <v-col class="py-0 py-md-3 px-4 px-md-6">
+              <v-icon class="px-1 my-2" :size="$vuetify.breakpoint.mdAndUp ? '32' : '28'"
+                >mdi-check-circle-outline</v-icon
+              >
+              <v-icon class="px-1 my-2" :size="$vuetify.breakpoint.mdAndUp ? '32' : '28'"
+                >mdi-close-circle-outline</v-icon
+              >
             </v-col>
           </div>
-          <div>
+          <div class="py-2">
             <div class="d-flex justify-space-between">
-              <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
+              <v-subheader
+                class="pa-md-0"
+                :class="
+                  $vuetify.breakpoint.mdAndUp
+                    ? 'hypothesisSubTitle'
+                    : 'spHypothesisSubTitle'
+                "
+              >
                 <p class="ma-0 font-weight-bold" color="grey darken-1">仮説</p>
               </v-subheader>
               <v-icon
@@ -94,14 +123,13 @@ export default {
 </script>
 
 <style scoped lang='sass'>
-.tabStyle
-    width: 772px
+.hypothesisSubTitle
+    font-size: 1rem
 
-.spTabStyle
-    width: 96vw
-    left: -4vw
-
-.cardStyle
+.spHypothesisSubTitle
+    font-size: 14px
+    height: 24px
+    padding: 0 0 0 12px
 
 .spCardStyle
     height: calc(100vh - 224px)
