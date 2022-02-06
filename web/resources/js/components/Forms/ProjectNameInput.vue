@@ -1,13 +1,17 @@
 <template>
   <v-card ref="form">
-    <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
-      <v-text-field
-        class="pa-0 ma-0"
-        v-model="message1"
-        label="プロジェクト名"
-        clearable
-      ></v-text-field>
-    </v-card-text>
+    <v-window>
+      <v-window-item>
+        <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
+          <v-text-field
+            class="pa-0 ma-0"
+            v-model="message1"
+            :label="hypothesis.category"
+            clearable
+          ></v-text-field>
+        </v-card-text>
+      </v-window-item>
+    </v-window>
     <v-divider></v-divider>
     <v-card-actions>
       <v-btn @click="$emit('clickCancel')" text> Cancel </v-btn>
@@ -21,6 +25,10 @@
 
 <script>
 export default {
-
+  props: {
+    hypothesis: {
+      type: Object,
+    },
+  },
 };
 </script>
