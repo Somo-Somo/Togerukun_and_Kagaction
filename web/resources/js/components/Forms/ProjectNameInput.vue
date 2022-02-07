@@ -175,6 +175,8 @@ export default {
         this.secondStepForm.category = "";
         this.secondStepForm.upperGoal.index = "";
         this.secondStepForm.upperGoal.content = "";
+        this.selectedCategory = "";
+        this.selectedHypothesis = "";
       }
     },
   },
