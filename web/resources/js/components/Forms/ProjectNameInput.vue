@@ -13,27 +13,36 @@
       </v-window-item>
       <v-window-item :value="2">
         <v-card-text class="d-flex flex-column">
-          <v-card-title> 「{{addingForm.category}} :{{firstStepForm}}」は何の課題？？ </v-card-title>
-          <v-card-subtitle>{{secondStepForm}}</v-card-subtitle>
-          <v-expansion-panels>
+          <v-card-subtitle>
+            「{{ firstStepForm }}」の上位目標を選択
+          </v-card-subtitle>
+          <v-card-subtitle
+            >上位目標: {{ secondStepForm.upperGoal.content }}</v-card-subtitle
+          >
+          <v-expansion-panels v-model="selectedCategory">
             <v-expansion-panel
-              v-for="hypothesis in hypotheses"
-              :key="hypothesis.tab"
+              v-for="(hypothesis, index) in hypotheses"
+              @click="updateSelectedHypothesis(index)"
+              :key="index"
             >
               <div v-if="hypothesis.tab !== 'DONE'">
                 <v-expansion-panel-header>
-                  {{ hypothesis.tab }}
+                  {{ hypothesis.tab }}{{ key }}
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                  <v-simple-table>
-                    <template v-slot:default>
-                      <tbody>
-                        <tr v-for="card in hypothesis.cards" :key="card">
-                          <td>{{ card }}</td>
-                        </tr>
-                      </tbody>
-                    </template>
-                  </v-simple-table>
+                  <v-list>
+                    <v-list-item-group v-model="selectedHypothesis">
+                      <v-list-item
+                        v-for="(card, index) in hypothesis.cards"
+                        @click="updateSecondStepForm(index, card)"
+                        :key="index"
+                      >
+                        <v-list-item-content>
+                          <v-list-item-title v-text="card"></v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
                 </v-expansion-panel-content>
               </div>
             </v-expansion-panel>
@@ -77,8 +86,16 @@ export default {
   data: () => ({
     step: 1,
     firstStepForm: "",
-    secondStepForm: "",
+    secondStepForm: {
+      category: "",
+      upperGoal: {
+        index: "",
+        content: "",
+      },
+    },
     nameInputOnly: true,
+    selectedCategory: "",
+    selectedHypothesis: "",
   }),
   props: {
     addingForm: {
@@ -109,15 +126,55 @@ export default {
       ) {
         return this.firstStepForm;
       } else {
-        return this.firstStepForm && this.secondStepForm;
+        return (
+          this.firstStepForm &&
+          this.secondStepForm.category &&
+          this.secondStepForm.upperGoal.content
+        );
+      }
+    },
+  },
+  methods: {
+    updateSelectedHypothesis: function (selectedCategoryIndex) {
+      if (this.secondStepForm.category === selectedCategoryIndex) {
+        return (this.selectedHypothesis = this.secondStepForm.upperGoal.index);
+      } else {
+        return (this.selectedHypothesis = "");
+      }
+    },
+    updateSecondStepForm: function (
+      selectedHypothesisIndex,
+      selectedHypothesisContent
+    ) {
+      if (
+        this.secondStepForm.category === this.selectedCategory &&
+        this.secondStepForm.upperGoal.index === selectedHypothesisIndex &&
+        this.secondStepForm.upperGoal.content === selectedHypothesisContent
+      ) {
+        // 選択された上位目標を再度クリックした時
+        return (
+          (this.secondStepForm.category = ""),
+          (this.secondStepForm.upperGoal.index = ""),
+          (this.secondStepForm.upperGoal.content = "")
+        );
+      } else {
+        // 上位目標を選択した時
+        return (
+          (this.secondStepForm.category = this.selectedCategory),
+          (this.secondStepForm.upperGoal.index = selectedHypothesisIndex),
+          (this.secondStepForm.upperGoal.content = selectedHypothesisContent)
+        );
       }
     },
   },
   watch: {
     inputForm(isDisplay) {
       if (!isDisplay) {
+        this.step = 1;
         this.firstStepForm = "";
-        this.secondStepForm = "";
+        this.secondStepForm.category = "";
+        this.secondStepForm.upperGoal.index = "";
+        this.secondStepForm.upperGoal.content = "";
       }
     },
   },

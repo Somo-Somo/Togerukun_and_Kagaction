@@ -60,7 +60,6 @@
         :hypotheses="hypotheses"
       />
     </v-dialog>
-    {{ tab }}
   </v-container>
 </template>
 
