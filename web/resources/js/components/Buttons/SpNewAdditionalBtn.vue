@@ -1,6 +1,7 @@
 <template>
   <div class="d-flex d-md-none justify-center pa-6">
     <v-avatar
+      v-if="tab !== 3"
       size="80"
       color="white"
       style="position: fixed; bottom: 16px; z-index: 10"
@@ -23,6 +24,9 @@ export default {
     attrs: {
       type: Boolean,
     },
+    tab: {
+      type: Number,
+    }
   },
 };
 </script>

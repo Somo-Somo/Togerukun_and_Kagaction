@@ -50,7 +50,7 @@
           </v-tabs-items>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpNewAdditionalBtn :on="on" :attrs="attrs" />
+        <SpNewAdditionalBtn :on="on" :attrs="attrs" :tab="tab" />
       </template>
       <InputForm
         @clickCancel="isDisplay"
