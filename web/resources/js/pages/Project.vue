@@ -32,7 +32,7 @@
         >
           <Cards />
           <!-- PC版追加カード -->
-          <NewAdditionalCard :on="on" :attrs="attrs" />
+          <NewAdditionalCard :on="on" :attrs="attrs" :category="category" />
         </div>
         <!-- スマホ版追加ボタン -->
         
@@ -40,7 +40,7 @@
       
       </template>
       <!-- 追加のフォーム -->
-      <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
+      <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" :addingForm="addingForm" />
     </v-dialog>
   </v-container>
 </template>
@@ -62,6 +62,8 @@ export default {
     on: true,
     attrs: true,
     inputForm: false,
+    addingForm: {category: "プロジェクト"},
+    
   }),
   methods: {
     isDisplay: function () {

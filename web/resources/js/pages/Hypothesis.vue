@@ -4,7 +4,7 @@
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
-    <v-dialog v-model="inputForm" width="500">
+    <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on, attrs }">
         <div
           class="d-flex justify-space-between"
@@ -14,7 +14,11 @@
         >
           <v-tabs v-model="tab" color="black" center-active>
             <v-tabs-slider color="#80CBC4"></v-tabs-slider>
-            <v-tab class="px-3" v-for="hypothesis in hypotheses" :key="hypothesis.tab">
+            <v-tab
+              class="px-3"
+              v-for="hypothesis in hypotheses"
+              :key="hypothesis.tab"
+            >
               {{ hypothesis.tab }}
             </v-tab>
           </v-tabs>
@@ -34,16 +38,27 @@
         >
           <v-tabs-items v-model="tab">
             <v-tab-item v-for="hypothesis in hypotheses" :key="hypothesis.tab">
-                <HypothesisCards :cards="hypothesis.cards" :tab="tab" />
-                 <!-- PC版追加カード -->
-                <NewAdditionalCard :on="on" :attrs="attrs" />
+              <HypothesisCards :cards="hypothesis.cards" :tab="tab" />
+              <!-- PC版追加カード -->
+              <NewAdditionalCard
+                v-if="tab !== 3"
+                :on="on"
+                :attrs="attrs"
+                :category="hypothesis.category"
+              />
             </v-tab-item>
           </v-tabs-items>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpNewAdditionalBtn :on="on" :attrs="attrs" />
+        <SpNewAdditionalBtn :on="on" :attrs="attrs" :tab="tab" />
       </template>
-      <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
+      <InputForm
+        @clickCancel="isDisplay"
+        @clickNext="isDisplay"
+        :addingForm="hypotheses[tab]"
+        :dialog="dialog"
+        :hypotheses="hypotheses"
+      />
     </v-dialog>
   </v-container>
 </template>
@@ -52,34 +67,42 @@
 import HypothesisCards from "../components/Cards/HypothesisCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpNewAdditionalBtn from "../components/Buttons/SpNewAdditionalBtn.vue";
-import ProjectNameInput from "../components/Forms/ProjectNameInput.vue";
+import InputForm from "../components/InputForm.vue";
 
 export default {
   components: {
     HypothesisCards,
     NewAdditionalCard,
     SpNewAdditionalBtn,
-    ProjectNameInput,
+    InputForm,
   },
   data: () => ({
     on: true,
     attrs: true,
-    inputForm: false,
+    dialog: false,
     tab: null,
-    purposeCards: ["天下統一","日本海制圧"],
+    purposeCards: ["天下統一", "日本海制圧"],
     todaysGoalCards: ["aiueo", "kakikukeko"],
     issueCards: ["アイウエオ", "カキクケコ", "サシスセソ"],
     finishedCards: ["あいうえお", "かきくけこ"],
     hypotheses: [
-      { tab: "PURPOSE", cards: ["天下統一","日本海制圧"] },
-      { tab: "TODAY'S GOAL", cards: ["aiueo", "kakikukeko"] },
-      { tab: "ISSUE", cards: ["アイウエオ", "カキクケコ", "サシスセソ"] },
-      { tab: "DONE", cards: ["あいうえお", "かきくけこ"], },
+      { tab: "GOAL", cards: ["天下統一", "日本海制圧"], category: "ゴール" },
+      {
+        tab: "TODAY'S GOAL",
+        cards: ["aiueo", "kakikukeko"],
+        category: "今日の目標",
+      },
+      {
+        tab: "ISSUE",
+        cards: ["アイウエオ", "カキクケコ", "サシスセソ"],
+        category: "課題",
+      },
+      { tab: "DONE", cards: ["あいうえお", "かきくけこ"], category: "完了" },
     ],
   }),
   methods: {
     isDisplay: function () {
-      this.inputForm = !this.inputForm;
+      this.dialog = !this.dialog;
     },
   },
 };
