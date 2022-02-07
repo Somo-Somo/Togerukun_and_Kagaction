@@ -172,6 +172,7 @@ export default {
   },
   watch: {
     inputForm(isDisplay) {
+      // ダイアログが閉じた後フォームの値を全て空にする * computedに移行したい
       if (!isDisplay) {
         this.step = 1;
         this.name = "";
