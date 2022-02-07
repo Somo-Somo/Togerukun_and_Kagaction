@@ -52,7 +52,7 @@
         <!-- スマホ版追加ボタン -->
         <SpNewAdditionalBtn :on="on" :attrs="attrs" />
       </template>
-      <ProjectNameInput
+      <InputForm
         @clickCancel="isDisplay"
         @clickNext="isDisplay"
         :addingForm="hypotheses[tab]"
@@ -67,14 +67,14 @@
 import HypothesisCards from "../components/Cards/HypothesisCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpNewAdditionalBtn from "../components/Buttons/SpNewAdditionalBtn.vue";
-import ProjectNameInput from "../components/Forms/ProjectNameInput.vue";
+import InputForm from "../components/InputForm.vue";
 
 export default {
   components: {
     HypothesisCards,
     NewAdditionalCard,
     SpNewAdditionalBtn,
-    ProjectNameInput,
+    InputForm,
   },
   data: () => ({
     on: true,
