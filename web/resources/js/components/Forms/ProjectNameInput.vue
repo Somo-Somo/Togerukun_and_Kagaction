@@ -5,7 +5,7 @@
         <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
           <v-text-field
             class="pa-0 ma-0"
-            v-model="firstStepForm"
+            v-model="name"
             :label="addingForm.category"
             clearable
           ></v-text-field>
@@ -14,15 +14,15 @@
       <v-window-item :value="2">
         <v-card-text class="d-flex flex-column">
           <v-card-subtitle>
-            「{{ firstStepForm }}」の上位目標を選択
+            「{{ name }}」の上位目標を選択
           </v-card-subtitle>
           <v-card-subtitle
-            >上位目標: {{ secondStepForm.upperGoal.content }}</v-card-subtitle
+            >上位目標: {{ upperGoal.content }}</v-card-subtitle
           >
-          <v-expansion-panels v-model="selectedCategory">
+          <v-expansion-panels v-model="activeCategory">
             <v-expansion-panel
               v-for="(hypothesis, index) in hypotheses"
-              @click="updateSelectedHypothesis(index)"
+              @click="changeActiveListItem(index)"
               :key="index"
             >
               <div v-if="hypothesis.tab !== 'DONE'">
@@ -31,10 +31,10 @@
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-list>
-                    <v-list-item-group v-model="selectedHypothesis">
+                    <v-list-item-group v-model="activeHypothesis">
                       <v-list-item
                         v-for="(card, index) in hypothesis.cards"
-                        @click="updateSecondStepForm(index, card)"
+                        @click="updateUpperGoalValue(index, card)"
                         :key="index"
                       >
                         <v-list-item-content>
@@ -59,7 +59,7 @@
       <v-spacer></v-spacer>
       <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
       <v-btn
-        :disabled="!firstStepForm"
+        :disabled="!name"
         v-if="step === 1 && checkNameInputOnly === false"
         @click="step++"
         color="primary"
@@ -68,7 +68,7 @@
         次へ
       </v-btn>
       <v-btn
-        :disabled="!secondStepFormIsValid"
+        :disabled="!formIsValid"
         color="primary"
         v-else-if="step === 2 || checkNameInputOnly === true"
         @click="$emit('clickNext')"
@@ -85,17 +85,15 @@
 export default {
   data: () => ({
     step: 1,
-    firstStepForm: "",
-    secondStepForm: {
+    name: "",
+    upperGoal: {
       category: "",
-      upperGoal: {
-        index: "",
-        content: "",
-      },
+      index: "",
+      content: "",
     },
     nameInputOnly: true,
-    selectedCategory: "",
-    selectedHypothesis: "",
+    activeCategory: "",
+    activeHypothesis: "",
   }),
   props: {
     addingForm: {
@@ -109,6 +107,7 @@ export default {
     },
   },
   computed: {
+    // 名前入力のみのフォームかチェック
     checkNameInputOnly() {
       if (
         this.addingForm.category === "ゴール" ||
@@ -119,50 +118,54 @@ export default {
         return false;
       }
     },
-    secondStepFormIsValid() {
+
+    // フォームが空じゃないかバリデーションチェック
+    formIsValid() {
       if (
         this.addingForm.category === "ゴール" ||
         this.addingForm.category === "プロジェクト"
       ) {
-        return this.firstStepForm;
+        return this.name;
       } else {
         return (
-          this.firstStepForm &&
-          this.secondStepForm.category &&
-          this.secondStepForm.upperGoal.content
+          this.name &&
+          this.upperGoal.content
         );
       }
     },
   },
   methods: {
-    updateSelectedHypothesis: function (selectedCategoryIndex) {
-      if (this.secondStepForm.category === selectedCategoryIndex) {
-        return (this.selectedHypothesis = this.secondStepForm.upperGoal.index);
+    // acitveなlist-itemを変更
+    changeActiveListItem: function (activeCategoryIndex) {
+      if (this.upperGoal.category === activeCategoryIndex) {
+        return (this.activeHypothesis = this.upperGoal.index);
       } else {
-        return (this.selectedHypothesis = "");
+        return (this.activeHypothesis = "");
       }
     },
-    updateSecondStepForm: function (
-      selectedHypothesisIndex,
-      selectedHypothesisContent
+
+    // 上位目標の更新
+    updateUpperGoalValue: function (
+      activeHypothesisIndex,
+      activeHypothesisContent
     ) {
       if (
-        this.secondStepForm.category === this.selectedCategory &&
-        this.secondStepForm.upperGoal.index === selectedHypothesisIndex &&
-        this.secondStepForm.upperGoal.content === selectedHypothesisContent
+        this.upperGoal.category === this.activeCategory &&
+        this.upperGoal.index === activeHypothesisIndex &&
+        this.upperGoal.content === activeHypothesisContent
       ) {
         // 選択された上位目標を再度クリックした時
         return (
-          (this.secondStepForm.category = ""),
-          (this.secondStepForm.upperGoal.index = ""),
-          (this.secondStepForm.upperGoal.content = "")
+          (this.upperGoal.category = ""),
+          (this.upperGoal.index = ""),
+          (this.upperGoal.content = "")
         );
       } else {
         // 上位目標を選択した時
         return (
-          (this.secondStepForm.category = this.selectedCategory),
-          (this.secondStepForm.upperGoal.index = selectedHypothesisIndex),
-          (this.secondStepForm.upperGoal.content = selectedHypothesisContent)
+          (this.upperGoal.category = this.activeCategory),
+          (this.upperGoal.index = activeHypothesisIndex),
+          (this.upperGoal.content = activeHypothesisContent)
         );
       }
     },
@@ -171,12 +174,12 @@ export default {
     inputForm(isDisplay) {
       if (!isDisplay) {
         this.step = 1;
-        this.firstStepForm = "";
-        this.secondStepForm.category = "";
-        this.secondStepForm.upperGoal.index = "";
-        this.secondStepForm.upperGoal.content = "";
-        this.selectedCategory = "";
-        this.selectedHypothesis = "";
+        this.name = "";
+        this.upperGoal.category = "";
+        this.upperGoal.index = "";
+        this.upperGoal.content = "";
+        this.activeCategory = "";
+        this.activeHypothesis = "";
       }
     },
   },
