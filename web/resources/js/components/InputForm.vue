@@ -99,7 +99,7 @@ export default {
     addingForm: {
       type: Object,
     },
-    inputForm: {
+    dialog: {
       type: Boolean,
     },
     hypotheses: {
@@ -171,8 +171,8 @@ export default {
     },
   },
   watch: {
-    inputForm(isDisplay) {
-      // ダイアログが閉じた後フォームの値を全て空にする * computedに移行したい
+    // ダイアログが閉じた後フォームの値を全て空にする * computedに移行したい
+    dialog(isDisplay) {
       if (!isDisplay) {
         this.step = 1;
         this.name = "";

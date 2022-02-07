@@ -4,7 +4,7 @@
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
-    <v-dialog v-model="inputForm" width="500">
+    <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on, attrs }">
         <div
           class="d-flex justify-space-between"
@@ -56,7 +56,7 @@
         @clickCancel="isDisplay"
         @clickNext="isDisplay"
         :addingForm="hypotheses[tab]"
-        :inputForm="inputForm"
+        :dialog="dialog"
         :hypotheses="hypotheses"
       />
     </v-dialog>
@@ -79,7 +79,7 @@ export default {
   data: () => ({
     on: true,
     attrs: true,
-    inputForm: false,
+    dialog: false,
     tab: null,
     purposeCards: ["天下統一", "日本海制圧"],
     todaysGoalCards: ["aiueo", "kakikukeko"],
@@ -102,7 +102,7 @@ export default {
   }),
   methods: {
     isDisplay: function () {
-      this.inputForm = !this.inputForm;
+      this.dialog = !this.dialog;
     },
   },
 };
