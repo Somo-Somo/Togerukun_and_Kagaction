@@ -13,10 +13,10 @@
       </v-window-item>
       <v-window-item :value="2">
         <v-card-text class="d-flex flex-column">
-          <v-card-subtitle>
+          <v-card-subtitle class="pb-2 font-weight-bold">
             「{{ name }}」の上位目標を選択
           </v-card-subtitle>
-          <v-card-subtitle
+          <v-card-subtitle class="pt-2 pb-4"
             >上位目標: {{ upperGoal.content }}</v-card-subtitle
           >
           <v-expansion-panels v-model="activeCategory">
