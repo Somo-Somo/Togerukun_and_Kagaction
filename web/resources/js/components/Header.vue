@@ -14,8 +14,7 @@
     <v-toolbar-title class="d-flex justify-start mt-3 px-0 ml-md-2">
       <v-btn
         class="d-flex align-self-center"
-        :to="headerTitle === '仮説一覧' ? '/project' : '/project/123'"
-        exact
+        @click="toBack(headerTitle)"
         small
         icon
         link
@@ -41,6 +40,13 @@ export default {
     },
     headerTitle: {
       type: String,
+    },
+  },
+  methods: {
+    toBack: function (headerTitle) {
+      return headerTitle === "仮説一覧"
+        ? this.$router.push({ path: "/project" })
+        : this.$router.push({ path: "/project/123" });
     },
   },
 };

@@ -26,7 +26,7 @@
         <v-list-item
           v-for="item in items"
           :key="item.icon"
-          :href="item.url"
+          @click="fromItem(item.url)"
           class="d-flex px-8"
           style="height: 48px"
           link
@@ -47,7 +47,7 @@
         <v-list-item
           v-for="text in projects"
           :key="text"
-          href="/project/123"
+          @click="fromProject"
           class="d-flex px-8"
           style="height: 48px"
           link
@@ -107,6 +107,14 @@ export default {
     ],
     transparent: 'rgba(128, 128, 128, 0.3)',
   }),
+  methods: {
+    fromItem: function (url) {
+      return this.$router.push({ path: url });
+    },
+    fromProject: function () {
+      return this.$router.push({ path: "/project/123" });
+    }
+  },
 };
 </script>
 

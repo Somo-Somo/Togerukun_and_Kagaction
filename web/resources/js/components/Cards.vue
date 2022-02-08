@@ -3,7 +3,7 @@
       <v-col class="px-md-0" v-for="card in cards" :key="card" :card="card">
         <v-card class="rounded" outlined>
           <v-list class="py-0" style="height: 80px">
-            <v-list-item href="/project/123" style="height: 80px" link>
+            <v-list-item @click="toHypothesis" style="height: 80px" link>
               <v-list-item-content>
                 <v-list-item-title
                   ><p class="font-weight-black ma-0">
@@ -24,5 +24,10 @@ export default {
   data: () => ({
     cards: ["VizHD", "開発", "マーケティング", "営業", "CS", "経理", "総務"],
   }),
+  methods: {
+    toHypothesis: function () {
+      return this.$router.push({ path: '/project/123' }) 
+    },
+  },
 };
 </script>
