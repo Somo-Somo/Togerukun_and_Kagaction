@@ -12,10 +12,9 @@
           :class="$vuetify.breakpoint.mdAndUp ? 'tabStyle' : 'spTabStyle'"
           absolute
         >
-          <v-tabs v-model="tab" color="black" center-active>
+          <v-tabs v-model="tab" class="px-3 px-md-0" color="black" center-active>
             <v-tabs-slider color="#80CBC4"></v-tabs-slider>
             <v-tab
-              class="px-3"
               v-for="hypothesis in hypotheses"
               :key="hypothesis.tab"
             >
@@ -86,18 +85,18 @@ export default {
     issueCards: ["アイウエオ", "カキクケコ", "サシスセソ"],
     finishedCards: ["あいうえお", "かきくけこ"],
     hypotheses: [
-      { tab: "GOAL", cards: ["天下統一", "日本海制圧"], category: "ゴール" },
+      { tab: "ゴール", cards: ["天下統一", "日本海制圧"], category: "ゴール" },
       {
-        tab: "TODAY'S GOAL",
+        tab: "今日の目標",
         cards: ["aiueo", "kakikukeko"],
         category: "今日の目標",
       },
       {
-        tab: "ISSUE",
+        tab: "仮説",
         cards: ["アイウエオ", "カキクケコ", "サシスセソ"],
-        category: "課題",
+        category: "仮説",
       },
-      { tab: "DONE", cards: ["あいうえお", "かきくけこ"], category: "完了" },
+      { tab: "完了", cards: ["あいうえお", "かきくけこ"], category: "完了" },
     ],
   }),
   methods: {
@@ -113,8 +112,7 @@ export default {
   width: 772px
 
 .spTabStyle
-  width: 96vw
-  left: -4vw
+  width: calc(100vw - 24px)
 
 .cardStyle
   height: calc(100vh - 152px)
@@ -124,4 +122,11 @@ export default {
 .spCardStyle
   height: calc(100vh - 224px)
   position: relative
+</style>
+
+<style lang='sass'>
+.v-slide-group__prev
+  display: none !important
+.v-slide-group__next
+  display: none !important
 </style>
