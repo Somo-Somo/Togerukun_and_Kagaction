@@ -4,7 +4,7 @@
     style="max-width: 900px"
     fluid
   >
-    <v-dialog v-model="inputForm" width="500">
+    <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on, attrs }">
         <div
           class="d-flex justify-space-between"
@@ -40,7 +40,7 @@
       
       </template>
       <!-- 追加のフォーム -->
-      <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" :addingForm="addingForm" />
+      <InputForm @clickCancel="isDisplay" @clickNext="isDisplay" :addingForm="addingForm" />
     </v-dialog>
   </v-container>
 </template>
@@ -49,25 +49,25 @@
 import Cards from "../components/Cards.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpNewAdditionalBtn from "../components/Buttons/SpNewAdditionalBtn.vue";
-import ProjectNameInput from "../components/Forms/ProjectNameInput.vue";
+import InputForm from "../components/InputForm.vue";
 
 export default {
   components: {
     Cards,
     NewAdditionalCard,
     SpNewAdditionalBtn,
-    ProjectNameInput,
+    InputForm,
   },
   data: () => ({
     on: true,
     attrs: true,
-    inputForm: false,
+    dialog: false,
     addingForm: {category: "プロジェクト"},
     
   }),
   methods: {
     isDisplay: function () {
-      this.inputForm = !this.inputForm;
+      this.dialog = !this.dialog;
     },
   },
 };
