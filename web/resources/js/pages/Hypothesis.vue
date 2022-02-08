@@ -18,7 +18,7 @@
               v-for="hypothesis in hypotheses"
               :key="hypothesis.tab"
             >
-              {{ hypothesis.tab }}
+              <p class="ma-0 font-weight-bold">{{ hypothesis.tab }}</p>
             </v-tab>
           </v-tabs>
           <v-icon

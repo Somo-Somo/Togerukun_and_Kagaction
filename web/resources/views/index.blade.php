@@ -13,17 +13,22 @@
   <link rel="stylesheet" href="https://unpkg.com/ionicons@4.2.2/dist/css/ionicons.min.css">
 
   <!-- Styles -->
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            flex: 1;
-          overflow-x: hidden;
-        }
-        main {
-          flex: 1;
-          overflow-x: hidden;
-        }
-    </style>
+<style>
+    .v-application {
+        font-family: 
+        "Helvetica Neue",Arial,
+        "Hiragino Kaku Gothic ProN",
+        "Hiragino Sans",
+        Meiryo,
+        sans-serif !important;
+        flex: 1;
+        overflow-x: hidden;
+    }
+    main {
+      flex: 1;
+      overflow-x: hidden;
+    }
+</style>
 </head>
 <body>
   <div id="app"></div>
