@@ -3,7 +3,7 @@
     <v-col class="px-md-0" v-for="card in cards" :key="card" :cards="cards">
       <v-card class="rounded" outlined>
         <v-list class="py-0" style="height: 80px">
-          <v-list-item style="height: 80px" link>
+          <v-list-item href="/project/123/123" style="height: 80px" link>
             <v-list-item-content class="pa-0">
               <v-list-item-subtitle class="d-flex justify-start pt-3 pb-1">
                 <v-icon size="8">circle</v-icon>
