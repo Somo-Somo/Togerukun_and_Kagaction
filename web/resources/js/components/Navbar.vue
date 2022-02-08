@@ -24,17 +24,18 @@
       </v-app-bar>
       <v-list class="pb-4" style="padding-top: 72px">
         <v-list-item
-          v-for="[icon, text] in links"
-          :key="icon"
+          v-for="item in items"
+          :key="item.icon"
+          :href="item.url"
           class="d-flex px-8"
           style="height: 48px"
           link
         >
           <v-list-item-icon class="align-self-center mr-6">
-            <v-icon color="teal lighten-5">{{ icon }}</v-icon>
+            <v-icon color="teal lighten-5">{{ item.icon }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content class="align-self-center">
-            <v-list-item-title>{{ text }}</v-list-item-title>
+            <v-list-item-title>{{ item.text }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -46,6 +47,7 @@
         <v-list-item
           v-for="text in projects"
           :key="text"
+          href="/project/123"
           class="d-flex px-8"
           style="height: 48px"
           link
@@ -89,24 +91,19 @@ export default {
     },
   },
   data: () => ({
-    links: [
-      // ["mdi-flag-variant-outline", "目標"],
-      ["mdi-folder-multiple-outline", "プロジェクト"],
-      ["mdi-help-circle-outline", "ガイド"],
+    items: [
+      // {icon: "mdi-flag-variant-outline", text: "目標", url: "/project"},
+      {icon: "mdi-folder-multiple-outline", text: "プロジェクト", url: "/project"},
+      {icon: "mdi-help-circle-outline", text: "ガイド", url: "/"},
     ],
     projects: [
       "VizHD",
       "開発",
       "マーケティング",
-      "VizHD",
-      "開発",
-      "マーケティング",
-      "VizHD",
-      "開発",
-      "マーケティング",
-      "VizHD",
-      "開発",
-      "マーケティング",
+      "営業",
+      "CS",
+      "経理",
+      "総務",
     ],
     transparent: 'rgba(128, 128, 128, 0.3)',
   }),
