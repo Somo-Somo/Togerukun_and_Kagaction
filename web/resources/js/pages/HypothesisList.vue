@@ -54,7 +54,7 @@
       <InputForm
         @clickCancel="isDisplay"
         @clickNext="isDisplay"
-        :addingForm="hypotheses[tab]"
+        :addingCard="hypotheses[tab]"
         :dialog="dialog"
         :hypotheses="hypotheses"
       />

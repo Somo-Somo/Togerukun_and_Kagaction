@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 // ページコンポーネントをインポートする
 import Login from './pages/Login.vue'
 import Project from './pages/Project.vue'
-import Hypothesis from './pages/Hypothesis.vue';
+import HypothesisList from './pages/HypothesisList.vue';
 import HypothesisDetail from './pages/HypothesisDetail.vue';
 
 // VueRouterプラグインを使用する
@@ -23,7 +23,7 @@ const routes = [
     },
     {
         path: '/project/:id',
-        component: Hypothesis
+        component: HypothesisList
     },
     {
         path: '/project/:id/:detailId',

@@ -6,7 +6,7 @@
           <v-text-field
             class="pa-0 ma-0"
             v-model="name"
-            :label="addingForm.category"
+            :label="addingCard.category"
             clearable
           ></v-text-field>
         </v-card-text>
@@ -96,7 +96,7 @@ export default {
     activeHypothesis: "",
   }),
   props: {
-    addingForm: {
+    addingCard: {
       type: Object,
     },
     dialog: {
@@ -110,8 +110,8 @@ export default {
     // 名前入力のみのフォームかチェック
     checkNameInputOnly() {
       if (
-        this.addingForm.category === "ゴール" ||
-        this.addingForm.category === "プロジェクト"
+        this.addingCard.category === "ゴール" ||
+        this.addingCard.category === "プロジェクト"
       ) {
         return true;
       } else {
@@ -122,8 +122,8 @@ export default {
     // フォームが空じゃないかバリデーションチェック
     formIsValid() {
       if (
-        this.addingForm.category === "ゴール" ||
-        this.addingForm.category === "プロジェクト"
+        this.addingCard.category === "ゴール" ||
+        this.addingCard.category === "プロジェクト"
       ) {
         return this.name;
       } else {

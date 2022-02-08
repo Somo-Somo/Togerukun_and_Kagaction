@@ -106,7 +106,7 @@
             >
               <HypothesisCards :cards="cards" />
               <!-- PC版追加カード -->
-              <NewAdditionalCard :on="on" :attrs="attrs" />
+              <NewAdditionalCard :on="on" :attrs="attrs" :category="'仮説'"/>
             </div>
           </div>
         </div>
