@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
-    <Navbar :drawer="drawer" />
-    <Header :headerTitle="headerTitle" @clickMenu="isDrawer" />
+    <Navbar :drawer="drawer" @clickMenu="isDrawer"/>
+    <Header :drawer="drawer" :headerTitle="headerTitle" @clickMenu="isDrawer" />
     <v-main class="my-md-2">
       <RouterView />
     </v-main>

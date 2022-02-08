@@ -10,7 +10,7 @@
       >
       <div class="d-flex justify-space-between" style="width: 222px;">
       <img :src="'/img/VizHD_logo_app.png'" alt="アプリロゴ">
-      <v-icon>mdi-chevron-double-left</v-icon>
+      <v-icon class="my-6" style="height: 24px;" @click="$emit('clickMenu')">mdi-chevron-double-left</v-icon>
       </div>
       </v-app-bar>
       <v-list class="pb-4" style="padding-top: 72px">
