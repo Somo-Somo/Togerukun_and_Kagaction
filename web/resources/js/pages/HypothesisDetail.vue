@@ -9,7 +9,11 @@
         <div
           class="d-flex flex-column"
           style="position: fixed"
-          :style="$vuetify.breakpoint.mdAndUp ? 'width: 772px' : 'width: calc(100vw - 24px)'"
+          :style="
+            $vuetify.breakpoint.mdAndUp
+              ? 'width: 772px'
+              : 'width: calc(100vw - 24px)'
+          "
           absolute
         >
           <div class="py-2 d-flex justify-start flex-column">
@@ -34,9 +38,14 @@
               hide-details
             ></v-textarea>
           </div>
-          <div class="py-2 d-flex justify-start" :style="$vuetify.breakpoint.mdAndUp ? 'height: 80px' : 'height: 64px'">
+          <div
+            class="py-2 d-flex justify-start"
+            :style="
+              $vuetify.breakpoint.mdAndUp ? 'height: 80px' : 'height: 64px'
+            "
+          >
             <v-subheader
-              class="my-2 my-md-3 pa-md-0"
+              class="d-flex align-self-center pa-md-0"
               :class="
                 $vuetify.breakpoint.mdAndUp
                   ? 'hypothesisSubTitle'
@@ -45,13 +54,29 @@
             >
               <p class="ma-0 font-weight-bold" color="grey darken-1">結果</p>
             </v-subheader>
-            <v-col class="py-0 py-md-3 px-4 px-md-6">
-              <v-icon class="px-1 my-2" :size="$vuetify.breakpoint.mdAndUp ? '32' : '28'"
-                >mdi-check-circle-outline</v-icon
+            <v-col class="px-4 px-md-6 d-flex align-self-center">
+              <v-btn
+                class="mx-1"
+                :result="result"
+                @click="clickSuccess"
+                :color="result === true ? 'green' : ''"
+                size="36"
+                icon
+                text
               >
-              <v-icon class="px-1 my-2" :size="$vuetify.breakpoint.mdAndUp ? '32' : '28'"
-                >mdi-close-circle-outline</v-icon
+                <v-icon size="32">mdi-check-circle-outline</v-icon>
+              </v-btn>
+              <v-btn
+                class="mx-1"
+                :result="result"
+                @click="clickFailure"
+                :color="result === false ? 'pink' : ''"
+                size="36"
+                icon
+                text
               >
+                <v-icon size="32">mdi-close-circle-outline</v-icon>
+              </v-btn>
             </v-col>
           </div>
           <div class="py-2">
@@ -90,7 +115,6 @@
         <!-- スマホ版追加ボタン -->
         <SpNewAdditionalBtn :on="on" :attrs="attrs" />
       </template>
-      
     </v-dialog>
   </v-container>
 </template>
@@ -111,8 +135,29 @@ export default {
     attrs: true,
     dialog: false,
     cards: ["朝ごはんを食べる", "日本海制圧"],
+    result: null,
   }),
   methods: {
+    clickSuccess: function () {
+      switch (this.result) {
+        case null:
+          return (this.result = true);
+        case true:
+          return (this.result = null);
+        case false:
+          return (this.result = true);
+      }
+    },
+    clickFailure: function () {
+      switch (this.result) {
+        case null:
+          return (this.result = false);
+        case true:
+          return (this.result = false);
+        case false:
+          return (this.result = null);
+      }
+    },
     isDisplay: function () {
       this.dialog = !this.dialog;
     },
@@ -122,14 +167,14 @@ export default {
 
 <style scoped lang='sass'>
 .hypothesisSubTitle
-    font-size: 1rem
+  font-size: 1rem
 
 .spHypothesisSubTitle
-    font-size: 14px
-    height: 24px
-    padding: 0 0 0 12px
+  font-size: 14px
+  height: 24px
+  padding: 0 0 0 12px
 
 .spCardStyle
-    height: calc(100vh - 224px)
-    position: relative
+  height: calc(100vh - 224px)
+  position: relative
 </style>
