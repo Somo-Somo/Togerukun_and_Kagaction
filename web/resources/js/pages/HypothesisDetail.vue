@@ -4,7 +4,7 @@
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
-    <v-dialog v-model="inputForm" width="500">
+    <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on, attrs }">
         <div
           class="d-flex flex-column"
@@ -90,7 +90,7 @@
         <!-- スマホ版追加ボタン -->
         <SpNewAdditionalBtn :on="on" :attrs="attrs" />
       </template>
-      <ProjectNameInput @clickCancel="isDisplay" @clickNext="isDisplay" />
+      
     </v-dialog>
   </v-container>
 </template>
@@ -99,24 +99,22 @@
 import HypothesisCards from "../components/Cards/HypothesisCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpNewAdditionalBtn from "../components/Buttons/SpNewAdditionalBtn.vue";
-import ProjectNameInput from "../components/Forms/ProjectNameInput.vue";
 
 export default {
   components: {
     HypothesisCards,
     NewAdditionalCard,
     SpNewAdditionalBtn,
-    ProjectNameInput,
   },
   data: () => ({
     on: true,
     attrs: true,
-    inputForm: false,
+    dialog: false,
     cards: ["朝ごはんを食べる", "日本海制圧"],
   }),
   methods: {
     isDisplay: function () {
-      this.inputForm = !this.inputForm;
+      this.dialog = !this.dialog;
     },
   },
 };
