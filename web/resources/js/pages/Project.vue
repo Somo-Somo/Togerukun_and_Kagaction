@@ -63,7 +63,6 @@ export default {
     attrs: true,
     dialog: false,
     addingForm: {category: "プロジェクト"},
-    
   }),
   methods: {
     isDisplay: function () {
