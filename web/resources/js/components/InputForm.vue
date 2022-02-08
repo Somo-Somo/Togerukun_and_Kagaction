@@ -25,7 +25,7 @@
               @click="changeActiveListItem(index)"
               :key="index"
             >
-              <div v-if="hypothesis.tab !== 'DONE'">
+              <div v-if="hypothesis.tab !== '完了'">
                 <v-expansion-panel-header>
                   {{ hypothesis.tab }}{{ key }}
                 </v-expansion-panel-header>
