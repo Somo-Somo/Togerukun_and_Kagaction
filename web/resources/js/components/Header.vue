@@ -1,6 +1,7 @@
 <template>
   <v-app-bar class="my-3 my-md-0" style="height: 72px" color="white" elevation="0" app>
     <v-app-bar-nav-icon
+      v-if="!drawer || $vuetify.breakpoint.md"
       @click="$emit('clickMenu')"
       class="mt-3 hidden-sm-and-down"
     ></v-app-bar-nav-icon>
@@ -13,6 +14,9 @@
 <script>
 export default {
   props: {
+    drawer: {
+      type: Boolean,
+    },
     headerTitle: {
       type: String,
     },

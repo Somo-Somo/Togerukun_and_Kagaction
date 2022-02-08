@@ -2,14 +2,18 @@
   <div class="hidden-sm-and-down" style="width: 256px">
     <v-navigation-drawer color="#80CBC4" v-model="drawer" app hide-overlay>
       <v-app-bar
-        class="d-flex flex-row px-4"
+        class="d-flex px-0 py-0 mt-2"
         color="#80CBC4"
-        style="height: 72px"
+        style="height: 72px;"
         elevation="0"
         absolute
       >
+      <div class="d-flex justify-space-between" style="width: 222px;">
+      <img :src="'/img/VizHD_logo_app.png'" alt="アプリロゴ">
+      <v-icon class="my-6" style="height: 24px;" @click="$emit('clickMenu')">mdi-chevron-double-left</v-icon>
+      </div>
       </v-app-bar>
-      <v-list class="pt-16 pb-4">
+      <v-list class="pb-4" style="padding-top: 72px">
         <v-list-item
           v-for="[icon, text] in links"
           :key="icon"
@@ -77,7 +81,7 @@ export default {
   },
   data: () => ({
     links: [
-      ["mdi-flag-variant-outline", "目標"],
+      // ["mdi-flag-variant-outline", "目標"],
       ["mdi-folder-multiple-outline", "プロジェクト"],
       ["mdi-help-circle-outline", "ガイド"],
     ],
