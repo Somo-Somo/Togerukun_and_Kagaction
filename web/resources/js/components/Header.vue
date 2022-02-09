@@ -14,6 +14,7 @@
     <v-toolbar-title class="d-flex justify-start mt-3 px-0 ml-md-2">
       <v-btn
         class="d-flex align-self-center"
+        v-if="headerTitle === '仮説一覧' || headerTitle === '仮説詳細'"
         @click="toBack(headerTitle)"
         small
         icon
@@ -21,7 +22,6 @@
       >
         <v-icon
           class="px-2"
-          v-if="headerTitle === '仮説一覧' || headerTitle === '仮説詳細'"
           >mdi-chevron-left</v-icon
         >
       </v-btn>
