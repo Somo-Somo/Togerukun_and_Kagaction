@@ -134,7 +134,7 @@ export default {
     on: true,
     attrs: true,
     dialog: false,
-    cards: ["朝ごはんを食べる", "日本海制圧"],
+    cards: ["グラフDB設計", "neo4jと接続"],
     result: null,
   }),
   methods: {
