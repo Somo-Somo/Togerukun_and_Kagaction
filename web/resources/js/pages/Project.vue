@@ -36,7 +36,7 @@
         </div>
         <!-- スマホ版追加ボタン -->
         
-        <SpNewAdditionalBtn :on="on" :attrs="attrs" :headerTitle="projects.category" />
+        <SpButtomBtn :on="on" :attrs="attrs" :headerTitle="projects.category" />
       
       </template>
       <!-- 追加のフォーム -->
@@ -48,14 +48,14 @@
 <script>
 import ProjectCards from "../components/Cards/ProjectCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
-import SpNewAdditionalBtn from "../components/Buttons/SpNewAdditionalBtn.vue";
+import SpButtomBtn from "../components/Buttons/SpBottomBtn.vue";
 import InputForm from "../components/InputForm.vue";
 
 export default {
   components: {
     ProjectCards,
     NewAdditionalCard,
-    SpNewAdditionalBtn,
+    SpButtomBtn,
     InputForm,
   },
   data: () => ({

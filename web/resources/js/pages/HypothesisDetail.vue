@@ -113,7 +113,7 @@
         <!-- PC版 -->
 
         <!-- スマホ版追加ボタン -->
-        <SpNewAdditionalBtn :on="on" :attrs="attrs" :headerTitle="'仮説詳細'" />
+        <SpBottomBtn :on="on" :attrs="attrs" :headerTitle="'仮説詳細'" />
       </template>
     </v-dialog>
   </v-container>
@@ -122,13 +122,13 @@
 <script>
 import HypothesisCards from "../components/Cards/HypothesisCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
-import SpNewAdditionalBtn from "../components/Buttons/SpNewAdditionalBtn.vue";
+import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
 
 export default {
   components: {
     HypothesisCards,
     NewAdditionalCard,
-    SpNewAdditionalBtn,
+    SpBottomBtn,
   },
   data: () => ({
     on: true,
