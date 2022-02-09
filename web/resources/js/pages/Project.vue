@@ -40,7 +40,7 @@
       
       </template>
       <!-- 追加のフォーム -->
-      <InputForm @clickCancel="isDisplay" @clickNext="isDisplay" :addingCard="projects" />
+      <InputForm @clickCancel="isDisplay" @clickNext="isDisplay" :dialog="dialog" :addingCard="projects" />
     </v-dialog>
   </v-container>
 </template>
