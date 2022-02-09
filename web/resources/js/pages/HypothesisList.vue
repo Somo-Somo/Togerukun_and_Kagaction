@@ -49,7 +49,7 @@
           </v-tabs-items>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpNewAdditionalBtn :on="on" :attrs="attrs" :tab="tab" />
+        <SpNewAdditionalBtn :on="on" :attrs="attrs" :tab="tab" :headerTitle="'仮説一覧'" />
       </template>
       <InputForm
         @clickCancel="isDisplay"

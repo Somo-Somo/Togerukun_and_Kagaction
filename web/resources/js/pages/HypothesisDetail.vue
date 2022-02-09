@@ -113,7 +113,7 @@
         <!-- PC版 -->
 
         <!-- スマホ版追加ボタン -->
-        <SpNewAdditionalBtn :on="on" :attrs="attrs" />
+        <SpNewAdditionalBtn :on="on" :attrs="attrs" :headerTitle="'仮説詳細'" />
       </template>
     </v-dialog>
   </v-container>

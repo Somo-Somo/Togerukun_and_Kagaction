@@ -36,7 +36,7 @@
         </div>
         <!-- スマホ版追加ボタン -->
         
-        <SpNewAdditionalBtn :on="on" :attrs="attrs" />
+        <SpNewAdditionalBtn :on="on" :attrs="attrs" :headerTitle="projects.category" />
       
       </template>
       <!-- 追加のフォーム -->
