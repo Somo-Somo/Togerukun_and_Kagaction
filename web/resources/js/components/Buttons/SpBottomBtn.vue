@@ -11,10 +11,10 @@
         <v-avatar
           class="ma-3"
           size="64"
+          @click="toBack(headerTitle)"
           :class="{ 'show-chevron-left': hover }"
           :color="transparent.chevronLeft"
           v-bind="attrs"
-          v-on="on"
         >
           <v-icon size="32" color="white" style="backgroud-color: white">
             mdi-chevron-left
@@ -61,6 +61,16 @@ export default {
     },
     tab: {
       type: Number,
+    },
+    headerTitle: {
+      type: String,
+    },
+  },
+  methods: {
+    toBack: function (headerTitle) {
+      return headerTitle === "仮説一覧"
+        ? this.$router.push({ path: "/project" })
+        : this.$router.push({ path: "/project/123" });
     },
   },
 };
