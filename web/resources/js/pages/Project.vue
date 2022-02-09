@@ -30,7 +30,7 @@
           class="overflow-y-auto d-flex flex-column"
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
-          <Cards />
+          <ProjectCards />
           <!-- PC版追加カード -->
           <NewAdditionalCard :on="on" :attrs="attrs" :category="projects.category" />
         </div>
@@ -46,14 +46,14 @@
 </template>
 
 <script>
-import Cards from "../components/Cards.vue";
+import ProjectCards from "../components/Cards/ProjectCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpNewAdditionalBtn from "../components/Buttons/SpNewAdditionalBtn.vue";
 import InputForm from "../components/InputForm.vue";
 
 export default {
   components: {
-    Cards,
+    ProjectCards,
     NewAdditionalCard,
     SpNewAdditionalBtn,
     InputForm,
