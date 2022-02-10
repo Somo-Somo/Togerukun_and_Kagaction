@@ -2,7 +2,7 @@
   <v-hover v-slot="{ hover }">
     <div class="d-flex d-md-none pa-6">
       <v-avatar
-        v-if="$route.matched[0].path !== '/project'"
+        v-if="$route.matched[0].path !== '/projects'"
         class="d-flex justify-center"
         size="48"
         color="white"
@@ -69,8 +69,8 @@ export default {
   methods: {
     toBack: function (headerTitle) {
       return headerTitle === "仮説一覧"
-        ? this.$router.push({ path: "/project" })
-        : this.$router.push({ path: "/project/123" });
+        ? this.$router.push({ path: "/projects" })
+        : this.$router.push({ path: "/projects/123" });
     },
   },
 };

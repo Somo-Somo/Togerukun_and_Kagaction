@@ -45,8 +45,8 @@ export default {
   methods: {
     toBack: function (headerTitle) {
       return headerTitle === "仮説一覧"
-        ? this.$router.push({ path: "/project" })
-        : this.$router.push({ path: "/project/123" });
+        ? this.$router.push({ path: "/projects" })
+        : this.$router.push({ path: "/projects/123" });
     },
   },
 };

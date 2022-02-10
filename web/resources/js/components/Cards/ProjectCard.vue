@@ -48,7 +48,7 @@ export default {
   }),
   methods: {
     toHypothesis: function () {
-      return this.$router.push({ path: "/project/123" });
+      return this.$router.push({ path: "/projects/123" });
     },
   },
 };
