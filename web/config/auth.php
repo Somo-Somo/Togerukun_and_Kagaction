@@ -1,5 +1,7 @@
 <?php
 
+use Facade\Ignition\Support\Packagist\Package;
+
 return [
 
     /*
@@ -62,7 +64,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => Packages\Domain\User::class,
         ],
 
         // 'users' => [
