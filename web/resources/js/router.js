@@ -18,15 +18,15 @@ const routes = [
         component: Login
     },
     {
-        path: '/project',
+        path: '/projects',
         component: Project
     },
     {
-        path: '/project/:id',
+        path: '/projects/:id',
         component: HypothesisList
     },
     {
-        path: '/project/:id/:detailId',
+        path: '/projects/:id/:detailId',
         component: HypothesisDetail
     },
 ]

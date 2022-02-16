@@ -24,11 +24,11 @@ export default {
   computed: {
     headerTitle() {
       switch (this.$route.matched[0].path) {
-        case "/project":
+        case "/projects":
           return "プロジェクト";
-        case "/project/:id":
+        case "/projects/:id":
           return "仮説一覧";
-        case "/project/:id/:detailId":
+        case "/projects/:id/:detailId":
           return "仮説詳細";
       }
     },

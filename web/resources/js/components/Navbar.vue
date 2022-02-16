@@ -93,7 +93,7 @@ export default {
   data: () => ({
     items: [
       // {icon: "mdi-flag-variant-outline", text: "目標", url: "/project"},
-      {icon: "mdi-folder-multiple-outline", text: "プロジェクト", url: "/project"},
+      {icon: "mdi-folder-multiple-outline", text: "プロジェクト", url: "/projects"},
       {icon: "mdi-help-circle-outline", text: "ガイド", url: "/"},
     ],
     projects: [
@@ -112,7 +112,7 @@ export default {
       return this.$router.push({ path: url });
     },
     fromProject: function () {
-      return this.$router.push({ path: "/project/123" });
+      return this.$router.push({ path: "/projects/123" });
     }
   },
 };
