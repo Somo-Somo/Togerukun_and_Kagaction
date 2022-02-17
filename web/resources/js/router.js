@@ -14,7 +14,7 @@ Vue.use(VueRouter)
 // パスとコンポーネントのマッピング
 const routes = [
     {
-        path: '/',
+        path: '/login',
         component: Login
     },
     {
