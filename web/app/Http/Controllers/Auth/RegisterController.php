@@ -28,11 +28,11 @@ class RegisterController extends Controller
         }
 
         //バリエーションで問題がなかった場合にはユーザを作成する。
-        $user = [
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ];
+        ]);
 
         //ユーザの作成が完了するとjsonを返す
         $json = [
