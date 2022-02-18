@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // ページコンポーネントをインポートする
+import User from './pages/User.vue'
 import Login from './pages/Login.vue'
 import Project from './pages/Project.vue'
 import HypothesisList from './pages/HypothesisList.vue';
@@ -13,6 +14,10 @@ Vue.use(VueRouter)
 
 // パスとコンポーネントのマッピング
 const routes = [
+    {
+        path: '/',
+        component: User
+    },
     {
         path: '/login',
         component: Login

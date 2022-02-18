@@ -7,14 +7,13 @@
       max-width="640"
     >
       <v-card-title class="text-center pa-8">
-        <h4 class="fill-width">{{ isLoginForm ? 'ログイン' : '会員登録' }}</h4>
+        <h4 class="fill-width">{{ isLoginForm ? "ログイン" : "会員登録" }}</h4>
       </v-card-title>
       <v-divider> </v-divider>
-      <form class="form" @submit="submitForm">
+      <form class="form" @submit.prevent="submitForm()">
         <div class="px-6 py-8">
           <div style="max-width: 344px" class="mx-auto">
             <div class="pt-6">
-              <div>
                 <v-text-field
                   v-model="registerForm.name"
                   v-if="!isLoginForm"
@@ -26,7 +25,7 @@
                 ></v-text-field>
 
                 <v-text-field
-                  :model="isLoginForm ? loginForm.email : registerForm.email"
+                  v-model="email"
                   autofocus
                   dense
                   height="48px"
@@ -35,7 +34,7 @@
                 ></v-text-field>
 
                 <v-text-field
-                  :model="isLoginForm ? loginForm.password : registerForm.password"
+                  v-model="password"
                   :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="passwordShow ? 'text' : 'password'"
                   dense
@@ -45,27 +44,27 @@
                   placeholder="パスワード"
                   @click:append="passwordShow = !passwordShow"
                 ></v-text-field>
-              </div>
-              <div class="login-btn pb-8">
-                <v-btn
-                  class="fill-width caption"
-                  color="#FFCB00"
-                  depressed
-                  height="48px"
-                  tile
-                >
-                  {{ isLoginForm ? 'ログイン' : '会員登録'}}
-                </v-btn>
-              </div>
-              <v-divider></v-divider>
-              <div class="pt-8 pb-4" v-if="!isLoginForm">
-                <span>すでにアカウントをお持ちですか？</span>
-                <p @click="isLoginForm = true">ログインに移動</p>
-              </div>
-              <div class="pt-8 pb-4" v-if="isLoginForm">
-                <span>アカウントをお持ちでない方はこちらへ</span>
-                <p @click="isLoginForm = false">会員登録に移動</p>
-              </div>
+            </div>
+            <div class="login-btn pb-8">
+              <v-btn
+                type="submit"
+                class="fill-width caption"
+                color="#FFCB00"
+                depressed
+                height="48px"
+                tile
+              >
+                {{ isLoginForm ? "ログイン" : "会員登録" }}
+              </v-btn>
+            </div>
+            <v-divider></v-divider>
+            <div class="pt-8 pb-4" v-if="!isLoginForm">
+              <span>すでにアカウントをお持ちですか？</span>
+              <p @click="isLoginForm = true; email = ''; password=''">ログインに移動</p>
+            </div>
+            <div class="pt-8 pb-4" v-if="isLoginForm">
+              <span>アカウントをお持ちでない方はこちらへ</span>
+              <p @click="isLoginForm = false; email = ''; password=''">会員登録に移動</p>
             </div>
           </div>
         </div>
@@ -78,38 +77,47 @@
 export default {
   data: () => ({
     isLoginForm: true,
+    email: "",
+    password: "",
     loginForm: {
-        email: '',
-        password: ''
+      email: "",
+      password: "",
     },
     registerForm: {
-        name: '',
-        email: '',
-        password: '',
+      name: "",
+      email: "",
+      password: "",
     },
     passwordShow: false,
   }),
   methods: {
-    submitForm() {
-      this.isLoginForm ? this.login() : this.register();
+    submitForm(){
+      this.isLoginForm ? this.login() : this.register()
     },
-    async login () {
+    async login() {
+      this.loginForm.email = this.email
+      this.loginForm.password = this.password
       // authストアのloginアクションを呼び出す
-      await this.$store.dispatch('auth/login', this.loginForm)
+      await this.$store.dispatch("auth/login", this.loginForm);
+      this.$router.push("/");
 
-      if (this.apiStatus) {
-        // トップページに移動する
-        this.$router.push('/')
-      }
+      // if (this.apiStatus) {
+      //   // トップページに移動する
+      //   this.$router.push('/')
+      // }
     },
-    async register () {
+    async register() {
+      this.registerForm.email = this.email
+      this.regitsterForm.password = this.password
       // authストアのresigterアクションを呼び出す
-      await this.$store.dispatch('auth/register', this.registerForm)
+      await this.$store.dispatch("auth/register", this.registerForm);
+      this.$router.push("/");
+     
 
-      if (this.apiStatus) {
-        // トップページに移動する
-        this.$router.push('/')
-      }
+      // if (this.apiStatus) {
+      //   // トップページに移動する
+      //   this.$router.push('/')
+      // }
     },
   },
 };
