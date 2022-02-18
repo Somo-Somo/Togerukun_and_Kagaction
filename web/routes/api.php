@@ -20,14 +20,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    // return $request->user();
-    return 'auth';
+Route::middleware('auth:sanctum')->get('/', function (Request $request) {
+    return $request->user();
 })->name('login');
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
+
+Route::get('/user', fn() => Auth::user())->name('user');
 
 // プロジェクト
 Route::get('/projects', [ProjectController::class, 'index']);
