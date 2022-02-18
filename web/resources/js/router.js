@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from './store'
 
 // ページコンポーネントをインポートする
 import User from './pages/User.vue'
@@ -20,7 +21,14 @@ const routes = [
     },
     {
         path: '/login',
-        component: Login
+        component: Login,
+        beforeEnter (to, from, next) {
+            if (store.getters['auth/check']) {
+              next('/')
+            } else {
+              next()
+            }
+        }
     },
     {
         path: '/projects',
