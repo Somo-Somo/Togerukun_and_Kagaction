@@ -101,7 +101,7 @@ export default {
 
       // authストアのloginアクションを呼び出す
       await this.$store.dispatch("auth/login", this.loginForm);
-      this.$router.push("/");
+      this.$router.push("/user_test");
 
       // if (this.apiStatus) {
       //   // トップページに移動する
@@ -111,11 +111,11 @@ export default {
     async register() {
       // 共通フォームを使ってためここでDataをSET
       this.registerForm.email = this.email
-      this.regitsterForm.password = this.password
+      this.registerForm.password = this.password
 
       // authストアのresigterアクションを呼び出す
       await this.$store.dispatch("auth/register", this.registerForm);
-      this.$router.push("/");
+      this.$router.push("/user_test");
      
 
       // if (this.apiStatus) {

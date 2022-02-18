@@ -16,7 +16,7 @@ Vue.use(VueRouter)
 // パスとコンポーネントのマッピング
 const routes = [
     {
-        path: '/',
+        path: '/user_test',
         component: User
     },
     {
@@ -24,7 +24,7 @@ const routes = [
         component: Login,
         beforeEnter (to, from, next) {
             if (store.getters['auth/check']) {
-              next('/')
+              next('/user_test')
             } else {
               next()
             }
