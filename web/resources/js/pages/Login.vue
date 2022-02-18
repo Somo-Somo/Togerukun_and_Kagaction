@@ -95,8 +95,10 @@ export default {
       this.isLoginForm ? this.login() : this.register()
     },
     async login() {
+      // 共通フォームを使ってためここでDataをSET
       this.loginForm.email = this.email
       this.loginForm.password = this.password
+
       // authストアのloginアクションを呼び出す
       await this.$store.dispatch("auth/login", this.loginForm);
       this.$router.push("/");
@@ -107,8 +109,10 @@ export default {
       // }
     },
     async register() {
+      // 共通フォームを使ってためここでDataをSET
       this.registerForm.email = this.email
       this.regitsterForm.password = this.password
+
       // authストアのresigterアクションを呼び出す
       await this.$store.dispatch("auth/register", this.registerForm);
       this.$router.push("/");

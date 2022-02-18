@@ -33,15 +33,15 @@ class LoginController extends Controller
         return response()->json('Can Not Login.', Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        Auth::logout();
+        // Auth::logout();
 
-        // session refresh
-        $request->session()->invalidate();
+        // // session refresh
+        // $request->session()->invalidate();
 
-        // regenerate token
-        $request->session()->regenerateToken();
+        // // regenerate token
+        // $request->session()->regenerateToken();
 
         return response()->json(['message' => 'Logged out.'], Response::HTTP_OK);
     }
