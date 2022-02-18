@@ -10,6 +10,10 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css';
 
 Vue.use(Vuetify);
 
+const createApp = async () => {
+
+await store.dispatch('auth/currentUser')
+
 new Vue({
     vuetify: new Vuetify(),
     el: '#app',
@@ -18,3 +22,5 @@ new Vue({
     components: { App }, 
     template: '<App />'
 })
+}
+createApp()
