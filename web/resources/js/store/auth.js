@@ -36,7 +36,7 @@ const actions = {
             .then((res) => {
                 axios.post('/api/login', data)
                     .then((response) => {
-                        console.info('ログイン成功')
+                        console.info(response.data)
                         context.commit('setUser', response.data)
                     })
                     .catch((err) => {
@@ -48,21 +48,12 @@ const actions = {
             })
     },
 
-    logout (context) {
-        axios.get('/sanctum/csrf-cookie', { withCredentials: true })
-            .then((res) => {
-                axios.post('/api/logout')
-                    .then((response) => {
-                        console.info('ログアウト成功')
-                        context.commit('setUser', null)
-                    })
-                    .catch((err) => {
-                        console.error('ログアウト失敗')
-                    })
-                })
-            .catch((err) => {
-                console.log('sanctum失敗')
-            })
+    async logout (context) {
+            await axios.get('/sanctum/csrf-cookie', { withCredentials: true })
+            await axios.post('/api/logout')
+            console.info('ログアウト成功')
+            await context.commit('setUser', null)
+            console.info('userをnullにしました')
     },
 
     currentUser (context) {

@@ -5,14 +5,10 @@
 <script>
 export default {
   methods: {
-    logout() {
-          this.$store.dispatch("auth/logout")
-            .then(() => {
-              this.$router.push("/login");
-            })
-            .catch((error) => {
-              this.$router.push("/abc");
-            });
+     async logout() {
+        await this.$store.dispatch("auth/logout")
+        console.info('loginへ移動')
+        await this.$router.push("/login");
     },
   },
 };
