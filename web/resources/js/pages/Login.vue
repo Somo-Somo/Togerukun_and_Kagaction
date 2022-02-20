@@ -114,39 +114,27 @@ export default {
       // 共通フォームを使ってためここでDataをSET
       this.loginForm.email = this.email;
       this.loginForm.password = this.password;
-
-      axios
-        .get("/sanctum/csrf-cookie", { withCredentials: true })
-        .then((response) => {
-          this.$store
-            .dispatch("auth/login", this.loginForm)
+      this.$store.dispatch("auth/login", this.loginForm)
             .then(() => {
               this.$router.push("/user_test");
             })
             .catch((error) => {
-              this.$router.push("/projects");
-              console.log(error);
+              this.$router.push("/login");
             });
-        });
+     
     },
     register() {
       // 共通フォームを使ってためここでDataをSET
       this.registerForm.email = this.email;
       this.registerForm.password = this.password;
 
-      axios
-        .get("/sanctum/csrf-cookie", { withCredentials: true })
-        .then((response) => {
-          this.$store
-            .dispatch("auth/register", this.registerForm)
+      this.$store.dispatch("auth/register", this.registerForm)
             .then(() => {
               this.$router.push("/user_test");
             })
             .catch((error) => {
-              this.$router.push("/projects");
-              console.log(error);
+              this.$router.push("/login");
             });
-        });
     },
   },
 };
