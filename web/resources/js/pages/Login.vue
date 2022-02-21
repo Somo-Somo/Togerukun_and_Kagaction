@@ -138,16 +138,6 @@ export default {
     submitForm() {
       this.isLoginForm ? this.login() : this.register();
     },
-    async login() {
-      // 共通フォームを使ってためここでDataをSET
-      this.loginForm.email = this.email;
-      this.loginForm.password = this.password;
-      await this.$store.dispatch("auth/login", this.loginForm);
-
-      if (this.apiStatus) {
-        this.$router.push("/user_test");
-      }
-    },
     async register() {
       // 共通フォームを使ってためここでDataをSET
       this.registerForm.email = this.email;
@@ -157,6 +147,16 @@ export default {
 
       if (this.apiStatus) {
         // トップページに移動する
+        this.$router.push("/user_test");
+      }
+    },
+    async login() {
+      // 共通フォームを使ってためここでDataをSET
+      this.loginForm.email = this.email;
+      this.loginForm.password = this.password;
+      await this.$store.dispatch("auth/login", this.loginForm);
+
+      if (this.apiStatus) {
         this.$router.push("/user_test");
       }
     },
