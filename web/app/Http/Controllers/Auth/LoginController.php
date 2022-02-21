@@ -11,6 +11,12 @@ use \Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends Controller
 {
+
+    public function authStatus(Request $request)
+    {
+        return $request->user();
+    }
+
     public function login(Request $request)
     {
         //バリデーション
@@ -19,30 +25,23 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-        //login処理
         if (Auth::attempt($credentials)) {
-            $user = User::where('email', $request->email)->first();
+            $request->session()->regenerate();
+            $user = $request->user();
 
-            $user->tokens()->delete();
-            $token = $user->createToken("login:user{$user->id}")->plainTextToken;
-
-            //ログインが成功するとtokenを返す。
-            return response()->json(['token' => $token], Response::HTTP_OK);
+            return response()->json(['user' => $user], Response::HTTP_OK);
         }
 
         return response()->json('Can Not Login.', Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        // Auth::logout();
+        Auth::logout();
 
-        // // session refresh
-        // $request->session()->invalidate();
+        $user = $request->user();
 
-        // // regenerate token
-        // $request->session()->regenerateToken();
-
-        return response()->json(['message' => 'Logged out.'], Response::HTTP_OK);
+        return response()->json(['message' => 'Logged out.', 'user' => $user], Response::HTTP_OK);
     }
+
 }
