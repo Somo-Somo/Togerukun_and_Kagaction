@@ -53,6 +53,6 @@ class RegisterController extends Controller
         ];
 
  
-        return response()->json( $json, Response::HTTP_OK);
+        return response()->json( $json, Response::HTTP_CREATED);
     }
 }
