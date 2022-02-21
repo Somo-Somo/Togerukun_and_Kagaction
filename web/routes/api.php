@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Auth;
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
-Route::get('/auth_status', fn() => Auth::user())->name('user');
+Route::get('/auth_status', fn () => Auth::user())->name('user');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // プロジェクト
@@ -46,8 +46,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/current_goals', [HypothesisController::class, 'index']);
     Route::post('/current_goal/{hypothesisId}', [HypothesisController::class, 'store']);
     Route::delete('/current_goal/{hypothesisId}', [HypothesisController::class, 'destroy']);
-
 });
-
-
-
