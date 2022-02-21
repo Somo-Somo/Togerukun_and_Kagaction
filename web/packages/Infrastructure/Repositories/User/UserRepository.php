@@ -14,7 +14,7 @@ class UserRepository implements UserRepositoryInterface
             <<<'CYPHER'
                 CREATE (
                     :User {
-                        user_id: 
+                        user_id: $user_id,
                         name: $name, 
                         email: $email,
                         password: $password
