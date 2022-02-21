@@ -46,9 +46,7 @@ const actions = {
   async login (context, data) {
     context.commit ('setApiStatus', null);
     await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-    const response = await axios
-      .post ('/api/login', data)
-      .catch (err => err.response || err);
+    const response = await axios.post ('/api/login', data)
 
     console.info (response.status);
 
