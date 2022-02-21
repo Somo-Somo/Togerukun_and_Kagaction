@@ -31,7 +31,7 @@ const actions = {
   async register (context, data) {
     context.commit ('setApiStatus', null);
     await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-    const response = await axios.post ('/api/login', data);
+    const response = await axios.post ('/api/register', data);
 
     if (response.status === CREATED) {
       context.commit ('setApiStatus', true);
@@ -41,6 +41,8 @@ const actions = {
     }
 
     context.commit ('setApiStatus', false);
+
+    console.info(response)
 
     if (response.status === UNPROCESSABLE_ENTITY) {
       context.commit ('setRegisterErrorMessages', response.data.errors);
