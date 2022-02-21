@@ -17,7 +17,6 @@ export default {
   methods: {
     async logout() {
       await this.$store.dispatch("auth/logout");
-      console.info("loginへ移動");
       if (this.apiStatus) {
         this.$router.push('/login')
       }

@@ -80,7 +80,6 @@ const actions = {
     if (response.status === OK) {
       context.commit ('setApiStatus', true);
       context.commit ('setUser', null);
-      console.info ('ログアウト成功');
       return false;
     }
 
