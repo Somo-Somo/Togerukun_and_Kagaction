@@ -1,5 +1,8 @@
+import { OK } from '../util'
+
 const state = {
-    user: null
+    user: null,
+    apiStatus: null
   }
 
 const getters = {
@@ -9,7 +12,10 @@ const getters = {
 
 const mutations = {
     setUser (state, user) {
-      state.user = user
+    state.user = user
+    },
+    setApiStatus (state, status) {
+      state.apiStatus = status
     }
   }
 
@@ -31,21 +37,24 @@ const actions = {
         })
     },
 
-    login (context, data) {
-        axios.get('/sanctum/csrf-cookie', { withCredentials: true })
-            .then((res) => {
-                axios.post('/api/login', data)
-                    .then((response) => {
-                        console.info(response.data)
-                        context.commit('setUser', response.data)
-                    })
-                    .catch((err) => {
-                        console.error('ログイン失敗')
-                    })
-                })
-            .catch((err) => {
-                console.warn('sanctum失敗')
-            })
+    async login (context, data) {
+        context.commit('setApiStatus', null)
+        await axios.get('/sanctum/csrf-cookie', { withCredentials: true })
+        const response = await axios.post('/api/login', data).catch(err => err.response || err)
+
+        console.info(response.status)
+
+        if (response.status === OK) {
+            context.commit('setApiStatus', true)
+            context.commit('setUser', response.data)
+            console.info('ログイン成功')
+            return false
+        }
+
+        console.log(response.status)
+
+        context.commit('setApiStatus', false)
+        context.commit('error/setCode', response.status, { root: true })
     },
 
     async logout (context) {

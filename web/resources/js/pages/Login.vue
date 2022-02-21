@@ -106,22 +106,24 @@ export default {
     },
     passwordShow: false,
   }),
+  computed: {
+    apiStatus () {
+      return this.$store.state.auth.apiStatus
+    }
+  },
   methods: {
     submitForm() {
       this.isLoginForm ? this.login() : this.register();
     },
-    login() {
+    async login() {
       // 共通フォームを使ってためここでDataをSET
       this.loginForm.email = this.email;
       this.loginForm.password = this.password;
-      this.$store.dispatch("auth/login", this.loginForm)
-            .then(() => {
-              this.$router.push("/user_test");
-            })
-            .catch((error) => {
-              this.$router.push("/login");
-            });
-     
+      await this.$store.dispatch("auth/login", this.loginForm)
+
+      if (this.apiStatus) {
+        this.$router.push('/user_test')
+      }  
     },
     register() {
       // 共通フォームを使ってためここでDataをSET

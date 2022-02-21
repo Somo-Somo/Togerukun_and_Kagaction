@@ -8,6 +8,7 @@ import Login from './pages/Login.vue'
 import Project from './pages/Project.vue'
 import HypothesisList from './pages/HypothesisList.vue';
 import HypothesisDetail from './pages/HypothesisDetail.vue';
+import SystemError from './pages/errors/System.vue'
 
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
@@ -42,6 +43,10 @@ const routes = [
         path: '/projects/:id/:detailId',
         component: HypothesisDetail
     },
+    {
+        path: '/500',
+        component: SystemError
+    }
 ]
 
 // VueRouterインスタンスを作成する
