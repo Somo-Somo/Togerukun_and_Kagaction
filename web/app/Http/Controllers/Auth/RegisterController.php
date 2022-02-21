@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use packages\Domain\User\User;
+use packages\Domain\User\UserRepositoryInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +14,13 @@ use \Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
 {
+    protected $user_repository;
+
+    public function __construct(UserRepositoryInterface $userRepositoryInterface)
+    {
+        $this->user_repository = $userRepositoryInterface;
+    }
+
     public function register(Request $request)
     {
         //入力バリデーション
@@ -33,6 +41,9 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // ユーザー作成後UserRepositoryを通してNeo4jに保存
+        $this->user_repository->register($user);
 
         //ユーザの作成が完了するとjsonを返す
         $json = [

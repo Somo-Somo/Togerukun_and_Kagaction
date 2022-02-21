@@ -12,7 +12,19 @@ class UserRepository implements UserRepositoryInterface
         $client = Neo4jDB::call();
         $client->run(
             <<<'CYPHER'
-                CREATE (u:User {name:"test1"})
-                CYPHER,);
+                CREATE (
+                    :User {
+                        user_id: 
+                        name: $name, 
+                        email: $email,
+                        password: $password
+                    })
+                CYPHER,
+                [
+                    'user_id' => $user['id'], 
+                    'name' => $user['name'], 
+                    'email' => $user['email'],
+                    'password' => $user['password']
+                ]);
     }
 }
