@@ -1,8 +1,9 @@
-import { OK } from '../util'
+import { OK, UNPROCESSABLE_ENTITY } from '../util'
 
 const state = {
     user: null,
-    apiStatus: null
+    apiStatus: null,
+    loginErrorMessages: null
   }
 
 const getters = {
@@ -12,10 +13,13 @@ const getters = {
 
 const mutations = {
     setUser (state, user) {
-    state.user = user
+        state.user = user
     },
     setApiStatus (state, status) {
-      state.apiStatus = status
+        state.apiStatus = status
+    },
+    setLoginErrorMessages (state, messages) {
+        state.loginErrorMessages = messages
     }
   }
 
@@ -54,7 +58,11 @@ const actions = {
         console.log(response.status)
 
         context.commit('setApiStatus', false)
-        context.commit('error/setCode', response.status, { root: true })
+        if (response.status === UNPROCESSABLE_ENTITY) {
+            context.commit('setLoginErrorMessages', response.data.errors)
+        } else {
+            context.commit('error/setCode', response.status, { root: true })
+        }
     },
 
     async logout (context) {
