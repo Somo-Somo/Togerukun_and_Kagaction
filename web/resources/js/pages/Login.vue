@@ -19,6 +19,17 @@
             <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
           </ul>
         </div>
+        <div v-if="registerErrors" class="errors">
+          <ul v-if="registerErrors.name">
+            <li v-for="msg in registerErrors.name" :key="msg">{{ msg }}</li>
+          </ul>
+          <ul v-if="registerErrors.email">
+            <li v-for="msg in registerErrors.email" :key="msg">{{ msg }}</li>
+          </ul>
+          <ul v-if="registerErrors.password">
+            <li v-for="msg in registerErrors.password" :key="msg">{{ msg }}</li>
+          </ul>
+        </div>
         <div class="px-6 py-8">
           <div style="max-width: 344px" class="mx-auto">
             <div class="pt-6">
@@ -120,6 +131,7 @@ export default {
     ...mapState({
       apiStatus: (state) => state.auth.apiStatus,
       loginErrors: (state) => state.auth.loginErrorMessages,
+      registerErrors: state => state.auth.registerErrorMessages
     }),
   },
   methods: {
@@ -136,22 +148,21 @@ export default {
         this.$router.push("/user_test");
       }
     },
-    register() {
+    async register() {
       // 共通フォームを使ってためここでDataをSET
       this.registerForm.email = this.email;
       this.registerForm.password = this.password;
 
-      this.$store
-        .dispatch("auth/register", this.registerForm)
-        .then(() => {
-          this.$router.push("/user_test");
-        })
-        .catch((error) => {
-          this.$router.push("/login");
-        });
+      await this.$store.dispatch("auth/register", this.registerForm);
+
+      if (this.apiStatus) {
+        // トップページに移動する
+        this.$router.push("/user_test");
+      }
     },
     clearError() {
       this.$store.commit("auth/setLoginErrorMessages", null);
+      this.$store.commit("auth/setRegisterErrorMessages", null);
     },
   },
   created() {
