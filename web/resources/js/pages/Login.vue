@@ -11,14 +11,14 @@
       </v-card-title>
       <v-divider> </v-divider>
       <form class="form" @submit.prevent="submitForm()">
-          <div v-if="loginErrors" class="errors">
-    <ul v-if="loginErrors.email">
-      <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
-    </ul>
-    <ul v-if="loginErrors.password">
-      <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
-    </ul>
-  </div>
+        <div v-if="loginErrors" class="errors">
+          <ul v-if="loginErrors.email">
+            <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
+          </ul>
+          <ul v-if="loginErrors.password">
+            <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
+          </ul>
+        </div>
         <div class="px-6 py-8">
           <div style="max-width: 344px" class="mx-auto">
             <div class="pt-6">
@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   data: () => ({
@@ -118,9 +118,9 @@ export default {
   }),
   computed: {
     ...mapState({
-      apiStatus: state => state.auth.apiStatus,
-      loginErrors: state => state.auth.loginErrorMessages
-    })
+      apiStatus: (state) => state.auth.apiStatus,
+      loginErrors: (state) => state.auth.loginErrorMessages,
+    }),
   },
   methods: {
     submitForm() {
@@ -130,31 +130,32 @@ export default {
       // 共通フォームを使ってためここでDataをSET
       this.loginForm.email = this.email;
       this.loginForm.password = this.password;
-      await this.$store.dispatch("auth/login", this.loginForm)
+      await this.$store.dispatch("auth/login", this.loginForm);
 
       if (this.apiStatus) {
-        this.$router.push('/user_test')
-      }  
+        this.$router.push("/user_test");
+      }
     },
     register() {
       // 共通フォームを使ってためここでDataをSET
       this.registerForm.email = this.email;
       this.registerForm.password = this.password;
 
-      this.$store.dispatch("auth/register", this.registerForm)
-            .then(() => {
-              this.$router.push("/user_test");
-            })
-            .catch((error) => {
-              this.$router.push("/login");
-            });
+      this.$store
+        .dispatch("auth/register", this.registerForm)
+        .then(() => {
+          this.$router.push("/user_test");
+        })
+        .catch((error) => {
+          this.$router.push("/login");
+        });
     },
-    clearError () {
-      this.$store.commit('auth/setLoginErrorMessages', null)
-    }
+    clearError() {
+      this.$store.commit("auth/setLoginErrorMessages", null);
+    },
   },
-  created () {
-    this.clearError()
-  }
+  created() {
+    this.clearError();
+  },
 };
 </script>

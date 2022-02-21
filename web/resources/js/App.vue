@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <Navbar :drawer="drawer" @clickMenu="isDrawer"/>
+    <Navbar :drawer="drawer" @clickMenu="isDrawer" />
     <Header :drawer="drawer" :headerTitle="headerTitle" @clickMenu="isDrawer" />
     <v-main class="my-md-2">
       <RouterView />
@@ -13,7 +13,7 @@
 import Header from "./components/Header.vue";
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
-import { INTERNAL_SERVER_ERROR } from './util'
+import { INTERNAL_SERVER_ERROR } from "./util";
 
 export default {
   components: {
@@ -33,9 +33,9 @@ export default {
           return "仮説詳細";
       }
     },
-    errorCode () {
-      return this.$store.state.error.code
-    }
+    errorCode() {
+      return this.$store.state.error.code;
+    },
   },
   methods: {
     isDrawer: function () {
@@ -44,16 +44,16 @@ export default {
   },
   watch: {
     errorCode: {
-      handler (val) {
-          if (val === INTERNAL_SERVER_ERROR) {
-            this.$router.push('/500')
-          }
-        },
-        immediate: true
+      handler(val) {
+        if (val === INTERNAL_SERVER_ERROR) {
+          this.$router.push("/500");
+        }
       },
-      $route () {
-        this.$store.commit('error/setCode', null)
-      }
-   }
+      immediate: true,
+    },
+    $route() {
+      this.$store.commit("error/setCode", null);
+    },
+  },
 };
 </script>

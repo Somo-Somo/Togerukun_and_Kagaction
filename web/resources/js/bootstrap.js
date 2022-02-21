@@ -1,5 +1,5 @@
-import { getCookieValue } from './util'
+import {getCookieValue} from './util';
 
-window.axios = require('axios')
+window.axios = require ('axios');
 
 axios.defaults.withCredentials = true;
