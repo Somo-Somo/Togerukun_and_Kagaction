@@ -25,8 +25,14 @@ const routes = [
     component: Login,
     beforeEnter (to, from, next) {
       if (store.getters['auth/check']) {
+        console.info('異常')
+        console.info(store.getters['auth/check'])
+        console.info(store.getters['auth/username'])
         next ('/user_test');
       } else {
+        console.info('正常')
+        console.info(store.getters['auth/check'])
+        console.info(store.getters['auth/username'])
         next ();
       }
     },

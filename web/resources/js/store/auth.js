@@ -15,6 +15,8 @@ const getters = {
 const mutations = {
   setUser (state, user) {
     state.user = user;
+    console.info(typeof(state.user))
+    console.info(state.user)
   },
   setApiStatus (state, status) {
     state.apiStatus = status;
@@ -42,8 +44,6 @@ const actions = {
 
     context.commit ('setApiStatus', false);
 
-    console.info(response)
-
     if (response.status === UNPROCESSABLE_ENTITY) {
       context.commit ('setRegisterErrorMessages', response.data.errors);
     } else {
@@ -55,8 +55,6 @@ const actions = {
     context.commit ('setApiStatus', null);
     await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
     const response = await axios.post ('/api/login', data);
-
-    console.info (response.status);
 
     if (response.status === OK) {
       context.commit ('setApiStatus', true);
@@ -90,13 +88,13 @@ const actions = {
   async currentUser (context) {
     context.commit ('setApiStatus', null);
     await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-    const response = await axios.get('/api/api_status');
-    const user = response.data || null;
+    const response = await axios.get('/api/auth_status');
+    console.info(response.data)
+    const user = typeof(response.data) === "object" ? response.data : null;
 
     if (response.status === OK) {
       context.commit ('setApiStatus', true);
       context.commit ('setUser', user);
-      console.info ('ログアウト成功');
       return false;
     }
 
