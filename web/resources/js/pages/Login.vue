@@ -147,7 +147,7 @@ export default {
 
       if (this.apiStatus) {
         // トップページに移動する
-        this.$router.push("/projects");
+        this.$router.push("/user_test");
       }
     },
     async login() {
