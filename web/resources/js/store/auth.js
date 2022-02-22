@@ -15,6 +15,7 @@ const getters = {
 const mutations = {
   setUser (state, user) {
     state.user = user;
+    console.info (state.user);
   },
   setApiStatus (state, status) {
     state.apiStatus = status;
@@ -58,6 +59,7 @@ const actions = {
       context.commit ('setApiStatus', true);
       context.commit ('setUser', response.data);
       console.info ('ログイン成功');
+      console.info (response.data);
       return false;
     }
 
