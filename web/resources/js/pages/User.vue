@@ -17,11 +17,9 @@ export default {
   },
   computed: {
     isLogin () {
-      console.info(this.$store.getters['auth/check'])
       return this.$store.getters['auth/check']
     },
     username () {
-      console.info(this.$store.getters['auth/username'])
       return this.$store.getters['auth/username']
     }
   }
