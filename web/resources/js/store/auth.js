@@ -15,7 +15,6 @@ const getters = {
 const mutations = {
   setUser (state, user) {
     state.user = user;
-    console.info (state.user);
   },
   setApiStatus (state, status) {
     state.apiStatus = status;
@@ -37,7 +36,6 @@ const actions = {
     if (response.status === CREATED) {
       context.commit ('setApiStatus', true);
       context.commit ('setUser', response.data);
-      console.info ('会員登録成功');
       return false;
     }
 
@@ -58,8 +56,6 @@ const actions = {
     if (response.status === OK) {
       context.commit ('setApiStatus', true);
       context.commit ('setUser', response.data);
-      console.info ('ログイン成功');
-      console.info (response.data);
       return false;
     }
 
@@ -89,8 +85,7 @@ const actions = {
     context.commit ('setApiStatus', null);
     await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
     const response = await axios.get('/api/auth_status');
-    console.info(response.data)
-    const user = typeof(response.data) === "object" ? response.data : null;
+    const user = typeof(response.data.id) ? response.data : null;
 
     if (response.status === OK) {
       context.commit ('setApiStatus', true);
