@@ -99,9 +99,9 @@ return [
 
         'neo4j' => [
             'driver' => 'aura',
-            'url' => env('DATABASE_URL', "neo4j+s://aeb87557.production-orch-0064.neo4j.io:7687"),
-            'username' => env('DB_USERNAME', "neo4j"),
-            'password' => env('DB_PASSWORD', "9D8oiNAv3XjrYa7O31nv0SAgq6iuzAXcV6AwKh7QIe8")
+            'url' => env('NEO4JDB_URL'),
+            'username' => env('NEO4JDB_USERNAME'),
+            'password' => env('NEO4JDB_PASSWORD')
         ],
 
     ],
