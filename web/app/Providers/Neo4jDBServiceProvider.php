@@ -13,7 +13,7 @@ class Neo4jDBServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('neo4jDB', \packages\Infrastructure\Database\Neo4jDB::class);
+        $this->app->bind('neo4jDB', \App\Services\ConnectNeo4jDB::class);
     }
 
     /**

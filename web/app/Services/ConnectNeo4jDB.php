@@ -8,7 +8,7 @@ use \Laudis\Neo4j\Authentication\Authenticate;
 /**
  * Neo4jのDBを呼び出す処理をFacadeを使って共通化
  */
-class Neo4jDB {
+class ConnectNeo4jDB {
 
     private $client;
 
@@ -19,9 +19,9 @@ class Neo4jDB {
      */
     public function __construct()
     {
-        $database_url = config('database.connections.neo4j.url');
-        $database_password = config('database.connections.neo4j.password');
-        $database_user_name = config('database.connections.neo4j.username');
+        $database_url = ('database.connections.neo4j.url');
+        $database_password = ('database.connections.neo4j.password');
+        $database_user_name = ('database.connections.neo4j.username');
 
         $this->client = ClientBuilder::create()
         ->withDriver(
