@@ -1,9 +1,9 @@
 <?php
 
-namespace packages\Infrastructure\Repositories\User;
+namespace App\Repositories\User;
 
 use Illuminate\Support\Facades\Neo4jDB;
-use packages\Domain\User\UserRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface
 {
