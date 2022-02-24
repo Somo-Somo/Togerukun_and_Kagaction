@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use \Symfony\Component\HttpFoundation\Response;
 
 class ProjectController extends Controller
 {
@@ -24,7 +26,20 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // バリエーションに問題が無かった場合にはプロジェクトの作成
+        $project = [
+            'name' => $request->name,
+            'uuid' => (string) Str::uuid(),
+        ];
+
+        //プロジェクトの作成が完了するとjsonを返す
+        $json = [
+            'data' => $project,
+            'message' => '新しいプロジェクトの追加を完了しました',
+            'error' => ''
+        ];
+
+        return response()->json($json, Response::HTTP_CREATED);
     }
 
     /**
