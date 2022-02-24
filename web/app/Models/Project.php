@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-
 class Project 
 {
-    
     private $id;
 
     private $uuid;
@@ -18,21 +16,5 @@ class Project
         $this->uuid = $uuid;
         $this->name = $name;
     }
-
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function getUuid(): string
-    {
-        return $this->uuid;
-    }
-    
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
 
 }
