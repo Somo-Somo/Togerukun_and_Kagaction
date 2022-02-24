@@ -31,9 +31,9 @@ Route::get('/auth_status', [LoginController::class, 'authStatus']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // プロジェクト
     Route::get('/projects', [ProjectController::class, 'index']);
-    Route::post('/projects', [ProjectController::class, 'store']);
-    Route::put('/projects/{projectId}', [ProjectController::class, 'update']);
-    Route::delete('/projects/{projectId}', [ProjectController::class, 'destroy']);
+    Route::post('/project', [ProjectController::class, 'store']);
+    Route::put('/project/{projectId}', [ProjectController::class, 'update']);
+    Route::delete('/project/{projectId}', [ProjectController::class, 'destroy']);
 
     // 仮説
     Route::get('/projects/:id', [HypothesisController::class, 'index']);
