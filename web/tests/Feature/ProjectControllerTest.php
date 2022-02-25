@@ -11,31 +11,37 @@ class ProjectControllerTest extends TestCase
 {
     /**
      * Post Project Test
-     * 
-     * 
      *
      * @return void
      */
     public function test_post_project()
     {
-        $projectData = [
+        $user = $this->post('api/login', [
+            'email'    => 'aaa@aaa',
+            'password' => 'aaa'
+        ]);
+        $user->assertStatus(200);
+
+        $inputData = [
             'name' => 'テストプロジェクト',
-            'uuid' => '',
+            'uuid' => null,
         ];
 
-        $this->withoutMiddleware()
-            ->json('POST', 'api/project', $projectData)
-            ->assertStatus(201)
-            ->assertJsonStructure([
-                'project' => [
-                    'name',
-                    'uuid'
-                ],
-                "message",
-                "error",
-            ])
-            ->assertJsonPath('project.name', 'テストプロジェクト')
-            ->assertJsonPath('message', '新しいプロジェクトの追加を完了しました')
-            ->assertJsonPath('error', '');
+        $response =  $this
+                        ->json('POST', 'api/project', $inputData)
+                        ->assertJsonStructure([
+                            'project' => [
+                                'name',
+                                'uuid',
+                            ],
+                            "message",
+                            "error",
+                        ])
+                        ->assertJsonPath('project.name', 'テストプロジェクト')
+                        ->assertJsonPath('project.created_by_user_id', 1)
+                        ->assertJsonPath('message', '新しいプロジェクトの追加を完了しました')
+                        ->assertJsonPath('error', '');
+
+        $response->assertStatus(201);
     }
 }
