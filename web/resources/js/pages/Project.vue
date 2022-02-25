@@ -40,7 +40,9 @@
       
       </template>
       <!-- 追加のフォーム -->
-      <InputForm @clickCancel="isDisplay" @clickNext="isDisplay" :dialog="dialog" :addingCard="projects" />
+      <form class="form" @submit.prevent="submitForm()">
+        <InputForm @clickCancel="isDisplay" @submitForm="submitForm" :dialog="dialog" :addingCard="projects" />
+      </form>
     </v-dialog>
   </v-container>
 </template>
@@ -68,6 +70,10 @@ export default {
     isDisplay: function () {
       this.dialog = !this.dialog;
     },
+    submitForm(){
+      this.dialog = !this.dialog;
+      console.info('送信ボタンを押しました')
+    }
   },
 };
 </script>
