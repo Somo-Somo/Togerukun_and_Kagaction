@@ -52,6 +52,7 @@ import ProjectCards from "../components/Cards/ProjectCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpButtomBtn from "../components/Buttons/SpBottomBtn.vue";
 import InputForm from "../components/InputForm.vue";
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -66,13 +67,22 @@ export default {
     dialog: false,
     projects: {category: "プロジェクト"},
   }),
+  computed: {
+    ...mapGetters({
+      name: 'form/name'
+    })
+  },
   methods: {
     isDisplay: function () {
       this.dialog = !this.dialog;
     },
-    submitForm(){
-      this.dialog = !this.dialog;
-      console.info('送信ボタンを押しました')
+    async submitForm(){
+      this.dialog = !this.dialog
+      const project = {
+        name : this.name 
+      }
+      console.info(project)
+      await this.$store.dispatch("form/createProject", project);
     }
   },
 };

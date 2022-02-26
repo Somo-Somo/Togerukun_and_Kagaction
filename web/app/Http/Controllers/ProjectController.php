@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\UseCases\Project\StoreAction;
-use Illuminate\Http\Request\Project\ProjectRequest as Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
 
@@ -33,6 +33,7 @@ class ProjectController extends Controller
             'uuid' => (string) Str::uuid(),
             'created_by_user_email' => $request->user()->email,
         ];
+
 
         // ユースケースを実行し、レスポンスの元になるデータを受け取る
         $created = $storeAction->invoke($storeAction);

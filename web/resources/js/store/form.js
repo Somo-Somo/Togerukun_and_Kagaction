@@ -1,6 +1,7 @@
+import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
+
 const state = {
     name : null,
-    uuid : null,
 };
 
 const getters = {
@@ -14,7 +15,22 @@ const mutations = {
 }
 
 const actions = {
+    async createProject (context, data) {
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        const response = await axios.post('api/project', data);
 
+        console.info(response)
+
+        if (response.status == CREATED) {
+            console.info('Projectが追加されました')
+        }
+
+        if (response.status === UNPROCESSABLE_ENTITY) {
+            // context.commit ('setRegisterErrorMessages', response.data.errors);
+        } else {
+            // context.commit ('error/setCode', response.status, {root: true});
+        }
+    }
 }
 
 export default {
