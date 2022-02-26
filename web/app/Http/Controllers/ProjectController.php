@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\UseCases\Project\StoreAction;
+use App\Http\Resources\Project\CreatedProjectResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
@@ -27,21 +28,20 @@ class ProjectController extends Controller
      */
     public function store(Request $request, StoreAction $storeAction)
     {
-        // バリエーションに問題が無かった場合にはプロジェクトの作成
+        // 後でRequestsに移行する
         $project = [
             'name' => $request->name,
             'uuid' => (string) Str::uuid(),
             'created_by_user_email' => $request->user()->email,
         ];
 
-
         // ユースケースを実行し、レスポンスの元になるデータを受け取る
         $createdProject = $storeAction->invoke($project);
 
-        //プロジェクトの作成が完了するとjsonを返す
+        // 本当はResourcesにかきたいけど
         $json = [
             'project' => $createdProject,
-            'message' => '新しいプロジェクトの追加を完了しました',
+            'message' => 'プロジェクトが追加されました',
             'error' => '',
         ];
 

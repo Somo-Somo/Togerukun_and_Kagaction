@@ -31,5 +31,17 @@ class ProjectRepository implements ProjectRepositoryInterface
                 );
 
         return $createdProject;
+
+    // $createdProject = $client->run(
+        //     <<<'CYPHER'
+        //         MATCH (user:User { email : $user_email })
+        //         RETURN user
+        //         CYPHER,
+        //         [
+        //             'name' => $project['name'], 
+        //             'uuid' => $project['uuid'], 
+        //             'user_email' => $project['created_by_user_email'], 
+        //         ]
+        //     );
     }
 }
