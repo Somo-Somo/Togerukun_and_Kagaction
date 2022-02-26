@@ -4,5 +4,5 @@ namespace App\Repositories\Project;
 
 interface ProjectRepositoryInterface
 {
-    public function created($project);
+    public function create($project);
 }

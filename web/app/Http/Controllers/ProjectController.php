@@ -36,11 +36,11 @@ class ProjectController extends Controller
 
 
         // ユースケースを実行し、レスポンスの元になるデータを受け取る
-        $created = $storeAction->invoke($storeAction);
+        $createdProject = $storeAction->invoke($project);
 
         //プロジェクトの作成が完了するとjsonを返す
         $json = [
-            'project' => $project,
+            'project' => $createdProject,
             'message' => '新しいプロジェクトの追加を完了しました',
             'error' => '',
         ];
