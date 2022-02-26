@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
-use packages\Domain\User\User;
 use \Symfony\Component\HttpFoundation\Response;
 
 

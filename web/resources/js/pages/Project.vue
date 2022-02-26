@@ -40,7 +40,9 @@
       
       </template>
       <!-- 追加のフォーム -->
-      <InputForm @clickCancel="isDisplay" @clickNext="isDisplay" :dialog="dialog" :addingCard="projects" />
+      <form class="form" @submit.prevent="submitForm()">
+        <InputForm @clickCancel="isDisplay" @submitForm="submitForm" :dialog="dialog" :addingCard="projects" />
+      </form>
     </v-dialog>
   </v-container>
 </template>
@@ -50,6 +52,7 @@ import ProjectCards from "../components/Cards/ProjectCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpButtomBtn from "../components/Buttons/SpBottomBtn.vue";
 import InputForm from "../components/InputForm.vue";
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
@@ -63,11 +66,37 @@ export default {
     attrs: true,
     dialog: false,
     projects: {category: "プロジェクト"},
+    projectList: null,
   }),
+  computed: {
+    ...mapState({
+      apiStatus: (state) => state.auth.apiStatus,
+      uuid: (state) => state.project.uuid,
+    }),
+    ...mapGetters({
+      name: 'project/name',
+    })
+  },
   methods: {
     isDisplay: function () {
       this.dialog = !this.dialog;
     },
+    async submitForm(){
+      this.dialog = !this.dialog
+      const project = {
+        name : this.name 
+      }
+      await this.$store.dispatch("project/createProject", project);
+
+      const url = "projects/" + this.uuid;
+      
+      if (this.apiStatus) {
+        this.$router.push(url);
+      }
+    }
+  },
+  created() {
+    this.$store.dispatch("project/getProjectList");
   },
 };
 </script>

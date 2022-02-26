@@ -68,10 +68,11 @@
         次へ
       </v-btn>
       <v-btn
+        type="submit"
         :disabled="!formIsValid"
         color="primary"
         v-else-if="step === 2 || checkNameInputOnly === true"
-        @click="$emit('clickNext')"
+        @click="$emit('submitForm')"
         text
       >
         完了
@@ -85,7 +86,6 @@
 export default {
   data: () => ({
     step: 1,
-    name: "",
     upperGoal: {
       category: "",
       index: "",
@@ -107,6 +107,15 @@ export default {
     },
   },
   computed: {
+    name: {
+      get () {
+        return this.$store.getters['form/name']
+      },
+      set (value) {
+        this.$store.commit('form/setName', value)
+      }
+    },
+
     // 名前入力のみのフォームかチェック
     checkNameInputOnly() {
       if (

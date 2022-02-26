@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class ProjectRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class ProjectRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,28 @@ class ProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'  => 'required|max:48',
         ];
+    }
+
+    public function messages()
+    {
+        return [
+            'required'    => 'プロジェクト名を入力してください。',
+            'max'         => 'プロジェクト名は:max文字以内で入力してください。',
+        ];
+    }
+
+    protected function makeProject()
+    {
+        $data = [];
+        $data['uuid'] = (string) Str::uuid();
+        $data['created_by_user_id'] = $this->user()->id;
+
+        $this->merge($data);
+
+        $this->validated()
+
+        return $this;
     }
 }

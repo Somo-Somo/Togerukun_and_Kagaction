@@ -1,13 +1,13 @@
 <template>
   <v-list class="py-0" width="100%">
-    <v-col class="px-md-0" v-for="card in cards" :key="card" :card="card">
+    <v-col class="px-md-0" v-for="projectCard in projectCards" :key="projectCard" :projectCard="projectCard">
       <v-card class="rounded" outlined>
         <v-list class="py-0" style="height: 80px">
           <v-list-item @click="toHypothesis" style="height: 80px" link>
             <v-list-item-content>
               <v-list-item-title
                 ><p class="font-weight-black ma-0">
-                  {{ card }}
+                  {{ projectCard.name }}
                 </p></v-list-item-title
               >
             </v-list-item-content>
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data: () => ({
     cards: ["VizHD", "開発", "マーケティング", "営業", "CS", "経理", "総務"],
@@ -46,6 +48,11 @@ export default {
       {title: "削除", color:"color: red"},
     ]
   }),
+  computed: {
+    ...mapGetters({
+      projectCards: 'project/projectList'
+    })
+  },
   methods: {
     toHypothesis: function () {
       return this.$router.push({ path: "/projects/123" });
