@@ -52,7 +52,7 @@ import ProjectCards from "../components/Cards/ProjectCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpButtomBtn from "../components/Buttons/SpBottomBtn.vue";
 import InputForm from "../components/InputForm.vue";
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
@@ -69,8 +69,12 @@ export default {
     projectList: null,
   }),
   computed: {
+    ...mapState({
+      apiStatus: (state) => state.auth.apiStatus,
+      uuid: (state) => state.project.uuid,
+    }),
     ...mapGetters({
-      name: 'form/name',
+      name: 'project/name',
     })
   },
   methods: {
@@ -82,8 +86,13 @@ export default {
       const project = {
         name : this.name 
       }
-      console.info(project)
-      await this.$store.dispatch("form/createProject", project);
+      await this.$store.dispatch("project/createProject", project);
+
+      const url = "projects/" + this.uuid;
+      
+      if (this.apiStatus) {
+        this.$router.push(url);
+      }
     }
   },
   created() {
