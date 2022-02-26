@@ -7,11 +7,32 @@ use App\Repositories\Project\ProjectRepositoryInterface;
 
 class ProjectRepository implements ProjectRepositoryInterface
 {
-    public function create($project)
+    protected $client;
+
+    public function __construct()
     {
-        $client = Neo4jDB::call();
-        
-        $createdProject = $client->run(
+        $this->client = Neo4jDB::call();
+    }
+
+    public function getProjectList($user_email)
+    {
+        $projectList = $this->client->run(
+            <<<'CYPHER'
+                MATCH (user:User { email : $user_email })-[:HAS]->(project:Project)
+                RETURN project
+                ORDER BY project
+                CYPHER,
+                [
+                    'user_email' => $user_email, 
+                ]
+            );
+
+        return $projectList;
+    }
+
+    public function create($project)
+    {        
+        $createdProject = $this->client->run(
                 <<<'CYPHER'
                     MATCH (user:User { email : $user_email })
                     CREATE (user)-[

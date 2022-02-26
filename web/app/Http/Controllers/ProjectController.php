@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\UseCases\Project\IndexAction;
 use App\UseCases\Project\StoreAction;
 use App\Http\Resources\Project\CreatedProjectResource;
 use Illuminate\Http\Request;
@@ -15,9 +16,14 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, IndexAction $indexAction)
     {
-        //
+        $user_email = $request->user()->email;
+
+        // ユースケースを実行し、レスポンスの元になるデータを受け取る
+        $projectList = $indexAction->invoke($user_email);
+
+        return response()->json($projectList, Response::HTTP_OK);
     }
 
     /**
