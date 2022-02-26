@@ -66,10 +66,11 @@ export default {
     attrs: true,
     dialog: false,
     projects: {category: "プロジェクト"},
+    projectList: null,
   }),
   computed: {
     ...mapGetters({
-      name: 'form/name'
+      name: 'form/name',
     })
   },
   methods: {
@@ -84,6 +85,9 @@ export default {
       console.info(project)
       await this.$store.dispatch("form/createProject", project);
     }
+  },
+  created() {
+    this.$store.dispatch("project/getProjectList");
   },
 };
 </script>
