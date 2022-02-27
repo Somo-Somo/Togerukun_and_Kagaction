@@ -4,9 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use \Symfony\Component\HttpFoundation\Response;
 
 class GoalController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -22,7 +33,7 @@ class GoalController extends Controller
             'created_by_user_email' => $request->user()->email,
         ];
 
-        return response()->json($json, Response::HTTP_CREATED);
+        return response()->json($goal, Response::HTTP_CREATED);
     }
 
 
