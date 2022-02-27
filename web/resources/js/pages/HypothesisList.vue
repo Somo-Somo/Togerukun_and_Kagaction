@@ -22,6 +22,7 @@
             </v-tab>
           </v-tabs>
           <v-icon
+            v-if="tab === 0"
             class="hidden-sm-and-down my-3"
             size="24"
             height="24"
@@ -40,7 +41,7 @@
               <HypothesisCards :cards="hypothesis.cards" :tab="tab" />
               <!-- PC版追加カード -->
               <NewAdditionalCard
-                v-if="tab !== 3"
+                v-if="tab === 0"
                 :on="on"
                 :attrs="attrs"
                 :category="hypothesis.category"
@@ -51,13 +52,15 @@
         <!-- スマホ版追加ボタン -->
         <SpBottomBtn :on="on" :attrs="attrs" :tab="tab" :headerTitle="'仮説一覧'" />
       </template>
-      <InputForm
-        @clickCancel="isDisplay"
-        @clickNext="isDisplay"
-        :addingCard="hypotheses[tab]"
-        :dialog="dialog"
-        :hypotheses="hypotheses"
-      />
+      <form class="form" @submit.prevent="submitForm()">
+        <InputForm
+          @clickCancel="isDisplay"
+          @clickNext="isDisplay"
+          :addingCard="hypotheses[tab]"
+          :dialog="dialog"
+          :hypotheses="hypotheses"
+        />
+      </form>
     </v-dialog>
   </v-container>
 </template>
@@ -67,6 +70,7 @@ import HypothesisCards from "../components/Cards/HypothesisCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
 import InputForm from "../components/InputForm.vue";
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   components: {
@@ -99,10 +103,31 @@ export default {
       { tab: "完了", cards: ["全体設計", "figmaでデザイン"], category: "完了" },
     ],
   }),
+  computed: {
+    ...mapState({
+      apiStatus: (state) => state.auth.apiStatus,
+      name: (state) => state.form.name,
+      project: (state) => state.project.project
+    }),
+  },
   methods: {
     isDisplay: function () {
       this.dialog = !this.dialog;
     },
+    async submitForm(){
+      // const hypothesis = {
+      //   name : this.name,
+      //   parentUuid: this.parentUuid,
+      // }
+      // this.dialog = !this.dialog
+      // const hypothesis = await this.$store.dispatch("hypothesis/createGoal", hypothesis);
+
+      // const url = "hypothesis/" + hypothesis.uuid;
+      
+      // if (this.apiStatus) {
+      //   this.$router.push(url);
+      // }
+    }
   },
 };
 </script>
