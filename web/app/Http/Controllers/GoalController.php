@@ -36,7 +36,7 @@ class GoalController extends Controller
 
         $createdGoal = $storeAction->invoke($goal);
 
-        return response()->json($goal, Response::HTTP_CREATED);
+        return response()->json($createdGoal, Response::HTTP_CREATED);
     }
 
 
