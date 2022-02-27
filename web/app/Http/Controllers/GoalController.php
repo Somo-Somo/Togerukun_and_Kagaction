@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class GoalController extends Controller
 {
@@ -14,7 +15,12 @@ class GoalController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $goal = [
+            'name' => $request->name,
+            'uuid' => (string) Str::uuid(),
+            'parent_uuid' => $request->parent_uuid,
+            'created_by_user_email' => $request->user()->email,
+        ];
     }
 
 
