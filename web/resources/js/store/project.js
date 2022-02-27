@@ -36,8 +36,6 @@ const actions = {
     async createProject (context, data) {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.post('api/project', data);
-        console.info(response.data.project);
-        console.info(response.status);
 
         if (response.status == CREATED) {
             console.info("projectを追加しました");
@@ -48,7 +46,6 @@ const actions = {
         }
 
         if (response.status === UNPROCESSABLE_ENTITY) {
-            console.info(response.data.errors)
             // context.commit ('setRegisterErrorMessages', response.data.errors);
         } else {
             context.commit ('error/setCode', response.status, {root: true});
