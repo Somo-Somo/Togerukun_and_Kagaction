@@ -112,7 +112,7 @@ export default {
         return this.$store.getters['form/name']
       },
       set (value) {
-        this.$store.commit('form/setName', value)
+        this.$store.dispatch("form/setName", value);
       }
     },
 

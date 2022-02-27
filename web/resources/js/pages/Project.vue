@@ -74,7 +74,7 @@ export default {
       uuid: (state) => state.project.uuid,
     }),
     ...mapGetters({
-      name: 'project/name',
+      name: 'form/name',
     })
   },
   methods: {
