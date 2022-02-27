@@ -71,10 +71,11 @@ export default {
   computed: {
     ...mapState({
       apiStatus: (state) => state.auth.apiStatus,
-      uuid: (state) => state.project.uuid,
     }),
+    // 後でmapGettersからprops,$emitに移行したい
     ...mapGetters({
       name: 'form/name',
+      project: 'project/project',
     })
   },
   methods: {
@@ -83,12 +84,12 @@ export default {
     },
     async submitForm(){
       this.dialog = !this.dialog
-      const project = {
+      const inputForm = {
         name : this.name 
       }
-      await this.$store.dispatch("project/createProject", project);
+      await this.$store.dispatch("project/createProject", inputForm);
 
-      const url = "projects/" + this.uuid;
+      const url = "project/" + this.project.uuid;
       
       if (this.apiStatus) {
         this.$router.push(url);

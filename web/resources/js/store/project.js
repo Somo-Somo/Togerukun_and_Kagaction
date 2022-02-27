@@ -1,23 +1,22 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
-    name : null,
-    uuid : null,
+    project : {
+        name : null,
+        uuid : null,
+    },
     projectList: null
 };
 
 const getters = {
-    name: state => state.name ? state.name : '',
-    uuid: state => state.uuid ? state.uuid : '',
+    project : state => (state.project.name && state.project.uuid) ? state.project : null,
     projectList: state => state.projectList ? state.projectList : null,
 };
 
 const mutations = {
-    setName (state, name) {
-        state.name = name;
-    },
-    setUuid (state, uuid) {
-        state.uuid = uuid;
+    setProject (state, project) {
+        state.project.name = project.name;
+        state.project.uuid = project.uuid;
     },
     setProjectList (state, projectList){
         state.projectList = projectList;
@@ -40,8 +39,7 @@ const actions = {
         if (response.status == CREATED) {
             console.info("projectを追加しました");
             context.commit ('auth/setApiStatus', true);
-            context.commit ('setName', response.data.project.name);
-            context.commit ('setUuid', response.data.project.uuid);
+            context.commit ('setProject', response.data.project);
             return false;
         }
 

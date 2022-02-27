@@ -3,7 +3,7 @@
     <v-col class="px-md-0" v-for="projectCard in projectCards" :key="projectCard" :projectCard="projectCard">
       <v-card class="rounded" outlined>
         <v-list class="py-0" style="height: 80px">
-          <v-list-item @click="toHypothesis" style="height: 80px" link>
+          <v-list-item @click="toHypothesis(projectCard)" style="height: 80px" link>
             <v-list-item-content>
               <v-list-item-title
                 ><p class="font-weight-black ma-0">
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   data: () => ({
@@ -49,13 +49,15 @@ export default {
     ]
   }),
   computed: {
-    ...mapGetters({
-      projectCards: 'project/projectList'
+    ...mapState({
+      projectCards : (state) => state.project.projectList
     })
   },
   methods: {
-    toHypothesis: function () {
-      return this.$router.push({ path: "/projects/123" });
+    async toHypothesis(project) {
+      await this.$store.dispatch("hypothesis/selectParent", project);
+      const url = "project/" + project.uuid;
+      return this.$router.push({ path: url });
     },
   },
 };
