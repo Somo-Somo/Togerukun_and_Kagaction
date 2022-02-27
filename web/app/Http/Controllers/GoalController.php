@@ -21,6 +21,8 @@ class GoalController extends Controller
             'parent_uuid' => $request->parent_uuid,
             'created_by_user_email' => $request->user()->email,
         ];
+
+        return response()->json($json, Response::HTTP_CREATED);
     }
 
 
