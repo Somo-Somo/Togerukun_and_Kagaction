@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\UseCases\Goal\StoreAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ class GoalController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, StoreAction $storeAction)
     {
         $goal = [
             'name' => $request->name,
@@ -32,6 +33,8 @@ class GoalController extends Controller
             'parent_uuid' => $request->parent_uuid,
             'created_by_user_email' => $request->user()->email,
         ];
+
+        $createdGoal = $storeAction->invoke($goal);
 
         return response()->json($goal, Response::HTTP_CREATED);
     }
