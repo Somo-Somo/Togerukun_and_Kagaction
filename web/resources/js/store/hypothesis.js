@@ -1,6 +1,10 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
+    parent: {
+        name: null,
+        uuid: null,
+    },
     hypothesis: {
         name: null,
         uuid: null,
@@ -9,10 +13,14 @@ const state = {
 };
 
 const getters = {
-
+    
 };
 
 const mutations = {
+    setParent (state, data) {
+        state.parent.name = data.name;
+        state.parent.uuid = data.uuid;
+    },
     setHypothesis (state, hypothesis) {
         state.hypothesis.name = hypothesis.name;
         state.hypothesis.uuid = hypothesis.uuid;
@@ -21,9 +29,15 @@ const mutations = {
 }
 
 const actions = {
+    selectParent (context, data){
+        console.info(data);
+        context.commit('setParent', data)
+    },
+
     async createGoal (context, data){
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-        const response = await axios.post('api/hypothesis/goal', data);
+        const response = await axios.post('/api/goal', data);
+        console.info(response);
 
         if (response.status == CREATED) {
             console.info("ゴールを追加しました");

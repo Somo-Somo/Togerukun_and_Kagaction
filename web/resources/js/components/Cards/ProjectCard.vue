@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     async toHypothesis(project) {
-      await this.$store.dispatch("hypothesis/selectParent", project);
+      await this.$store.dispatch("project/selectProject", project);
       const url = "project/" + project.uuid;
       return this.$router.push({ path: url });
     },

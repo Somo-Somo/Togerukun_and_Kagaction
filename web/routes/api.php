@@ -45,8 +45,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/hypothesis/{hypothesisId}', [HypothesisController::class, 'destroy']);
 
     // ゴール
-    Route::post('/hypothesis/goal', [GoalController::class, 'store']);
-    Route::delete('/hypothesis/goal/:hypothesisId', [GoalController::class, 'destroy']);
+    Route::get('/goal', [GoalController::class, 'index']);
+    Route::post('/goal', [GoalController::class, 'store']);
+    Route::delete('/goal/:hypothesisId', [GoalController::class, 'destroy']);
 
     // 現在の目標
     Route::get('/current_goals', [HypothesisController::class, 'index']);

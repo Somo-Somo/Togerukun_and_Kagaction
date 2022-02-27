@@ -48,6 +48,9 @@ const actions = {
         } else {
             context.commit ('error/setCode', response.status, {root: true});
         }
+    },
+    selectProject (context, project){
+        context.commit ('setProject', project);
     }
 }
 

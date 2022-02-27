@@ -106,27 +106,30 @@ export default {
   computed: {
     ...mapState({
       apiStatus: (state) => state.auth.apiStatus,
-      name: (state) => state.form.name,
-      project: (state) => state.project.project
     }),
+    ...mapGetters({
+      name: 'form/name',
+      project: 'project/project',
+    })
   },
   methods: {
     isDisplay: function () {
       this.dialog = !this.dialog;
     },
     async submitForm(){
-      // const hypothesis = {
-      //   name : this.name,
-      //   parentUuid: this.parentUuid,
-      // }
-      // this.dialog = !this.dialog
-      // const hypothesis = await this.$store.dispatch("hypothesis/createGoal", hypothesis);
+      const hypothesis = {
+        name : this.name,
+        parent_uuid: this.project.uuid,
+      }
+      console.info(this.project);
+      this.dialog = !this.dialog;
+      const createdGoal = await this.$store.dispatch("hypothesis/createGoal", hypothesis);
 
-      // const url = "hypothesis/" + hypothesis.uuid;
+      const url = "hypothesis/" + createdGoal.uuid;
       
-      // if (this.apiStatus) {
-      //   this.$router.push(url);
-      // }
+      if (this.apiStatus) {
+        this.$router.push(url);
+      }
     }
   },
 };
