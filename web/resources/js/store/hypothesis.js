@@ -59,7 +59,28 @@ const actions = {
         } else {
             context.commit ('error/setCode', response.status, {root: true});
         }
-    }
+    },
+
+    async createHypothesis (context, data){
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        const response = await axios.post('/api/hypothesis', data);
+        console.info(response);
+
+        if (response.status == CREATED) {
+            console.info("ゴールを追加しました");
+            context.commit ('auth/setApiStatus', true);
+            context.commit ('setParent', response.data.parent);
+            context.commit ('setHypothesis', response.data.hypothesis);
+            return response.data;
+        }
+
+        if (response.status === UNPROCESSABLE_ENTITY) {
+            console.info('エラー')
+            // context.commit ('setRegisterErrorMessages', response.data.errors);
+        } else {
+            context.commit ('error/setCode', response.status, {root: true});
+        }
+    },
 }
 
 export default {

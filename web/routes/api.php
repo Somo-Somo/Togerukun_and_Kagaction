@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // 仮説
     Route::get('/hypotheses', [HypothesisController::class, 'index']);
     Route::get('/hypothesis/:hypothesisId', [HypothesisController::class, 'show']);
-    Route::post('/hypothesis/:hypothesisId', [HypothesisController::class, 'store']);
+    Route::post('/hypothesis', [HypothesisController::class, 'store']);
     Route::put('/hypothesis/:hypothesisId', [HypothesisController::class, 'update']);
     Route::delete('/hypothesis/{hypothesisId}', [HypothesisController::class, 'destroy']);
 

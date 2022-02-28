@@ -29,7 +29,7 @@
             </v-subheader>
             <v-textarea
               label="ゴールを入力"
-              v-model="name"
+              v-model="title"
               class="pa-0 text-h5"
               rows="1"
               auto-grow
@@ -131,6 +131,7 @@ import HypothesisCards from "../components/Cards/HypothesisCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
 import InputForm from "../components/InputForm.vue";
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   components: {
@@ -148,7 +149,13 @@ export default {
     result: null,
   }),
   computed : {
-    name: {
+    ...mapState({
+      hypothesis: (state) => state.hypothesis.hypothesis,
+    }),
+   ...mapGetters({
+      inputFormName: 'form/name',
+    }),
+    title: {
       get () {
         return this.$store.getters['hypothesis/hypothesisName']
       },
@@ -182,7 +189,20 @@ export default {
       this.dialog = !this.dialog;
     },
     async submitForm(){
+      const hypothesis = {
+        name : this.inputFormName,
+        parent_uuid: this.hypothesis.uuid,
+      }
+      
+      this.dialog = !this.dialog;
+      const createdHypothesis = await this.$store.dispatch("hypothesis/createHypothesis", hypothesis);
 
+      // ゴール作成後の遷移先
+      const url = "/hypothesis/" + createdHypothesis.hypothesis.uuid;
+      
+      if (this.apiStatus) {
+        this.$router.push(url);
+      }
     }
   },
 };
