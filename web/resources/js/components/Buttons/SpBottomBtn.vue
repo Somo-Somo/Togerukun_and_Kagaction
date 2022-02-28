@@ -22,7 +22,7 @@
         </v-avatar>
       </v-avatar>
       <v-avatar
-        v-if="tab !== 3"
+        v-if="tab === 0"
         class="d-flex justify-center"
         size="80"
         color="white"
