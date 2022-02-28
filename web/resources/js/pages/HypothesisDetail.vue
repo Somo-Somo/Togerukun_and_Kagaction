@@ -151,6 +151,7 @@ export default {
   computed : {
     ...mapState({
       hypothesis: (state) => state.hypothesis.hypothesis,
+      apiStatus: (state) => state.auth.apiStatus,
     }),
    ...mapGetters({
       inputFormName: 'form/name',
@@ -196,6 +197,8 @@ export default {
       
       this.dialog = !this.dialog;
       const createdHypothesis = await this.$store.dispatch("hypothesis/createHypothesis", hypothesis);
+
+      console.info(createdHypothesis.hypothesis.uuid);
 
       // ゴール作成後の遷移先
       const url = "/hypothesis/" + createdHypothesis.hypothesis.uuid;
