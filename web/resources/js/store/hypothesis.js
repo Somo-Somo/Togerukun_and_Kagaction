@@ -40,6 +40,17 @@ const actions = {
         context.commit('setInputName', value)
     },
 
+    async getHypothesisList (context, data) {
+        console.info('action')
+
+        await axios.get('/api/project/'+data.uuid).then(response => {
+            console.info(response);
+        })
+        .catch(error => {
+            console.info(error);
+        });
+    },
+
     async createGoal (context, data){
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.post('/api/goal', data);

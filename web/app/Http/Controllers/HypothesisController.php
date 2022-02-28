@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\UseCases\Hypothesis\IndexAction;
 use App\UseCases\Hypothesis\StoreAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -11,18 +12,31 @@ class HypothesisController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     * 
+     * @param string $projectUuid
+     * @param  \App\UseCases\Hypothesis\IndexAction $indexAction
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(string $projectUuid, Request $request, IndexAction $indexAction)
     {
-        //
+        $user_email = $request->user()->email;
+    
+        $project = [
+            $user_email,$projectUuid
+        ];
+
+        // ユースケースを実行し、レスポンスの元になるデータを受け取る
+        $HypothesisList = $indexAction->invoke($project);
+
+        return response()->json($HypothesisList, Response::HTTP_OK);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\UseCases\Hypothesis\StoreAction  $storeAction
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, StoreAction $storeAction)
