@@ -32,16 +32,16 @@
         >
           <ProjectCards />
           <!-- PC版追加カード -->
-          <NewAdditionalCard :on="on" :attrs="attrs" :category="projects.category" />
+          <NewAdditionalCard :on="on" :attrs="attrs" :category="category" />
         </div>
         <!-- スマホ版追加ボタン -->
         
-        <SpButtomBtn :on="on" :attrs="attrs" :headerTitle="projects.category" />
+        <SpButtomBtn :on="on" :attrs="attrs" :headerTitle="category" />
       
       </template>
       <!-- 追加のフォーム -->
       <form class="form" @submit.prevent="submitForm()">
-        <InputForm @clickCancel="isDisplay" @submitForm="submitForm" :dialog="dialog" :addingCard="projects" />
+        <InputForm @clickCancel="isDisplay" @submitForm="submitForm" :dialog="dialog" :category="category" />
       </form>
     </v-dialog>
   </v-container>
@@ -65,7 +65,7 @@ export default {
     on: true,
     attrs: true,
     dialog: false,
-    projects: {category: "プロジェクト"},
+    category : "プロジェクト",
     projectList: null,
   }),
   computed: {

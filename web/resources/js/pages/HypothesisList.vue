@@ -44,7 +44,7 @@
                 v-if="tab === 0"
                 :on="on"
                 :attrs="attrs"
-                :category="hypothesis.category"
+                :category="category"
               />
             </v-tab-item>
           </v-tabs-items>
@@ -56,7 +56,7 @@
         <InputForm
           @clickCancel="isDisplay"
           @clickNext="isDisplay"
-          :addingCard="hypotheses[tab]"
+          :category="category"
           :dialog="dialog"
           :hypotheses="hypotheses"
         />
@@ -84,6 +84,7 @@ export default {
     attrs: true,
     dialog: false,
     tab: null,
+    category: "ゴール",
     purposeCards: ["テスト版リリース",],
     todaysGoalCards: ["フロントエンドを完成させる", "neo4jDBと接続"],
     issueCards: ["フロントエンドを完成させる", "neo4jDBと接続", "デプロイの仕方がわからない", "グラフDBの設計"],

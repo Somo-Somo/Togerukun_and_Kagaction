@@ -4,7 +4,7 @@
           <v-text-field
             class="pa-0 ma-0"
             v-model="name"
-            :label="addingCard.category"
+            :label="category"
             clearable
           ></v-text-field>
         </v-card-text>
@@ -17,7 +17,7 @@
       <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
       <v-btn
         type="submit"
-        :disabled="!formIsValid"
+        :disabled="!name"
         color="primary"
         @click="$emit('submitForm')"
         text
@@ -35,8 +35,8 @@ export default {
 
   }),
   props: {
-    addingCard: {
-      type: Object,
+    category: {
+      type: String,
     },
     dialog: {
       type: Boolean,
@@ -52,33 +52,6 @@ export default {
       },
       set (value) {
         this.$store.dispatch("form/setName", value);
-      }
-    },
-
-    // 名前入力のみのフォームかチェック
-    checkNameInputOnly() {
-      if (
-        this.addingCard.category === "ゴール" ||
-        this.addingCard.category === "プロジェクト"
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-
-    // フォームが空じゃないかバリデーションチェック
-    formIsValid() {
-      if (
-        this.addingCard.category === "ゴール" ||
-        this.addingCard.category === "プロジェクト"
-      ) {
-        return this.name;
-      } else {
-        return (
-          this.name &&
-          this.upperGoal.content
-        );
       }
     },
   },
