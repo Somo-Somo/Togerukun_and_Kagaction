@@ -16,10 +16,14 @@ class StoreAction
     public function invoke(array $goal)
     {
 
-        $createdGoal = $this->goal_repository->create($goal);
+        $saveGoalToDB = $this->goal_repository->create($goal);
 
-        // 本当はCreatedProjectResource.phpで処理したかったけど出来なくてこちらで
-        // $formatedProject = $createdProject->getAsCypherMap(0)->getAsNode('project')->getProperties()->toArray();
+        $cypherMapGoal = $saveGoalToDB->getAsCypherMap(0);
+
+        $createdGoal = [
+            'parent' => $cypherMapGoal->getAsNode('project')->getProperties()->toArray(),
+            'hypothesis' => $cypherMapGoal->getAsNode('hypothesis')->getProperties()->toArray(),
+        ];
         
         return $createdGoal;
     }

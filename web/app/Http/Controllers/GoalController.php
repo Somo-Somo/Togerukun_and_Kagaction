@@ -36,7 +36,15 @@ class GoalController extends Controller
 
         $createdGoal = $storeAction->invoke($goal);
 
-        return response()->json($createdGoal, Response::HTTP_CREATED);
+       // 本当はResourcesにかきたいけど
+       $json = [
+            'parent' => $createdGoal['parent'],
+            'hypothesis' => $createdGoal['hypothesis'],
+            'message' => 'ゴールが追加されました',
+            'error' => '',
+        ];
+
+        return response()->json($json, Response::HTTP_CREATED);
     }
 
 
