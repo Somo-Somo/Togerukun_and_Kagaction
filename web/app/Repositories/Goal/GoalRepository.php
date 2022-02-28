@@ -18,7 +18,7 @@ class GoalRepository implements GoalRepositoryInterface
     {
         $createdGoal = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }), (project:Project { uuid: $parent_uuid})
+                MATCH (user:User { email : $user_email }), (project:Project { uuid: $parent_uuid })
                 CREATE (user)-[
                             :CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}
                         ]->(
@@ -26,11 +26,11 @@ class GoalRepository implements GoalRepositoryInterface
                                 name: $name,
                                 uuid: $uuid,
                                 status: null,
-                                limited: null,
-                        }) - [
-                            ::IS_THE_GOAL_OF {since:localdatetime({timezone: 'Asia/Tokyo'})}  
-                        ] -> (project)
-                RETURN project
+                                limited: null
+                        })-[
+                            :IS_THE_GOAL_OF{since:localdatetime({timezone: 'Asia/Tokyo'})}  
+                        ]->(project)
+                RETURN hypothesis, project
                 CYPHER,
                 [
                     'name' => $goal['name'], 
