@@ -29,6 +29,7 @@
             </v-subheader>
             <v-textarea
               label="ゴールを入力"
+              v-model="name"
               class="pa-0 text-h5"
               rows="1"
               auto-grow
@@ -137,6 +138,16 @@ export default {
     cards: ["グラフDB設計", "neo4jと接続"],
     result: null,
   }),
+  computed : {
+    name: {
+      get () {
+        return this.$store.getters['hypothesis/hypothesisName']
+      },
+      set (value) {
+        this.$store.dispatch("hypothesis/setInputName", value);
+      }
+    }
+  },
   methods: {
     clickSuccess: function () {
       switch (this.result) {

@@ -12,14 +12,19 @@ const state = {
 };
 
 const getters = {
-    
+    hypothesisName: state => state.hypothesis.name ? state.hypothesis.name : null,
 };
 
 const mutations = {
+    setInputName (state, value){
+        state.hypothesis.name = value;
+    },
+
     setParent (state, data) {
         state.parent.name = data.name;
         state.parent.uuid = data.uuid;
     },
+
     setHypothesis (state, hypothesis) {
         state.hypothesis.name = hypothesis.name;
         state.hypothesis.uuid = hypothesis.uuid;
@@ -28,8 +33,11 @@ const mutations = {
 
 const actions = {
     selectParent (context, data){
-        console.info(data);
         context.commit('setParent', data)
+    },
+
+    setInputName (context, value) {
+        context.commit('setInputName', value)
     },
 
     async createGoal (context, data){
