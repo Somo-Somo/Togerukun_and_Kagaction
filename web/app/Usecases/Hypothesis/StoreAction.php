@@ -1,8 +1,8 @@
 <?php
 
-namespace App\UseCases\Hypthesis;
+namespace App\UseCases\Hypothesis;
 
-use App\Repositories\Hypthesis\HypthesisRepositoryInterface;
+use App\Repositories\Hypothesis\HypothesisRepositoryInterface;
 
 class StoreAction
 {
