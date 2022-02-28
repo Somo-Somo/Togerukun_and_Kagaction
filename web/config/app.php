@@ -175,6 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\GoalServiceProvider::class,
         App\Providers\Neo4jDBServiceProvider::class,
+        App\Providers\HypothesisServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\UserServiceProvider::class,
 
