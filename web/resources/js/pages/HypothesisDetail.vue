@@ -107,15 +107,21 @@
             >
               <HypothesisCards :cards="cards" />
               <!-- PC版追加カード -->
-              <NewAdditionalCard :on="on" :attrs="attrs" :category="'仮説'"/>
+              <NewAdditionalCard :on="on" :attrs="attrs" :category="category"/>
             </div>
           </div>
         </div>
-        <!-- PC版 -->
-
         <!-- スマホ版追加ボタン -->
         <SpBottomBtn :on="on" :attrs="attrs" :headerTitle="'仮説詳細'" />
       </template>
+      <form class="form" @submit.prevent="submitForm()">
+        <InputForm
+          @clickCancel="isDisplay"
+          @clickNext="isDisplay"
+          :category="category"
+          :dialog="dialog"
+        />
+      </form>
     </v-dialog>
   </v-container>
 </template>
@@ -124,17 +130,20 @@
 import HypothesisCards from "../components/Cards/HypothesisCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
+import InputForm from "../components/InputForm.vue";
 
 export default {
   components: {
     HypothesisCards,
     NewAdditionalCard,
     SpBottomBtn,
+    InputForm,
   },
   data: () => ({
     on: true,
     attrs: true,
     dialog: false,
+    category: "仮説",
     cards: ["グラフDB設計", "neo4jと接続"],
     result: null,
   }),
@@ -172,6 +181,9 @@ export default {
     isDisplay: function () {
       this.dialog = !this.dialog;
     },
+    async submitForm(){
+
+    }
   },
 };
 </script>

@@ -58,7 +58,6 @@
           @clickNext="isDisplay"
           :category="category"
           :dialog="dialog"
-          :hypotheses="hypotheses"
         />
       </form>
     </v-dialog>
