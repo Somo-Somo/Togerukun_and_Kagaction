@@ -121,11 +121,12 @@ export default {
         name : this.name,
         parent_uuid: this.project.uuid,
       }
-      console.info(this.project);
+      
       this.dialog = !this.dialog;
       const createdGoal = await this.$store.dispatch("hypothesis/createGoal", hypothesis);
 
-      const url = "hypothesis/" + createdGoal.uuid;
+      // ゴール作成後の遷移先
+      const url = "/hypothesis/" + createdGoal.hypothesis.uuid;
       
       if (this.apiStatus) {
         this.$router.push(url);

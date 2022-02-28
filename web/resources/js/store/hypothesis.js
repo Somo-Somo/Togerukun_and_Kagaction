@@ -8,7 +8,6 @@ const state = {
     hypothesis: {
         name: null,
         uuid: null,
-        parentUuid: null,
     }
 };
 
@@ -24,7 +23,6 @@ const mutations = {
     setHypothesis (state, hypothesis) {
         state.hypothesis.name = hypothesis.name;
         state.hypothesis.uuid = hypothesis.uuid;
-        state.hypothesis.parentUuid = hypothesis.parentUuid;
     }
 }
 
@@ -42,8 +40,9 @@ const actions = {
         if (response.status == CREATED) {
             console.info("ゴールを追加しました");
             context.commit ('auth/setApiStatus', true);
+            context.commit ('setParent', response.data.parent);
             context.commit ('setHypothesis', response.data.hypothesis);
-            return false;
+            return response.data;
         }
 
         if (response.status === UNPROCESSABLE_ENTITY) {
