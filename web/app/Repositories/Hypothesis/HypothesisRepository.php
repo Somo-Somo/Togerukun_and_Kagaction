@@ -16,6 +16,30 @@ class HypothesisRepository implements HypothesisRepositoryInterface
 
     public function create($hypothesis)
     {
-        return $hypothesis;
+        $createdHypothesis = $this->client->run(
+            <<<'CYPHER'
+                MATCH (user:User { email : $user_email }), (parent:Hypothesis { uuid: $parent_uuid })
+                CREATE (user)-[
+                            :CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                        ]->(
+                           hypothesis:Hypothesis {
+                                name: $name,
+                                uuid: $uuid,
+                                status: null,
+                                limited: null
+                        })-[
+                            :TO_ACHIEVE{since:localdatetime({timezone: 'Asia/Tokyo'})}  
+                        ]->(parent)
+                RETURN hypothesis, parent
+                CYPHER,
+                [
+                    'name' => $hypothesis['name'], 
+                    'uuid' => $hypothesis['uuid'], 
+                    'parent_uuid' => $hypothesis['parent_uuid'], 
+                    'user_email' => $hypothesis['created_by_user_email'], 
+                ]
+            );
+
+        return $createdHypothesis;
     }
 }

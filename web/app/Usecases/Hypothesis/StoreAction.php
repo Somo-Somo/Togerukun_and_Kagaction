@@ -18,13 +18,13 @@ class StoreAction
 
         $saveHypothesisToDB = $this->hypothesis_repository->create($hypothesis);
 
-        // $cypherMapGoal = $saveGoalToDB->getAsCypherMap(0);
+        $cypherMapHypothesis = $saveHypothesisToDB->getAsCypherMap(0);
 
-        // $createdGoal = [
-        //     'parent' => $cypherMapGoal->getAsNode('project')->getProperties()->toArray(),
-        //     'hypothesis' => $cypherMapGoal->getAsNode('hypothesis')->getProperties()->toArray(),
-        // ];
+        $createdHypothesis = [
+            'parent' => $cypherMapHypothesis->getAsNode('parent')->getProperties()->toArray(),
+            'hypothesis' => $cypherMapHypothesis->getAsNode('hypothesis')->getProperties()->toArray(),
+        ];
         
-        return $saveHypothesisToDB;
+        return $createdHypothesis;
     }
 }

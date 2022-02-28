@@ -38,7 +38,8 @@ class HypothesisController extends Controller
 
         // 本当はResourcesにかきたいけど
        $json = [
-            'hypothesis' => $hypothesis,
+            'parent' => $createdHypothesis['parent'],
+            'hypothesis' => $createdHypothesis['hypothesis'],
             'message' => '仮設が追加されました',
             'error' => '',
         ];
