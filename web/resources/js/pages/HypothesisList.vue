@@ -37,8 +37,8 @@
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
           <v-tabs-items v-model="tab">
-            <v-tab-item v-for="hypothesis in hypotheses" :key="hypothesis.tab">
-              <HypothesisCards :cards="hypothesis.cards" :tab="tab" />
+            <v-tab-item v-for="tabName in tabs" :key="tabs">
+              <HypothesisCards :cards="hypothesisList" :tab="tab" />
               <!-- PC版追加カード -->
               <NewAdditionalCard
                 v-if="tab === 0"
@@ -106,6 +106,7 @@ export default {
     ...mapGetters({
       name: 'form/name',
       project: 'project/project',
+      hypothesisList: 'hypothesis/hypothesisList',
     })
   },
   methods: {

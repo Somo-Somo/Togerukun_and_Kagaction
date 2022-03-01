@@ -14,6 +14,7 @@ const state = {
 
 const getters = {
     hypothesisName: state => state.hypothesis.name ? state.hypothesis.name : null,
+    hypothesisList: state => state.hypothesisList ? state.hypothesisList : null,
 };
 
 const mutations = {

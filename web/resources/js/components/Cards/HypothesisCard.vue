@@ -17,7 +17,7 @@
                 </v-list-item-subtitle>
                 <v-list-item-title class="pb-4">
                   <p class="font-weight-black ma-0">
-                    {{ card }}
+                    {{ card.name }}
                   </p></v-list-item-title
                 >
                 <v-menu class="rounded-lg elevation-0" offset-y>
