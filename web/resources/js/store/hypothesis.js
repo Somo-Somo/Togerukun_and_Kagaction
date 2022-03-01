@@ -8,7 +8,8 @@ const state = {
     hypothesis: {
         name: null,
         uuid: null,
-    }
+    },
+    hypothesisList: null,
 };
 
 const getters = {
@@ -28,6 +29,10 @@ const mutations = {
     setHypothesis (state, hypothesis) {
         state.hypothesis.name = hypothesis.name;
         state.hypothesis.uuid = hypothesis.uuid;
+    },
+
+    setHypothesisList (state, data) {
+        state.hypothesisList = data;
     }
 }
 
@@ -41,10 +46,10 @@ const actions = {
     },
 
     async getHypothesisList (context, data) {
-        console.info('action')
-
         await axios.get('/api/project/'+data.uuid).then(response => {
-            console.info(response);
+            console.info('仮説一覧を追加しました');
+            context.commit ('setHypothesisList', response.data);
+            return false;
         })
         .catch(error => {
             console.info(error);

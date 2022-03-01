@@ -26,7 +26,7 @@ class HypothesisRepository implements HypothesisRepositoryInterface
                 RETURN parent,collect(child),length(len)
                 CYPHER,
                 [
-                    'project_uuid' => $projectUuid
+                    'project_uuid' => $projectUuid,
                 ]
             );
 
@@ -54,7 +54,7 @@ class HypothesisRepository implements HypothesisRepositoryInterface
                 [
                     'name' => $hypothesis['name'], 
                     'uuid' => $hypothesis['uuid'], 
-                    'parent_uuid' => $hypothesis['parent_uuid'], ;
+                    'parent_uuid' => $hypothesis['parent_uuid'], 
                     'user_email' => $hypothesis['created_by_user_email'], 
                 ]
             );
