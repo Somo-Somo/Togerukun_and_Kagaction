@@ -1,9 +1,14 @@
 <template>
   <v-list class="py-0" width="100%">
-    <v-col class="px-md-0" v-for="card in cards" :key="card" :cards="cards" :class="cardShow(card) ? '': 'd-none'">
+    <v-col 
+      class="px-md-0"
+      v-for="hypothesis in hypotheses" 
+      :key="hypothesis" :hypotheses="hypotheses" 
+      :class="cardShow(hypothesis) ? '': 'd-none'"
+      >
       <v-card class="rounded" outlined>
         <v-list class="py-0 d-flex align-content-center" style="height: 80px">
-          <v-list-item @click="toHypothesisDetail(card)" link>
+          <v-list-item @click="toHypothesisDetail(hypothesis)" link>
             <v-list-item-content class="pa-0 d-flex flex-nowrap">
               <div>
                 <v-list-item-subtitle class="d-flex align-content-start py-3">
@@ -17,7 +22,7 @@
                 </v-list-item-subtitle>
                 <v-list-item-title class="pb-4">
                   <p class="font-weight-black ma-0">
-                    {{ card.name }}
+                    {{ hypothesis.name }}
                   </p></v-list-item-title
                 >
                 <v-menu class="rounded-lg elevation-0" offset-y>
@@ -66,7 +71,7 @@ export default {
     ]
   }),
   props: {
-    cards: {
+    hypotheses: {
       type: Array,
     },
     tab: {
@@ -75,15 +80,15 @@ export default {
   },
   computed : {
     cardShow() {
-      return function (card) {
+      return function (hypothesis) {
         if (this.tab === 0) {
-          return card.depth === 0 ? true : false ;
+          return hypothesis.depth === 0 ? true : false ;
         } else if (this.tab === 1) {
-          return card.currentGoal ? true : false;
+          return hypothesis.currentGoal ? true : false;
         } else if (this.tab === 2) {
           return true;
         } else if (this.tab === 3) {
-          return card.status ? true : false; 
+          return hypothesis.status ? true : false; 
         } else {
           return false;
         }
@@ -91,9 +96,9 @@ export default {
     },
   },
   methods: {
-    async toHypothesisDetail (card) {
-      await this.$store.dispatch("hypothesis/selectHypothesis", card);
-      return this.$router.push({ path: "/hypothesis/" + card.uuid });
+    async toHypothesisDetail (hypothesis) {
+      await this.$store.dispatch("hypothesis/selectHypothesis", hypothesis);
+      return this.$router.push({ path: "/hypothesis/" + hypothesis.uuid });
     },
   },
 };

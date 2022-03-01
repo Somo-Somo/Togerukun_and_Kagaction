@@ -38,7 +38,7 @@
         >
           <v-tabs-items v-model="tab">
             <v-tab-item v-for="tabName in tabs" :key="tabs">
-              <HypothesisCards :cards="hypothesisList" :tab="tab" />
+              <HypothesisCards :hypotheses="hypothesisList" :tab="tab" />
               <!-- PC版追加カード -->
               <NewAdditionalCard
                 v-if="tab === 0"
