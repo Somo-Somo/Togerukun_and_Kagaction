@@ -1,6 +1,6 @@
 <template>
   <v-list class="py-0" width="100%">
-    <v-col class="px-md-0" v-for="card in cards" :key="card" :cards="cards">
+    <v-col class="px-md-0" v-for="card in cards" :key="card" :cards="cards" :class="cardShow(card) ? '': 'd-none'">
       <v-card class="rounded" outlined>
         <v-list class="py-0 d-flex align-content-center" style="height: 80px">
           <v-list-item @click="toHypothesisDetail" link>
@@ -71,6 +71,23 @@ export default {
     },
     tab: {
       type: String,
+    },
+  },
+  computed : {
+    cardShow() {
+      return function (card) {
+        if (this.tab === 0) {
+          return card.depth === 0 ? true : false ;
+        } else if (this.tab === 1) {
+          return card.currentGoal ? true : false;
+        } else if (this.tab === 2) {
+          return true;
+        } else if (this.tab === 3) {
+          return card.status ? true : false; 
+        } else {
+          return false;
+        }
+      }
     },
   },
   methods: {
