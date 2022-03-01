@@ -28,8 +28,7 @@ const mutations = {
     },
 
     setHypothesis (state, hypothesis) {
-        state.hypothesis.name = hypothesis.name;
-        state.hypothesis.uuid = hypothesis.uuid;
+        state.hypothesis = hypothesis;
     },
 
     setHypothesisList (state, data) {
@@ -44,6 +43,10 @@ const actions = {
 
     setInputName (context, value) {
         context.commit('setInputName', value)
+    },
+
+    selectHypothesis (context, value) {
+        context.commit ('setHypothesis', value);
     },
 
     async getHypothesisList (context, data) {

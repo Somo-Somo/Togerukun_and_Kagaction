@@ -3,7 +3,7 @@
     <v-col class="px-md-0" v-for="card in cards" :key="card" :cards="cards" :class="cardShow(card) ? '': 'd-none'">
       <v-card class="rounded" outlined>
         <v-list class="py-0 d-flex align-content-center" style="height: 80px">
-          <v-list-item @click="toHypothesisDetail" link>
+          <v-list-item @click="toHypothesisDetail(card)" link>
             <v-list-item-content class="pa-0 d-flex flex-nowrap">
               <div>
                 <v-list-item-subtitle class="d-flex align-content-start py-3">
@@ -91,8 +91,9 @@ export default {
     },
   },
   methods: {
-    toHypothesisDetail: function () {
-      return this.$router.push({ path: "/projects/123/123" });
+    async toHypothesisDetail (card) {
+      await this.$store.dispatch("hypothesis/selectHypothesis", card);
+      return this.$router.push({ path: "/hypothesis/" + card.uuid });
     },
   },
 };
