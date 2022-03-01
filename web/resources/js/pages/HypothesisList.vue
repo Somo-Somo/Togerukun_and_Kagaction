@@ -15,10 +15,10 @@
           <v-tabs v-model="tab" class="px-3 px-md-0" color="black" center-active>
             <v-tabs-slider color="#80CBC4"></v-tabs-slider>
             <v-tab
-              v-for="hypothesis in hypotheses"
-              :key="hypothesis.tab"
+              v-for="tabName in tabs"
+              :key="tabName"
             >
-              <p class="ma-0 font-weight-bold">{{ hypothesis.tab }}</p>
+              <p class="ma-0 font-weight-bold">{{ tabName }}</p>
             </v-tab>
           </v-tabs>
           <v-icon
@@ -56,7 +56,7 @@
         <InputForm
           @clickCancel="isDisplay"
           @clickNext="isDisplay"
-          :category="category"
+          :category="tabs[0]"
           :dialog="dialog"
         />
       </form>
@@ -83,11 +83,7 @@ export default {
     attrs: true,
     dialog: false,
     tab: null,
-    category: "ゴール",
-    purposeCards: ["テスト版リリース",],
-    todaysGoalCards: ["フロントエンドを完成させる", "neo4jDBと接続"],
-    issueCards: ["フロントエンドを完成させる", "neo4jDBと接続", "デプロイの仕方がわからない", "グラフDBの設計"],
-    finishedCards: ["全体設計", "figmaでデザイン"],
+    tabs: ["ゴール", "今日の目標", "仮説", "完了"],
     hypotheses: [
       { tab: "ゴール", cards: ["テスト版リリース"], category: "ゴール" },
       {
