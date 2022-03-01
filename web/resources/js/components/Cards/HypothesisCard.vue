@@ -3,7 +3,8 @@
     <v-col 
       class="px-md-0"
       v-for="hypothesis in hypotheses" 
-      :key="hypothesis" :hypotheses="hypotheses" 
+      :key="hypothesis.name" 
+      :hypotheses="hypotheses" 
       :class="cardShow(hypothesis) ? '': 'd-none'"
       >
       <v-card class="rounded" outlined>
@@ -47,7 +48,7 @@
                     </v-list-item-action>
                   </template>
                   <v-list>
-                    <v-list-item v-for="menu in cardMenu" :key="menu" link>
+                    <v-list-item v-for="menu in cardMenu" :key="menu.title" link>
                       <v-list-item-title :style="menu.color">{{ menu.title }}</v-list-item-title>
                     </v-list-item>
                   </v-list>

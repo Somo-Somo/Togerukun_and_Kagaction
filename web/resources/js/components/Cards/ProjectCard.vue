@@ -1,6 +1,6 @@
 <template>
   <v-list class="py-0" width="100%">
-    <v-col class="px-md-0" v-for="projectCard in projectCards" :key="projectCard" :projectCard="projectCard">
+    <v-col class="px-md-0" v-for="projectCard in projectCards" :key="projectCard.name" :projectCard="projectCard">
       <v-card class="rounded" outlined>
         <v-list class="py-0" style="height: 80px">
           <v-list-item @click="toHypothesis(projectCard)" style="height: 80px" link>
@@ -24,7 +24,7 @@
                 </v-list-item-action>
               </template>
               <v-list>
-                <v-list-item v-for="menu in cardMenu" :key="menu" link>
+                <v-list-item v-for="menu in cardMenu" :key="menu.title" link>
                   <v-list-item-title :style="menu.color">{{
                     menu.title
                   }}</v-list-item-title>

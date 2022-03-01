@@ -37,7 +37,7 @@
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
           <v-tabs-items v-model="tab">
-            <v-tab-item v-for="tabName in tabs" :key="tabs">
+            <v-tab-item v-for="tabName in tabs" :key="tabName">
               <HypothesisCards :hypotheses="hypothesisList" :tab="tab" />
               <!-- PC版追加カード -->
               <NewAdditionalCard
