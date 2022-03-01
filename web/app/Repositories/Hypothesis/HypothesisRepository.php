@@ -23,7 +23,7 @@ class HypothesisRepository implements HypothesisRepositoryInterface
             <<<'CYPHER'
                 MATCH len = (project:Project{uuid: $project_uuid})<- [*] - (parent:Hypothesis)
                 OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
-                RETURN parent,collect(child),length(len)
+                RETURN project.uuid,parent,collect(child),length(len)
                 CYPHER,
                 [
                     'project_uuid' => $projectUuid,

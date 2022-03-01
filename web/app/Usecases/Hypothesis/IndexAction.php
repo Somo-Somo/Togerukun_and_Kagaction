@@ -26,7 +26,9 @@ class IndexAction
         // 親仮説それに紐づく子仮説の順番になるように配列$hypothesisListに追加
         foreach ($arrayHypothesisList as $key => $value) {
             $value = $value->toArray();
-            // 親仮説,子仮説の値を取得
+
+            // 親プロジェクト, 親仮説, 子仮説の値を取得
+            $projectUuid = $value['project.uuid'];
             $parent = $value['parent']->getProperties()->toArray();
             $childs = $value['collect(child)']->toArray();
             $depth = $value['length(len)'];
@@ -37,8 +39,10 @@ class IndexAction
             // 仮説リストにすでに親のUUIDがある場合はそのリストのKEYの番号を返す
             $parentKey = array_keys($uuidList, $parent['uuid']);
             
+            // もし仮説リストに親のUUIDがない場合（親仮説=ゴールの場合のみ）
             if (!$parentKey) {
-                // もし仮説リストに親のUUIDがない場合（親仮説=ゴールの場合のみ）
+                // ゴールは親仮説がいないので親UUIDはプロジェクトUUID
+                $parent['parentUuid'] = $projectUuid;
                 // ゴールからの仮説の階層の深さ
                 $parent['depth'] = 0;
                 $hypothesisList[] = $parent;
@@ -46,6 +50,9 @@ class IndexAction
                 // 親に対して複数の子をforeach
                 foreach ($childs as $childValue) {
                     $child = $childValue->getProperties()->toArray();
+
+                    // 親仮説のUUID
+                    $child['parentUuid'] = $parent['uuid'];
 
                     // ゴールからの仮説の階層の深さ
                     $child['depth'] = $depth;
@@ -57,6 +64,9 @@ class IndexAction
                 // もし仮説リストに親のUUIDがあった場合（親仮説=ゴール以外の場合）
                 foreach ($childs as $childKey => $childValue) {
                     $child = $childValue->getProperties()->toArray();
+
+                    // 親仮説のUUID
+                    $child['parentUuid'] = $parent['uuid'];                    
 
                     // ゴールからの仮説の階層の深さ
                     $child['depth'] = $depth;
@@ -72,7 +82,7 @@ class IndexAction
                 }
             }
         }
-        
+
         return $hypothesisList;
     }
 }
