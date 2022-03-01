@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-list class="py-0" width="100%">
     <v-col class="px-md-0" v-for="projectCard in projectCards" :key="projectCard.name" :projectCard="projectCard">
       <v-card class="rounded" outlined>
@@ -24,7 +25,12 @@
                 </v-list-item-action>
               </template>
               <v-list>
-                <v-list-item v-for="menu in cardMenu" :key="menu.title" link>
+                <v-list-item 
+                  v-for="menu in cardMenu" 
+                  :key="menu.title" 
+                  @click="displayDeletingConfirmationDialog(projectCard)" 
+                  link
+                >
                   <v-list-item-title :style="menu.color">{{
                     menu.title
                   }}</v-list-item-title>
@@ -36,17 +42,32 @@
       </v-card>
     </v-col>
   </v-list>
+    <DeletingConfirmationDialog 
+      :deletingConfirmationDialog="deletingConfirmationDialog"
+      :selectedDeletingItem="selectedDeletingProject"
+      @deleteItem="deleteProject"
+      @cancel="cancel"
+    />
+</div>
 </template>
 
 <script>
+import DeletingConfirmationDialog from "../Dialog/DeletingConfirmationDialog.vue";
 import { mapState } from 'vuex'
 
 export default {
+  components: {
+    DeletingConfirmationDialog,
+  },
   data: () => ({
-    cards: ["VizHD", "開発", "マーケティング", "営業", "CS", "経理", "総務"],
     cardMenu: [
       {title: "削除", color:"color: red"},
-    ]
+    ],
+    deletingConfirmationDialog: false,
+    selectedDeletingProject: {
+      name: null,
+      uuid: null
+    },
   }),
   computed: {
     ...mapState({
@@ -59,6 +80,22 @@ export default {
       const url = "project/" + project.uuid;
       return this.$router.push({ path: url });
     },
+    displayDeletingConfirmationDialog(projectCard) {
+      this.deletingConfirmationDialog = true;
+      this.selectedDeletingProject.name = projectCard.name;
+      this.selectedDeletingProject.uuid = projectCard.uuid;
+    },
+    async deleteProject(){
+      await this.$store.dispatch("project/deleteProject", this.selectedDeletingProject);
+      this.deletingConfirmationDialog = false;
+      this.selectedDeletingProject.name = null;
+      this.selectedDeletingProject.uuid = null;
+    },
+    cancel(){
+      this.deletingConfirmationDialog = false;
+      this.selectedDeletingProject.name = null;
+      this.selectedDeletingProject.uuid = null;
+    }
   },
 };
 </script>

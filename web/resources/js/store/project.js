@@ -24,6 +24,9 @@ const mutations = {
 }
 
 const actions = {
+    selectProject (context, project){
+        context.commit ('setProject', project);
+    },
     async getProjectList (context) {
         await axios.get('/api/projects').then(response => {
             context.commit('setProjectList', response.data)
@@ -49,8 +52,8 @@ const actions = {
             context.commit ('error/setCode', response.status, {root: true});
         }
     },
-    selectProject (context, project){
-        context.commit ('setProject', project);
+    async deleteProject (deleteProjectId) {
+        return;
     }
 }
 
