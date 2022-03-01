@@ -44,7 +44,7 @@
                 v-if="tab === 0"
                 :on="on"
                 :attrs="attrs"
-                :category="category"
+                :category="tabs[0]"
               />
             </v-tab-item>
           </v-tabs-items>
