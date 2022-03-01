@@ -1,20 +1,22 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
-    parent: {
-        name: null,
-        uuid: null,
-    },
     hypothesis: {
         name: null,
         uuid: null,
     },
     hypothesisList: null,
+    parent: {
+        name: null,
+        uuid: null,
+    },
+    child: null,
 };
 
 const getters = {
     hypothesisName: state => state.hypothesis.name ? state.hypothesis.name : null,
     hypothesisList: state => state.hypothesisList ? state.hypothesisList : null,
+    hypothesisChildList: state => state.child ? state.child : null,
 };
 
 const mutations = {
@@ -27,8 +29,14 @@ const mutations = {
         state.parent.uuid = data.uuid;
     },
 
-    setHypothesis (state, hypothesis) {
-        state.hypothesis = hypothesis;
+    setChild (state, hypothesisVal) {
+        state.child = state.hypothesisList.filter(hypothesis => {
+            return hypothesis.parentUuid === hypothesisVal.uuid;
+        });
+    },
+
+    setHypothesis (state, hypothesisVal) {
+        state.hypothesis = hypothesisVal;
     },
 
     setHypothesisList (state, data) {
@@ -45,8 +53,9 @@ const actions = {
         context.commit('setInputName', value)
     },
 
-    selectHypothesis (context, value) {
-        context.commit ('setHypothesis', value);
+    selectHypothesis (context, hypothesisVal) {
+        context.commit ('setHypothesis', hypothesisVal);
+        context.commit ('setChild', hypothesisVal);
     },
 
     async getHypothesisList (context, data) {

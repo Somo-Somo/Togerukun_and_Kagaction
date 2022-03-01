@@ -38,7 +38,7 @@
         >
           <v-tabs-items v-model="tab">
             <v-tab-item v-for="tabName in tabs" :key="tabName">
-              <HypothesisCards :hypotheses="hypothesisList" :tab="tab" />
+              <HypothesisCards :hypotheses="hypothesisList" :category="tabs[tab]" />
               <!-- PC版追加カード -->
               <NewAdditionalCard
                 v-if="tab === 0"
@@ -84,20 +84,6 @@ export default {
     dialog: false,
     tab: null,
     tabs: ["ゴール", "今日の目標", "仮説", "完了"],
-    hypotheses: [
-      { tab: "ゴール", cards: ["テスト版リリース"], category: "ゴール" },
-      {
-        tab: "今日の目標",
-        cards: ["フロントエンドを完成させる", "neo4jDBと接続"],
-        category: "今日の目標",
-      },
-      {
-        tab: "仮説",
-        cards: ["フロントエンドを完成させる", "neo4jDBと接続", "デプロイの仕方がわからない", "グラフDBの設計"],
-        category: "仮説",
-      },
-      { tab: "完了", cards: ["全体設計", "figmaでデザイン"], category: "完了" },
-    ],
   }),
   computed: {
     ...mapState({

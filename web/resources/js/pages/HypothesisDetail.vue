@@ -105,7 +105,7 @@
               class="overflow-y-auto d-flex flex-column"
               :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
             >
-              <HypothesisCards :cards="cards" />
+              <HypothesisCards :hypotheses="hypothesisChildList" :category="category" />
               <!-- PC版追加カード -->
               <NewAdditionalCard :on="on" :attrs="attrs" :category="category"/>
             </div>
@@ -145,7 +145,6 @@ export default {
     attrs: true,
     dialog: false,
     category: "仮説",
-    cards: ["グラフDB設計", "neo4jと接続"],
     result: null,
   }),
   computed : {
@@ -155,6 +154,7 @@ export default {
     }),
    ...mapGetters({
       inputFormName: 'form/name',
+      hypothesisChildList: 'hypothesis/hypothesisChildList',
     }),
     title: {
       get () {

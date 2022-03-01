@@ -75,20 +75,20 @@ export default {
     hypotheses: {
       type: Array,
     },
-    tab: {
+    category: {
       type: String,
     },
   },
   computed : {
     cardShow() {
       return function (hypothesis) {
-        if (this.tab === 0) {
+        if (this.category === "ゴール") {
           return hypothesis.depth === 0 ? true : false ;
-        } else if (this.tab === 1) {
+        } else if (this.category === "今日の目標") {
           return hypothesis.currentGoal ? true : false;
-        } else if (this.tab === 2) {
-          return true;
-        } else if (this.tab === 3) {
+        } else if (this.category === "仮説") {
+          return hypothesis.depth !== 0 ? true : false ;
+        } else if (this.category === "完了") {
           return hypothesis.status ? true : false; 
         } else {
           return false;
