@@ -1,9 +1,15 @@
 <template>
   <v-list class="py-0" width="100%">
-    <v-col class="px-md-0" v-for="card in cards" :key="card" :cards="cards">
+    <v-col 
+      class="px-md-0"
+      v-for="hypothesis in hypotheses" 
+      :key="hypothesis.name" 
+      :hypotheses="hypotheses" 
+      :class="cardShow(hypothesis) ? '': 'd-none'"
+      >
       <v-card class="rounded" outlined>
         <v-list class="py-0 d-flex align-content-center" style="height: 80px">
-          <v-list-item @click="toHypothesisDetail" link>
+          <v-list-item @click="toHypothesisDetail(hypothesis)" link>
             <v-list-item-content class="pa-0 d-flex flex-nowrap">
               <div>
                 <v-list-item-subtitle class="d-flex align-content-start py-3">
@@ -17,7 +23,7 @@
                 </v-list-item-subtitle>
                 <v-list-item-title class="pb-4">
                   <p class="font-weight-black ma-0">
-                    {{ card }}
+                    {{ hypothesis.name }}
                   </p></v-list-item-title
                 >
                 <v-menu class="rounded-lg elevation-0" offset-y>
@@ -42,7 +48,7 @@
                     </v-list-item-action>
                   </template>
                   <v-list>
-                    <v-list-item v-for="menu in cardMenu" :key="menu" link>
+                    <v-list-item v-for="menu in cardMenu" :key="menu.title" link>
                       <v-list-item-title :style="menu.color">{{ menu.title }}</v-list-item-title>
                     </v-list-item>
                   </v-list>
@@ -66,16 +72,34 @@ export default {
     ]
   }),
   props: {
-    cards: {
+    hypotheses: {
       type: Array,
     },
-    tab: {
+    category: {
       type: String,
     },
   },
+  computed : {
+    cardShow() {
+      return function (hypothesis) {
+        if (this.category === "ゴール") {
+          return hypothesis.depth === 0 ? true : false ;
+        } else if (this.category === "今日の目標") {
+          return hypothesis.currentGoal ? true : false;
+        } else if (this.category === "仮説") {
+          return hypothesis.depth !== 0 ? true : false ;
+        } else if (this.category === "完了") {
+          return hypothesis.status ? true : false; 
+        } else {
+          return false;
+        }
+      }
+    },
+  },
   methods: {
-    toHypothesisDetail: function () {
-      return this.$router.push({ path: "/projects/123/123" });
+    async toHypothesisDetail (hypothesis) {
+      await this.$store.dispatch("hypothesis/selectHypothesis", hypothesis);
+      return this.$router.push({ path: "/hypothesis/" + hypothesis.uuid });
     },
   },
 };

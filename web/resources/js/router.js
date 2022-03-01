@@ -38,11 +38,11 @@ const routes = [
     component: Project,
   },
   {
-    path: '/projects/:id',
+    path: '/project/:id',
     component: HypothesisList,
   },
   {
-    path: '/projects/:id/:detailId',
+    path: '/hypothesis/:detailId',
     component: HypothesisDetail,
   },
   {

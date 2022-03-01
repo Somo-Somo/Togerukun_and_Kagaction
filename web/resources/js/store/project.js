@@ -1,23 +1,22 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
-    name : null,
-    uuid : null,
+    project : {
+        name : null,
+        uuid : null,
+    },
     projectList: null
 };
 
 const getters = {
-    name: state => state.name ? state.name : '',
-    uuid: state => state.uuid ? state.uuid : '',
+    project : state => (state.project.name && state.project.uuid) ? state.project : null,
     projectList: state => state.projectList ? state.projectList : null,
 };
 
 const mutations = {
-    setName (state, name) {
-        state.name = name;
-    },
-    setUuid (state, uuid) {
-        state.uuid = uuid;
+    setProject (state, project) {
+        state.project.name = project.name;
+        state.project.uuid = project.uuid;
     },
     setProjectList (state, projectList){
         state.projectList = projectList;
@@ -36,23 +35,22 @@ const actions = {
     async createProject (context, data) {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.post('api/project', data);
-        console.info(response.data.project);
-        console.info(response.status);
 
         if (response.status == CREATED) {
             console.info("projectを追加しました");
             context.commit ('auth/setApiStatus', true);
-            context.commit ('setName', response.data.project.name);
-            context.commit ('setUuid', response.data.project.uuid);
+            context.commit ('setProject', response.data.project);
             return false;
         }
 
         if (response.status === UNPROCESSABLE_ENTITY) {
-            console.info(response.data.errors)
             // context.commit ('setRegisterErrorMessages', response.data.errors);
         } else {
             context.commit ('error/setCode', response.status, {root: true});
         }
+    },
+    selectProject (context, project){
+        context.commit ('setProject', project);
     }
 }
 

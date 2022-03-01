@@ -29,6 +29,7 @@
             </v-subheader>
             <v-textarea
               label="ゴールを入力"
+              v-model="title"
               class="pa-0 text-h5"
               rows="1"
               auto-grow
@@ -104,17 +105,23 @@
               class="overflow-y-auto d-flex flex-column"
               :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
             >
-              <HypothesisCards :cards="cards" />
+              <HypothesisCards :hypotheses="hypothesisChildList" :category="category" />
               <!-- PC版追加カード -->
-              <NewAdditionalCard :on="on" :attrs="attrs" :category="'仮説'"/>
+              <NewAdditionalCard :on="on" :attrs="attrs" :category="category"/>
             </div>
           </div>
         </div>
-        <!-- PC版 -->
-
         <!-- スマホ版追加ボタン -->
         <SpBottomBtn :on="on" :attrs="attrs" :headerTitle="'仮説詳細'" />
       </template>
+      <form class="form" @submit.prevent="submitForm()">
+        <InputForm
+          @clickCancel="isDisplay"
+          @clickNext="isDisplay"
+          :category="category"
+          :dialog="dialog"
+        />
+      </form>
     </v-dialog>
   </v-container>
 </template>
@@ -123,20 +130,41 @@
 import HypothesisCards from "../components/Cards/HypothesisCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
+import InputForm from "../components/InputForm.vue";
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   components: {
     HypothesisCards,
     NewAdditionalCard,
     SpBottomBtn,
+    InputForm,
   },
   data: () => ({
     on: true,
     attrs: true,
     dialog: false,
-    cards: ["グラフDB設計", "neo4jと接続"],
+    category: "仮説",
     result: null,
   }),
+  computed : {
+    ...mapState({
+      hypothesis: (state) => state.hypothesis.hypothesis,
+      apiStatus: (state) => state.auth.apiStatus,
+    }),
+   ...mapGetters({
+      inputFormName: 'form/name',
+      hypothesisChildList: 'hypothesis/hypothesisChildList',
+    }),
+    title: {
+      get () {
+        return this.$store.getters['hypothesis/hypothesisName']
+      },
+      set (value) {
+        this.$store.dispatch("hypothesis/setInputName", value);
+      }
+    }
+  },
   methods: {
     clickSuccess: function () {
       switch (this.result) {
@@ -161,6 +189,24 @@ export default {
     isDisplay: function () {
       this.dialog = !this.dialog;
     },
+    async submitForm(){
+      const hypothesis = {
+        name : this.inputFormName,
+        parent_uuid: this.hypothesis.uuid,
+      }
+      
+      this.dialog = !this.dialog;
+      const createdHypothesis = await this.$store.dispatch("hypothesis/createHypothesis", hypothesis);
+
+      console.info(createdHypothesis.hypothesis.uuid);
+
+      // ゴール作成後の遷移先
+      const url = "/hypothesis/" + createdHypothesis.hypothesis.uuid;
+      
+      if (this.apiStatus) {
+        this.$router.push(url);
+      }
+    }
   },
 };
 </script>
