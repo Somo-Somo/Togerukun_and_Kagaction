@@ -54,10 +54,10 @@ export default {
   }),
   props: {
     on: {
-      type: Boolean,
+      type: Object,
     },
     attrs: {
-      type: Boolean,
+      type: Object,
     },
     tab: {
       type: Number,
