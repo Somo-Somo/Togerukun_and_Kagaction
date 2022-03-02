@@ -20,7 +20,10 @@ const mutations = {
     },
     setProjectList (state, projectList){
         state.projectList = projectList;
-    }
+    },
+    deleteProject (state, index){
+        state.projectList.splice(index,1);
+    },
 }
 
 const actions = {
@@ -52,7 +55,8 @@ const actions = {
             context.commit ('error/setCode', response.status, {root: true});
         }
     },
-    async deleteProject (deleteProjectId) {
+    async deleteProject (context, selectedDeletingProject) {
+        context.commit('deleteProject', selectedDeletingProject.index);
         return;
     }
 }
