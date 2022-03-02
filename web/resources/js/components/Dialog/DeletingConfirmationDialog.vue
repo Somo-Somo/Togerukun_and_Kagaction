@@ -10,6 +10,7 @@
             </v-card-title>
             <v-card-text>
             プロジェクト: 「{{selectedDeletingItem.name}}」を削除してもよろしいでしょうか。
+            共有している場合は共有者のプロジェクト一覧からも削除が行われます。
             </v-card-text>
             <v-card-actions>
             <v-spacer></v-spacer>
