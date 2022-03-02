@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\UseCases\Project\IndexAction;
 use App\UseCases\Project\StoreAction;
+use App\UseCases\Project\DestroyAction;
 use App\Http\Resources\Project\CreatedProjectResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -84,12 +85,15 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $ProjectUuid, Request $request)
+    public function destroy(string $ProjectUuid, Request $request, DestroyAction $destroyAction)
     {
-        $deletingProject = [
+        $project = [
             'uuid' => $ProjectUuid,
             'user_email' => $request->user()->email,
         ];
+
+        $deletingProject = $destroyAction->invoke($project);
+
         return response()->json($deletingProject, Response::HTTP_OK);
     }
 }
