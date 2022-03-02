@@ -94,6 +94,13 @@ class ProjectController extends Controller
 
         $deletingProject = $destroyAction->invoke($project);
 
-        return response()->json($deletingProject, Response::HTTP_OK);
+        // 本当はResourcesにかきたいけど
+        $json = [
+            'project' => $deletingProject,
+            'message' => 'プロジェクトを削除しました',
+            'error' => '',
+        ];
+
+        return response()->json($json, Response::HTTP_OK);
     }
 }

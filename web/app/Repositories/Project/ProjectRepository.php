@@ -56,6 +56,21 @@ class ProjectRepository implements ProjectRepositoryInterface
 
     public function destroy(array $project)
     {
-        return $project;
+        $deletedDataFromDB = $this->client->run(
+            <<<'CYPHER'
+                MATCH (user:User { email : $user_email }), (:User)-[has:HAS]->(project:Project{ uuid :$uuid })
+                CREATE (user)-[
+                            :DELETED{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                        ]->(project)
+                DELETE has
+                RETURN project
+                CYPHER,
+                [
+                    'uuid' => $project['uuid'], 
+                    'user_email' => $project['user_email'], 
+                ]
+            );
+
+        return $deletedDataFromDB;
     }
 }
