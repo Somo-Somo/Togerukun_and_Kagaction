@@ -17,8 +17,6 @@ class DestroyAction
     {
         $deletedDataFromDB = $this->project_repository->destroy($project);
         
-        // $formatedProject = $createdProject->getAsCypherMap(0)->getAsNode('project')->getProperties()->toArray();
-        
         return $deletedDataFromDB;
     }
 }
