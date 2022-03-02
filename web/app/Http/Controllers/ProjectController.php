@@ -80,11 +80,16 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $ProjectUuid
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(string $ProjectUuid, Request $request)
     {
-        //
+        $deletingProject = [
+            'uuid' => $ProjectUuid,
+            'user_email' => $request->user()->email,
+        ];
+        return response()->json($deletingProject, Response::HTTP_OK);
     }
 }

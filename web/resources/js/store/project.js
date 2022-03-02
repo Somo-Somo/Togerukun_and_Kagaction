@@ -56,7 +56,18 @@ const actions = {
         }
     },
     async deleteProject (context, selectedDeletingProject) {
-        context.commit('deleteProject', selectedDeletingProject.index);
+        const projectUuid = selectedDeletingProject.uuid;
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        const response = await axios.delete('api/project/'+ projectUuid)
+            .then(response => {
+                console.info('プロジェクトを削除しました');
+                context.commit ('auth/setApiStatus', true);
+                context.commit('deleteProject', selectedDeletingProject.index);
+                return;
+            }).catch(error => {
+                console.info(error);
+            });
+
         return;
     }
 }
