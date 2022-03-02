@@ -83,7 +83,6 @@ export default {
     },
     displayDeletingConfirmationDialog(projectCard,index) {
       this.deletingConfirmationDialog = true;
-      console.info(index);
       this.selectedDeletingProject.index = index;
       this.selectedDeletingProject.name = projectCard.name;
       this.selectedDeletingProject.uuid = projectCard.uuid;
