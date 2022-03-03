@@ -199,8 +199,6 @@ export default {
       this.dialog = !this.dialog;
       const createdHypothesis = await this.$store.dispatch("hypothesis/createHypothesis", hypothesis);
 
-      console.info(createdHypothesis.hypothesis.uuid);
-
       // ゴール作成後の遷移先
       const url = "/hypothesis/" + createdHypothesis.hypothesis.uuid;
       
