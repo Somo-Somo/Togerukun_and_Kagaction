@@ -105,14 +105,14 @@
               class="overflow-y-auto d-flex flex-column"
               :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
             >
-              <HypothesisCards :hypotheses="hypothesisChildList" :category="category" />
+              <HypothesisCards :parent="hypothesis" :hypotheses="hypothesisList" :view="page" />
               <!-- PC版追加カード -->
               <NewAdditionalCard :on="on" :attrs="attrs" :category="category"/>
             </div>
           </div>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpBottomBtn :on="on" :attrs="attrs" :headerTitle="'仮説詳細'" />
+        <SpBottomBtn :on="on" :attrs="attrs" :headerTitle="page" />
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
@@ -145,6 +145,7 @@ export default {
     attrs: true,
     dialog: false,
     category: "仮説",
+    page: "仮説詳細",
     result: null,
   }),
   computed : {
@@ -164,15 +165,6 @@ export default {
         this.$store.dispatch("hypothesis/setInputName", value);
       }
     },
-    hypothesisChildList() {
-      const hypothesisChildList = {};
-      for (let key in this.hypothesisList) {
-        if (this.hypothesisList[key].parentUuid === this.hypothesis.uuid) {
-          hypothesisChildList[key] = this.hypothesisList[key];
-        }
-      }
-      return hypothesisChildList;
-    }
   },
   methods: {
     clickSuccess: function () {

@@ -90,24 +90,29 @@ export default {
     ],
   }),
   props: {
+    parent : {
+      type: Object,
+    },
     hypotheses: {
       type: Object,
     },
-    category: {
+    view: {
       type: String,
     },
   },
   computed : {
     cardShow() {
       return function (hypothesis) {
-        if (this.category === "ゴール") {
+        if (this.view === "ゴール") {
           return hypothesis.depth === 0 ? true : false ;
-        } else if (this.category === "今日の目標") {
+        } else if (this.view === "今日の目標") {
           return hypothesis.currentGoal ? true : false;
-        } else if (this.category === "仮説") {
+        } else if (this.view === "仮説") {
           return hypothesis.depth !== 0 ? true : false ;
-        } else if (this.category === "完了") {
+        } else if (this.view === "完了") {
           return hypothesis.status ? true : false; 
+        } else if (this.view === "仮説詳細") {
+          return this.parent.uuid === hypothesis.parentUuid ? true : false;
         } else {
           return false;
         }
