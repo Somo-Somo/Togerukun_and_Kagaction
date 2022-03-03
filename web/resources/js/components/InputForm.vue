@@ -1,5 +1,5 @@
 <template>
-<v-dialog v-model="inputForm" width="500">
+<v-dialog v-model="inputForm" @click:outside="$emit('onClickCancel')" width="500">
   <v-card ref="form">
         <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
           <v-text-field
@@ -11,7 +11,7 @@
         </v-card-text>
     <v-divider></v-divider>
     <v-card-actions>
-      <v-btn @click="$emit('clickCancel')" text>
+      <v-btn @click="$emit('onClickCancel')" text>
         キャンセル
       </v-btn>
       <v-spacer></v-spacer>
@@ -65,7 +65,6 @@ export default {
     // ダイアログが閉じた後フォームの値を全て空にする * computedに移行したい
     inputForm(inputForm) {
       if (!inputForm) {
-        this.$store.dispatch("form/isDisplay");
         this.formTitle = "";
       }
     },

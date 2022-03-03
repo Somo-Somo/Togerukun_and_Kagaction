@@ -51,8 +51,8 @@
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
-          @clickCancel="isDisplay"
-          @clickNext="isDisplay"
+          @onClickCancel="onClickCancel"
+          @submitForm="submitForm"
           :category="tabs[0]"
           :inputForm="inputForm"
         />
@@ -90,8 +90,11 @@ export default {
     })
   },
   methods: {
-    isDisplay: function () {
+    isDisplay () {
       this.$store.dispatch("form/isDisplay");
+    },
+    onClickCancel() {
+      this.$store.dispatch("form/onClickCancel");
     },
     async submitForm(){
       const hypothesis = {

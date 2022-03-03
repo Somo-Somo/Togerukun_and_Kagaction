@@ -2,6 +2,7 @@
     <div>
         <v-dialog
         v-model="deletingConfirmationDialog"
+        @click:outside="$emit('onClickCancel')"
         width="500"
         >
         <v-card>
@@ -17,7 +18,7 @@
             <v-btn
                 color="grey"
                 text
-                @click="$emit('cancel')"
+                @click="$emit('onClickCancel')"
             >
                 キャンセル
             </v-btn>

@@ -15,7 +15,11 @@ const mutations = {
         state.title = title;
     },
     isDisplay (state) {
-        state.inputForm = !state.inputForm
+        state.inputForm = true
+        console.info(state.inputForm)
+    },
+    onClickCancel (state) {
+        state.inputForm = false
         console.info(state.inputForm)
     }
 }
@@ -26,7 +30,10 @@ const actions = {
     },
     isDisplay (context) {
         context.commit('isDisplay')
-    }
+    },
+    onClickCancel (context) {
+        context.commit('onClickCancel')
+    },
 }
 
 export default {

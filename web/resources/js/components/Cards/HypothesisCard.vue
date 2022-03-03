@@ -65,7 +65,7 @@
       :deletingConfirmationDialog="deletingConfirmationDialog"
       :selectedDeletingItem="selectedDeletingHypothesis"
       @deleteItem="deleteHypothesis"
-      @cancel="cancel"
+      @onClickCancel="onClickCancel"
     />
 </div>  
 </template>
@@ -141,7 +141,7 @@ export default {
       this.selectedDeletingHypothesis.name = null;
       this.selectedDeletingHypothesis.uuid = null;
     },
-    cancel(){
+    onClickCancel(){
       this.deletingConfirmationDialog = false;
       this.selectedDeletingHypothesis.name = null;
       this.selectedDeletingHypothesis.uuid = null;

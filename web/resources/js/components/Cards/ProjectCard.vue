@@ -46,7 +46,7 @@
       :deletingConfirmationDialog="deletingConfirmationDialog"
       :selectedDeletingItem="selectedDeletingProject"
       @deleteItem="deleteProject"
-      @cancel="cancel"
+      @onClickCancel="onClickCancel"
     />
 </div>
 </template>
@@ -96,7 +96,7 @@ export default {
       this.selectedDeletingProject.name = null;
       this.selectedDeletingProject.uuid = null;
     },
-    cancel(){
+    onClickCancel(){
       this.deletingConfirmationDialog = false;
       this.selectedDeletingProject.name = null;
       this.selectedDeletingProject.uuid = null;

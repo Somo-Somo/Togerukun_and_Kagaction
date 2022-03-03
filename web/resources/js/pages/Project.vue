@@ -38,7 +38,12 @@
       </template>
       <!-- 追加のフォーム -->
       <form class="form" @submit.prevent="submitForm()">
-        <InputForm @clickCancel="isDisplay" @submitForm="submitForm" :inputForm="inputForm" :category="category" />
+        <InputForm 
+          @onClickCancel="onClickCancel" 
+          @submitForm="submitForm"
+          :inputForm="inputForm" 
+          :category="category" 
+        />
       </form>
   </v-container>
 </template>
@@ -73,8 +78,11 @@ export default {
     })
   },
   methods: {
-    isDisplay: function () {
+    isDisplay () {
       this.$store.dispatch("form/isDisplay");
+    },
+    onClickCancel() {
+      this.$store.dispatch("form/onClickCancel");
     },
     async submitForm(){
       this.$store.dispatch("form/isDisplay");
