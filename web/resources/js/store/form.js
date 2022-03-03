@@ -3,22 +3,27 @@ import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 const state = {
     title : null,
     inputForm: false,
+    submitType: null,
 };
 
 const getters = {
     title: state => state.title ? state.title : '',
     inputForm: state => state.inputForm,
+    submitType: state => state.submitType ? state.submitType : null,
 };
 
 const mutations = {
     setTitle (state, title) {
-        state.title = title;
+        state.title = title
     },
-    isDisplay (state) {
+    openForm (state) {
         state.inputForm = true
     },
-    onClickCancel (state) {
+    closeForm (state) {
         state.inputForm = false
+    },
+    setSubmitType (state, data) {
+        state.submitType = data
     }
 }
 
@@ -26,17 +31,21 @@ const actions = {
     setTitle (context, title) {
         context.commit('setTitle', title);
     },
-    isDisplay (context) {
-        context.commit('isDisplay');
+    onClickCreate (context) {
+        const submitType = 'create'
+        context.commit('setSubmitType',submitType);
+        context.commit('openForm');
     },
     async onClickEdit (context, data) {
-        console.info(data);
+        const submitType = 'edit'
         await context.commit('setTitle', data.name);
-        context.commit('isDisplay');
+        context.commit('setSubmitType',submitType);
+        context.commit('openForm');
     },
-    async onClickCancel (context) {
-        await context.commit('onClickCancel');
+    async closeForm (context) {
+        await context.commit('closeForm');
         context.commit('setTitle', null);
+        context.commit('setSubmitType', null);
     },
 }
 
