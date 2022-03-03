@@ -41,7 +41,11 @@ const mutations = {
 
     setHypothesisList (state, data) {
         state.hypothesisList = data;
-    }
+    },
+
+    deleteHypothesis (state, hypothesisUuid){
+        delete state.hypothesisList[hypothesisUuid];
+    },
 }
 
 const actions = {
@@ -59,8 +63,10 @@ const actions = {
     },
 
     async getHypothesisList (context, data) {
-        await axios.get('/api/project/'+data.uuid).then(response => {
+        await axios.get('/api/project/'+data.uuid)
+        .then(response => {
             console.info('仮説一覧を追加しました');
+            console.info(response);
             context.commit ('setHypothesisList', response.data);
             return false;
         })
@@ -110,6 +116,22 @@ const actions = {
             context.commit ('error/setCode', response.status, {root: true});
         }
     },
+
+    async deleteHypothesis (context, selectedDeletingHypothesis) {
+        const hypothesisUuid = selectedDeletingHypothesis.uuid;
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        const response = await axios.delete('api/hypothesis/'+ hypothesisUuid)
+            .then(response => {
+                console.info('仮説を削除しました');
+                context.commit ('auth/setApiStatus', true);
+                context.commit('deleteHypothesis', hypothesisUuid);
+                return;
+            }).catch(error => {
+                console.info(error);
+            });
+
+        return;        
+    }
 }
 
 export default {

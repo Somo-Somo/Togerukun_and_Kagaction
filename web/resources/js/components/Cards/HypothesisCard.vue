@@ -1,8 +1,9 @@
 <template>
+<div> 
   <v-list class="py-0" width="100%">
     <v-col 
       class="px-md-0"
-      v-for="hypothesis in hypotheses" 
+      v-for="(hypothesis, key) in hypotheses" 
       :key="hypothesis.name" 
       :hypotheses="hypotheses" 
       :class="cardShow(hypothesis) ? '': 'd-none'"
@@ -48,7 +49,7 @@
                     </v-list-item-action>
                   </template>
                   <v-list>
-                    <v-list-item v-for="menu in cardMenu" :key="menu.title" link>
+                    <v-list-item v-for="menu in cardMenu" :key="menu.title" @click="selectMenu(menu.title, hypothesis)" link>
                       <v-list-item-title :style="menu.color">{{ menu.title }}</v-list-item-title>
                     </v-list-item>
                   </v-list>
@@ -60,16 +61,33 @@
       </v-card>
     </v-col>
   </v-list>
+    <DeletingConfirmationDialog 
+      :deletingConfirmationDialog="deletingConfirmationDialog"
+      :selectedDeletingItem="selectedDeletingHypothesis"
+      @deleteItem="deleteHypothesis"
+      @cancel="cancel"
+    />
+</div>  
 </template>
 
 <script>
+import DeletingConfirmationDialog from "../Dialog/DeletingConfirmationDialog.vue";
+
 export default {
+  components: {
+    DeletingConfirmationDialog,
+  },
   data: () => ({
+    deletingConfirmationDialog: false,
+    selectedDeletingHypothesis: {
+      name : null,
+      uuid : null,
+    },
     cardMenu: [
       {title: "ゴールにする", color:""},
       {title: "今日の目標にする", color: ""},
       {title: "削除", color:"color: red"},
-    ]
+    ],
   }),
   props: {
     hypotheses: {
@@ -101,6 +119,28 @@ export default {
       await this.$store.dispatch("hypothesis/selectHypothesis", hypothesis);
       return this.$router.push({ path: "/hypothesis/" + hypothesis.uuid });
     },
+    selectMenu(menuTitle, hypothesis){
+      if (menuTitle === "ゴールにする") {
+        
+      } else if (menuTitle === "今日の目標にする") {
+        
+      } else if (menuTitle === "削除") {
+        this.deletingConfirmationDialog = true;
+        this.selectedDeletingHypothesis.name = hypothesis.name;
+        this.selectedDeletingHypothesis.uuid = hypothesis.uuid;
+      }
+    },
+    async deleteHypothesis(){
+      await this.$store.dispatch("hypothesis/deleteHypothesis", this.selectedDeletingHypothesis);
+      this.deletingConfirmationDialog = false;
+      this.selectedDeletingHypothesis.name = null;
+      this.selectedDeletingHypothesis.uuid = null;
+    },
+    cancel(){
+      this.deletingConfirmationDialog = false;
+      this.selectedDeletingHypothesis.name = null;
+      this.selectedDeletingHypothesis.uuid = null;
+    }    
   },
 };
 </script>
