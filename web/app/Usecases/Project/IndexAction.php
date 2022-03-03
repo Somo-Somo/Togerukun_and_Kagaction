@@ -19,8 +19,9 @@ class IndexAction
 
         $projcetsCypherList = $projectCypherMap->toArray();
         $projectList = [];
-        foreach ($projcetsCypherList as $project) {
-            $projectList[] = $project->getAsNode('project')->getProperties()->toArray();
+        foreach ($projcetsCypherList as $projectData) {
+            $project = $projectData->getAsNode('project')->getProperties()->toArray();
+            $projectList[$project['uuid']] = $project;
         }
         
         // 他にも処理がある場合はここに色々書く

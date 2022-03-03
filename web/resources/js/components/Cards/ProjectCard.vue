@@ -1,14 +1,14 @@
 <template>
 <div>
   <v-list class="py-0" width="100%">
-    <v-col class="px-md-0" v-for="(projectCard, index) in projectCards" :key="projectCard.name" :projectCard="projectCard">
+    <v-col class="px-md-0" v-for="(project, index) in projectCards" :key="project.name">
       <v-card class="rounded" outlined>
         <v-list class="py-0" style="height: 80px">
-          <v-list-item @click="toHypothesis(projectCard)" style="height: 80px" link>
+          <v-list-item @click="toHypothesis(project)" style="height: 80px" link>
             <v-list-item-content>
               <v-list-item-title
                 ><p class="font-weight-black ma-0">
-                  {{ projectCard.name }}
+                  {{ project.name }}
                 </p></v-list-item-title
               >
             </v-list-item-content>
@@ -28,7 +28,7 @@
                 <v-list-item 
                   v-for="menu in cardMenu" 
                   :key="menu.title" 
-                  @click="displayDeletingConfirmationDialog(projectCard, index)" 
+                  @click="selectMenu(menu.title, project)" 
                   link
                 >
                   <v-list-item-title :style="menu.color">{{
@@ -61,11 +61,11 @@ export default {
   },
   data: () => ({
     cardMenu: [
+      {title: "編集", color:"color: black"},
       {title: "削除", color:"color: red"},
     ],
     deletingConfirmationDialog: false,
     selectedDeletingProject: {
-      index: null,
       name: null,
       uuid: null,
     },
@@ -81,22 +81,19 @@ export default {
       const url = "project/" + project.uuid;
       return this.$router.push({ path: url });
     },
-    displayDeletingConfirmationDialog(projectCard,index) {
+    selectMenu(title,project) {
       this.deletingConfirmationDialog = true;
-      this.selectedDeletingProject.index = index;
-      this.selectedDeletingProject.name = projectCard.name;
-      this.selectedDeletingProject.uuid = projectCard.uuid;
+      this.selectedDeletingProject.name = project.name;
+      this.selectedDeletingProject.uuid = project.uuid;
     },
     async deleteProject(){
       await this.$store.dispatch("project/deleteProject", this.selectedDeletingProject);
       this.deletingConfirmationDialog = false;
-      this.selectedDeletingProject.index = null;
       this.selectedDeletingProject.name = null;
       this.selectedDeletingProject.uuid = null;
     },
     cancel(){
       this.deletingConfirmationDialog = false;
-      this.selectedDeletingProject.index = null;
       this.selectedDeletingProject.name = null;
       this.selectedDeletingProject.uuid = null;
     }

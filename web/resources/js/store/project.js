@@ -21,8 +21,8 @@ const mutations = {
     setProjectList (state, projectList){
         state.projectList = projectList;
     },
-    deleteProject (state, index){
-        state.projectList.splice(index,1);
+    deleteProject (state, projectUuid){
+        delete state.projectList[projectUuid];
     },
 }
 
@@ -62,7 +62,7 @@ const actions = {
             .then(response => {
                 console.info('プロジェクトを削除しました');
                 context.commit ('auth/setApiStatus', true);
-                context.commit('deleteProject', selectedDeletingProject.index);
+                context.commit('deleteProject', projectUuid);
                 return;
             }).catch(error => {
                 console.info(error);
