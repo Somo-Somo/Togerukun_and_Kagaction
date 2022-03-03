@@ -83,7 +83,7 @@ export default {
     },
     selectMenu(menuTitle,project) {
       if (menuTitle === "編集") {
-        
+        this.$emit("onClickEdit", project);
       } else if (menuTitle === "削除") {
         this.deletingConfirmationDialog = true;
         this.selectedDeletingProject.name = project.name;

@@ -16,23 +16,27 @@ const mutations = {
     },
     isDisplay (state) {
         state.inputForm = true
-        console.info(state.inputForm)
     },
     onClickCancel (state) {
         state.inputForm = false
-        console.info(state.inputForm)
     }
 }
 
 const actions = {
     setTitle (context, title) {
-        context.commit('setTitle', title)
+        context.commit('setTitle', title);
     },
     isDisplay (context) {
-        context.commit('isDisplay')
+        context.commit('isDisplay');
     },
-    onClickCancel (context) {
-        context.commit('onClickCancel')
+    async onClickEdit (context, data) {
+        console.info(data);
+        await context.commit('setTitle', data.name);
+        context.commit('isDisplay');
+    },
+    async onClickCancel (context) {
+        await context.commit('onClickCancel');
+        context.commit('setTitle', null);
     },
 }
 

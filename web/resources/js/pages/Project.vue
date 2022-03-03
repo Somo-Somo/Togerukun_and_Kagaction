@@ -27,7 +27,7 @@
           class="overflow-y-auto d-flex flex-column"
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
-          <ProjectCards />
+          <ProjectCards @onClickEdit="onClickEdit" />
           <!-- PC版追加カード -->
           <NewAdditionalCard @clickAditional="isDisplay" :category="category" />
         </div>
@@ -81,15 +81,18 @@ export default {
     isDisplay () {
       this.$store.dispatch("form/isDisplay");
     },
+    onClickEdit(value){
+      this.$store.dispatch("form/onClickEdit", value);
+    },
     onClickCancel() {
       this.$store.dispatch("form/onClickCancel");
     },
     async submitForm(){
       this.$store.dispatch("form/isDisplay");
-      const inputForm = {
+      const projectInputForm = {
         title : this.title 
       }
-      await this.$store.dispatch("project/createProject", inputForm);
+      await this.$store.dispatch("project/createProject", projectInputForm);
 
       const url = "project/" + this.project.uuid;
       
