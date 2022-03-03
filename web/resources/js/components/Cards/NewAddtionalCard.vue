@@ -25,10 +25,10 @@
 export default {
   props: {
     on: {
-      type: Boolean,
+      type: Object,
     },
     attrs: {
-      type: Boolean,
+      type: Object,
     },
     category: {
       type: String,

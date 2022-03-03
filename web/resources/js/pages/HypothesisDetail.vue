@@ -105,14 +105,14 @@
               class="overflow-y-auto d-flex flex-column"
               :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
             >
-              <HypothesisCards :hypotheses="hypothesisChildList" :category="category" />
+              <HypothesisCards :parent="hypothesis" :hypotheses="hypothesisList" :view="page" />
               <!-- PC版追加カード -->
               <NewAdditionalCard :on="on" :attrs="attrs" :category="category"/>
             </div>
           </div>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpBottomBtn :on="on" :attrs="attrs" :headerTitle="'仮説詳細'" />
+        <SpBottomBtn :on="on" :attrs="attrs" :headerTitle="page" />
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
@@ -145,6 +145,7 @@ export default {
     attrs: true,
     dialog: false,
     category: "仮説",
+    page: "仮説詳細",
     result: null,
   }),
   computed : {
@@ -154,7 +155,7 @@ export default {
     }),
    ...mapGetters({
       inputFormName: 'form/name',
-      hypothesisChildList: 'hypothesis/hypothesisChildList',
+      hypothesisList: 'hypothesis/hypothesisList',
     }),
     title: {
       get () {
@@ -163,7 +164,7 @@ export default {
       set (value) {
         this.$store.dispatch("hypothesis/setInputName", value);
       }
-    }
+    },
   },
   methods: {
     clickSuccess: function () {
@@ -197,8 +198,6 @@ export default {
       
       this.dialog = !this.dialog;
       const createdHypothesis = await this.$store.dispatch("hypothesis/createHypothesis", hypothesis);
-
-      console.info(createdHypothesis.hypothesis.uuid);
 
       // ゴール作成後の遷移先
       const url = "/hypothesis/" + createdHypothesis.hypothesis.uuid;

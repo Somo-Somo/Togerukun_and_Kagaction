@@ -61,4 +61,23 @@ class HypothesisRepository implements HypothesisRepositoryInterface
 
         return $createdHypothesis;
     }
+
+    public function destroy(array $hypothesis)
+    {
+        $deletingHypothesis = $this->client->run(
+            <<<'CYPHER'
+                MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis{ uuid :$uuid }) - [r] -> (parent)
+                CREATE (user)-[
+                            :DELETED{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                        ]->(hypothesis)
+                DELETE r
+                RETURN hypothesis
+                CYPHER,
+                [
+                    'uuid' => $hypothesis['uuid'], 
+                    'user_email' => $hypothesis['user_email'], 
+                ]
+            );
+        return $deletingHypothesis;
+    }
 }

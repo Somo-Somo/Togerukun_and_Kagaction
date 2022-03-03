@@ -20,10 +20,16 @@ const mutations = {
     },
     setProjectList (state, projectList){
         state.projectList = projectList;
-    }
+    },
+    deleteProject (state, index){
+        state.projectList.splice(index,1);
+    },
 }
 
 const actions = {
+    selectProject (context, project){
+        context.commit ('setProject', project);
+    },
     async getProjectList (context) {
         await axios.get('/api/projects').then(response => {
             context.commit('setProjectList', response.data)
@@ -49,8 +55,20 @@ const actions = {
             context.commit ('error/setCode', response.status, {root: true});
         }
     },
-    selectProject (context, project){
-        context.commit ('setProject', project);
+    async deleteProject (context, selectedDeletingProject) {
+        const projectUuid = selectedDeletingProject.uuid;
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        const response = await axios.delete('/api/project/'+ projectUuid)
+            .then(response => {
+                console.info('プロジェクトを削除しました');
+                context.commit ('auth/setApiStatus', true);
+                context.commit('deleteProject', selectedDeletingProject.index);
+                return;
+            }).catch(error => {
+                console.info(error);
+            });
+
+        return;
     }
 }
 

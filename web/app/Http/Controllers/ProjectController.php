@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\UseCases\Project\IndexAction;
 use App\UseCases\Project\StoreAction;
+use App\UseCases\Project\DestroyAction;
 use App\Http\Resources\Project\CreatedProjectResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -80,11 +81,26 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $ProjectUuid
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(string $ProjectUuid, Request $request, DestroyAction $destroyAction)
     {
-        //
+        $project = [
+            'uuid' => $ProjectUuid,
+            'user_email' => $request->user()->email,
+        ];
+
+        $deletingProject = $destroyAction->invoke($project);
+
+        // 本当はResourcesにかきたいけど
+        $json = [
+            'project' => $deletingProject,
+            'message' => 'プロジェクトを削除しました',
+            'error' => '',
+        ];
+
+        return response()->json($json, Response::HTTP_OK);
     }
 }

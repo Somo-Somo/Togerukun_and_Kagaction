@@ -20,7 +20,7 @@ class IndexAction
 
         $arrayHypothesisList = $getHypothesisListFromDB->toArray();
 
-        // 仮説のリスト全部ぶち込む配列
+        // 仮説の一覧に全部ぶち込む配列
         $hypothesisList = [];
 
         // 親仮説それに紐づく子仮説の順番になるように配列$hypothesisListに追加
@@ -41,36 +41,32 @@ class IndexAction
             
             // もし仮説リストに親のUUIDがない場合（親仮説=ゴールの場合のみ）
             if (!$parentKey) {
-                // ゴールは親仮説がいないので親UUIDはプロジェクトUUID
+                // ゴールは親仮説がいないので親の親UUIDはプロジェクトUUID
                 $parent['parentUuid'] = $projectUuid;
+
                 // ゴールからの仮説の階層の深さ
                 $parent['depth'] = 0;
+
                 $hypothesisList[] = $parent;
+            } 
 
-                // 親に対して複数の子をforeach
-                foreach ($childs as $childValue) {
-                    $child = $childValue->getProperties()->toArray();
 
-                    // 親仮説のUUID
-                    $child['parentUuid'] = $parent['uuid'];
+            // 親に対して複数の子をforeach
+            foreach ($childs as $childValue) {
+                $child = $childValue->getProperties()->toArray();
 
-                    // ゴールからの仮説の階層の深さ
-                    $child['depth'] = $depth;
+                // 親仮説のUUID
+                $child['parentUuid'] = $parent['uuid'];
 
-                    //仮説リストの最後尾に子仮説を追加
+                // ゴールからの仮説の階層の深さ
+                $child['depth'] = $depth;
+
+                // 仮説一覧に親がなかった場合（親=ゴール）
+                if (!$parentKey) {
+                    //仮説一覧の最後尾に子仮説を追加
                     $hypothesisList[] = $child;
-                }
-            } else {
-                // もし仮説リストに親のUUIDがあった場合（親仮説=ゴール以外の場合）
-                foreach ($childs as $childKey => $childValue) {
-                    $child = $childValue->getProperties()->toArray();
-
-                    // 親仮説のUUID
-                    $child['parentUuid'] = $parent['uuid'];                    
-
-                    // ゴールからの仮説の階層の深さ
-                    $child['depth'] = $depth;
-
+                } else {
+                    // 紐づく親が仮説一覧にない場合(親=ゴール以外)
                     // 紐づく親仮説の後ろに配列追加
                     // 第一引数 仮説リスト
                     // 第二引数 子仮説を仮説リストに追加する位置
@@ -83,6 +79,12 @@ class IndexAction
             }
         }
 
-        return $hypothesisList;
+
+        $formatHypothesisList = [];
+        foreach ($hypothesisList as $value) {
+            $formatHypothesisList[$value['uuid']] = $value;
+        }
+
+        return $formatHypothesisList;
     }
 }
