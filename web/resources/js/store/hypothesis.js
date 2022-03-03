@@ -10,13 +10,11 @@ const state = {
         name: null,
         uuid: null,
     },
-    child: null,
 };
 
 const getters = {
     hypothesisName: state => state.hypothesis.name ? state.hypothesis.name : null,
     hypothesisList: state => state.hypothesisList ? state.hypothesisList : null,
-    hypothesisChildList: state => state.child ? state.child : null,
 };
 
 const mutations = {
@@ -27,12 +25,6 @@ const mutations = {
     setParent (state, data) {
         state.parent.name = data.name;
         state.parent.uuid = data.uuid;
-    },
-
-    setChild (state, hypothesisVal) {
-        state.child = state.hypothesisList.filter(hypothesis => {
-            return hypothesis.parentUuid === hypothesisVal.uuid;
-        });
     },
 
     setHypothesis (state, hypothesisVal) {
@@ -59,7 +51,6 @@ const actions = {
 
     selectHypothesis (context, hypothesisVal) {
         context.commit ('setHypothesis', hypothesisVal);
-        context.commit ('setChild', hypothesisVal);
     },
 
     async getHypothesisList (context, data) {
@@ -120,7 +111,7 @@ const actions = {
     async deleteHypothesis (context, selectedDeletingHypothesis) {
         const hypothesisUuid = selectedDeletingHypothesis.uuid;
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-        const response = await axios.delete('api/hypothesis/'+ hypothesisUuid)
+        const response = await axios.delete('/api/hypothesis/'+ hypothesisUuid)
             .then(response => {
                 console.info('仮説を削除しました');
                 context.commit ('auth/setApiStatus', true);

@@ -154,7 +154,7 @@ export default {
     }),
    ...mapGetters({
       inputFormName: 'form/name',
-      hypothesisChildList: 'hypothesis/hypothesisChildList',
+      hypothesisList: 'hypothesis/hypothesisList',
     }),
     title: {
       get () {
@@ -163,6 +163,15 @@ export default {
       set (value) {
         this.$store.dispatch("hypothesis/setInputName", value);
       }
+    },
+    hypothesisChildList() {
+      const hypothesisChildList = {};
+      for (let key in this.hypothesisList) {
+        if (this.hypothesisList[key].parentUuid === this.hypothesis.uuid) {
+          hypothesisChildList[key] = this.hypothesisList[key];
+        }
+      }
+      return hypothesisChildList;
     }
   },
   methods: {

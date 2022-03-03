@@ -91,7 +91,7 @@ export default {
   }),
   props: {
     hypotheses: {
-      type: Array,
+      type: Object,
     },
     category: {
       type: String,
