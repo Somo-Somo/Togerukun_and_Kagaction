@@ -154,7 +154,7 @@ export default {
       apiStatus: (state) => state.auth.apiStatus,
     }),
    ...mapGetters({
-      inputFormName: 'form/name',
+      inputFormName: 'form/title',
       hypothesisList: 'hypothesis/hypothesisList',
     }),
     title: {

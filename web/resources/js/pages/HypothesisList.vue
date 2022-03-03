@@ -90,7 +90,7 @@ export default {
       apiStatus: (state) => state.auth.apiStatus,
     }),
     ...mapGetters({
-      name: 'form/name',
+      title: 'form/title',
       project: 'project/project',
       hypothesisList: 'hypothesis/hypothesisList',
     })
@@ -101,7 +101,7 @@ export default {
     },
     async submitForm(){
       const hypothesis = {
-        name : this.name,
+        title : this.title,
         parent_uuid: this.project.uuid,
       }
       

@@ -81,10 +81,14 @@ export default {
       const url = "project/" + project.uuid;
       return this.$router.push({ path: url });
     },
-    selectMenu(title,project) {
-      this.deletingConfirmationDialog = true;
-      this.selectedDeletingProject.name = project.name;
-      this.selectedDeletingProject.uuid = project.uuid;
+    selectMenu(menuTitle,project) {
+      if (menuTitle === "編集") {
+        
+      } else if (menuTitle === "削除") {
+        this.deletingConfirmationDialog = true;
+        this.selectedDeletingProject.name = project.name;
+        this.selectedDeletingProject.uuid = project.uuid;
+      }
     },
     async deleteProject(){
       await this.$store.dispatch("project/deleteProject", this.selectedDeletingProject);

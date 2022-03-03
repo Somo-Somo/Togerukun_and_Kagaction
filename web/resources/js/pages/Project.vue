@@ -4,7 +4,7 @@
     style="max-width: 900px"
     fluid
   >
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="inputForm" width="500">
       <template v-slot:activator="{ on, attrs }">
         <div
           class="d-flex justify-space-between"
@@ -41,7 +41,7 @@
       </template>
       <!-- 追加のフォーム -->
       <form class="form" @submit.prevent="submitForm()">
-        <InputForm @clickCancel="isDisplay" @submitForm="submitForm" :dialog="dialog" :category="category" />
+        <InputForm @clickCancel="isDisplay" @submitForm="submitForm" :inputForm="inputForm" :category="category" />
       </form>
     </v-dialog>
   </v-container>
@@ -64,7 +64,6 @@ export default {
   data: () => ({
     on: true,
     attrs: true,
-    dialog: false,
     category : "プロジェクト",
     projectList: null,
   }),
@@ -74,18 +73,19 @@ export default {
     }),
     // 後でmapGettersからprops,$emitに移行したい
     ...mapGetters({
-      name: 'form/name',
+      title: 'form/title',
+      inputForm: 'form/inputForm',
       project: 'project/project',
     })
   },
   methods: {
     isDisplay: function () {
-      this.dialog = !this.dialog;
+      this.$store.dispatch("form/isDisplay");
     },
     async submitForm(){
-      this.dialog = !this.dialog
+      this.$store.dispatch("form/isDisplay");
       const inputForm = {
-        name : this.name 
+        title : this.title 
       }
       await this.$store.dispatch("project/createProject", inputForm);
 

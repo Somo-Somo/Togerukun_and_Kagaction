@@ -1,22 +1,30 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
-    name : null,
+    title : null,
+    inputForm: false,
 };
 
 const getters = {
-    name: state => state.name ? state.name : '',
+    title: state => state.title ? state.title : '',
+    inputForm: state => state.inputForm ? state.inputForm : '',
 };
 
 const mutations = {
-    setName (state, name) {
-        state.name = name;
+    setTitle (state, title) {
+        state.title = title;
     },
+    isDisplay (state) {
+        state.inputForm = !state.inputForm
+    }
 }
 
 const actions = {
-    setName (context, name) {
-        context.commit('setName', name)
+    setTitle (context, title) {
+        context.commit('setTitle', title)
+    },
+    isDisplay (context) {
+        context.commit('isDisplay')
     }
 }
 

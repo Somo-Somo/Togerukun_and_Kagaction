@@ -3,7 +3,7 @@
         <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
           <v-text-field
             class="pa-0 ma-0"
-            v-model="name"
+            v-model="formTitle"
             :label="category"
             clearable
           ></v-text-field>
@@ -17,7 +17,7 @@
       <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
       <v-btn
         type="submit"
-        :disabled="!name"
+        :disabled="!formTitle"
         color="primary"
         @click="$emit('submitForm')"
         text
@@ -38,7 +38,7 @@ export default {
     category: {
       type: String,
     },
-    dialog: {
+    inputForm: {
       type: Boolean,
     },
     hypotheses: {
@@ -46,29 +46,24 @@ export default {
     },
   },
   computed: {
-    name: {
+    formTitle: {
       get () {
-        return this.$store.getters['form/name']
+        return this.$store.getters['form/title']
       },
       set (value) {
-        this.$store.dispatch("form/setName", value);
+        this.$store.dispatch("form/setTitle", value);
       }
     },
+ 
   },
   methods: {
    
   },
   watch: {
     // ダイアログが閉じた後フォームの値を全て空にする * computedに移行したい
-    dialog(isDisplay) {
-      if (!isDisplay) {
-        this.step = 1;
-        this.name = "";
-        this.upperGoal.category = "";
-        this.upperGoal.index = "";
-        this.upperGoal.content = "";
-        this.activeCategory = "";
-        this.activeHypothesis = "";
+    inputForm(inputForm) {
+      if (!inputForm) {
+        this.formTitle = "";
       }
     },
   },
