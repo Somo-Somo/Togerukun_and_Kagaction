@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\UseCases\Hypothesis\IndexAction;
 use App\UseCases\Hypothesis\StoreAction;
+use App\UseCases\Hypothesis\DestroyAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
@@ -81,11 +82,25 @@ class HypothesisController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $hypothesisUuid
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(string $hypothesisUuid, Request $request, DestroyAction $destroyAction)
     {
-        //
+        $hypothesis = [
+            'uuid' => $hypothesisUuid,
+            'user_email' => $request->user()->email,
+        ];
+
+        $deletingHypothesis = $destroyAction->invoke($hypothesis);
+
+        $json = [
+            'hypothesis' => $deletingHypothesis,
+            'message' => 'プロジェクトを削除しました',
+            'error' => '',
+        ];
+
+        return response()->json($json, Response::HTTP_OK);
     }
 }
