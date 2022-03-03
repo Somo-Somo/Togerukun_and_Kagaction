@@ -7,7 +7,7 @@ const state = {
 
 const getters = {
     title: state => state.title ? state.title : '',
-    inputForm: state => state.inputForm ? state.inputForm : '',
+    inputForm: state => state.inputForm,
 };
 
 const mutations = {
@@ -16,6 +16,7 @@ const mutations = {
     },
     isDisplay (state) {
         state.inputForm = !state.inputForm
+        console.info(state.inputForm)
     }
 }
 

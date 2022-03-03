@@ -1,4 +1,5 @@
 <template>
+<v-dialog v-model="inputForm" width="500">
   <v-card ref="form">
         <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
           <v-text-field
@@ -26,6 +27,7 @@
       </v-btn>
     </v-card-actions>
   </v-card>
+</v-dialog>
 </template>
 
 
@@ -63,6 +65,7 @@ export default {
     // ダイアログが閉じた後フォームの値を全て空にする * computedに移行したい
     inputForm(inputForm) {
       if (!inputForm) {
+        this.$store.dispatch("form/isDisplay");
         this.formTitle = "";
       }
     },

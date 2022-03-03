@@ -4,8 +4,7 @@
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
-    <v-dialog v-model="dialog" width="500">
-      <template v-slot:activator="{ on, attrs }">
+      <template>
         <div
           class="d-flex flex-column"
           style="position: fixed"
@@ -96,8 +95,7 @@
                 class="hidden-sm-and-down my-3"
                 size="24"
                 height="24"
-                v-bind="attrs"
-                v-on="on"
+                @click="isDisplay()"
                 >mdi-plus-circle</v-icon
               >
             </div>
@@ -107,22 +105,21 @@
             >
               <HypothesisCards :parent="hypothesis" :hypotheses="hypothesisList" :view="page" />
               <!-- PC版追加カード -->
-              <NewAdditionalCard :on="on" :attrs="attrs" :category="category"/>
+              <NewAdditionalCard @clickAditional="isDisplay" :category="category"/>
             </div>
           </div>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpBottomBtn :on="on" :attrs="attrs" :headerTitle="page" />
+        <SpBottomBtn @clickAditional="isDisplay" :headerTitle="page" />
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
           @clickCancel="isDisplay"
           @clickNext="isDisplay"
           :category="category"
-          :dialog="dialog"
+          :inputForm="inputForm"
         />
       </form>
-    </v-dialog>
   </v-container>
 </template>
 
@@ -141,9 +138,6 @@ export default {
     InputForm,
   },
   data: () => ({
-    on: true,
-    attrs: true,
-    dialog: false,
     category: "仮説",
     page: "仮説詳細",
     result: null,
@@ -155,6 +149,7 @@ export default {
     }),
    ...mapGetters({
       inputFormName: 'form/title',
+      inputForm: 'form/inputForm',
       hypothesisList: 'hypothesis/hypothesisList',
     }),
     title: {
@@ -188,7 +183,7 @@ export default {
       }
     },
     isDisplay: function () {
-      this.dialog = !this.dialog;
+      this.$store.dispatch("form/isDisplay");
     },
     async submitForm(){
       const hypothesis = {
@@ -196,7 +191,7 @@ export default {
         parent_uuid: this.hypothesis.uuid,
       }
       
-      this.dialog = !this.dialog;
+      this.$store.dispatch("form/isDisplay");
       const createdHypothesis = await this.$store.dispatch("hypothesis/createHypothesis", hypothesis);
 
       // ゴール作成後の遷移先

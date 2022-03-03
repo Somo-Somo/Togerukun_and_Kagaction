@@ -32,8 +32,7 @@
           size="64"
           :class="{ 'show-plus': hover }"
           :color="transparent.plus"
-          v-bind="attrs"
-          v-on="on"
+          @click="$emit('clickAditional')"
         >
           <v-icon size="32" color="white" style="backgroud-color: white">
             mdi-plus
@@ -53,12 +52,6 @@ export default {
     },
   }),
   props: {
-    on: {
-      type: Object,
-    },
-    attrs: {
-      type: Object,
-    },
     tab: {
       type: Number,
     },

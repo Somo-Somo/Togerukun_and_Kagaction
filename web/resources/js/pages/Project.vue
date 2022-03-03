@@ -4,8 +4,7 @@
     style="max-width: 900px"
     fluid
   >
-    <v-dialog v-model="inputForm" width="500">
-      <template v-slot:activator="{ on, attrs }">
+      <template>
         <div
           class="d-flex justify-space-between"
           style="position: fixed; width: 772px"
@@ -20,30 +19,27 @@
             class="hidden-sm-and-down my-3"
             size="24"
             height="24"
-            v-bind="attrs"
-            v-on="on"
+            @click="isDisplay"
             >mdi-plus-circle</v-icon
           >
         </div>
-
         <div
           class="overflow-y-auto d-flex flex-column"
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
           <ProjectCards />
           <!-- PC版追加カード -->
-          <NewAdditionalCard :on="on" :attrs="attrs" :category="category" />
+          <NewAdditionalCard @clickAditional="isDisplay" :category="category" />
         </div>
         <!-- スマホ版追加ボタン -->
         
-        <SpButtomBtn :on="on" :attrs="attrs" :headerTitle="category" />
+        <SpButtomBtn @clickAditional="isDisplay" :headerTitle="category" />
       
       </template>
       <!-- 追加のフォーム -->
       <form class="form" @submit.prevent="submitForm()">
         <InputForm @clickCancel="isDisplay" @submitForm="submitForm" :inputForm="inputForm" :category="category" />
       </form>
-    </v-dialog>
   </v-container>
 </template>
 
@@ -62,8 +58,6 @@ export default {
     InputForm,
   },
   data: () => ({
-    on: true,
-    attrs: true,
     category : "プロジェクト",
     projectList: null,
   }),
