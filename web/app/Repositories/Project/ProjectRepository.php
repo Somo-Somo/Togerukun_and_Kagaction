@@ -54,6 +54,27 @@ class ProjectRepository implements ProjectRepositoryInterface
         return $createdProject;
     }
 
+    public function update($project)
+    {        
+        $createdProject = $this->client->run(
+                <<<'CYPHER'
+                    MATCH (user:User { email : $user_email }), (project:Project { uuid: $uuid })
+                    SET project.name = $name
+                    CREATE (user) - [
+                        :UPDATED{since:localdatetime({timezone: 'Asia/Tokyo'})}
+                    ] -> (project)
+                    RETURN project
+                    CYPHER,
+                    [
+                        'name' => $project['name'], 
+                        'uuid' => $project['uuid'], 
+                        'user_email' => $project['user_email'], 
+                    ]
+                );
+
+        return $createdProject;
+    }
+
     public function destroy(array $project)
     {
         $deletedDataFromDB = $this->client->run(

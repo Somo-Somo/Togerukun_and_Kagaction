@@ -69,8 +69,6 @@ const actions = {
             }).catch(error => {
                 console.info(error);
             });
-        console.info('response返ってきました')
-        console.info(response)
     },
     async deleteProject (context, selectedDeletingProject) {
         const projectUuid = selectedDeletingProject.uuid;
