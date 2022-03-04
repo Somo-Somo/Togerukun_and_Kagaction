@@ -81,7 +81,7 @@ export default {
       const url = "project/" + project.uuid;
       return this.$router.push({ path: url });
     },
-    selectMenu(menuTitle,project) {
+    selectMenu(menuTitle, project) {
       if (menuTitle === "編集") {
         this.$emit("onClickEdit", project);
       } else if (menuTitle === "削除") {

@@ -4,7 +4,7 @@
         <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
           <v-text-field
             class="pa-0 ma-0"
-            v-model="formTitle"
+            v-model="formName"
             :label="category"
             clearable
           ></v-text-field>
@@ -18,7 +18,7 @@
       <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
       <v-btn
         type="submit"
-        :disabled="!formTitle"
+        :disabled="!formName"
         color="primary"
         @click="$emit('submitForm')"
         text
@@ -48,12 +48,12 @@ export default {
     },
   },
   computed: {
-    formTitle: {
+    formName: {
       get () {
-        return this.$store.getters['form/title']
+        return this.$store.getters['form/name']
       },
       set (value) {
-        this.$store.dispatch("form/setTitle", value);
+        this.$store.dispatch("form/setName", value);
       }
     },
  
@@ -65,7 +65,7 @@ export default {
     // ダイアログが閉じた後フォームの値を全て空にする * computedに移行したい
     inputForm(inputForm) {
       if (!inputForm) {
-        this.formTitle = "";
+        this.formName = "";
       }
     },
   },

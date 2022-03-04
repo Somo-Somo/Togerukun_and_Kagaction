@@ -1,20 +1,25 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
-    title : null,
+    name : null,
+    editObject : null,
     inputForm: false,
     submitType: null,
 };
 
 const getters = {
-    title: state => state.title ? state.title : '',
+    name: state => state.name ? state.name : '',
+    editObject: state => state.editObject ? state.editObject : null,
     inputForm: state => state.inputForm,
     submitType: state => state.submitType ? state.submitType : null,
 };
 
 const mutations = {
-    setTitle (state, title) {
-        state.title = title
+    setName (state, name) {
+        state.name = name
+    },
+    setEditingObject (state, data){
+        state.editObject = data
     },
     openForm (state) {
         state.inputForm = true
@@ -28,8 +33,8 @@ const mutations = {
 }
 
 const actions = {
-    setTitle (context, title) {
-        context.commit('setTitle', title);
+    setName (context, name) {
+        context.commit('setName', name);
     },
     onClickCreate (context) {
         const submitType = 'create'
@@ -38,13 +43,14 @@ const actions = {
     },
     async onClickEdit (context, data) {
         const submitType = 'edit'
-        await context.commit('setTitle', data.name);
+        await context.commit('setName', data.name);
+        context.commit('setEditingObject', data);
         context.commit('setSubmitType',submitType);
         context.commit('openForm');
     },
     async closeForm (context) {
         await context.commit('closeForm');
-        context.commit('setTitle', null);
+        context.commit('setName', null);
         context.commit('setSubmitType', null);
     },
 }

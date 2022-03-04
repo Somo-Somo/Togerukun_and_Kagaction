@@ -55,6 +55,13 @@ const actions = {
             context.commit ('error/setCode', response.status, {root: true});
         }
     },
+    async editProject (context, data) {
+        console.info(data);
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        const response = await axios.put('api/project/'+ data.uuid, data);
+        console.info('response返ってきました')
+        console.info(response)
+    },
     async deleteProject (context, selectedDeletingProject) {
         const projectUuid = selectedDeletingProject.uuid;
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});

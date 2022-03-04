@@ -72,7 +72,8 @@ export default {
     }),
     // 後でmapGettersからprops,$emitに移行したい
     ...mapGetters({
-      title: 'form/title',
+      name: 'form/name',
+      editObject: 'form/editObject',
       inputForm: 'form/inputForm',
       submitType: 'form/submitType',
       project: 'project/project',
@@ -90,14 +91,13 @@ export default {
     },
     submitForm(){
       this.$store.dispatch("form/closeForm");
-      const projectInputForm = {
-        title : this.title 
-      }
       if (this.submitType === 'create') {
-        this.$store.dispatch("project/createProject", projectInputForm);
+        this.$store.dispatch("project/createProject", {'name' : this.name});
         this.apiStatus ? this.$router.push( "project/" + this.project.uuid) : console.info('ログインしてください')
       } else if (this.submitType === 'edit') {
-        console.info('編集だよん')
+        // 名前を更新
+        this.editObject.name = this.name;
+        this.$store.dispatch("project/editProject", this.editObject);
       }
     }
   },
