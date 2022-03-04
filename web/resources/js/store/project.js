@@ -21,6 +21,9 @@ const mutations = {
     setProjectList (state, projectList){
         state.projectList = projectList;
     },
+    updateProject (state, data) {
+        state.projectList[data.uuid]['name'] = data.name;
+    },
     deleteProject (state, projectUuid){
         delete state.projectList[projectUuid];
     },
@@ -56,9 +59,16 @@ const actions = {
         }
     },
     async editProject (context, data) {
-        console.info(data);
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-        const response = await axios.put('api/project/'+ data.uuid, data);
+        const response = await axios.put('api/project/'+ data.uuid, data)
+            .then(response => {
+                console.info('プロジェクトを更新しました');
+                context.commit ('auth/setApiStatus', true);
+                context.commit('updateProject', response.data);
+                return;
+            }).catch(error => {
+                console.info(error);
+            });
         console.info('response返ってきました')
         console.info(response)
     },
