@@ -60,9 +60,13 @@ class ProjectRepository implements ProjectRepositoryInterface
                 <<<'CYPHER'
                     MATCH (user:User { email : $user_email }), (project:Project { uuid: $uuid })
                     SET project.name = $name
-                    CREATE (user) - [
-                        :UPDATED{since:localdatetime({timezone: 'Asia/Tokyo'})}
-                    ] -> (project)
+                    WITH user,project
+                    OPTIONAL MATCH x = (user)-[updated:UPDATED]->(project)
+                    WHERE x IS NOT NULL 
+                    SET updated.since = localdatetime({timezone: 'Asia/Tokyo'}) 
+                    WITH user,project,x
+                    WHERE x IS NULL
+                    CREATE (user)-[:UPDATED{since:localdatetime({timezone: 'Asia/Tokyo'})}]->(project)
                     RETURN project
                     CYPHER,
                     [

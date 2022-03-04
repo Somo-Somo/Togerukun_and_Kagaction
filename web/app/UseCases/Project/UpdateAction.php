@@ -17,9 +17,7 @@ class UpdateAction
     {
 
         $updatedProject = $this->project_repository->update($project);
-
-        $formatedProject = $updatedProject->getAsCypherMap(0)->getAsNode('project')->getProperties()->toArray();
         
-        return $formatedProject;
+        return; 
     }
 }

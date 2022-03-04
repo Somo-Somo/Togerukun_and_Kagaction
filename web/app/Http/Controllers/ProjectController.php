@@ -82,11 +82,10 @@ class ProjectController extends Controller
             'user_email' => $request->user()->email,
         ];
 
-        $updatedProject = $updateAction->invoke($project);
+        $updateAction->invoke($project);
 
         // 本当はResourcesにかきたいけど
         $json = [
-            'project' => $updatedProject,
             'message' => 'プロジェクト名を更新しました',
             'error' => '',
         ];
