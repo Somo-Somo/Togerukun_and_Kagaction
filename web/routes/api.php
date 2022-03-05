@@ -41,7 +41,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/project/{projectUuid}', [HypothesisController::class, 'index']);
     Route::get('/hypothesis/:hypothesisId', [HypothesisController::class, 'show']);
     Route::post('/hypothesis', [HypothesisController::class, 'store']);
-    Route::put('/hypothesis/:hypothesisId', [HypothesisController::class, 'update']);
+    Route::put('/hypothesis/{hypothesisId}', [HypothesisController::class, 'update']);
     Route::delete('/hypothesis/{hypothesisId}', [HypothesisController::class, 'destroy']);
 
     // ゴール

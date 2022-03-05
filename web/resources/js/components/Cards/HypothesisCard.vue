@@ -3,7 +3,7 @@
   <v-list class="py-0" width="100%">
     <v-col 
       class="px-md-0"
-      v-for="(hypothesis, key) in hypotheses" 
+      v-for="hypothesis in hypotheses" 
       :key="hypothesis.name" 
       :hypotheses="hypotheses" 
       :class="cardShow(hypothesis) ? '': 'd-none'"

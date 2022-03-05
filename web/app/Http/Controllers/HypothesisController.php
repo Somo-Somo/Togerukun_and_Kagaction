@@ -74,9 +74,15 @@ class HypothesisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $hypothesis = [
+            'name' => $request->name,
+            'uuid' => $request->uuid,
+            'user_email' => $request->user()->email,
+        ];
+
+        return response()->json($hypothesis, Response::HTTP_OK);
     }
 
     /**

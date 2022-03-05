@@ -64,7 +64,7 @@ const actions = {
             .then(response => {
                 console.info('プロジェクトを更新しました');
                 context.commit ('auth/setApiStatus', true);
-                context.commit('updateProject', response.data);
+                context.commit('updateProject', data);
                 return;
             }).catch(error => {
                 console.info(error);
