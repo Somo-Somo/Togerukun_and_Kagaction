@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\UseCases\Hypothesis\IndexAction;
 use App\UseCases\Hypothesis\StoreAction;
+use App\UseCases\Hypothesis\UpdateAction;
 use App\UseCases\Hypothesis\DestroyAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -74,7 +75,7 @@ class HypothesisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, UpdateAction $updateAction)
     {
         $hypothesis = [
             'name' => $request->name,
@@ -82,7 +83,14 @@ class HypothesisController extends Controller
             'user_email' => $request->user()->email,
         ];
 
-        return response()->json($hypothesis, Response::HTTP_OK);
+        $updateAction->invoke($hypothesis);
+
+        $json = [
+            'message' => '仮説名を更新しました',
+            'error' => '',
+        ];
+
+        return response()->json($json, Response::HTTP_OK);
     }
 
     /**
