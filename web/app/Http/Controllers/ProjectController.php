@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\UseCases\Project\IndexAction;
 use App\UseCases\Project\StoreAction;
+use App\UseCases\Project\UpdateAction;
 use App\UseCases\Project\DestroyAction;
 use App\Http\Resources\Project\CreatedProjectResource;
 use Illuminate\Http\Request;
@@ -70,12 +71,26 @@ class ProjectController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, UpdateAction $updateAction)
     {
-        //
+        $project = [
+            'name' => $request->name,
+            'uuid' => $request->uuid,
+            'user_email' => $request->user()->email,
+        ];
+
+        $updateAction->invoke($project);
+
+        // 本当はResourcesにかきたいけど
+        $json = [
+            'message' => 'プロジェクト名を更新しました',
+            'error' => '',
+        ];
+
+        return response()->json($json, Response::HTTP_OK);
     }
 
     /**

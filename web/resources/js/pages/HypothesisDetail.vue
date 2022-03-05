@@ -4,8 +4,7 @@
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
-    <v-dialog v-model="dialog" width="500">
-      <template v-slot:activator="{ on, attrs }">
+      <template>
         <div
           class="d-flex flex-column"
           style="position: fixed"
@@ -29,7 +28,8 @@
             </v-subheader>
             <v-textarea
               label="ゴールを入力"
-              v-model="title"
+              v-model="hypothesis.name"
+              @keyup.enter="edit"
               class="pa-0 text-h5"
               rows="1"
               auto-grow
@@ -96,8 +96,7 @@
                 class="hidden-sm-and-down my-3"
                 size="24"
                 height="24"
-                v-bind="attrs"
-                v-on="on"
+                @click="onClickCreate"
                 >mdi-plus-circle</v-icon
               >
             </div>
@@ -107,22 +106,21 @@
             >
               <HypothesisCards :parent="hypothesis" :hypotheses="hypothesisList" :view="page" />
               <!-- PC版追加カード -->
-              <NewAdditionalCard :on="on" :attrs="attrs" :category="category"/>
+              <NewAdditionalCard @clickAditional="onClickCreate" :category="category"/>
             </div>
           </div>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpBottomBtn :on="on" :attrs="attrs" :headerTitle="page" />
+        <SpBottomBtn @clickAditional="onClickCreate" :headerTitle="page" />
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
-          @clickCancel="isDisplay"
-          @clickNext="isDisplay"
+          @onClickCancel="onClickCancel"
+          @submitForm="submitForm"
           :category="category"
-          :dialog="dialog"
+          :inputForm="inputForm"
         />
       </form>
-    </v-dialog>
   </v-container>
 </template>
 
@@ -141,9 +139,6 @@ export default {
     InputForm,
   },
   data: () => ({
-    on: true,
-    attrs: true,
-    dialog: false,
     category: "仮説",
     page: "仮説詳細",
     result: null,
@@ -155,11 +150,12 @@ export default {
     }),
    ...mapGetters({
       inputFormName: 'form/name',
+      inputForm: 'form/inputForm',
       hypothesisList: 'hypothesis/hypothesisList',
     }),
-    title: {
+    hypothesis: {
       get () {
-        return this.$store.getters['hypothesis/hypothesisName']
+        return this.$store.getters['hypothesis/hypothesis']
       },
       set (value) {
         this.$store.dispatch("hypothesis/setInputName", value);
@@ -167,7 +163,7 @@ export default {
     },
   },
   methods: {
-    clickSuccess: function () {
+    clickSuccess () {
       switch (this.result) {
         case null:
           return (this.result = true);
@@ -177,7 +173,7 @@ export default {
           return (this.result = true);
       }
     },
-    clickFailure: function () {
+    clickFailure () {
       switch (this.result) {
         case null:
           return (this.result = false);
@@ -187,24 +183,27 @@ export default {
           return (this.result = null);
       }
     },
-    isDisplay: function () {
-      this.dialog = !this.dialog;
+    onClickCreate () {
+      this.$store.dispatch("form/onClickCreate");
+    },    
+    onClickCancel() {
+      this.$store.dispatch("form/closeForm");
     },
     async submitForm(){
+      this.$store.dispatch("form/closeForm");
       const hypothesis = {
         name : this.inputFormName,
         parent_uuid: this.hypothesis.uuid,
       }
-      
-      this.dialog = !this.dialog;
       const createdHypothesis = await this.$store.dispatch("hypothesis/createHypothesis", hypothesis);
-
       // ゴール作成後の遷移先
       const url = "/hypothesis/" + createdHypothesis.hypothesis.uuid;
-      
       if (this.apiStatus) {
         this.$router.push(url);
       }
+    },
+    edit(){
+        this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
     }
   },
 };

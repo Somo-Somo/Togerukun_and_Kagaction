@@ -13,13 +13,13 @@ const state = {
 };
 
 const getters = {
-    hypothesisName: state => state.hypothesis.name ? state.hypothesis.name : null,
+    hypothesis: state => (state.hypothesis.name && state.hypothesis.uuid) ? state.hypothesis: null,
     hypothesisList: state => state.hypothesisList ? state.hypothesisList : null,
 };
 
 const mutations = {
     setInputName (state, value){
-        state.hypothesis.name = value;
+        state.hypothesis.name = value.name;
     },
 
     setParent (state, data) {
@@ -33,6 +33,11 @@ const mutations = {
 
     setHypothesisList (state, data) {
         state.hypothesisList = data;
+    },
+
+    updateHypothesis (state, data) {
+        console.info(data)
+        state.hypothesisList[data.uuid]['name'] = data.name;
     },
 
     deleteHypothesis (state, hypothesisUuid){
@@ -106,6 +111,19 @@ const actions = {
         } else {
             context.commit ('error/setCode', response.status, {root: true});
         }
+    },
+
+    async editHypothesis (context, data) {
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        const response = await axios.put('/api/hypothesis/'+ data.uuid, data)
+            .then(response => {
+                console.info('仮説を更新しました');
+                context.commit ('auth/setApiStatus', true);
+                context.commit('updateHypothesis', data);
+                return;
+            }).catch(error => {
+                console.info(error);
+            });
     },
 
     async deleteHypothesis (context, selectedDeletingHypothesis) {

@@ -1,6 +1,6 @@
 <template>
   <v-col class="px-md-0 hidden-sm-and-down" cols="12">
-    <v-card class="rounded" v-bind="attrs" v-on="on" outlined>
+    <v-card class="rounded" @click="$emit('clickAditional')" outlined>
       <v-list class="py-0" style="height: 80px">
         <v-list-item
           class="d-flex justify-space-around"
@@ -24,12 +24,6 @@
 <script>
 export default {
   props: {
-    on: {
-      type: Object,
-    },
-    attrs: {
-      type: Object,
-    },
     category: {
       type: String,
     },

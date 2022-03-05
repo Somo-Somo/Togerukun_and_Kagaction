@@ -4,8 +4,7 @@
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
-    <v-dialog v-model="dialog" width="500">
-      <template v-slot:activator="{ on, attrs }">
+      <template>
         <div
           class="d-flex justify-space-between"
           style="position: fixed"
@@ -26,8 +25,7 @@
             class="hidden-sm-and-down my-3"
             size="24"
             height="24"
-            v-bind="attrs"
-            v-on="on"
+            @click="isDisplay()"
             >mdi-plus-circle</v-icon
           >
         </div>
@@ -42,25 +40,23 @@
               <!-- PC版追加カード -->
               <NewAdditionalCard
                 v-if="tab === 0"
-                :on="on"
-                :attrs="attrs"
+                @clickAditional="isDisplay"
                 :category="tabs[0]"
               />
             </v-tab-item>
           </v-tabs-items>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpBottomBtn :on="on" :attrs="attrs" :tab="tab" :headerTitle="'仮説一覧'" />
+        <SpBottomBtn @clickAditional="isDisplay" :tab="tab" :headerTitle="'仮説一覧'" />
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
-          @clickCancel="isDisplay"
-          @clickNext="isDisplay"
+          @onClickCancel="onClickCancel"
+          @submitForm="submitForm"
           :category="tabs[0]"
-          :dialog="dialog"
+          :inputForm="inputForm"
         />
       </form>
-    </v-dialog>
   </v-container>
 </template>
 
@@ -79,9 +75,6 @@ export default {
     InputForm,
   },
   data: () => ({
-    on: true,
-    attrs: true,
-    dialog: false,
     tab: null,
     tabs: ["ゴール", "今日の目標", "仮説", "完了"],
   }),
@@ -90,22 +83,26 @@ export default {
       apiStatus: (state) => state.auth.apiStatus,
     }),
     ...mapGetters({
-      name: 'form/name',
+      title: 'form/title',
+      inputForm: 'form/inputForm',
       project: 'project/project',
       hypothesisList: 'hypothesis/hypothesisList',
     })
   },
   methods: {
-    isDisplay: function () {
-      this.dialog = !this.dialog;
+    isDisplay () {
+      this.$store.dispatch("form/isDisplay");
+    },
+    onClickCancel() {
+      this.$store.dispatch("form/onClickCancel");
     },
     async submitForm(){
       const hypothesis = {
-        name : this.name,
+        title : this.title,
         parent_uuid: this.project.uuid,
       }
       
-      this.dialog = !this.dialog;
+      this.$store.dispatch("form/isDisplay");
       const createdGoal = await this.$store.dispatch("hypothesis/createGoal", hypothesis);
 
       // ゴール作成後の遷移先

@@ -62,6 +62,31 @@ class HypothesisRepository implements HypothesisRepositoryInterface
         return $createdHypothesis;
     }
 
+    public function update($hypothesis)
+    {        
+        $updatedHypothesis = $this->client->run(
+                <<<'CYPHER'
+                    MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
+                    SET hypothesis.name = $name
+                    WITH user,hypothesis
+                    OPTIONAL MATCH x = (user)-[updated:UPDATED]->(hypothesis)
+                    WHERE x IS NOT NULL 
+                    SET updated.since = localdatetime({timezone: 'Asia/Tokyo'}) 
+                    WITH user,hypothesis,x
+                    WHERE x IS NULL
+                    CREATE (user)-[:UPDATED{since:localdatetime({timezone: 'Asia/Tokyo'})}]->(hypothesis)
+                    RETURN hypothesis
+                    CYPHER,
+                    [
+                        'name' => $hypothesis['name'], 
+                        'uuid' => $hypothesis['uuid'], 
+                        'user_email' => $hypothesis['user_email'], 
+                    ]
+                );
+
+        return $updatedHypothesis;
+    }
+
     public function destroy(array $hypothesis)
     {
         $deletingHypothesis = $this->client->run(
