@@ -114,7 +114,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("hypothesis/getHypothesisList", this.project);
+    // this.$store.dispatch("hypothesis/getHypothesisList", this.project);
   },
 };
 </script>

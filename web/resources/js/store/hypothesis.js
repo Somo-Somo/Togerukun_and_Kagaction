@@ -6,6 +6,7 @@ const state = {
         uuid: null,
     },
     hypothesisList: null,
+    allHypothesisList: null,
     parent: {
         name: null,
         uuid: null,
@@ -32,7 +33,13 @@ const mutations = {
     },
 
     setHypothesisList (state, data) {
-        state.hypothesisList = data;
+        const allHypothesisList = state.allHypothesisList;
+        state.hypothesisList = allHypothesisList[data.uuid];
+        console.info(state.hypothesisList);
+    },
+
+    setAllHypothesisList (state, data) {
+        state.allHypothesisList = data;
     },
 
     updateHypothesis (state, data) {
@@ -46,10 +53,6 @@ const mutations = {
 }
 
 const actions = {
-    selectParent (context, data){
-        context.commit('setParent', data)
-    },
-
     setInputName (context, value) {
         context.commit('setInputName', value)
     },
@@ -61,7 +64,7 @@ const actions = {
     async getHypothesisList (context, data) {
         await axios.get('/api/project/'+data.uuid)
         .then(response => {
-            console.info('仮説一覧を追加しました');
+            console.info('仮説一覧を取得しました');
             console.info(response);
             context.commit ('setHypothesisList', response.data);
             return false;
