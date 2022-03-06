@@ -1,4 +1,5 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
+import router from "../router";
 
 const state = {
 
@@ -24,7 +25,7 @@ const actions = {
                 } else if (route.name === "hypothesisList") {
                     context.commit ('hypothesis/setHypothesisList', route.params.id, { root: true });
                 } else if (route.name === "hypothesisDetail") {
-                    
+                    router.push({ path: '/projects' });
                 }            
                 return false;
             })

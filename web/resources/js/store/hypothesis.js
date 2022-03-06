@@ -1,10 +1,7 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
-    hypothesis: {
-        name: null,
-        uuid: null,
-    },
+    hypothesis: null,
     hypothesisList: null,
     allHypothesisList: null,
     parent: {
@@ -35,7 +32,6 @@ const mutations = {
     setHypothesisList (state, projectUuid) {
         const allHypothesisList = state.allHypothesisList;
         state.hypothesisList = allHypothesisList[projectUuid];
-        console.info(projectUuid);
     },
 
     setAllHypothesisList (state, data) {
