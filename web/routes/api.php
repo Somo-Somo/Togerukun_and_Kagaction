@@ -7,6 +7,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\HypothesisController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\CurrentGoalController;
+use App\Http\Controllers\Initialize;
 
 
 use Illuminate\Http\Request;
@@ -31,6 +32,8 @@ Route::post('/logout', [LoginController::class, 'logout']);
 Route::get('/auth_status', [LoginController::class, 'authStatus']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/initialize', Initialize::class);
+
     // プロジェクト
     Route::get('/projects', [ProjectController::class, 'index']);
     Route::post('/project', [ProjectController::class, 'store']);
@@ -38,7 +41,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/project/{projectId}', [ProjectController::class, 'destroy']);
 
     // 仮説
-    Route::get('/project/{projectUuid}', [HypothesisController::class, 'index']);
+    Route::get('/project', [HypothesisController::class, 'index']);
     Route::get('/hypothesis/:hypothesisId', [HypothesisController::class, 'show']);
     Route::post('/hypothesis', [HypothesisController::class, 'store']);
     Route::put('/hypothesis/{hypothesisId}', [HypothesisController::class, 'update']);

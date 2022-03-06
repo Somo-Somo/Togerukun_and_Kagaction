@@ -17,18 +17,31 @@ class HypothesisRepository implements HypothesisRepositoryInterface
     /**
      * 選択されたプロジェクトの親仮説と子仮説と子仮説のゴールからの深さ（距離）を取得
      */
-    public function getHypothesisList(string $projectUuid)
+    public function getHypothesisList(string $user_email)
     {
         $hypothesisList = $this->client->run(
             <<<'CYPHER'
-                MATCH len = (project:Project{uuid: $project_uuid})<- [*] - (parent:Hypothesis)
+                MATCH len = (user:User{email:$user_email}) - [:HAS] -> (project:Project) <- [*] - (parent:Hypothesis)
                 OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
                 RETURN project.uuid,parent,collect(child),length(len)
                 CYPHER,
                 [
-                    'project_uuid' => $projectUuid,
+                    'user_email' => $user_email,
                 ]
             );
+        
+        
+        // 旧get
+        // $hypothesisList = $this->client->run(
+        //     <<<'CYPHER'
+        //         MATCH len = (project:Project{uuid: $project_uuid})<- [*] - (parent:Hypothesis)
+        //         OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
+        //         RETURN project.uuid,parent,collect(child),length(len)
+        //         CYPHER,
+        //         [
+        //             'project_uuid' => $projectUuid,
+        //         ]
+        //     );
 
         return $hypothesisList;
     }
