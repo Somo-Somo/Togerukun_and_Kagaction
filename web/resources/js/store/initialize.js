@@ -13,12 +13,19 @@ const mutations = {
 }
 
 const actions = {
-    getUserHasProjectAndHypothesis (context) {
+    getUserHasProjectAndHypothesis (context, route) {
         axios.get('/api/initialize')
             .then(response => {
                 console.info('プロジェクトと仮説を取得しました');                
                 console.info(response.data);                
                 context.commit ('hypothesis/setAllHypothesisList', response.data, { root: true });
+                if (route.name === "project") {
+
+                } else if (route.name === "hypothesisList") {
+                    context.commit ('hypothesis/setHypothesisList', route.params.id, { root: true });
+                } else if (route.name === "hypothesisDetail") {
+                    
+                }            
                 return false;
             })
             .catch(error => {

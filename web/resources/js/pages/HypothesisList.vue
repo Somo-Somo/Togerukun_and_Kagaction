@@ -113,9 +113,6 @@ export default {
       }
     }
   },
-  created() {
-    // this.$store.dispatch("hypothesis/getHypothesisList", this.project);
-  },
 };
 </script>
 

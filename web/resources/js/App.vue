@@ -56,7 +56,7 @@ export default {
     },
   },
   created(){
-    this.$store.dispatch("initialize/getUserHasProjectAndHypothesis");
+    this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
   }
 };
 </script>

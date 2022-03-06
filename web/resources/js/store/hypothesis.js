@@ -32,10 +32,10 @@ const mutations = {
         state.hypothesis = hypothesisVal;
     },
 
-    setHypothesisList (state, data) {
+    setHypothesisList (state, projectUuid) {
         const allHypothesisList = state.allHypothesisList;
-        state.hypothesisList = allHypothesisList[data.uuid];
-        console.info(state.hypothesisList);
+        state.hypothesisList = allHypothesisList[projectUuid];
+        console.info(projectUuid);
     },
 
     setAllHypothesisList (state, data) {
@@ -43,7 +43,6 @@ const mutations = {
     },
 
     updateHypothesis (state, data) {
-        console.info(data)
         state.hypothesisList[data.uuid]['name'] = data.name;
     },
 
@@ -59,19 +58,6 @@ const actions = {
 
     selectHypothesis (context, hypothesisVal) {
         context.commit ('setHypothesis', hypothesisVal);
-    },
-
-    async getHypothesisList (context, data) {
-        await axios.get('/api/project/'+data.uuid)
-        .then(response => {
-            console.info('仮説一覧を取得しました');
-            console.info(response);
-            context.commit ('setHypothesisList', response.data);
-            return false;
-        })
-        .catch(error => {
-            console.info(error);
-        });
     },
 
     async createGoal (context, data){

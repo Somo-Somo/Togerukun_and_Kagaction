@@ -32,7 +32,7 @@ const mutations = {
 const actions = {
     selectProject (context, project){
         context.commit ('setProject', project);
-        context.commit ('hypothesis/setHypothesisList', project, { root: true });
+        context.commit ('hypothesis/setHypothesisList', project.uuid, { root: true });
     },
     async getProjectList (context) {
         await axios.get('/api/projects').then(response => {
