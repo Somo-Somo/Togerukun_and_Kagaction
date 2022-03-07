@@ -1,11 +1,9 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
-    hypothesis: {
-        name: null,
-        uuid: null,
-    },
+    hypothesis: null,
     hypothesisList: null,
+    allHypothesisList: null,
     parent: {
         name: null,
         uuid: null,
@@ -31,12 +29,16 @@ const mutations = {
         state.hypothesis = hypothesisVal;
     },
 
-    setHypothesisList (state, data) {
-        state.hypothesisList = data;
+    setHypothesisList (state, projectUuid) {
+        const allHypothesisList = state.allHypothesisList;
+        state.hypothesisList = allHypothesisList[projectUuid];
+    },
+
+    setAllHypothesisList (state, data) {
+        state.allHypothesisList = data;
     },
 
     updateHypothesis (state, data) {
-        console.info(data)
         state.hypothesisList[data.uuid]['name'] = data.name;
     },
 
@@ -46,29 +48,12 @@ const mutations = {
 }
 
 const actions = {
-    selectParent (context, data){
-        context.commit('setParent', data)
-    },
-
     setInputName (context, value) {
         context.commit('setInputName', value)
     },
 
     selectHypothesis (context, hypothesisVal) {
         context.commit ('setHypothesis', hypothesisVal);
-    },
-
-    async getHypothesisList (context, data) {
-        await axios.get('/api/project/'+data.uuid)
-        .then(response => {
-            console.info('仮説一覧を追加しました');
-            console.info(response);
-            context.commit ('setHypothesisList', response.data);
-            return false;
-        })
-        .catch(error => {
-            console.info(error);
-        });
     },
 
     async createGoal (context, data){

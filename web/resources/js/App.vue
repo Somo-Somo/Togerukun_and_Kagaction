@@ -55,5 +55,8 @@ export default {
       this.$store.commit("error/setCode", null);
     },
   },
+  created(){
+    this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
+  }
 };
 </script>

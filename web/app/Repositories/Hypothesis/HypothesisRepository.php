@@ -18,7 +18,7 @@ class HypothesisRepository implements HypothesisRepositoryInterface
      * 選択されたプロジェクトの親仮説と子仮説と子仮説のゴールからの深さ（距離）を取得
      */
     public function getHypothesisList(string $projectUuid)
-    {
+    {   
         $hypothesisList = $this->client->run(
             <<<'CYPHER'
                 MATCH len = (project:Project{uuid: $project_uuid})<- [*] - (parent:Hypothesis)

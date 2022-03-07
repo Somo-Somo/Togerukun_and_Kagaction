@@ -7,10 +7,16 @@ use App\Repositories\User\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface
 {
+    protected $client;
+
+    public function __construct()
+    {
+        $this->client = Neo4jDB::call();
+    }
+
     public function register($user)
     {
-        $client = Neo4jDB::call();
-        $client->run(
+        $this->client->run(
             <<<'CYPHER'
                 CREATE (
                     :User {
@@ -26,5 +32,21 @@ class UserRepository implements UserRepositoryInterface
                     'email' => $user['email'],
                     'password' => $user['password']
                 ]);
+    }
+
+    public function getUserHasProjetAndHypothesis(string $user_email)
+    {
+        $userHasProjetAndHypothesis = $this->client->run(
+            <<<'CYPHER'
+                MATCH len = (user:User{email:$user_email}) - [:HAS] -> (project:Project) <- [*] - (parent:Hypothesis)
+                OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
+                RETURN project,parent,collect(child),length(len)
+                CYPHER,
+                [
+                    'user_email' => $user_email,
+                ]
+            );
+
+        return $userHasProjetAndHypothesis;
     }
 }
