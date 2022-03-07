@@ -14,8 +14,8 @@
     <v-toolbar-title class="d-flex justify-start mt-3 px-0 ml-md-2">
       <v-btn
         class="d-flex align-self-center"
-        v-if="headerTitle === '仮説一覧' || headerTitle === '仮説詳細'"
-        @click="toBack(headerTitle)"
+        v-if="thisPageParamsId"
+        @click="toBack()"
         small
         icon
         link
@@ -38,10 +38,16 @@ export default {
     headerTitle: {
       type: String,
     },
+    parent: {
+      type: Object,
+    }
   },
   computed: {
     navigation() {
       return this.$store.getters['navigation/navigation'];
+    },
+    thisPageParamsId() {
+      return this.$route.params.id;
     }
   },
   methods: {
@@ -49,9 +55,11 @@ export default {
       this.$store.dispatch("navigation/changeNavState");
     },
     toBack (headerTitle) {
-      return headerTitle === "仮説一覧"
-        ? this.$router.push({ path: "/projects" })
-        : this.$router.push({ path: "/projects/123" });
+      if (this.$route.name === "hypothesisList") {
+        this.$router.push({ path: "/projects" });
+      } else if (this.$route.name === "hypothesisDetail") {
+        this.$router.back();
+      }
     },
   },
 };

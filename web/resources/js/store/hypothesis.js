@@ -4,10 +4,6 @@ const state = {
     hypothesis: null,
     hypothesisList: null,
     allHypothesisList: null,
-    parent: {
-        name: null,
-        uuid: null,
-    },
 };
 
 const getters = {
@@ -20,18 +16,14 @@ const mutations = {
         state.hypothesis.name = value.name;
     },
 
-    setParent (state, data) {
-        state.parent.name = data.name;
-        state.parent.uuid = data.uuid;
-    },
-
-    setHypothesis (state, hypothesisVal) {
-        state.hypothesis = hypothesisVal;
+    setHypothesis (state, hypothesis) {
+        state.hypothesis = hypothesis;
     },
 
     setHypothesisList (state, projectUuid) {
         const allHypothesisList = state.allHypothesisList;
         state.hypothesisList = allHypothesisList[projectUuid];
+        console.info(state.hypothesisList);
     },
 
     setAllHypothesisList (state, data) {
@@ -52,8 +44,8 @@ const actions = {
         context.commit('setInputName', value)
     },
 
-    selectHypothesis (context, hypothesisVal) {
-        context.commit ('setHypothesis', hypothesisVal);
+    selectHypothesis (context, hypothesis) {
+        context.commit ('setHypothesis', hypothesis);
     },
 
     async createGoal (context, data){
@@ -64,7 +56,6 @@ const actions = {
         if (response.status == CREATED) {
             console.info("ゴールを追加しました");
             context.commit ('auth/setApiStatus', true);
-            context.commit ('setParent', response.data.parent);
             context.commit ('setHypothesis', response.data.hypothesis);
             return response.data;
         }

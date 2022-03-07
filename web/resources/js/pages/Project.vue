@@ -4,6 +4,7 @@
     style="max-width: 900px"
     fluid
   >
+  <Header :headerTitle="category"/>
       <template>
         <div
           class="d-flex justify-space-between"
@@ -49,6 +50,7 @@
 </template>
 
 <script>
+import Header from "../components/Header.vue";
 import ProjectCards from "../components/Cards/ProjectCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpButtomBtn from "../components/Buttons/SpBottomBtn.vue";
@@ -57,6 +59,7 @@ import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
+    Header,
     ProjectCards,
     NewAdditionalCard,
     SpButtomBtn,

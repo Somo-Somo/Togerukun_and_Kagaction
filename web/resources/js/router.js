@@ -44,7 +44,7 @@ const routes = [
     name: "hypothesisList"
   },
   {
-    path: '/hypothesis/:detailId',
+    path: '/hypothesis/:id',
     component: HypothesisDetail,
     name: "hypothesisDetail"
   },
