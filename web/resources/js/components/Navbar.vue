@@ -1,6 +1,6 @@
 <template>
   <div class="hidden-sm-and-down" style="width: 256px">
-    <v-navigation-drawer color="#80CBC4" v-model="drawer" app hide-overlay>
+    <v-navigation-drawer color="#80CBC4" v-model="navigation" app hide-overlay>
       <v-app-bar
         class="d-flex px-0 py-0 mt-2"
         color="#80CBC4"
@@ -16,7 +16,7 @@
               style="height: 24px"
               :class="{ 'show-btn': hover }"
               :color="transparent"
-              @click="$emit('clickMenu')"
+              @click="clickChevronDoubleLeft"
               >mdi-chevron-double-left</v-icon
             >
           </div>
@@ -45,9 +45,9 @@
       >
       <v-list class="overflow-y-auto py-0" height="calc(100% - 304px)">
         <v-list-item
-          v-for="text in projects"
-          :key="text"
-          @click="fromProject"
+          v-for="project in projectList"
+          :key="project.uuid"
+          @click="selectProject(project)"
           class="d-flex px-8"
           style="height: 48px"
           link
@@ -56,7 +56,7 @@
             <v-icon color="teal lighten-5">mdi-folder-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-content class="align-self-center">
-            <v-list-item-title>{{ text }}</v-list-item-title>
+            <v-list-item-title>{{ project.name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -85,34 +85,33 @@
 
 <script>
 export default {
-  props: {
-    drawer: {
-      type: Boolean,
-    },
-  },
   data: () => ({
     items: [
-      // {icon: "mdi-flag-variant-outline", text: "目標", url: "/project"},
       {icon: "mdi-folder-multiple-outline", text: "プロジェクト", url: "/projects"},
       {icon: "mdi-help-circle-outline", text: "ガイド", url: "/"},
     ],
-    projects: [
-      "VizHD",
-      "開発",
-      "マーケティング",
-      "営業",
-      "CS",
-      "経理",
-      "総務",
-    ],
     transparent: 'rgba(128, 128, 128, 0.3)',
   }),
+  computed: {
+    navigation() {
+      return this.$store.getters['navigation/navigation'];
+    },
+    projectList: function() {
+      return this.$store.getters['project/projectList'];
+    }
+  },
   methods: {
+    clickChevronDoubleLeft() {
+      this.$store.dispatch("navigation/changeNavState");
+    },
     fromItem: function (url) {
       return this.$router.push({ path: url });
     },
-    fromProject: function () {
-      return this.$router.push({ path: "/projects/123" });
+    selectProject (project) {
+      if (this.$route.params.id !== project.uuid) {
+        this.$store.dispatch("project/selectProject", project);
+        return this.$router.push({ path: "/project/" + project.uuid });
+      }
     }
   },
 };
