@@ -23,7 +23,8 @@ class HypothesisController extends Controller
     public function index(string $projectUuid, Request $request, IndexAction $indexAction)
     {
         // ユースケースを実行し、レスポンスの元になるデータを受け取る
-        $HypothesisList = $indexAction->invoke($projectUuid);
+        // $HypothesisList = $indexAction->invoke($projectUuid);
+        $HypothesisList = $indexAction->invoke($request->user()->email);
 
         return response()->json($HypothesisList, Response::HTTP_OK);
     }

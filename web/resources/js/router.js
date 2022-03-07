@@ -36,14 +36,17 @@ const routes = [
   {
     path: '/projects',
     component: Project,
+    name: "project"
   },
   {
     path: '/project/:id',
     component: HypothesisList,
+    name: "hypothesisList"
   },
   {
     path: '/hypothesis/:detailId',
     component: HypothesisDetail,
+    name: "hypothesisDetail"
   },
   {
     path: '/500',

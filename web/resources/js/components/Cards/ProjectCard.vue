@@ -1,7 +1,7 @@
 <template>
 <div>
   <v-list class="py-0" width="100%">
-    <v-col class="px-md-0" v-for="(project, index) in projectCards" :key="project.name">
+    <v-col class="px-md-0" v-for="project in projectCards" :key="project.name">
       <v-card class="rounded" outlined>
         <v-list class="py-0" style="height: 80px">
           <v-list-item @click="toHypothesis(project)" style="height: 80px" link>
@@ -76,8 +76,8 @@ export default {
     })
   },
   methods: {
-    async toHypothesis(project) {
-      await this.$store.dispatch("project/selectProject", project);
+    toHypothesis(project) {
+      this.$store.dispatch("project/selectProject", project);
       const url = "project/" + project.uuid;
       return this.$router.push({ path: url });
     },
