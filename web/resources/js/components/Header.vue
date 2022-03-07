@@ -7,8 +7,8 @@
     app
   >
     <v-app-bar-nav-icon
-      v-if="!drawer || $vuetify.breakpoint.md"
-      @click="$emit('clickMenu')"
+      v-if="!navigation || $vuetify.breakpoint.md"
+      @click="clickHumburgerMenu"
       class="mt-3 hidden-sm-and-down"
     ></v-app-bar-nav-icon>
     <v-toolbar-title class="d-flex justify-start mt-3 px-0 ml-md-2">
@@ -35,15 +35,20 @@
 <script>
 export default {
   props: {
-    drawer: {
-      type: Boolean,
-    },
     headerTitle: {
       type: String,
     },
   },
+  computed: {
+    navigation() {
+      return this.$store.getters['navigation/navigation'];
+    }
+  },
   methods: {
-    toBack: function (headerTitle) {
+    clickHumburgerMenu() {
+      this.$store.dispatch("navigation/changeNavState");
+    },
+    toBack (headerTitle) {
       return headerTitle === "仮説一覧"
         ? this.$router.push({ path: "/projects" })
         : this.$router.push({ path: "/projects/123" });

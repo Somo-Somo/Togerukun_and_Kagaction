@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
-    <Navbar :drawer="drawer" @clickMenu="isDrawer" />
-    <Header :drawer="drawer" :headerTitle="headerTitle" @clickMenu="isDrawer" />
+    <Navbar />
+    <Header :headerTitle="headerTitle" />
     <v-main class="my-md-2">
       <RouterView />
     </v-main>
@@ -21,7 +21,6 @@ export default {
     Navbar,
     Footer,
   },
-  data: () => ({ drawer: true }),
   computed: {
     headerTitle() {
       switch (this.$route.matched[0].path) {
@@ -35,11 +34,6 @@ export default {
     },
     errorCode() {
       return this.$store.state.error.code;
-    },
-  },
-  methods: {
-    isDrawer: function () {
-      this.drawer = !this.drawer;
     },
   },
   watch: {
