@@ -34,14 +34,6 @@ const actions = {
         context.commit ('setProject', project);
         context.commit ('hypothesis/setHypothesisList', project.uuid, { root: true });
     },
-    async getProjectList (context) {
-        await axios.get('/api/projects').then(response => {
-            context.commit('setProjectList', response.data)
-        })
-        .catch(error => {
-            console.info(error);
-        });
-    },
     async createProject (context, data) {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.post('api/project', data);

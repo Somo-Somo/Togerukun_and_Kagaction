@@ -25,20 +25,24 @@ class GetUserHasProjectAndHypothesisAction
 
         // 仮説の一覧を全部ぶち込む配列
         $hypothesisList = [];
-        // プロジェクトUUIDをぶち込む配列
-        $projectUuidList = [];
-        // 仮説一覧の配列とプロジェクトUUIDの配列を合体させる配列
-        $projectUuidUnderHypothesisList = [];
+
+        // プロジェクトの一覧を全部ぶち込む配列
+        $projectList = [];
 
         // 親仮説それに紐づく子仮説の順番になるように配列$hypothesisListに追加
-        foreach ($arrayHypothesisList as $key => $value) {
+        foreach ($arrayHypothesisList as $value) {
             $value = $value->toArray();
 
             // 親プロジェクト, 親仮説, 子仮説の値を取得
-            $projectUuid = $value['project.uuid'];
+            $project = $value['project']->getProperties()->toArray();
+            $projectUuid = $project['uuid'];
             $parent = $value['parent']->getProperties()->toArray();
             $childs = $value['collect(child)']->toArray();
             $depth = $value['length(len)'] - 1;
+
+            // $projectListにプロジェクトの情報がない場合は情報を配列に入れる。
+            array_key_exists($projectUuid, $hypothesisList) ? 
+                null : $projectList[$projectUuid] = $project;
             
             // 仮説のリストからuuidだけ取り出して[$hypothesisListのkey => uuid]の配列の形にしたもの
             $uuidList = array_key_exists($projectUuid, $hypothesisList) ? 
@@ -87,6 +91,11 @@ class GetUserHasProjectAndHypothesisAction
             }
         }
 
-        return $hypothesisList;
+        $userHasProjectAndHypothesis = [
+            'project' => $projectList,
+            'hypothesis' => $hypothesisList,
+        ];
+
+        return $userHasProjectAndHypothesis;
     }
 }

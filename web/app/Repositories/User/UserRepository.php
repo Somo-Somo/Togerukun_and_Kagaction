@@ -40,7 +40,7 @@ class UserRepository implements UserRepositoryInterface
             <<<'CYPHER'
                 MATCH len = (user:User{email:$user_email}) - [:HAS] -> (project:Project) <- [*] - (parent:Hypothesis)
                 OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
-                RETURN project.uuid,parent,collect(child),length(len)
+                RETURN project,parent,collect(child),length(len)
                 CYPHER,
                 [
                     'user_email' => $user_email,

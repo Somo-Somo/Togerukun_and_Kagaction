@@ -101,9 +101,6 @@ export default {
       }
     }
   },
-  created() {
-    this.$store.dispatch("project/getProjectList");
-  },
 };
 </script>
 
