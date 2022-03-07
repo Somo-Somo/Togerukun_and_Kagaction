@@ -1,6 +1,6 @@
 <template>
   <div class="hidden-sm-and-down" style="width: 256px">
-    <v-navigation-drawer color="#80CBC4" v-model="drawer" app hide-overlay>
+    <v-navigation-drawer color="#80CBC4" v-model="navigation" app hide-overlay>
       <v-app-bar
         class="d-flex px-0 py-0 mt-2"
         color="#80CBC4"
@@ -16,7 +16,7 @@
               style="height: 24px"
               :class="{ 'show-btn': hover }"
               :color="transparent"
-              @click="$emit('clickMenu')"
+              @click="clickChevronDoubleLeft"
               >mdi-chevron-double-left</v-icon
             >
           </div>
@@ -85,11 +85,6 @@
 
 <script>
 export default {
-  props: {
-    drawer: {
-      type: Boolean,
-    },
-  },
   data: () => ({
     items: [
       // {icon: "mdi-flag-variant-outline", text: "目標", url: "/project"},
@@ -107,7 +102,15 @@ export default {
     ],
     transparent: 'rgba(128, 128, 128, 0.3)',
   }),
+  computed: {
+    navigation() {
+      return this.$store.getters['navigation/navigation'];
+    }
+  },
   methods: {
+    clickChevronDoubleLeft() {
+      this.$store.dispatch("navigation/changeNavState");
+    },
     fromItem: function (url) {
       return this.$router.push({ path: url });
     },
