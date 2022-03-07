@@ -38,13 +38,15 @@ export default {
     headerTitle: {
       type: String,
     },
+    parent: {
+      type: Object,
+    }
   },
   computed: {
     navigation() {
       return this.$store.getters['navigation/navigation'];
     },
     thisPageParamsId() {
-      console.info(this.$route);
       return this.$route.params.id;
     }
   },
@@ -56,7 +58,7 @@ export default {
       if (this.$route.name === "hypothesisList") {
         this.$router.push({ path: "/projects" });
       } else if (this.$route.name === "hypothesisDetail") {
-        // parent必要
+        this.$router.back();
       }
     },
   },
