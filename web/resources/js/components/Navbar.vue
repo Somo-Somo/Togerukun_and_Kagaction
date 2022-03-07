@@ -45,9 +45,9 @@
       >
       <v-list class="overflow-y-auto py-0" height="calc(100% - 304px)">
         <v-list-item
-          v-for="text in projects"
-          :key="text"
-          @click="fromProject"
+          v-for="project in projectList"
+          :key="project.uuid"
+          @click="selectProject(project)"
           class="d-flex px-8"
           style="height: 48px"
           link
@@ -56,7 +56,7 @@
             <v-icon color="teal lighten-5">mdi-folder-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-content class="align-self-center">
-            <v-list-item-title>{{ text }}</v-list-item-title>
+            <v-list-item-title>{{ project.name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -91,20 +91,14 @@ export default {
       {icon: "mdi-folder-multiple-outline", text: "プロジェクト", url: "/projects"},
       {icon: "mdi-help-circle-outline", text: "ガイド", url: "/"},
     ],
-    projects: [
-      "VizHD",
-      "開発",
-      "マーケティング",
-      "営業",
-      "CS",
-      "経理",
-      "総務",
-    ],
     transparent: 'rgba(128, 128, 128, 0.3)',
   }),
   computed: {
     navigation() {
       return this.$store.getters['navigation/navigation'];
+    },
+    projectList: function() {
+      return this.$store.getters['project/projectList'];
     }
   },
   methods: {
@@ -114,8 +108,8 @@ export default {
     fromItem: function (url) {
       return this.$router.push({ path: url });
     },
-    fromProject: function () {
-      return this.$router.push({ path: "/projects/123" });
+    selectProject (project) {
+      return this.$router.push({ path: "/project/" + project.uuid });
     }
   },
 };
