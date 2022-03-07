@@ -87,7 +87,6 @@
 export default {
   data: () => ({
     items: [
-      // {icon: "mdi-flag-variant-outline", text: "目標", url: "/project"},
       {icon: "mdi-folder-multiple-outline", text: "プロジェクト", url: "/projects"},
       {icon: "mdi-help-circle-outline", text: "ガイド", url: "/"},
     ],
