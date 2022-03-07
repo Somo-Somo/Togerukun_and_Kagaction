@@ -1,14 +1,14 @@
 const state = {
-    opendNavigation: true,
+    navigation: true,
 };
 
 const getters = {
-    openedNavigation: state => state.opendNavigation,
+    navigation: state => state.navigation,
 };
 
 const mutations = {
     changeNavState (state) {
-        state.opendNavigation = !state.opendNavigation;
+        state.navigation = !state.navigation;
     }
 }
 
