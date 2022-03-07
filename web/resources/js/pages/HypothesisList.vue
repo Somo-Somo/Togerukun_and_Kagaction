@@ -4,6 +4,7 @@
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
+   <Header :headerTitle="project.name"/>
       <template>
         <div
           class="d-flex justify-space-between"
@@ -61,6 +62,7 @@
 </template>
 
 <script>
+import Header from "../components/Header.vue";
 import HypothesisCards from "../components/Cards/HypothesisCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
@@ -69,6 +71,7 @@ import { mapGetters, mapState } from 'vuex';
 
 export default {
   components: {
+    Header,
     HypothesisCards,
     NewAdditionalCard,
     SpBottomBtn,
