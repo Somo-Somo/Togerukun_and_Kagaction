@@ -109,7 +109,10 @@ export default {
       return this.$router.push({ path: url });
     },
     selectProject (project) {
-      return this.$router.push({ path: "/project/" + project.uuid });
+      if (this.$route.params.id !== project.uuid) {
+        this.$store.dispatch("project/selectProject", project);
+        return this.$router.push({ path: "/project/" + project.uuid });
+      }
     }
   },
 };
