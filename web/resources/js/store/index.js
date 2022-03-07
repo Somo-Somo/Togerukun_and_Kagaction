@@ -7,6 +7,7 @@ import error from './error';
 import project from './project';
 import hypothesis from './hypothesis';
 import initialize from './initialize';
+import navigation from './navigation';
 
 Vue.use (Vuex);
 
@@ -17,7 +18,8 @@ const store = new Vuex.Store ({
     error,
     project,
     hypothesis,
-    initialize
+    initialize,
+    navigation,
   },
 });
 
