@@ -55,6 +55,9 @@ class IndexAction
                 // ゴールからの仮説の階層の深さ
                 $parent['depth'] = 0;
 
+                 // 親仮説でステータスがundifindの場合
+                if (!array_keys($parent, 'status')) $parent['status'] =  null;
+
                 $hypothesisList[$projectUuid][] = $parent;
             } 
 
@@ -68,6 +71,9 @@ class IndexAction
 
                 // ゴールからの仮説の階層の深さ
                 $child['depth'] = $depth;
+
+                // 子仮説でステータスがundifindの場合
+                if (!array_keys($child, 'status')) $child['status'] =  null;
 
                 // 仮説一覧に親がなかった場合（親=ゴール）
                 if (!$parentKey) {

@@ -23,16 +23,25 @@ const mutations = {
     setHypothesisList (state, projectUuid) {
         const allHypothesisList = state.allHypothesisList;
         state.hypothesisList = allHypothesisList[projectUuid];
-        console.info(state.hypothesisList);
     },
 
     setAllHypothesisList (state, data) {
         state.allHypothesisList = data;
     },
 
-    updateHypothesis (state, data) {
+    updateHypothesisName (state, data) {
         state.hypothesisList[data.uuid]['name'] = data.name;
     },
+
+    updateHypothesisStatus (state, click){
+        if (click === 'success') {
+            state.hypothesis.status = state.hypothesis.status === 'success' ? null : 'success';
+        } else if (click === 'failure') {
+            state.hypothesis.status = state.hypothesis.status === 'failure' ? null : 'failure';
+        } else if (click === 'remove') {
+            state.hypothesis.status = null;
+        }
+     },
 
     deleteHypothesis (state, hypothesisUuid){
         delete state.hypothesisList[hypothesisUuid];
@@ -95,7 +104,7 @@ const actions = {
             .then(response => {
                 console.info('仮説を更新しました');
                 context.commit ('auth/setApiStatus', true);
-                context.commit('updateHypothesis', data);
+                context.commit('updateHypothesisName', data);
                 return;
             }).catch(error => {
                 console.info(error);
@@ -116,6 +125,18 @@ const actions = {
             });
 
         return;        
+    },
+
+    async updateStatus (context, click) {
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        context.commit('updateHypothesisStatus', click);
+        // const response = await axios.put('/api/hypothesis/${data.uuid}/status', data)
+        //     .then(response => {
+                
+        //         return;
+        //     }).catch(error => {
+        //         console.info(error);
+        //     });
     }
 }
 
