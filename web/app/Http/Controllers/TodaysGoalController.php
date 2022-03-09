@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CurrentGoalController extends Controller
+class TodaysGoalController extends Controller
 {
     /**
      * Display a listing of the resource.
