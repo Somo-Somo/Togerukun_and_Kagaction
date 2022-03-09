@@ -40,6 +40,9 @@ class GetUserHasProjectAndHypothesisAction
             $childs = $value['collect(child)']->toArray();
             $depth = $value['length(len)'] - 1;
 
+            // 今日の目標
+            if ($value['todaysGoal']) $parent['todaysGoal'] = true;
+
             // $projectListにプロジェクトの情報がない場合は情報を配列に入れる。
             array_key_exists($projectUuid, $hypothesisList) ? 
                 null : $projectList[$projectUuid] = $project;

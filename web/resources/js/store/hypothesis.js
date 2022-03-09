@@ -43,6 +43,10 @@ const mutations = {
         }
      },
 
+    updateHypothesisTodaysGoal (state, todaysGoal){
+        state.hypothesis.todaysGoal = todaysGoal;
+    },
+
     deleteHypothesis (state, hypothesisUuid){
         delete state.hypothesisList[hypothesisUuid];
     },
@@ -139,6 +143,27 @@ const actions = {
                 });
         } else {
             await axios.put('/api/hypothesis/'+hypothesisUuid+'/status', {status:click})
+                .then(response => {
+                    console.info(response);
+                    return;
+                }).catch(error => {
+                    console.info(error);
+                });
+        }
+    },
+
+    async updateTodaysGoal (context, {todaysGoal, hypothesisUuid}) {
+        context.commit('updateHypothesisTodaysGoal', todaysGoal);
+        if (todaysGoal) {
+            await axios.put('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
+                .then(response => {
+                    console.info(response);
+                    return;
+                }).catch(error => {
+                    console.info(error);
+                });
+        } else {
+            await axios.delete('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
                 .then(response => {
                     console.info(response);
                     return;

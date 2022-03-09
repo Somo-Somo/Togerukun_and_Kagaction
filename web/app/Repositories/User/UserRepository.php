@@ -38,9 +38,11 @@ class UserRepository implements UserRepositoryInterface
     {
         $userHasProjetAndHypothesis = $this->client->run(
             <<<'CYPHER'
-                MATCH len = (user:User{email:$user_email}) - [:HAS] -> (project:Project) <- [*] - (parent:Hypothesis)
+                MATCH len = (user:User{email:$user_email}) - [has:HAS] -> (project:Project) <- [*] - (parent:Hypothesis)
                 OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
-                RETURN project,parent,collect(child),length(len)
+                OPTIONAL MATCH (:User)-[todaysGoal:SET_TODAYS_GOAL]->(parent)
+                RETURN project,parent,has,collect(child),length(len),todaysGoal
+                ORDER BY has
                 CYPHER,
                 [
                     'user_email' => $user_email,
