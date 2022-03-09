@@ -170,7 +170,10 @@ export default {
         click = this.result === 'failure' ?  'remove'  : 'failure';
         this.result = this.result === 'failure' ? null : 'failure'; 
       }
-      this.$store.dispatch("hypothesis/updateStatus", click);
+      this.$store.dispatch(
+        "hypothesis/updateStatus", 
+        { click:click, hypothesisUuid:this.hypothesis.uuid }
+      );
     },
     onClickCreate () {
       this.$store.dispatch("form/onClickCreate");

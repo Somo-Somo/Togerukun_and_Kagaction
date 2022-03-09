@@ -123,20 +123,29 @@ const actions = {
             }).catch(error => {
                 console.info(error);
             });
-
         return;        
     },
 
-    async updateStatus (context, click) {
-        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+    async updateStatus (context, {click,hypothesisUuid}) {
         context.commit('updateHypothesisStatus', click);
-        // const response = await axios.put('/api/hypothesis/${data.uuid}/status', data)
-        //     .then(response => {
-                
-        //         return;
-        //     }).catch(error => {
-        //         console.info(error);
-        //     });
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        if (click === 'remove') {
+            await axios.delete('/api/hypothesis/'+hypothesisUuid+'/status')
+                .then(response => {
+                    console.info(response);
+                    return;
+                }).catch(error => {
+                    console.info(error);
+                });
+        } else {
+            await axios.put('/api/hypothesis/'+hypothesisUuid+'/status', {status:click})
+                .then(response => {
+                    console.info(response);
+                    return;
+                }).catch(error => {
+                    console.info(error);
+                });
+        }
     }
 }
 
