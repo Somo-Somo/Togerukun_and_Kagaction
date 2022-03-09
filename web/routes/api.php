@@ -58,6 +58,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/hypothesis/{hypothesisId}/status', [HypothesisStatusController::class, 'destroy']);
 
     // 今日の目標
-    Route::put('/hypothesis/{hypothesisId}/todaysGoal', [TodaysGoalController::class, 'update']);
-    Route::delete('/hypothesis/{hypothesisId}/todaysGoal', [TodaysGoalController::class, 'destroy']);
+    Route::put('/hypothesis/{hypothesisId}/todays_goal', [TodaysGoalController::class, 'update']);
+    Route::delete('/hypothesis/{hypothesisId}/todays_goal', [TodaysGoalController::class, 'destroy']);
 });
