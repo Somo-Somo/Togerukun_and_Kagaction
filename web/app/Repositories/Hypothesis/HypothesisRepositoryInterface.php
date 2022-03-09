@@ -8,4 +8,6 @@ interface HypothesisRepositoryInterface
     public function create($hypothesis);
     public function update(array $hypothesis);
     public function destroy(array $hypothesis);
+    public function updateStatus(array $hypothesis);
+    public function destroyStatus(array $hypothesis);
 }
