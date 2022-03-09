@@ -152,8 +152,25 @@ const actions = {
         }
     },
 
-    async updateTodaysGoal (context, todaysGoal) {
+    async updateTodaysGoal (context, {todaysGoal, hypothesisUuid}) {
         context.commit('updateHypothesisTodaysGoal', todaysGoal);
+        if (todaysGoal) {
+            await axios.put('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
+                .then(response => {
+                    console.info(response);
+                    return;
+                }).catch(error => {
+                    console.info(error);
+                });
+        } else {
+            await axios.delete('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
+                .then(response => {
+                    console.info(response);
+                    return;
+                }).catch(error => {
+                    console.info(error);
+                });
+        }
     }
 }
 

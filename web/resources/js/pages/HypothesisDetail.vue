@@ -201,7 +201,10 @@ export default {
       );
     },
     onClickTodaysGoal (todaysGoal){
-      this.$store.dispatch("hypothesis/updateTodaysGoal", todaysGoal);
+      this.$store.dispatch(
+        "hypothesis/updateTodaysGoal",
+         { todaysGoal:todaysGoal, hypothesisUuid:this.hypothesis.uuid }
+      );
     },
     onClickCreate () {
       this.$store.dispatch("form/onClickCreate");
