@@ -106,7 +106,7 @@ export default {
         if (this.view === "ゴール") {
           return hypothesis.depth === 0 ? true : false ;
         } else if (this.view === "今日の目標") {
-          return hypothesis.currentGoal ? true : false;
+          return hypothesis.todaysGoal ? true : false;
         } else if (this.view === "仮説") {
           return hypothesis.depth !== 0 ? true : false ;
         } else if (this.view === "完了") {
