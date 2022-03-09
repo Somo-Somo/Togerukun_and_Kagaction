@@ -52,14 +52,13 @@ class TodaysGoalController extends Controller
     {
         $hypothesis = [
             'uuid' => $hypothesisUuid,
-            'status' => $request->status,
             'user_email' => $request->user()->email,
         ];
 
         $updateAction->invoke($hypothesis);
 
         $json = [
-            'message' => '今日の目標を更新しました',
+            'message' => '今日の目標を設定しました',
             'error' => '',
         ];
 
