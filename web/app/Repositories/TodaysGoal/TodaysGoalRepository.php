@@ -19,31 +19,27 @@ class TodaysGoalRepository implements TodaysGoalRepositoryInterface
         $updateHypothesisTodaysGoal = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
-                SET hypothesis.status = $status
-                WITH user,hypothesis
-                OPTIONAL MATCH x = (:User)-[evaluated:EVALUATED]->(hypothesis)
-                WHERE x IS NOT NULL 
-                DELETE evaluated
-                WITH user,hypothesis
-                CREATE (user)-[:EVALUATED{at:localdatetime({timezone: 'Asia/Tokyo'})}]->(hypothesis)
+                CREATE (user) - [
+                    todaysGoal: SET_TODAYS_GOAL{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                ] -> (hypothesis)
                 RETURN hypothesis
                 CYPHER,
                 [
                     'uuid' => $hypothesis['uuid'], 
-                    'status' => $hypothesis['status'], 
                     'user_email' => $hypothesis['user_email'], 
                 ]
             );
-        return ;
+        return;
     }
 
     public function destroyTodaysGoal(array $hypothesis)
     {
         $deleteHypothesisTodaysGoal = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email })-[evaluated:EVALUATED]->(hypothesis:Hypothesis { uuid: $uuid })
-                DELETE evaluated
-                REMOVE hypothesis.status
+                MATCH (user:User { email : $user_email }) - 
+                [todaysGoal: SET_TODAYS_GOAL]
+                ->(hypothesis:Hypothesis { uuid: $uuid })
+                DELETE todaysGoal
                 RETURN hypothesis
                 CYPHER,
                 [
