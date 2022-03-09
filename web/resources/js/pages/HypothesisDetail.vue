@@ -54,14 +54,13 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">結果</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">結果:</p>
             </v-subheader>
             <v-col class="px-4 px-md-6 d-flex align-self-center">
               <v-btn
                 class="mx-1"
-                :result="result"
-                @click="clickSuccess"
-                :color="result === true ? 'green' : ''"
+                @click="onClickStatus('success')"
+                :color="result === 'success' ? 'green' : ''"
                 size="36"
                 icon
                 text
@@ -70,9 +69,8 @@
               </v-btn>
               <v-btn
                 class="mx-1"
-                :result="result"
-                @click="clickFailure"
-                :color="result === false ? 'pink' : ''"
+                @click="onClickStatus('failure')"
+                :color="result === 'failure' ? 'pink' : ''"
                 size="36"
                 icon
                 text
@@ -144,7 +142,7 @@ export default {
   data: () => ({
     category: "仮説",
     page: "仮説詳細",
-    result: null,
+    result: undefined,
   }),
   computed : {
     ...mapState({
@@ -156,35 +154,26 @@ export default {
       inputForm: 'form/inputForm',
       hypothesisList: 'hypothesis/hypothesisList',
     }),
-    hypothesis: {
-      get () {
-        return this.$store.getters['hypothesis/hypothesis']
-      },
-      set (value) {
-        this.$store.dispatch("hypothesis/setInputName", value);
-      }
+    hypothesis() {
+        let getterHypothesis = this.$store.getters['hypothesis/hypothesis'];
+        if(this.result === undefined) this.result = getterHypothesis.status;
+        return getterHypothesis;
     },
   },
   methods: {
-    clickSuccess () {
-      switch (this.result) {
-        case null:
-          return (this.result = true);
-        case true:
-          return (this.result = null);
-        case false:
-          return (this.result = true);
+    onClickStatus (btn){
+      let click;
+      if (btn === 'success') {
+        click = this.result === 'success' ?  'remove'  : 'success';
+        this.result = this.result === 'success' ? null : 'success';
+      } else if (btn === 'failure') {
+        click = this.result === 'failure' ?  'remove'  : 'failure';
+        this.result = this.result === 'failure' ? null : 'failure'; 
       }
-    },
-    clickFailure () {
-      switch (this.result) {
-        case null:
-          return (this.result = false);
-        case true:
-          return (this.result = false);
-        case false:
-          return (this.result = null);
-      }
+      this.$store.dispatch(
+        "hypothesis/updateStatus", 
+        { click:click, hypothesisUuid:this.hypothesis.uuid }
+      );
     },
     onClickCreate () {
       this.$store.dispatch("form/onClickCreate");

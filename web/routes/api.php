@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\HypothesisController;
+use App\Http\Controllers\HypothesisStatusController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\CurrentGoalController;
 use App\Http\Controllers\Initialize;
@@ -51,6 +52,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/goal', [GoalController::class, 'index']);
     Route::post('/goal', [GoalController::class, 'store']);
     Route::delete('/goal/:hypothesisId', [GoalController::class, 'destroy']);
+
+    // 仮説のステータス
+    Route::put('/hypothesis/{hypothesisId}/status', [HypothesisStatusController::class, 'update']);
+    Route::delete('/hypothesis/{hypothesisId}/status', [HypothesisStatusController::class, 'destroy']);
 
     // 現在の目標
     Route::get('/current_goals', [HypothesisController::class, 'index']);

@@ -44,8 +44,6 @@ class HypothesisRepository implements HypothesisRepositoryInterface
                            hypothesis:Hypothesis {
                                 name: $name,
                                 uuid: $uuid,
-                                status: null,
-                                limited: null
                         })-[
                             :TO_ACHIEVE{since:localdatetime({timezone: 'Asia/Tokyo'})}  
                         ]->(parent)
@@ -104,5 +102,45 @@ class HypothesisRepository implements HypothesisRepositoryInterface
                 ]
             );
         return $deletingHypothesis;
+    }
+
+    public function updateStatus(array $hypothesis)
+    {
+        $updateHypothesisStatus = $this->client->run(
+            <<<'CYPHER'
+                MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
+                SET hypothesis.status = $status
+                WITH user,hypothesis
+                OPTIONAL MATCH x = (:User)-[evaluated:EVALUATED]->(hypothesis)
+                WHERE x IS NOT NULL 
+                DELETE evaluated
+                WITH user,hypothesis
+                CREATE (user)-[:EVALUATED{at:localdatetime({timezone: 'Asia/Tokyo'})}]->(hypothesis)
+                RETURN hypothesis
+                CYPHER,
+                [
+                    'uuid' => $hypothesis['uuid'], 
+                    'status' => $hypothesis['status'], 
+                    'user_email' => $hypothesis['user_email'], 
+                ]
+            );
+        return $updateHypothesisStatus;
+    }
+
+    public function destroyStatus(array $hypothesis)
+    {
+        $deleteHypothesisStatus = $this->client->run(
+            <<<'CYPHER'
+                MATCH (user:User { email : $user_email })-[evaluated:EVALUATED]->(hypothesis:Hypothesis { uuid: $uuid })
+                DELETE evaluated
+                REMOVE hypothesis.status
+                RETURN hypothesis
+                CYPHER,
+                [
+                    'uuid' => $hypothesis['uuid'], 
+                    'user_email' => $hypothesis['user_email'], 
+                ]
+            );
+        return $deleteHypothesisStatus;
     }
 }

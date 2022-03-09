@@ -23,16 +23,25 @@ const mutations = {
     setHypothesisList (state, projectUuid) {
         const allHypothesisList = state.allHypothesisList;
         state.hypothesisList = allHypothesisList[projectUuid];
-        console.info(state.hypothesisList);
     },
 
     setAllHypothesisList (state, data) {
         state.allHypothesisList = data;
     },
 
-    updateHypothesis (state, data) {
+    updateHypothesisName (state, data) {
         state.hypothesisList[data.uuid]['name'] = data.name;
     },
+
+    updateHypothesisStatus (state, click){
+        if (click === 'success') {
+            state.hypothesis.status = state.hypothesis.status === 'success' ? null : 'success';
+        } else if (click === 'failure') {
+            state.hypothesis.status = state.hypothesis.status === 'failure' ? null : 'failure';
+        } else if (click === 'remove') {
+            state.hypothesis.status = null;
+        }
+     },
 
     deleteHypothesis (state, hypothesisUuid){
         delete state.hypothesisList[hypothesisUuid];
@@ -95,7 +104,7 @@ const actions = {
             .then(response => {
                 console.info('仮説を更新しました');
                 context.commit ('auth/setApiStatus', true);
-                context.commit('updateHypothesis', data);
+                context.commit('updateHypothesisName', data);
                 return;
             }).catch(error => {
                 console.info(error);
@@ -114,8 +123,29 @@ const actions = {
             }).catch(error => {
                 console.info(error);
             });
-
         return;        
+    },
+
+    async updateStatus (context, {click,hypothesisUuid}) {
+        context.commit('updateHypothesisStatus', click);
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        if (click === 'remove') {
+            await axios.delete('/api/hypothesis/'+hypothesisUuid+'/status')
+                .then(response => {
+                    console.info(response);
+                    return;
+                }).catch(error => {
+                    console.info(error);
+                });
+        } else {
+            await axios.put('/api/hypothesis/'+hypothesisUuid+'/status', {status:click})
+                .then(response => {
+                    console.info(response);
+                    return;
+                }).catch(error => {
+                    console.info(error);
+                });
+        }
     }
 }
 
