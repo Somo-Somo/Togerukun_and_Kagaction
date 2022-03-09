@@ -97,6 +97,8 @@
             </v-subheader>
             <v-col class="px-4 px-md-6 d-flex align-self-center">
               <v-checkbox
+                v-model="todaysGoal"
+                @click="onClickTodaysGoal(todaysGoal)"
               ></v-checkbox>
             </v-col>
           </div>
@@ -164,6 +166,7 @@ export default {
     category: "仮説",
     page: "仮説詳細",
     result: undefined,
+    todaysGoal: undefined,
   }),
   computed : {
     ...mapState({
@@ -178,6 +181,7 @@ export default {
     hypothesis() {
         let getterHypothesis = this.$store.getters['hypothesis/hypothesis'];
         if(this.result === undefined) this.result = getterHypothesis.status;
+        if(this.todaysGoal === undefined) this.todaysGoal = getterHypothesis.todaysGoal;
         return getterHypothesis;
     },
   },
@@ -195,6 +199,9 @@ export default {
         "hypothesis/updateStatus", 
         { click:click, hypothesisUuid:this.hypothesis.uuid }
       );
+    },
+    onClickTodaysGoal (todaysGoal){
+      this.$store.dispatch("hypothesis/updateTodaysGoal", todaysGoal);
     },
     onClickCreate () {
       this.$store.dispatch("form/onClickCreate");

@@ -43,6 +43,10 @@ const mutations = {
         }
      },
 
+    updateHypothesisTodaysGoal (state, todaysGoal){
+        state.hypothesis.todaysGoal = todaysGoal;
+    },
+
     deleteHypothesis (state, hypothesisUuid){
         delete state.hypothesisList[hypothesisUuid];
     },
@@ -146,6 +150,10 @@ const actions = {
                     console.info(error);
                 });
         }
+    },
+
+    async updateTodaysGoal (context, todaysGoal) {
+        context.commit('updateHypothesisTodaysGoal', todaysGoal);
     }
 }
 
