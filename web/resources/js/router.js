@@ -17,21 +17,21 @@ Vue.use (VueRouter);
 // パスとコンポーネントのマッピング
 const routes = [
   {
-    path: '/user_test',
-    component: User,
-  },
-  {
     path: '/login',
     component: Login,
     beforeEnter (to, from, next) {
       if (store.getters['auth/check']) {
         console.info('ログインしてます')
-        next ('/user_test');
+        next ('/user');
       } else {
         console.info('ログインしてません')
         next ();
       }
     },
+  },
+  {
+    path: '/user',
+    component: User,
   },
   {
     path: '/projects',

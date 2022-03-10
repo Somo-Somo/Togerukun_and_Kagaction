@@ -68,13 +68,15 @@
           color="#80CBC4"
         >
           <v-list-item-avatar
-            color="grey darken-1"
+            color="brown"
             size="36"
-          ></v-list-item-avatar>
+          >
+           <span class="white--text text-subtitle-2">{{ initial }}</span>
+          </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title>四戸岸 勇仁</v-list-item-title>
+            <v-list-item-title>{{ user.name }}</v-list-item-title>
             <v-list-item-subtitle style="font-size: 0.75em">
-              y.shitogishi@vizhd.co.jp
+              ID: y.shitogishi@vizhd.co.jp
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-sheet>
@@ -84,20 +86,24 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   data: () => ({
     items: [
       {icon: "mdi-folder-multiple-outline", text: "プロジェクト", url: "/projects"},
-      {icon: "mdi-help-circle-outline", text: "ガイド", url: "/"},
+      {icon: "mdi-account-circle-outline", text: "ユーザー", url: "/user"},
     ],
     transparent: 'rgba(128, 128, 128, 0.3)',
   }),
   computed: {
-    navigation() {
-      return this.$store.getters['navigation/navigation'];
-    },
-    projectList: function() {
-      return this.$store.getters['project/projectList'];
+     ...mapGetters({
+            user: "auth/user",
+            navigation: "navigation/navigation",
+            projectList: "project/projectList",
+    }),
+    initial() {
+      return this.user.name.charAt(0);
     }
   },
   methods: {
