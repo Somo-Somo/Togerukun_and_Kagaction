@@ -124,7 +124,7 @@ export default {
         } else if (this.view === "完了") {
           return hypothesis.status ? true : false; 
         } else if (this.view === "仮説詳細") {
-          return this.parent.uuid === hypothesis.parentUuid ? true : false;
+          return this.selectHypothesis.uuid === hypothesis.parentUuid ? true : false;
         } else {
           return false;
         }
