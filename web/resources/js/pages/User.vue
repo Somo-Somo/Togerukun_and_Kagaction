@@ -14,7 +14,7 @@
                 </div>
                 <div class="mx-4 my-2">
                     <span v-if="isLogin" class="navbar__item">
-                        <p class="ma-0 text-h4">{{ username }}</p>
+                        <p class="ma-0 text-h4">{{ user.name }}</p>
                         <p class="text-subtitle-2 grey--text ma-0">
                             ID:2fj4oaejdo
                         </p>
@@ -47,6 +47,7 @@
 
 <script>
 import Header from "../components/Header.vue";
+import { mapGetters } from "vuex";
 
 export default {
     components: {
@@ -74,15 +75,11 @@ export default {
         ],
     }),
     computed: {
-        apiStatus() {
-            return this.$store.getters["auth/apiStatus"];
-        },
-        isLogin() {
-            return this.$store.getters["auth/check"];
-        },
-        username() {
-            return this.$store.getters["auth/username"];
-        },
+        ...mapGetters({
+            apiStatus: "auth/apiStatus",
+            isLogin: "auth/check",
+            user: "auth/user",
+        }),
     },
     methods: {
         onClickItem: function (click) {
