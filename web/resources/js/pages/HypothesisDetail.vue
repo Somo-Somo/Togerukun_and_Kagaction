@@ -126,7 +126,7 @@
               class="overflow-y-auto d-flex flex-column"
               :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
             >
-              <HypothesisCards :parent="hypothesis" :hypotheses="hypothesisList" :view="page" />
+              <HypothesisCards :project="project" :selectHypothesis="hypothesis" :hypothesisList="hypothesisList" :view="page" />
               <!-- PC版追加カード -->
               <NewAdditionalCard @clickAditional="onClickCreate" :category="category"/>
             </div>
@@ -176,6 +176,7 @@ export default {
    ...mapGetters({
       inputFormName: 'form/name',
       inputForm: 'form/inputForm',
+      project: 'project/project',
       hypothesisList: 'hypothesis/hypothesisList',
     }),
     hypothesis() {
