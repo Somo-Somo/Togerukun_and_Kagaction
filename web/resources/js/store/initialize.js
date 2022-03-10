@@ -22,7 +22,9 @@ const actions = {
                 context.commit ('project/setProjectList', response.data.project, { root: true });
                 context.commit ('hypothesis/setAllHypothesisList', response.data.hypothesis, { root: true });
                 if (route.name === "hypothesisList") {
-                    context.commit ('hypothesis/setHypothesisList', route.params.id, { root: true });
+                    const projectUuid = route.params.id
+                    context.commit ('project/setProject', response.data.project[projectUuid] , { root: true });
+                    context.commit ('hypothesis/setHypothesisList', projectUuid , { root: true });
                 } else if (route.name === "hypothesisDetail") {
                     router.push({ path: '/projects' });
                 }            
