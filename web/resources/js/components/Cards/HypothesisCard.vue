@@ -4,8 +4,8 @@
     <v-col 
       class="px-md-0"
       v-for="hypothesis in hypotheses" 
-      :key="hypothesis.name" 
-      :hypotheses="hypotheses" 
+      :key="hypothesis.uuid" 
+      :hypotheses="hypotheses"
       :class="cardShow(hypothesis) ? '': 'd-none'"
       >
       <v-card class="rounded" outlined>
@@ -13,16 +13,26 @@
           <v-list-item @click="toHypothesisDetail(hypothesis)" link>
             <v-list-item-content class="pa-0 d-flex flex-nowrap">
               <div>
-                <v-list-item-subtitle class="d-flex align-content-start py-3">
-                  <v-icon size="8">circle</v-icon>
-                  <p
-                    class="ma-0 px-2 grey--text font-weight-bold"
-                    style="font-size: 12px"
-                  >
-                    Not yet
-                  </p>
+                <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
+                  <div class="d-flex pr-2" v-if="status(hypothesis)">
+                    <v-icon size="8" :color="status(hypothesis).color">circle</v-icon>
+                    <p
+                      class="ma-0 px-2 #212121--text font-weight-bold align-self-center"
+                      style="font-size: 12px"
+                    >
+                       {{ status(hypothesis).title }}
+                    </p>
+                  </div>
+                  <div class="d-flex"> 
+                      <p
+                        class="ma-0 grey--text font-weight-bold align-self-center"
+                        style="font-size: 8px"
+                      >
+                       朝ごはんを食べるの仮説
+                      </p>
+                  </div>
                 </v-list-item-subtitle>
-                <v-list-item-title class="pb-4">
+                <v-list-item-title class="py-2 pb-4">
                   <p class="font-weight-black ma-0">
                     {{ hypothesis.name }}
                   </p></v-list-item-title
@@ -118,6 +128,21 @@ export default {
         }
       }
     },
+    status() {
+      return (hypothesis) => {
+        if (hypothesis.todaysGoal) {
+          return {title: '今日の目標', color:'blue'};
+        } else if (hypothesis.limit) {
+          return {title: hypothesis.limit, color: 'purple'};
+        } else if (hypothesis.status) {
+          console.info(hypothesis);
+          if(hypothesis.status === 'success') return {title: '成功', color: 'green'}; 
+          if(hypothesis.status === 'failure') return {title: '失敗', color: 'red'}; 
+        } else {
+          return false;
+        }
+      }  
+    } 
   },
   methods: {
     async toHypothesisDetail (hypothesis) {
