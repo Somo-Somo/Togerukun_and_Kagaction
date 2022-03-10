@@ -9,7 +9,7 @@
             <v-row class="d-flex justify-start ma-2">
                 <div class="ma-2 align-self-center">
                     <v-avatar color="brown" size="64">
-                        <span class="white--text text-h5">YS</span>
+                        <span class="white--text text-h5">{{ initial }}</span>
                     </v-avatar>
                 </div>
                 <div class="mx-4 my-2">
@@ -80,6 +80,9 @@ export default {
             isLogin: "auth/check",
             user: "auth/user",
         }),
+        initial() {
+          return this.user.name.charAt(0);
+        }
     },
     methods: {
         onClickItem: function (click) {

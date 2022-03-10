@@ -68,9 +68,11 @@
           color="#80CBC4"
         >
           <v-list-item-avatar
-            color="grey darken-1"
+            color="brown"
             size="36"
-          ></v-list-item-avatar>
+          >
+           <span class="white--text text-subtitle-2">{{ initial }}</span>
+          </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ user.name }}</v-list-item-title>
             <v-list-item-subtitle style="font-size: 0.75em">
@@ -100,6 +102,9 @@ export default {
             navigation: "navigation/navigation",
             projectList: "project/projectList",
     }),
+    initial() {
+      return this.user.name.charAt(0);
+    }
   },
   methods: {
     clickChevronDoubleLeft() {
