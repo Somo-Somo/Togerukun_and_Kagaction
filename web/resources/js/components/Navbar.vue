@@ -88,7 +88,7 @@ export default {
   data: () => ({
     items: [
       {icon: "mdi-folder-multiple-outline", text: "プロジェクト", url: "/projects"},
-      {icon: "mdi-help-circle-outline", text: "ガイド", url: "/"},
+      {icon: "mdi-account-circle-outline", text: "ユーザー", url: "/user"},
     ],
     transparent: 'rgba(128, 128, 128, 0.3)',
   }),
