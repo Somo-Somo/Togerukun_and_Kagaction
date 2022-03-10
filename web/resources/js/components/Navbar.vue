@@ -72,9 +72,9 @@
             size="36"
           ></v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title>四戸岸 勇仁</v-list-item-title>
+            <v-list-item-title>{{ user.name }}</v-list-item-title>
             <v-list-item-subtitle style="font-size: 0.75em">
-              y.shitogishi@vizhd.co.jp
+              ID: y.shitogishi@vizhd.co.jp
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-sheet>
@@ -84,6 +84,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   data: () => ({
     items: [
@@ -93,12 +95,11 @@ export default {
     transparent: 'rgba(128, 128, 128, 0.3)',
   }),
   computed: {
-    navigation() {
-      return this.$store.getters['navigation/navigation'];
-    },
-    projectList: function() {
-      return this.$store.getters['project/projectList'];
-    }
+     ...mapGetters({
+            user: "auth/user",
+            navigation: "navigation/navigation",
+            projectList: "project/projectList",
+    }),
   },
   methods: {
     clickChevronDoubleLeft() {
