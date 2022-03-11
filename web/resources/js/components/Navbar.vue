@@ -43,6 +43,12 @@
       <v-subheader class="px-8 pt-4" style="font-size: 0.75em"
         >プロジェクト</v-subheader
       >
+      <v-progress-circular
+        class="d-flex mx-auto my-4"
+        v-if="loading"
+        color="grey darken-1"
+        indeterminate
+      ></v-progress-circular>
       <v-list class="overflow-y-auto py-0" height="calc(100% - 304px)">
         <v-list-item
           v-for="project in projectList"
@@ -98,6 +104,7 @@ export default {
   }),
   computed: {
      ...mapGetters({
+            loading: 'initialize/loading',
             user: "auth/user",
             navigation: "navigation/navigation",
             projectList: "project/projectList",
