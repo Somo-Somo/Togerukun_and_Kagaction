@@ -29,11 +29,16 @@
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
           <ProjectCards @onClickEdit="onClickEdit" />
+          <v-progress-circular
+            class="mx-auto my-8"
+            v-if="loading"
+            color="grey lighten-1"
+            indeterminate
+          ></v-progress-circular>
           <!-- PC版追加カード -->
-          <NewAdditionalCard @clickAditional="onClickCreate" :category="category" />
+          <NewAdditionalCard v-if="!loading" @clickAditional="onClickCreate" :category="category" />
         </div>
         <!-- スマホ版追加ボタン -->
-        
         <SpButtomBtn @clickAditional="onClickCreate" :headerTitle="category" />
       
       </template>
@@ -75,6 +80,7 @@ export default {
     }),
     // 後でmapGettersからprops,$emitに移行したい
     ...mapGetters({
+      loading: 'initialize/loading',
       name: 'form/name',
       editObject: 'form/editObject',
       inputForm: 'form/inputForm',

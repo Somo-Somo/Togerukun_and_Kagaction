@@ -2,15 +2,17 @@ import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 import router from "../router";
 
 const state = {
-
+    loading: true,
 };
 
 const getters = {
-
+    loading: state => state.loading
 };
 
 const mutations = {
-
+    finishedLoading (state) {
+        state.loading = false
+    }
 }
 
 const actions = {
@@ -21,6 +23,7 @@ const actions = {
                 console.info(response.data);                
                 context.commit ('project/setProjectList', response.data.project, { root: true });
                 context.commit ('hypothesis/setAllHypothesisList', response.data.hypothesis, { root: true });
+                context.commit ('finishedLoading');
                 if (route.name === "hypothesisList") {
                     const projectUuid = route.params.id
                     context.commit ('project/setProject', response.data.project[projectUuid] , { root: true });
