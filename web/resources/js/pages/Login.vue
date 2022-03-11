@@ -146,8 +146,9 @@ export default {
       await this.$store.dispatch("auth/register", this.registerForm);
 
       if (this.apiStatus) {
+        await this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
         // トップページに移動する
-        this.$router.push("/user_test");
+        this.$router.push("/projects");
       }
     },
     async login() {
@@ -157,7 +158,8 @@ export default {
       await this.$store.dispatch("auth/login", this.loginForm);
 
       if (this.apiStatus) {
-        this.$router.push("/user_test");
+        await this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
+        this.$router.push("/projects");
       }
     },
     clearError() {
