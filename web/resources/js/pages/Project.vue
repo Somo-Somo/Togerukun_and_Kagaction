@@ -32,7 +32,7 @@
           <v-progress-circular
             class="mx-auto my-8"
             v-if="loading"
-            color="gray"
+            color="grey lighten-1"
             indeterminate
           ></v-progress-circular>
           <!-- PC版追加カード -->
