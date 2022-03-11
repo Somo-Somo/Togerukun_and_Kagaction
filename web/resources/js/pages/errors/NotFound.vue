@@ -1,5 +1,5 @@
 <template>
     <v-alert type="error">
-      システムエラーが発生しました。
+      ページが見つかりませんでした。
     </v-alert>
 </template>

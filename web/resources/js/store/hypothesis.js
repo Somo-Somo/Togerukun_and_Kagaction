@@ -64,18 +64,17 @@ const actions = {
     async createGoal (context, data){
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.post('/api/goal', data);
-        console.info(response);
-
-        if (response.status == CREATED) {
-            console.info("ゴールを追加しました");
-            context.commit ('auth/setApiStatus', true);
-            context.commit ('setHypothesis', response.data.hypothesis);
-            return response.data;
-        }
 
         if (response.status === UNPROCESSABLE_ENTITY) {
             console.info('エラー')
             // context.commit ('setRegisterErrorMessages', response.data.errors);
+        }
+
+        if (response.status === CREATED) {
+            console.info("ゴールを追加しました");
+            context.commit ('auth/setApiStatus', true);
+            context.commit ('setHypothesis', response.data.hypothesis);
+            return response.data;
         } else {
             context.commit ('error/setCode', response.status, {root: true});
         }
@@ -84,19 +83,17 @@ const actions = {
     async createHypothesis (context, data){
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.post('/api/hypothesis', data);
-        console.info(response);
-
-        if (response.status == CREATED) {
-            console.info("ゴールを追加しました");
-            context.commit ('auth/setApiStatus', true);
-            context.commit ('setParent', response.data.parent);
-            context.commit ('setHypothesis', response.data.hypothesis);
-            return response.data;
-        }
 
         if (response.status === UNPROCESSABLE_ENTITY) {
             console.info('エラー')
             // context.commit ('setRegisterErrorMessages', response.data.errors);
+        } 
+
+        if (response.status === CREATED) {
+            context.commit ('auth/setApiStatus', true);
+            context.commit ('setParent', response.data.parent);
+            context.commit ('setHypothesis', response.data.hypothesis);
+            return response.data;
         } else {
             context.commit ('error/setCode', response.status, {root: true});
         }
@@ -105,72 +102,67 @@ const actions = {
     async editHypothesis (context, data) {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.put('/api/hypothesis/'+ data.uuid, data)
-            .then(response => {
-                console.info('仮説を更新しました');
-                context.commit ('auth/setApiStatus', true);
-                context.commit('updateHypothesisName', data);
-                return;
-            }).catch(error => {
-                console.info(error);
-            });
+
+        if (response.status === OK) {
+            context.commit ('auth/setApiStatus', true);
+            context.commit('updateHypothesisName', data);
+            return false;
+        } else {
+            context.commit ('error/setCode', response.status, {root: true});
+            return false;
+        }
     },
 
     async deleteHypothesis (context, selectedDeletingHypothesis) {
         const hypothesisUuid = selectedDeletingHypothesis.uuid;
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.delete('/api/hypothesis/'+ hypothesisUuid)
-            .then(response => {
-                console.info('仮説を削除しました');
-                context.commit ('auth/setApiStatus', true);
-                context.commit('deleteHypothesis', hypothesisUuid);
-                return;
-            }).catch(error => {
-                console.info(error);
-            });
-        return;        
+
+        if (response.status === OK) {
+            context.commit ('auth/setApiStatus', true);
+            context.commit('deleteHypothesis', hypothesisUuid);
+            return false;
+        } else {
+            context.commit ('error/setCode', response.status, {root: true});
+            return false;
+        }      
     },
 
     async updateStatus (context, {click,hypothesisUuid}) {
-        context.commit('updateHypothesisStatus', click);
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         if (click === 'remove') {
-            await axios.delete('/api/hypothesis/'+hypothesisUuid+'/status')
-                .then(response => {
-                    console.info(response);
-                    return;
-                }).catch(error => {
-                    console.info(error);
-                });
+            const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/status')
+            if (response.status !== OK) {
+                context.commit ('error/setCode', response.status, {root: true});
+                return false;
+            } 
         } else {
-            await axios.put('/api/hypothesis/'+hypothesisUuid+'/status', {status:click})
-                .then(response => {
-                    console.info(response);
-                    return;
-                }).catch(error => {
-                    console.info(error);
-                });
+            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/status', {status:click})
+            if (response.status !== OK) {
+                context.commit ('error/setCode', response.status, {root: true});
+                return false;
+            }
         }
+        context.commit('updateHypothesisStatus', click);
+        return;
     },
 
     async updateTodaysGoal (context, {todaysGoal, hypothesisUuid}) {
-        context.commit('updateHypothesisTodaysGoal', todaysGoal);
         if (todaysGoal) {
-            await axios.put('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
-                .then(response => {
-                    console.info(response);
-                    return;
-                }).catch(error => {
-                    console.info(error);
-                });
+            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
+            if (response.status !== OK) {
+                context.commit ('error/setCode', response.status, {root: true});
+                return false;
+            }
         } else {
-            await axios.delete('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
-                .then(response => {
-                    console.info(response);
-                    return;
-                }).catch(error => {
-                    console.info(error);
-                });
+            const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
+            if (response.status !== OK) {
+                context.commit ('error/setCode', response.status, {root: true});
+                return false;
+            }
         }
+        context.commit('updateHypothesisTodaysGoal', todaysGoal);
+        return; 
     }
 }
 
