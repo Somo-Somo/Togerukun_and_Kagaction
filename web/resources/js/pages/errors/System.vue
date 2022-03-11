@@ -1,3 +1,5 @@
 <template>
-  <p>システムエラーが発生しました。</p>
+    <v-alert type="error">
+      システムエラーが発生しました。
+    </v-alert>
 </template>
