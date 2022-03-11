@@ -41,9 +41,9 @@ class HypothesisRepository implements HypothesisRepositoryInterface
                 CREATE (user)-[
                             :CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}
                         ]->(
-                           hypothesis:Hypothesis {
+                           hypothesis:Hypothesis{
                                 name: $name,
-                                uuid: $uuid,
+                                uuid: $uuid
                         })-[
                             :TO_ACHIEVE{since:localdatetime({timezone: 'Asia/Tokyo'})}  
                         ]->(parent)
