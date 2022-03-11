@@ -104,7 +104,6 @@ const actions = {
         const response = await axios.put('/api/hypothesis/'+ data.uuid, data)
 
         if (response.status === OK) {
-            console.info("ゴールを追加しました");
             context.commit ('auth/setApiStatus', true);
             context.commit('updateHypothesisName', data);
             return false;
@@ -130,42 +129,40 @@ const actions = {
     },
 
     async updateStatus (context, {click,hypothesisUuid}) {
-        context.commit('updateHypothesisStatus', click);
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         if (click === 'remove') {
             const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/status')
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
-            }
-            return; 
+            } 
         } else {
             const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/status', {status:click})
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
             }
-            return; 
         }
+        context.commit('updateHypothesisStatus', click);
+        return;
     },
 
     async updateTodaysGoal (context, {todaysGoal, hypothesisUuid}) {
-        context.commit('updateHypothesisTodaysGoal', todaysGoal);
         if (todaysGoal) {
             const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
             }
-            return; 
         } else {
             const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
             }
-            return; 
         }
+        context.commit('updateHypothesisTodaysGoal', todaysGoal);
+        return; 
     }
 }
 
