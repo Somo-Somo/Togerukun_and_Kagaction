@@ -9,6 +9,7 @@ import Project from './pages/Project.vue';
 import HypothesisList from './pages/HypothesisList.vue';
 import HypothesisDetail from './pages/HypothesisDetail.vue';
 import SystemError from './pages/errors/System.vue';
+import NotFound from './pages/errors/NotFound.vue';
 
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
@@ -51,6 +52,18 @@ const routes = [
   {
     path: '/500',
     component: SystemError,
+  },
+  {
+    path: '*',
+    component: NotFound,
+  },
+  {
+    path: '/project/*',
+    component: NotFound,
+  },
+  {
+    path: '/hypothesis/*',
+    component: NotFound,
   },
 ];
 

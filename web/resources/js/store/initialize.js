@@ -1,4 +1,4 @@
-import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
+import {OK, NOT_FOUND, UNPROCESSABLE_ENTITY} from '../util';
 import router from "../router";
 
 const state = {
@@ -28,6 +28,8 @@ const actions = {
             context.commit ('finishedLoading');
             if (route.name === "hypothesisList") {
                 const projectUuid = route.params.id
+                // URLのIDが存在しない場合404エラー
+                if (!response.data.project[projectUuid]) context.commit ('error/setCode', NOT_FOUND, {root: true});
                 context.commit ('project/setProject', response.data.project[projectUuid] , { root: true });
                 context.commit ('hypothesis/setHypothesisList', projectUuid , { root: true });
             } else if (route.name === "hypothesisDetail") {

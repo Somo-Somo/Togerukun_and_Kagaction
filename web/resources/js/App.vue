@@ -11,7 +11,7 @@
 <script>
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
-import { INTERNAL_SERVER_ERROR } from "./util";
+import { NOT_FOUND, INTERNAL_SERVER_ERROR } from "./util";
 
 export default {
   components: {
@@ -28,6 +28,8 @@ export default {
       handler(val) {
         if (val === INTERNAL_SERVER_ERROR) {
           this.$router.push("/500");
+        } else if (val === NOT_FOUND) {
+          this.$router.push('/not-found');
         }
       },
       immediate: true,
