@@ -38,45 +38,49 @@ const actions = {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.post('api/project', data);
 
-        if (response.status == CREATED) {
-            console.info("projectを追加しました");
+        // バリデーションエラー
+        if (response.status === UNPROCESSABLE_ENTITY) {
+            // context.commit ('setRegisterErrorMessages', response.data.errors);
+        }
+
+        if (response.status === CREATED) {
             context.commit ('auth/setApiStatus', true);
             context.commit ('setProject', response.data.project);
             return false;
         }
-
-        if (response.status === UNPROCESSABLE_ENTITY) {
-            // context.commit ('setRegisterErrorMessages', response.data.errors);
-        } else {
+        else {
             context.commit ('error/setCode', response.status, {root: true});
+            return false
         }
     },
     async editProject (context, data) {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.put('api/project/'+ data.uuid, data)
-            .then(response => {
-                console.info('プロジェクトを更新しました');
-                context.commit ('auth/setApiStatus', true);
-                context.commit('updateProject', data);
-                return;
-            }).catch(error => {
-                console.info(error);
-            });
+
+        if (response.status === OK) {
+            context.commit ('auth/setApiStatus', true);
+            context.commit('updateProject', data);
+            return false;
+        }
+        else {
+            context.commit ('error/setCode', response.status, {root: true});
+            return false
+        }
     },
     async deleteProject (context, selectedDeletingProject) {
         const projectUuid = selectedDeletingProject.uuid;
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.delete('/api/project/'+ projectUuid)
-            .then(response => {
-                console.info('プロジェクトを削除しました');
-                context.commit ('auth/setApiStatus', true);
-                context.commit('deleteProject', projectUuid);
-                return;
-            }).catch(error => {
-                console.info(error);
-            });
 
-        return;
+        if (response.status === OK) {
+            context.commit ('auth/setApiStatus', true);
+            context.commit('deleteProject', projectUuid);
+            return false;
+        }
+        else {
+            context.commit ('error/setCode', response.status, {root: true});
+            return false
+        }
     }
 }
 
