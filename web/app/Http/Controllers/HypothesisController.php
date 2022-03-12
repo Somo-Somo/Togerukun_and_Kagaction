@@ -47,10 +47,13 @@ class HypothesisController extends Controller
 
         $createdHypothesis = $storeAction->invoke($hypothesis);
 
+
         // 本当はResourcesにかきたいけど
+        unset($hypothesis['created_by_user_email']);
        $json = [
-            'parent' => $createdHypothesis['parent'],
-            'hypothesis' => $createdHypothesis['hypothesis'],
+            'project' => $createdHypothesis['project'],
+            'hypothesis' => $hypothesis,
+            'hypothesisList' => $createdHypothesis['hypothesis'],
             'message' => '仮設が追加されました',
             'error' => '',
         ];
