@@ -41,14 +41,14 @@
               <!-- PC版追加カード -->
               <NewAdditionalCard
                 v-if="tab === 0"
-                @clickAditional="isDisplay"
+                @clickAditional="onClickCreate"
                 :category="tabs[0]"
               />
             </v-tab-item>
           </v-tabs-items>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpBottomBtn @clickAditional="isDisplay" :tab="tab" :headerTitle="'仮説一覧'" />
+        <SpBottomBtn @clickAditional="onClickCreate" :tab="tab" :headerTitle="'仮説一覧'" />
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
@@ -93,9 +93,9 @@ export default {
     })
   },
   methods: {
-    isDisplay () {
-      this.$store.dispatch("form/isDisplay");
-    },
+     onClickCreate () {
+      this.$store.dispatch("form/onClickCreate");
+    },  
     onClickCancel() {
       this.$store.dispatch("form/onClickCancel");
     },
