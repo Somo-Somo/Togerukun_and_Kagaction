@@ -32,7 +32,7 @@ const mutations = {
 const actions = {
     selectProject (context, project){
         context.commit ('setProject', project);
-        context.commit ('hypothesis/setHypothesisList', project.uuid, { root: true });
+        context.commit ('hypothesis/selectHypothesisList', project.uuid, { root: true });
     },
     async createProject (context, data) {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});

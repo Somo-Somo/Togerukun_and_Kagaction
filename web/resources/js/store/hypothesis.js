@@ -20,13 +20,18 @@ const mutations = {
         state.hypothesis = hypothesis;
     },
 
-    setHypothesisList (state, projectUuid) {
+    selectHypothesisList (state, projectUuid) {
         const allHypothesisList = state.allHypothesisList;
         state.hypothesisList = allHypothesisList[projectUuid];
+        console.info(state.hypothesisList);
     },
 
     setAllHypothesisList (state, data) {
         state.allHypothesisList = data;
+    },
+
+    setHypothesisListAfterHypothesisCreation(state, data) {
+        state.hypothesisList = data.hypothesisList[data.project.uuid];
     },
 
     updateHypothesisName (state, data) {
@@ -73,6 +78,8 @@ const actions = {
         if (response.status === CREATED) {
             console.info("ゴールを追加しました");
             context.commit ('auth/setApiStatus', true);
+            context.commit ('project/setProject', response.data.project , { root: true });
+            context.commit ('hypothesis/selectHypothesisList', projectUuid , { root: true });
             context.commit ('setHypothesis', response.data.hypothesis);
             return response.data;
         } else {
@@ -91,9 +98,10 @@ const actions = {
 
         if (response.status === CREATED) {
             context.commit ('auth/setApiStatus', true);
-            context.commit ('setParent', response.data.parent);
             context.commit ('setHypothesis', response.data.hypothesis);
-            return response.data;
+            context.commit ('setHypothesisListAfterHypothesisCreation', response.data);
+            console.info(response.data);
+            return;
         } else {
             context.commit ('error/setCode', response.status, {root: true});
         }

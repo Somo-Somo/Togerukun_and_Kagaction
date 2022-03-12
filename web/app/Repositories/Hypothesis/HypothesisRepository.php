@@ -37,17 +37,22 @@ class HypothesisRepository implements HypothesisRepositoryInterface
     {
         $createdHypothesis = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }), (parent:Hypothesis { uuid: $parent_uuid })
+                MATCH   (user:User { email : $user_email }), 
+                        (parent:Hypothesis { uuid: $parent_uuid }) - [*] -> (project:Project)
                 CREATE (user)-[
                             :CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}
                         ]->(
-                           hypothesis:Hypothesis {
+                           hypothesis:Hypothesis{
                                 name: $name,
-                                uuid: $uuid,
+                                uuid: $uuid
                         })-[
                             :TO_ACHIEVE{since:localdatetime({timezone: 'Asia/Tokyo'})}  
                         ]->(parent)
-                RETURN hypothesis, parent
+                WITH project
+                MATCH  len = (project:Project) <- [*] - (parent:Hypothesis)
+                OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
+                OPTIONAL MATCH (:User)-[todaysGoal:SET_TODAYS_GOAL]->(parent)
+                RETURN project,parent,collect(child),length(len),todaysGoal
                 CYPHER,
                 [
                     'name' => $hypothesis['name'], 

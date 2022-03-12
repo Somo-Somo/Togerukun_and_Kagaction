@@ -31,7 +31,7 @@ const actions = {
                 // URLのIDが存在しない場合404エラー
                 if (!response.data.project[projectUuid]) context.commit ('error/setCode', NOT_FOUND, {root: true});
                 context.commit ('project/setProject', response.data.project[projectUuid] , { root: true });
-                context.commit ('hypothesis/setHypothesisList', projectUuid , { root: true });
+                context.commit ('hypothesis/selectHypothesisList', projectUuid , { root: true });
             } else if (route.name === "hypothesisDetail") {
                 router.push({ path: '/projects' });
             }            
