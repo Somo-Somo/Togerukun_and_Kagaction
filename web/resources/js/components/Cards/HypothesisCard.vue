@@ -106,7 +106,7 @@ export default {
       type: Object,
     },
     hypothesisList: {
-      type: Object,
+      type: Array,
     },
     view: {
       type: String,
