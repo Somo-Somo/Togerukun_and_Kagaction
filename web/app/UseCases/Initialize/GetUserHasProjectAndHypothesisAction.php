@@ -38,7 +38,7 @@ class GetUserHasProjectAndHypothesisAction
             $projectUuid = $project['uuid'];
             $parent = $value['parent']->getProperties()->toArray();
             $childs = $value['collect(child)']->toArray();
-            $depth = $value['length(len)'] - 1;
+            $depth = $value['length(len)'];
 
             // 今日の目標
             if ($value['todaysGoal']) $parent['todaysGoal'] = true;
@@ -81,6 +81,7 @@ class GetUserHasProjectAndHypothesisAction
                     //仮説一覧の最後尾に子仮説を追加
                     $hypothesisList[$projectUuid][] = $child;
                 } else {
+                    $addChild[] = $child;
                     // 紐づく親が仮説一覧にない場合(親=ゴール以外)
                     // 紐づく親仮説の後ろに配列追加
                     // 第一引数 仮説リスト
@@ -89,7 +90,7 @@ class GetUserHasProjectAndHypothesisAction
                     // $childKey = 親に紐づく子仮説たちのKey
                     // 第三引数 配列を置き換える要素の数
                     // 第四引数 追加する配列 = 子仮説
-                    array_splice($hypothesisList[$projectUuid], $parentKey + $childKey + 1, 0, $child);
+                    array_splice($hypothesisList[$projectUuid], (int)$parentKey + (int)$childKey + 1, 0, $addChild);
                 }
             }
         }
