@@ -31,7 +31,7 @@ const mutations = {
     },
 
     setHypothesisListAfterHypothesisCreation(state, data) {
-        state.hypothesisList = data.hypothesisList[data.project.uuid];
+        state.hypothesisList = data.hypothesisList[data.project];
     },
 
     updateHypothesisName (state, data) {
