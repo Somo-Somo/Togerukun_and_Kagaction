@@ -30,8 +30,8 @@ const mutations = {
         state.allHypothesisList = data;
     },
 
-    setHypothesisListAfterHypothesisCreation(state, data) {
-        state.hypothesisList = data.hypothesisList[data.project];
+    setHypothesisListAfterHypothesisCreation(state, hypothesisList) {
+        state.hypothesisList = Object.values(hypothesisList)[0];
     },
 
     updateHypothesisName (state, data) {
@@ -99,7 +99,7 @@ const actions = {
         if (response.status === CREATED) {
             context.commit ('auth/setApiStatus', true);
             context.commit ('setHypothesis', response.data.hypothesis);
-            context.commit ('setHypothesisListAfterHypothesisCreation', response.data);
+            context.commit ('setHypothesisListAfterHypothesisCreation', response.data.hypothesisList);
             console.info(response.data);
             return;
         } else {
