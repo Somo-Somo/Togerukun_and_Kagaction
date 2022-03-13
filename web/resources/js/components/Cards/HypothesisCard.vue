@@ -120,7 +120,6 @@ export default {
   computed : {
     cardShow() {
       return function (hypothesis) {
-        console.info(this.hypothesisStatus.name);
         if (this.hypothesisStatus.name === "ゴール") 
           return hypothesis.depth === 0 ? this.existsCard() : false;
         if (this.hypothesisStatus.name === "今日の目標") 

@@ -22,15 +22,7 @@ class GetUserHasProjectAndHypothesisAction
     public function invoke($userEmail)
     {
         $fetchProjectAndHypothesisFromNeo4j = $this->user_repository->getUserHasProjetAndHypothesis($userEmail);
-
-        $projectList = $this->projectListConverter->invoke($fetchProjectAndHypothesisFromNeo4j);
         $hypothesisList = $this->hypothesisListConverter->invoke($fetchProjectAndHypothesisFromNeo4j);
-
-        $userHasProjectAndHypothesis = [
-            'project' => $projectList,
-            'hypothesis' => $hypothesisList,
-        ];
-
-        return $userHasProjectAndHypothesis;
+        return $hypothesisList;
     }
 }
