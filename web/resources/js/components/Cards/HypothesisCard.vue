@@ -5,7 +5,7 @@
       class="px-md-0"
       v-for="hypothesis in hypothesisList" 
       :key="hypothesis.uuid" 
-      :class="cardShow(hypothesis) ? '': 'd-none'"
+      :class="cardShow(hypothesis) ? '' : 'd-none'"
       >
       <v-card class="rounded" outlined>
         <v-list class="py-0 d-flex align-content-center" style="height: 80px">
@@ -13,13 +13,13 @@
             <v-list-item-content class="pa-0 d-flex flex-nowrap">
               <div>
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
-                  <div class="d-flex pr-1" v-if="status(hypothesis)">
-                    <v-icon size="8" :color="status(hypothesis).color">circle</v-icon>
+                  <div class="d-flex pr-1" v-if="showStatus(hypothesis)">
+                    <v-icon size="8" :color="showStatus(hypothesis).color">circle</v-icon>
                     <p
                       class="ma-0 px-2 #212121--text font-weight-bold align-self-center"
                       style="font-size: 12px"
                     >
-                       {{ status(hypothesis).title }}
+                       {{ showStatus(hypothesis).title }}
                     </p>
                   </div>
                   <div class="d-flex"> 
@@ -69,6 +69,11 @@
         </v-list>
       </v-card>
     </v-col>
+    <div class="my-4" v-show="!hypothesisStatus.existsCard">
+      <p class="grey--text font-weight-bold ma-0 pa-2">
+          {{hypothesisStatus.name}}はありません
+      </p>
+    </div>
   </v-list>
     <DeletingConfirmationDialog 
       :deletingConfirmationDialog="deletingConfirmationDialog"
@@ -108,29 +113,28 @@ export default {
     hypothesisList: {
       type: Array,
     },
-    view: {
-      type: String,
+    hypothesisStatus: {
+      type: Object,
     },
   },
   computed : {
     cardShow() {
       return function (hypothesis) {
-        if (this.view === "ゴール") {
-          return hypothesis.depth === 0 ? true : false ;
-        } else if (this.view === "今日の目標") {
-          return hypothesis.todaysGoal ? true : false;
-        } else if (this.view === "仮説") {
-          return hypothesis.depth !== 0 ? true : false ;
-        } else if (this.view === "完了") {
-          return hypothesis.status ? true : false; 
-        } else if (this.view === "仮説詳細") {
-          return this.selectHypothesis.uuid === hypothesis.parentUuid ? true : false;
-        } else {
-          return false;
-        }
+        console.info(this.hypothesisStatus.name);
+        if (this.hypothesisStatus.name === "ゴール") 
+          return hypothesis.depth === 0 ? this.existsCard() : false;
+        if (this.hypothesisStatus.name === "今日の目標") 
+          return hypothesis.todaysGoal ? this.existsCard() : false;  
+        if (this.hypothesisStatus.name === "仮説") 
+          return hypothesis.depth !== 0 ? this.existsCard() : false ;
+        if (this.hypothesisStatus.name === "完了") 
+          return hypothesis.status ? this.existsCard() : false; 
+        if (this.hypothesisStatus.name === "仮説詳細") 
+          return this.selectHypothesis.uuid === hypothesis.parentUuid ? this.existsCard() : false;
+        return false;
       }
     },
-    status() {
+    showStatus() {
       return (hypothesis) => {
         if (hypothesis.todaysGoal) {
           return {title: '今日の目標', color:'blue'};
@@ -159,6 +163,10 @@ export default {
     }, 
   },
   methods: {
+    existsCard(){
+      this.hypothesisStatus.existsCard = true;
+      return true;
+    },
     async toHypothesisDetail (hypothesis) {
       await this.$store.dispatch("hypothesis/selectHypothesis", hypothesis);
       return this.$router.push({ path: "/hypothesis/" + hypothesis.uuid });

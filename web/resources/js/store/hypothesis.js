@@ -23,7 +23,6 @@ const mutations = {
     selectHypothesisList (state, projectUuid) {
         const allHypothesisList = state.allHypothesisList;
         state.hypothesisList = allHypothesisList[projectUuid];
-        console.info(state.hypothesisList);
     },
 
     setAllHypothesisList (state, data) {
@@ -106,7 +105,6 @@ const actions = {
         if (response.status === CREATED) {
             context.commit ('setHypothesis', response.data.hypothesis);
             context.commit ('setHypothesisListAfterHypothesisCreation', response.data.hypothesisList);
-            console.info(response.data);
             return;
         } else {
             context.commit ('error/setCode', response.status, {root: true});
