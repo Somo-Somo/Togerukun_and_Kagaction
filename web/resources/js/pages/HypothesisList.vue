@@ -15,10 +15,10 @@
           <v-tabs v-model="tab" class="px-3 px-md-0" color="black" center-active>
             <v-tabs-slider color="#80CBC4"></v-tabs-slider>
             <v-tab
-              v-for="tabName in tabs"
-              :key="tabName"
+              v-for="hypothesisStatus in hypothesisStatuses"
+              :key="hypothesisStatus.name"
             >
-              <p class="ma-0 font-weight-bold">{{ tabName }}</p>
+              <p class="ma-0 font-weight-bold">{{ hypothesisStatus.name }}</p>
             </v-tab>
           </v-tabs>
           <v-icon
@@ -36,25 +36,33 @@
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
           <v-tabs-items v-model="tab">
-            <v-tab-item v-for="tabName in tabs" :key="tabName">
-              <HypothesisCards :project="project" :hypothesisList="hypothesisList" :view="tabs[tab]" />
+            <v-tab-item v-for="hypothesisStatus in hypothesisStatuses" :key="hypothesisStatus.name">
+              <HypothesisCards
+               :project="project" 
+               :hypothesisList="hypothesisList" 
+               :hypothesisStatus="hypothesisStatuses[tab]" 
+               />
               <!-- PC版追加カード -->
               <NewAdditionalCard
                 v-if="tab === 0"
                 @clickAditional="onClickCreate"
-                :category="tabs[0]"
+                :category="hypothesisStatus.name"
               />
+                    
             </v-tab-item>
           </v-tabs-items>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpBottomBtn @clickAditional="onClickCreate" :tab="tab" :headerTitle="'仮説一覧'" />
+        <SpBottomBtn 
+        @clickAditional="onClickCreate" 
+        :tab="tab" 
+        :headerTitle="'仮説一覧'" />
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
           @onClickCancel="onClickCancel"
           @submitForm="submitForm"
-          :category="tabs[0]"
+          :category="hypothesisStatuses[0].name"
           :inputForm="inputForm"
         />
       </form>
@@ -79,7 +87,13 @@ export default {
   },
   data: () => ({
     tab: null,
-    tabs: ["ゴール", "今日の目標", "仮説", "完了"],
+    hypothesisStatuses: [
+      {name : "ゴール", existsCard: false},
+      {name : "今日の目標", existsCard: false}, 
+      {name : "仮説", existsCard: false},
+      {name : "完了", existsCard: false}
+    ],
+    existsCard: false,
   }),
   computed: {
     ...mapState({
@@ -109,7 +123,6 @@ export default {
       }).catch((err) => {
              console.info(err);     
       });
-
     }
   },
 };

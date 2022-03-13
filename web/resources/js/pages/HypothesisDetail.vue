@@ -126,9 +126,15 @@
               class="overflow-y-auto d-flex flex-column"
               :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
             >
-              <HypothesisCards :project="project" :selectHypothesis="hypothesis" :hypothesisList="hypothesisList" :view="page" />
+              <HypothesisCards 
+               :project="project" 
+               :selectHypothesis="hypothesis" 
+               :hypothesisList="hypothesisList" 
+               :hypothesisStatus="hypothesisStatus" />
               <!-- PC版追加カード -->
-              <NewAdditionalCard @clickAditional="onClickCreate" :category="category"/>
+              <NewAdditionalCard 
+               @clickAditional="onClickCreate" 
+               :category="hypothesisStatus.name"/>
             </div>
           </div>
         </div>
@@ -139,7 +145,7 @@
         <InputForm
           @onClickCancel="onClickCancel"
           @submitForm="submitForm"
-          :category="category"
+          :category="hypothesisStatus.name"
           :inputForm="inputForm"
         />
       </form>
@@ -163,8 +169,8 @@ export default {
     InputForm,
   },
   data: () => ({
-    category: "仮説",
-    page: "仮説詳細",
+    hypothesisStatus: {name: "仮説詳細", existsCard: false },
+    page: "仮説",
     result: undefined,
     todaysGoal: undefined,
   }),
