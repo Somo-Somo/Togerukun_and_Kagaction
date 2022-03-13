@@ -34,6 +34,10 @@ const mutations = {
         state.hypothesisList = Object.values(hypothesisList)[0];
     },
 
+    addGoal (state, data) {
+        state.hypothesisList.push(data.goal);
+    },
+
     updateHypothesisName (state, data) {
         state.hypothesisList[data.uuid]['name'] = data.name;
     },
@@ -66,9 +70,13 @@ const actions = {
         context.commit ('setHypothesis', hypothesis);
     },
 
-    async createGoal (context, data){
+    async createGoal (context, {project, hypothesisName}){
+        const goal = {
+            project: project,
+            name : hypothesisName
+        };
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-        const response = await axios.post('/api/goal', data);
+        const response = await axios.post('/api/goal', goal);
 
         if (response.status === UNPROCESSABLE_ENTITY) {
             console.info('エラー')
@@ -76,14 +84,13 @@ const actions = {
         }
 
         if (response.status === CREATED) {
-            console.info("ゴールを追加しました");
-            context.commit ('auth/setApiStatus', true);
-            context.commit ('project/setProject', response.data.project , { root: true });
-            context.commit ('hypothesis/selectHypothesisList', projectUuid , { root: true });
-            context.commit ('setHypothesis', response.data.hypothesis);
+            response.data.goal.depth = 0;
+            context.commit ('setHypothesis', response.data.goal);
+            context.commit ('addGoal', response.data);
             return response.data;
         } else {
             context.commit ('error/setCode', response.status, {root: true});
+            return false;
         }
     },
 
@@ -97,7 +104,6 @@ const actions = {
         } 
 
         if (response.status === CREATED) {
-            context.commit ('auth/setApiStatus', true);
             context.commit ('setHypothesis', response.data.hypothesis);
             context.commit ('setHypothesisListAfterHypothesisCreation', response.data.hypothesisList);
             console.info(response.data);
@@ -112,7 +118,6 @@ const actions = {
         const response = await axios.put('/api/hypothesis/'+ data.uuid, data)
 
         if (response.status === OK) {
-            context.commit ('auth/setApiStatus', true);
             context.commit('updateHypothesisName', data);
             return false;
         } else {
@@ -127,7 +132,6 @@ const actions = {
         const response = await axios.delete('/api/hypothesis/'+ hypothesisUuid)
 
         if (response.status === OK) {
-            context.commit ('auth/setApiStatus', true);
             context.commit('deleteHypothesis', hypothesisUuid);
             return false;
         } else {

@@ -16,15 +16,7 @@ class StoreAction
     public function invoke(array $goal)
     {
 
-        $saveGoalToDB = $this->goal_repository->create($goal);
-
-        $cypherMapGoal = $saveGoalToDB->getAsCypherMap(0);
-
-        $createdGoal = [
-            'parent' => $cypherMapGoal->getAsNode('project')->getProperties()->toArray(),
-            'hypothesis' => $cypherMapGoal->getAsNode('hypothesis')->getProperties()->toArray(),
-        ];
+        $this->goal_repository->create($goal);
         
-        return $createdGoal;
     }
 }

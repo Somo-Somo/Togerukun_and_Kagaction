@@ -30,16 +30,17 @@ class GoalController extends Controller
         $goal = [
             'name' => $request->name,
             'uuid' => (string) Str::uuid(),
-            'parent_uuid' => $request->parent_uuid,
+            'parent_uuid' => $request->project['uuid'],
             'created_by_user_email' => $request->user()->email,
         ];
 
-        $createdGoal = $storeAction->invoke($goal);
+        $storeAction->invoke($goal);
 
        // 本当はResourcesにかきたいけど
+       unset($goal['created_by_user_email']);
        $json = [
-            'parent' => $createdGoal['parent'],
-            'hypothesis' => $createdGoal['hypothesis'],
+            'project' => $request->project,
+            'goal' => $goal,
             'message' => 'ゴールが追加されました',
             'error' => '',
         ];

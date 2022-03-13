@@ -41,14 +41,14 @@
               <!-- PC版追加カード -->
               <NewAdditionalCard
                 v-if="tab === 0"
-                @clickAditional="isDisplay"
+                @clickAditional="onClickCreate"
                 :category="tabs[0]"
               />
             </v-tab-item>
           </v-tabs-items>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpBottomBtn @clickAditional="isDisplay" :tab="tab" :headerTitle="'仮説一覧'" />
+        <SpBottomBtn @clickAditional="onClickCreate" :tab="tab" :headerTitle="'仮説一覧'" />
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
@@ -86,34 +86,30 @@ export default {
       apiStatus: (state) => state.auth.apiStatus,
     }),
     ...mapGetters({
-      title: 'form/title',
+      name: 'form/name',
       inputForm: 'form/inputForm',
       project: 'project/project',
       hypothesisList: 'hypothesis/hypothesisList',
     })
   },
   methods: {
-    isDisplay () {
-      this.$store.dispatch("form/isDisplay");
-    },
+    onClickCreate () {
+      this.$store.dispatch("form/onClickCreate");
+    },  
     onClickCancel() {
       this.$store.dispatch("form/onClickCancel");
     },
-    async submitForm(){
-      const hypothesis = {
-        title : this.title,
-        parent_uuid: this.project.uuid,
-      }
-      
-      this.$store.dispatch("form/isDisplay");
-      const createdGoal = await this.$store.dispatch("hypothesis/createGoal", hypothesis);
+    async submitForm(){      
+      this.$store.dispatch("form/closeForm");
+      await this.$store.dispatch(
+        "hypothesis/createGoal", 
+        {project: this.project, hypothesisName: this.name}
+      ).then((result) => {
+        console.info(result); 
+      }).catch((err) => {
+             console.info(err);     
+      });
 
-      // ゴール作成後の遷移先
-      const url = "/hypothesis/" + createdGoal.hypothesis.uuid;
-      
-      if (this.apiStatus) {
-        this.$router.push(url);
-      }
     }
   },
 };
