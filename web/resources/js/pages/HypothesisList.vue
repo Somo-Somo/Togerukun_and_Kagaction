@@ -86,34 +86,30 @@ export default {
       apiStatus: (state) => state.auth.apiStatus,
     }),
     ...mapGetters({
-      title: 'form/title',
+      name: 'form/name',
       inputForm: 'form/inputForm',
       project: 'project/project',
       hypothesisList: 'hypothesis/hypothesisList',
     })
   },
   methods: {
-     onClickCreate () {
+    onClickCreate () {
       this.$store.dispatch("form/onClickCreate");
     },  
     onClickCancel() {
       this.$store.dispatch("form/onClickCancel");
     },
-    async submitForm(){
-      const hypothesis = {
-        title : this.title,
-        parent_uuid: this.project.uuid,
-      }
-      
-      this.$store.dispatch("form/isDisplay");
-      const createdGoal = await this.$store.dispatch("hypothesis/createGoal", hypothesis);
+    async submitForm(){      
+      this.$store.dispatch("form/closeForm");
+      await this.$store.dispatch(
+        "hypothesis/createGoal", 
+        {project: this.project, hypothesisName: this.name}
+      ).then((result) => {
+        console.info(result); 
+      }).catch((err) => {
+             console.info(err);     
+      });
 
-      // ゴール作成後の遷移先
-      const url = "/hypothesis/" + createdGoal.hypothesis.uuid;
-      
-      if (this.apiStatus) {
-        this.$router.push(url);
-      }
     }
   },
 };
