@@ -1,10 +1,7 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
-    project : {
-        name : null,
-        uuid : null,
-    },
+    project : null,
     projectList: null
 };
 
@@ -15,11 +12,13 @@ const getters = {
 
 const mutations = {
     setProject (state, project) {
-        state.project.name = project.name;
-        state.project.uuid = project.uuid;
+        state.project = project;
     },
     setProjectList (state, projectList){
         state.projectList = projectList;
+    },
+    addProjectList (state, project) {
+        state.projectList[project.uuid] = project;
     },
     updateProject (state, data) {
         state.projectList[data.uuid]['name'] = data.name;
@@ -36,7 +35,7 @@ const actions = {
     },
     async createProject (context, data) {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-        const response = await axios.post('api/project', data);
+        const response = await axios.post('/api/project', data);
 
         // バリデーションエラー
         if (response.status === UNPROCESSABLE_ENTITY) {
@@ -46,7 +45,8 @@ const actions = {
         if (response.status === CREATED) {
             context.commit ('auth/setApiStatus', true);
             context.commit ('setProject', response.data.project);
-            return false;
+            context.commit ('addProjectList', response.data.project);
+            return response.data;
         }
         else {
             context.commit ('error/setCode', response.status, {root: true});
@@ -55,7 +55,7 @@ const actions = {
     },
     async editProject (context, data) {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-        const response = await axios.put('api/project/'+ data.uuid, data)
+        const response = await axios.put('/api/project/'+ data.uuid, data)
 
         if (response.status === OK) {
             context.commit ('auth/setApiStatus', true);

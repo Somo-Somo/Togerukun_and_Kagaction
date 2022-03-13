@@ -98,11 +98,11 @@ export default {
     onClickCancel() {
       this.$store.dispatch("form/closeForm");
     },
-    submitForm(){
+    async submitForm(){
       this.$store.dispatch("form/closeForm");
       if (this.submitType === 'create') {
-        this.$store.dispatch("project/createProject", {'name' : this.name});
-        this.apiStatus ? this.$router.push( "project/" + this.project.uuid) : console.info('ログインしてください')
+        const response = await this.$store.dispatch("project/createProject", {'name' : this.name});
+        this.$router.push( "/project/" + response.project.uuid);
       } else if (this.submitType === 'edit') {
         // 名前を更新
         this.editObject.name = this.name;
