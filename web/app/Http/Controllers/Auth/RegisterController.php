@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -21,18 +22,11 @@ class RegisterController extends Controller
         $this->user_repository = $userRepositoryInterface;
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        //入力バリデーション
-        $validator = Validator::make($request->all(),[
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required'
-        ]);
-
         //バリデーションで問題があった際にはエラーを返す。
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        if ($request->fails()) {
+            return response()->json($request->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         //バリエーションで問題がなかった場合にはユーザを作成する。
