@@ -47,8 +47,17 @@
                 placeholder="パスワード"
                 @click:append="passwordShow = !passwordShow"
               ></v-text-field>
+            <div 
+              v-if="!isLoginForm" 
+              style="position: relative;" 
+              :style="!registerErrorMessages ? 'top: -16px;': 'top: -8px;'">
+              <ul>
+                <li>半角英数字・記号8文字以上</li>
+                <li>半角英字・数字それぞれ一文字以上含む</li>
+              </ul>
             </div>
-            <div class="login-btn pb-8">
+            </div>
+            <div class="login-btn mt-2 mb-8">
               <v-btn
                 type="submit"
                 class="fill-width caption"
@@ -61,7 +70,8 @@
               </v-btn>
             </div>
             <v-divider></v-divider>
-            <div class="pt-8 pb-4" v-if="!isLoginForm">
+
+            <div class="my-4" v-if="!isLoginForm">
               <span>すでにアカウントをお持ちですか？</span>
               <p
                 @click="
