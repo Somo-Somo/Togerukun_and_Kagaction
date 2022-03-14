@@ -132,8 +132,6 @@ export default {
       registerErrorMessages: 'auth/registerErrorMessages'
     }),
     errorMessagesEmail(){
-      console.info(this.registerErrorMessages);
-      console.info('bbb');
       return this.isLoginForm ?  this.loginErrorMessages.email[0] : this.registerErrorMessages.email[0];
     },
     errorMessagesPassword(){
