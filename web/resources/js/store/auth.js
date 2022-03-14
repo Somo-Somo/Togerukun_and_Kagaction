@@ -4,13 +4,15 @@ const state = {
   user: null,
   apiStatus: null,
   loginErrorMessages: null,
-  registerErrorMessages: null,
+  registerErrorMessages:  null,
 };
 
 const getters = {
   check: state => !!state.user,
   apiStatus: state => state.apiStatus,
   user: state => state.user ? state.user : '',
+  loginErrorMessages: state => state.loginErrorMessages,
+  registerErrorMessages: state => state.registerErrorMessages,
 };
 
 const mutations = {
@@ -43,7 +45,8 @@ const actions = {
     context.commit ('setApiStatus', false);
 
     if (response.status === UNPROCESSABLE_ENTITY) {
-      context.commit ('setRegisterErrorMessages', response.data.errors);
+      console.info(response.data);
+      context.commit ('setRegisterErrorMessages', response.data);
     } else {
       context.commit ('error/setCode', response.status, {root: true});
     }

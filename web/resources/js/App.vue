@@ -39,7 +39,9 @@ export default {
     },
   },
   created(){
-    this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
+    if(this.$store.getters.auth.check){
+      this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
+    }
   }
 };
 </script>

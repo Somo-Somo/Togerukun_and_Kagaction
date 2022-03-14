@@ -11,31 +11,13 @@
       </v-card-title>
       <v-divider> </v-divider>
       <form class="form" @submit.prevent="submitForm()">
-        <div v-if="loginErrors" class="errors">
-          <ul v-if="loginErrors.email">
-            <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
-          </ul>
-          <ul v-if="loginErrors.password">
-            <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
-          </ul>
-        </div>
-        <div v-if="registerErrors" class="errors">
-          <ul v-if="registerErrors.name">
-            <li v-for="msg in registerErrors.name" :key="msg">{{ msg }}</li>
-          </ul>
-          <ul v-if="registerErrors.email">
-            <li v-for="msg in registerErrors.email" :key="msg">{{ msg }}</li>
-          </ul>
-          <ul v-if="registerErrors.password">
-            <li v-for="msg in registerErrors.password" :key="msg">{{ msg }}</li>
-          </ul>
-        </div>
         <div class="px-6 py-8">
           <div style="max-width: 344px" class="mx-auto">
             <div class="pt-6">
               <v-text-field
                 v-model="registerForm.name"
                 v-if="!isLoginForm"
+                :error-messages="registerErrorMessages ? registerErrorMessages.name : null"
                 autofocus
                 dense
                 height="48px"
@@ -45,6 +27,7 @@
 
               <v-text-field
                 v-model="email"
+                :error-messages="loginErrorMessages || registerErrorMessages ? errorMessagesEmail : null"
                 autofocus
                 dense
                 height="48px"
@@ -56,6 +39,7 @@
                 v-model="password"
                 :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="passwordShow ? 'text' : 'password'"
+                :error-messages="loginErrorMessages || registerErrorMessages ? errorMessagesPassword : null"
                 dense
                 height="48px"
                 name="input-password"
@@ -84,6 +68,7 @@
                   isLoginForm = true;
                   email = '';
                   password = '';
+                  clearError()
                 "
               >
                 ログインに移動
@@ -96,6 +81,7 @@
                   isLoginForm = false;
                   email = '';
                   password = '';
+                  clearError()
                 "
               >
                 会員登録に移動
@@ -109,7 +95,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState,mapGetters } from "vuex";
 
 export default {
   data: () => ({
@@ -130,9 +116,19 @@ export default {
   computed: {
     ...mapState({
       apiStatus: (state) => state.auth.apiStatus,
-      loginErrors: (state) => state.auth.loginErrorMessages,
-      registerErrors: state => state.auth.registerErrorMessages
     }),
+    ...mapGetters({
+      loginErrorMessages: 'auth/loginErrorMessages',
+      registerErrorMessages: 'auth/registerErrorMessages'
+    }),
+    errorMessagesEmail(){
+      console.info(this.registerErrorMessages);
+      console.info('bbb');
+      return this.isLoginForm ?  this.loginErrorMessages.email[0] : this.registerErrorMessages.email[0];
+    },
+    errorMessagesPassword(){
+      return this.isLoginForm ? this.loginErrorMessages.password[0] : this.registerErrorMessages.password[0];
+    },
   },
   methods: {
     submitForm() {
