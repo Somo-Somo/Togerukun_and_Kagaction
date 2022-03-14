@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Requests\RegisterRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use \Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
