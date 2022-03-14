@@ -12,7 +12,7 @@
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
 import { NOT_FOUND, INTERNAL_SERVER_ERROR } from "./util";
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
@@ -20,21 +20,20 @@ export default {
     Footer,
   },
   computed: {
-    ...mapGetters({
+    ...mapState({
       check: 'auth/check',
+    }),
+    ...mapGetters({
       errorCode: 'error/code',
     }),
   },
   watch: {
-    errorCode: {
-      handler(val) {
+    errorCode(val, old) {
         if (val === INTERNAL_SERVER_ERROR) {
           this.$router.push("/500");
         } else if (val === NOT_FOUND) {
           this.$router.push('/not-found');
         }
-      },
-      immediate: true,
     },
     $route() {
       this.$store.commit("error/setCode", null);
@@ -43,6 +42,8 @@ export default {
   created(){
     if(this.check){
       this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
+    } else {
+       this.$router.push('/login');
     }
   }
 };
