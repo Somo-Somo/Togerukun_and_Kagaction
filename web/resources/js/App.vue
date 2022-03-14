@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <Navbar />
+    <Navbar v-if="!errorCode" />
     <v-main class="my-md-2">
       <RouterView />
     </v-main>
@@ -22,10 +22,8 @@ export default {
   computed: {
     ...mapGetters({
       check: 'auth/check',
+      errorCode: 'error/code',
     }),
-    errorCode() {
-      return this.$store.state.error.code;
-    },
   },
   watch: {
     errorCode: {

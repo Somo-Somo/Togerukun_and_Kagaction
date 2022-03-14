@@ -37,7 +37,6 @@ const actions = {
             }            
             return false;
         }
-
         context.commit('setApiStatus', false);
         context.commit('error/setCode', response.status, { root: true })
     },
