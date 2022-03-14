@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use \Symfony\Component\HttpFoundation\Response;
 
@@ -17,20 +18,16 @@ class LoginController extends Controller
         return $request->user() ? response()->json(new UserResource($request->user()), Response::HTTP_OK) : null;
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        //バリデーション
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
+        $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
         }
 
-        return response()->json('Can Not Login.', Response::HTTP_INTERNAL_SERVER_ERROR);
+        return response()->json(['errors' => 'ユーザーが見つかりませんでした。'], Response::HTTP_UNAUTHORIZED);
     }
 
     public function logout(Request $request)

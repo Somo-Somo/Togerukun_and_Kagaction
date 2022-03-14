@@ -12,6 +12,7 @@
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
 import { NOT_FOUND, INTERNAL_SERVER_ERROR } from "./util";
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -19,6 +20,9 @@ export default {
     Footer,
   },
   computed: {
+    ...mapGetters({
+      check: 'auth/check',
+    }),
     errorCode() {
       return this.$store.state.error.code;
     },
@@ -39,7 +43,9 @@ export default {
     },
   },
   created(){
-    this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
+    if(this.check){
+      this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
+    }
   }
 };
 </script>

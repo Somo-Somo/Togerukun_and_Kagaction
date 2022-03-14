@@ -1,16 +1,18 @@
-import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
+import {OK, CREATED, UNAUTHORIZED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
   user: null,
   apiStatus: null,
   loginErrorMessages: null,
-  registerErrorMessages: null,
+  registerErrorMessages:  null,
 };
 
 const getters = {
   check: state => !!state.user,
   apiStatus: state => state.apiStatus,
   user: state => state.user ? state.user : '',
+  registerErrorMessages: state => state.registerErrorMessages,
+  loginErrorMessages: state => state.loginErrorMessages,
 };
 
 const mutations = {
@@ -20,11 +22,11 @@ const mutations = {
   setApiStatus (state, status) {
     state.apiStatus = status;
   },
-  setLoginErrorMessages (state, messages) {
-    state.loginErrorMessages = messages;
-  },
   setRegisterErrorMessages (state, messages) {
     state.registerErrorMessages = messages;
+  },
+  setLoginErrorMessages (state, messages) {
+    state.loginErrorMessages = messages;
   },
 };
 
@@ -63,6 +65,12 @@ const actions = {
     context.commit ('setApiStatus', false);
     if (response.status === UNPROCESSABLE_ENTITY) {
       context.commit ('setLoginErrorMessages', response.data.errors);
+    } else if (response.status === UNAUTHORIZED) {
+      const messeages = {
+        email: [response.data.errors], 
+        password: [response.data.errors]
+      }
+      context.commit ('setLoginErrorMessages', messeages);
     } else {
       context.commit ('error/setCode', response.status, {root: true});
     }
