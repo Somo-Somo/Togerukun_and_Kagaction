@@ -5,6 +5,7 @@
           <v-text-field
             class="pa-0 ma-0"
             v-model="formName"
+            counter="64"
             :label="category"
             clearable
           ></v-text-field>
