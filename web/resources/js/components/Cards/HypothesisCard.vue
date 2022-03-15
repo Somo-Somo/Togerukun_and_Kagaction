@@ -69,7 +69,7 @@
         </v-list>
       </v-card>
     </v-col>
-    <div class="my-4" v-show="!hypothesisStatus.existsCard">
+    <div class="my-4" v-show="!hypothesisStatus.existsCard && hypothesisStatus.name !== 'ゴール'">
       <p class="grey--text font-weight-bold ma-0 pa-2">
           {{hypothesisStatus.name}}はありません
       </p>
