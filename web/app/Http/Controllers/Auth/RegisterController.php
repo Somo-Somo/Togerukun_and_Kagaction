@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
 
 class RegisterController extends Controller
@@ -20,16 +21,12 @@ class RegisterController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        //バリデーションで問題があった際にはエラーを返す。
-        if ($request->fails()) {
-            return response()->json($request->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         //バリエーションで問題がなかった場合にはユーザを作成する。
         $user = User::create([
             'name' => $request->name,
+            'uuid' => (string) Str::uuid(),
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->password)
         ]);
 
         // ユーザー作成後UserRepositoryを通してNeo4jに保存
