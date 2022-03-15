@@ -16,7 +16,7 @@
                     <span v-if="isLogin" class="navbar__item">
                         <p class="ma-0 text-h4">{{ user.name }}</p>
                         <p class="text-subtitle-2 grey--text ma-0">
-                            ID:2fj4oaejdo
+                            ID:{{ userId }}
                         </p>
                     </span>
                 </div>
@@ -82,7 +82,10 @@ export default {
         }),
         initial() {
           return this.user.name.charAt(0);
-        }
+        },
+        userId() {
+            return this.user.uuid.substr(0,23);
+        },
     },
     methods: {
         onClickItem: function (click) {

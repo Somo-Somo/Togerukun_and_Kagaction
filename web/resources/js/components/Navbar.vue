@@ -69,7 +69,7 @@
       <v-footer color="#80CBC4" absolute>
         <v-divider color="#80CBC4"></v-divider>
         <v-sheet
-          class="d-flex flex-row justify-space-around pl-2"
+          class="d-flex flex-row justify-space-around"
           style="height: 72px"
           color="#80CBC4"
         >
@@ -82,7 +82,7 @@
           <v-list-item-content>
             <v-list-item-title>{{ user.name }}</v-list-item-title>
             <v-list-item-subtitle style="font-size: 0.75em">
-              ID: y.shitogishi@vizhd.co.jp
+              ID: {{ userId }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-sheet>
@@ -111,6 +111,9 @@ export default {
     }),
     initial() {
       return this.user.name.charAt(0);
+    },
+    userId() {
+      return this.user.uuid.substr(0,23);
     }
   },
   methods: {
