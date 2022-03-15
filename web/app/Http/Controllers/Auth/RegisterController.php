@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Http\Resources\UserResource;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Hash;
@@ -32,14 +33,7 @@ class RegisterController extends Controller
         // ユーザー作成後UserRepositoryを通してNeo4jに保存
         $this->user_repository->register($user);
 
-        //ユーザの作成が完了するとjsonを返す
-        $json = [
-            'data' => $user,
-            'message' => 'User registration success!',
-            'error' => ''
-        ];
-
  
-        return response()->json( $json, Response::HTTP_CREATED);
+        return response()->json( new UserResource($user), Response::HTTP_CREATED);
     }
 }
