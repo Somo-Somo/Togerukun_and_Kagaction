@@ -22,7 +22,8 @@ const mutations = {
 
     selectHypothesisList (state, projectUuid) {
         const allHypothesisList = state.allHypothesisList;
-        if(allHypothesisList[projectUuid]) state.hypothesisList = allHypothesisList[projectUuid];
+        state.hypothesisList = allHypothesisList[projectUuid] ? 
+            allHypothesisList[projectUuid] : [];
     },
 
     setAllHypothesisList (state, data) {
