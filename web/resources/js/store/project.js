@@ -15,12 +15,10 @@ const mutations = {
         state.project = project;
     },
     setProjectList (state, projectList){
-        state.projectList = projectList.length ? projectList : {};
+        state.projectList = Object.keys(projectList).length ? projectList : {};
     },
     addProjectList (state, project) {
         state.projectList[project.uuid] = project;
-        console.info(project);
-        console.info(state.projectList);
     },
     updateProject (state, data) {
         state.projectList[data.uuid]['name'] = data.name;
