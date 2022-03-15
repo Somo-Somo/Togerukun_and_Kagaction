@@ -142,10 +142,12 @@ export default {
       registerErrorMessages: 'auth/registerErrorMessages'
     }),
     errorMessagesEmail(){
-      return this.isLoginForm ?  this.loginErrorMessages.email[0] : this.registerErrorMessages.email[0];
+      const errorMessages = this.isLoginForm ?  this.loginErrorMessages : this.registerErrorMessages;
+      return errorMessages.email ? errorMessages.email[0] : null;
     },
     errorMessagesPassword(){
-      return this.isLoginForm ? this.loginErrorMessages.password[0] : this.registerErrorMessages.password[0];
+      const errorMessages = this.isLoginForm ? this.loginErrorMessages : this.registerErrorMessages;
+      return errorMessages.password ? errorMessages.password[0] : null;
     },
   },
   methods: {
