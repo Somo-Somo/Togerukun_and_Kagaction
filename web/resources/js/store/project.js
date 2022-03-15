@@ -6,7 +6,7 @@ const state = {
 };
 
 const getters = {
-    project : state => (state.project.name && state.project.uuid) ? state.project : null,
+    project : state => state.project ? state.project : null,
     projectList: state => state.projectList ? state.projectList : null,
 };
 

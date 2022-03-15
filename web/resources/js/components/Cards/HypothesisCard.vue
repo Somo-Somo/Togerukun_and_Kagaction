@@ -4,7 +4,7 @@
     <v-col 
       class="px-md-0"
       v-for="hypothesis in hypothesisList" 
-      :key="hypothesis.uuid" 
+      :key="hypothesis.uuid"
       :class="cardShow(hypothesis) ? '' : 'd-none'"
       >
       <v-card class="rounded" outlined>
@@ -181,8 +181,8 @@ export default {
         this.selectedDeletingHypothesis.uuid = hypothesis.uuid;
       }
     },
-    async deleteHypothesis(){
-      await this.$store.dispatch("hypothesis/deleteHypothesis", this.selectedDeletingHypothesis);
+    deleteHypothesis(){
+      this.$store.dispatch("hypothesis/deleteHypothesis", this.selectedDeletingHypothesis);
       this.deletingConfirmationDialog = false;
       this.selectedDeletingHypothesis.name = null;
       this.selectedDeletingHypothesis.uuid = null;

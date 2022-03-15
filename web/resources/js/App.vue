@@ -12,7 +12,7 @@
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
 import { NOT_FOUND, INTERNAL_SERVER_ERROR } from "./util";
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -20,10 +20,8 @@ export default {
     Footer,
   },
   computed: {
-    ...mapState({
-      check: 'auth/check',
-    }),
     ...mapGetters({
+      check: 'auth/check',
       errorCode: 'error/code',
     }),
   },
