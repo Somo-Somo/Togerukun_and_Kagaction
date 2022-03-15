@@ -8,7 +8,7 @@
       <template>
         <div
           class="d-flex justify-space-between"
-          style="position: fixed"
+          style="position: fixed;  width: 772px"
           :class="$vuetify.breakpoint.mdAndUp ? 'tabStyle' : 'spTabStyle'"
           absolute
         >
@@ -32,10 +32,10 @@
         </div>
         <!-- PC版 -->
         <div
-          class="overflow-y-auto d-flex flex-column"
+          class="d-flex flex-column"
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
-          <v-tabs-items v-model="tab">
+          <v-tabs-items class="overflow-y-auto" v-model="tab">
             <v-tab-item v-for="hypothesisStatus in hypothesisStatuses" :key="hypothesisStatus.name">
               <HypothesisCards
                :project="project" 
