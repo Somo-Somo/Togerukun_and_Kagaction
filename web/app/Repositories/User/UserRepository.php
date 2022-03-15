@@ -22,12 +22,15 @@ class UserRepository implements UserRepositoryInterface
                     :User {
                         user_id: $user_id,
                         name: $name, 
+                        uuid: $uuid, 
                         email: $email,
-                        password: $password
+                        password: $password,
+                        created_at: localdatetime({timezone: 'Asia/Tokyo'})
                     })
                 CYPHER,
                 [
                     'user_id' => $user['id'], 
+                    'uuid' => $user['uuid'], 
                     'name' => $user['name'], 
                     'email' => $user['email'],
                     'password' => $user['password']

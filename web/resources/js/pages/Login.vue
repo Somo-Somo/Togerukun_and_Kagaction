@@ -4,8 +4,17 @@
       :tile="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
       class="mx-auto fill-width"
       flat
-      max-width="640"
-    >
+      max-width="720"
+    >   
+      <v-alert
+        v-if="completedRegister"
+        class="my-2"
+        outlined
+        type="success"
+        text
+      >
+      会員登録が完了しました。<br>先ほどご登録いただいたメールアドレスとパスワードをこちらでご入力ください。
+    </v-alert>
       <v-card-title class="text-center pa-8">
         <h4 class="fill-width">{{ isLoginForm ? "ログイン" : "会員登録" }}</h4>
       </v-card-title>
@@ -122,6 +131,7 @@ export default {
       password: "",
     },
     passwordShow: false,
+    completedRegister: false,
   }),
   computed: {
     ...mapState({
@@ -140,6 +150,7 @@ export default {
   },
   methods: {
     submitForm() {
+      this.completedRegister = false;
       this.isLoginForm ? this.login() : this.register();
     },
     async register() {
@@ -150,9 +161,11 @@ export default {
       await this.$store.dispatch("auth/register", this.registerForm);
 
       if (this.apiStatus) {
-        await this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
-        // トップページに移動する
-        this.$router.push("/projects");
+        this.completedRegister = true;
+        this.email = null;
+        this.password = null;
+        this.registerForm.name = null;
+        this.isLoginForm = true;
       }
     },
     async login() {
