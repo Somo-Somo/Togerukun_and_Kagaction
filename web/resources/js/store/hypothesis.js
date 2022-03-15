@@ -56,7 +56,14 @@ const mutations = {
     },
 
     deleteHypothesis (state, hypothesisUuid){
-        delete state.hypothesisList[hypothesisUuid];
+        const hypothesisList = state.hypothesisList
+        let newHypothesisList = [];
+        for (const [key, value] of Object.entries(hypothesisList)) {
+            if(value.uuid !== hypothesisUuid && value.parentUuid !== hypothesisUuid){
+                newHypothesisList.push(value);
+            }
+        }
+        state.hypothesisList = newHypothesisList;
     },
 }
 
@@ -126,16 +133,15 @@ const actions = {
 
     async deleteHypothesis (context, selectedDeletingHypothesis) {
         const hypothesisUuid = selectedDeletingHypothesis.uuid;
+        context.commit('deleteHypothesis', hypothesisUuid);
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.delete('/api/hypothesis/'+ hypothesisUuid)
 
-        if (response.status === OK) {
-            context.commit('deleteHypothesis', hypothesisUuid);
-            return false;
-        } else {
+        if (response.status !== OK) {
             context.commit ('error/setCode', response.status, {root: true});
-            return false;
-        }      
+            return;
+        }
+        return;
     },
 
     async updateStatus (context, {click,hypothesisUuid}) {
