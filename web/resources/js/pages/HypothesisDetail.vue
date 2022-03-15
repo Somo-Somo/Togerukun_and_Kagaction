@@ -248,6 +248,10 @@ export default {
   height: 24px
   padding: 0 0 0 12px
 
+.cardStyle
+  height: calc(100vh - 400px)
+  position: relative
+
 .spCardStyle
   height: calc(100vh - 224px)
   position: relative
