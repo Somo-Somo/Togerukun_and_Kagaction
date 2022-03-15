@@ -46,7 +46,7 @@ class HypothesisRepository implements HypothesisRepositoryInterface
                                 name: $name,
                                 uuid: $uuid
                         })-[
-                            :TO_ACHIEVE{since:localdatetime({timezone: 'Asia/Tokyo'})}  
+                            :TO_ACHIEVE{at:localdatetime({timezone: 'Asia/Tokyo'})}  
                         ]->(parent)
                 WITH project
                 MATCH  len = (project:Project) <- [*] - (parent:Hypothesis)
@@ -74,10 +74,10 @@ class HypothesisRepository implements HypothesisRepositoryInterface
                     WITH user,hypothesis
                     OPTIONAL MATCH x = (user)-[updated:UPDATED]->(hypothesis)
                     WHERE x IS NOT NULL 
-                    SET updated.since = localdatetime({timezone: 'Asia/Tokyo'}) 
+                    SET updated.at = localdatetime({timezone: 'Asia/Tokyo'}) 
                     WITH user,hypothesis,x
                     WHERE x IS NULL
-                    CREATE (user)-[:UPDATED{since:localdatetime({timezone: 'Asia/Tokyo'})}]->(hypothesis)
+                    CREATE (user)-[:UPDATED{at:localdatetime({timezone: 'Asia/Tokyo'})}]->(hypothesis)
                     RETURN hypothesis
                     CYPHER,
                     [
