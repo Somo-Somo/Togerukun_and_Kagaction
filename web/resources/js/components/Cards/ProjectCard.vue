@@ -1,7 +1,7 @@
 <template>
 <div>
   <v-list class="py-0" width="100%">
-    <v-col class="px-md-0" v-for="project in projectCards" :key="project.name">
+    <v-col class="px-md-0" v-for="project in projectList" :key="project.name">
       <v-card class="rounded" outlined>
         <v-list class="py-0" style="height: 80px">
           <v-list-item @click="toHypothesis(project)" style="height: 80px" link>
@@ -53,7 +53,6 @@
 
 <script>
 import DeletingConfirmationDialog from "../Dialog/DeletingConfirmationDialog.vue";
-import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -70,10 +69,10 @@ export default {
       uuid: null,
     },
   }),
-  computed: {
-    ...mapState({
-      projectCards : (state) => state.project.projectList
-    })
+  props: {
+    projectList: {
+      type: Array,
+    },
   },
   methods: {
     toHypothesis(project) {

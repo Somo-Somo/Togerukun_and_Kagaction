@@ -13,7 +13,7 @@
         >
           <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
             <p class="ma-0 font-weight-bold" color="grey darken-1">
-              プロジェクト一覧
+              プロジェクト一覧 
             </p>
           </v-subheader>
           <v-icon
@@ -28,7 +28,7 @@
           class="overflow-y-auto d-flex flex-column"
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
-          <ProjectCards @onClickEdit="onClickEdit" />
+          <ProjectCards :projectList="projectList" @onClickEdit="onClickEdit" />
           <v-progress-circular
             class="mx-auto my-8"
             v-if="loading"
@@ -72,7 +72,6 @@ export default {
   },
   data: () => ({
     category : "プロジェクト",
-    projectList: null,
   }),
   computed: {
     ...mapState({
@@ -86,6 +85,7 @@ export default {
       inputForm: 'form/inputForm',
       submitType: 'form/submitType',
       project: 'project/project',
+      projectList: 'project/projectList',
     })
   },
   methods: {
@@ -99,14 +99,15 @@ export default {
       this.$store.dispatch("form/closeForm");
     },
     async submitForm(){
-      this.$store.dispatch("form/closeForm");
       if (this.submitType === 'create') {
         const response = await this.$store.dispatch("project/createProject", {'name' : this.name});
-        this.$router.push( "/project/" + response.project.uuid);
+        this.$store.dispatch("form/closeForm");
+        this.$router.push("/project/" + response.project.uuid);
       } else if (this.submitType === 'edit') {
         // 名前を更新
         this.editObject.name = this.name;
         this.$store.dispatch("project/editProject", this.editObject);
+        this.$store.dispatch("form/closeForm");
       }
     }
   },
