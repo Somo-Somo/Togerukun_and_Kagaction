@@ -38,7 +38,6 @@ export default {
     },
   },
   created(){
-    console.info(this.check);
     if(this.check){
       this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
     } else {
