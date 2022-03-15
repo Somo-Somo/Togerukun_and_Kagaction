@@ -36,7 +36,7 @@ class ProjectRepository implements ProjectRepositoryInterface
                 <<<'CYPHER'
                     MATCH (user:User { email : $user_email })
                     CREATE (user)-[
-                                :HAS{since:localdatetime({timezone: 'Asia/Tokyo'})}
+                                :HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}
                             ]->(
                             project:Project {
                                 name: $name, 
@@ -63,10 +63,10 @@ class ProjectRepository implements ProjectRepositoryInterface
                     WITH user,project
                     OPTIONAL MATCH x = (user)-[updated:UPDATED]->(project)
                     WHERE x IS NOT NULL 
-                    SET updated.since = localdatetime({timezone: 'Asia/Tokyo'}) 
+                    SET updated.at = localdatetime({timezone: 'Asia/Tokyo'}) 
                     WITH user,project,x
                     WHERE x IS NULL
-                    CREATE (user)-[:UPDATED{since:localdatetime({timezone: 'Asia/Tokyo'})}]->(project)
+                    CREATE (user)-[:UPDATED{at:localdatetime({timezone: 'Asia/Tokyo'})}]->(project)
                     RETURN project
                     CYPHER,
                     [

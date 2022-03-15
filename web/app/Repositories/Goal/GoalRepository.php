@@ -28,7 +28,7 @@ class GoalRepository implements GoalRepositoryInterface
                                 status: null,
                                 limited: null
                         })-[
-                            :IS_THE_GOAL_OF{since:localdatetime({timezone: 'Asia/Tokyo'})}  
+                            :IS_THE_GOAL_OF{at:localdatetime({timezone: 'Asia/Tokyo'})}  
                         ]->(project)
                 RETURN hypothesis, project
                 CYPHER,
