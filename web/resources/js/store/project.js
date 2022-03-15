@@ -2,7 +2,7 @@ import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
     project : null,
-    projectList: null
+    projectList: {},
 };
 
 const getters = {
@@ -15,10 +15,12 @@ const mutations = {
         state.project = project;
     },
     setProjectList (state, projectList){
-        state.projectList = projectList;
+        state.projectList = projectList.length ? projectList : {};
     },
     addProjectList (state, project) {
         state.projectList[project.uuid] = project;
+        console.info(project);
+        console.info(state.projectList);
     },
     updateProject (state, data) {
         state.projectList[data.uuid]['name'] = data.name;
@@ -43,7 +45,7 @@ const actions = {
         }
 
         if (response.status === CREATED) {
-            context.commit ('auth/setApiStatus', true);
+            context.commit ('auth/setApiStatus', true, {root: true});
             context.commit ('setProject', response.data.project);
             context.commit ('addProjectList', response.data.project);
             return response.data;
@@ -58,7 +60,7 @@ const actions = {
         const response = await axios.put('/api/project/'+ data.uuid, data)
 
         if (response.status === OK) {
-            context.commit ('auth/setApiStatus', true);
+            context.commit ('auth/setApiStatus', true, {root: true});
             context.commit('updateProject', data);
             return false;
         }
@@ -73,7 +75,7 @@ const actions = {
         const response = await axios.delete('/api/project/'+ projectUuid)
 
         if (response.status === OK) {
-            context.commit ('auth/setApiStatus', true);
+            context.commit ('auth/setApiStatus', true, {root: true});
             context.commit('deleteProject', projectUuid);
             return false;
         }
