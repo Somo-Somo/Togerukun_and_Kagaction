@@ -15,17 +15,14 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
-switch ($_SERVER['HTTP_HOST'] ?? 'localhost') {
-    // 開発環境
-    case 'localhost':
+switch ($_SERVER['HTTP_HOST'] ?? 'localhost:8080') {
+    case 'localhost:8080':
         $app->loadEnvironmentFrom('.env.dev');
         break;
-
-    // 本番環境
-    case 'https://kagaction.herokuapp.com':
+    case 'kagaction.herokuapp.com':
         $app->loadEnvironmentFrom('.env.prod');
         break;
-    }
+}
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
