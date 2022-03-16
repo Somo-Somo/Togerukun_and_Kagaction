@@ -30,7 +30,7 @@
             <v-textarea
               label="ゴールを入力"
               v-model="hypothesis.name"
-              @keyup.enter="edit"
+              @change="edit"
               class="pa-0 text-h5"
               rows="1"
               auto-grow
