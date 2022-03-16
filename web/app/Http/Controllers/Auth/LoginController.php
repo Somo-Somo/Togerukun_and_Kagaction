@@ -15,11 +15,10 @@ class LoginController extends Controller
 
     public function authStatus(Request $request)
     {
-        var_dump($_SERVER['HTTP_HOST']);
         if ($request->user()) {
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
         }
-        return response()->json(['message' => 'ログインしていません。'], Response::HTTP_UNAUTHORIZED);
+        return response()->json(['message' => 'ログインしていません。', 'host' => $_SERVER['HTTP_HOST']], Response::HTTP_UNAUTHORIZED);
     }
 
     public function login(LoginRequest $request)
