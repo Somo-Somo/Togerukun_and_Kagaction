@@ -34,7 +34,13 @@ const actions = {
   async register (context, data) {
     context.commit ('setApiStatus', null);
     await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-    const response = await axios.post ('/api/register', data);
+    const response = await axios.post ('/api/register', data)
+    .then(response => { 
+      console.log(response)
+    })
+    .catch(({error}) => {
+      console.log(error)
+    });
 
     if (response.status === CREATED) {
       context.commit ('setApiStatus', true);
