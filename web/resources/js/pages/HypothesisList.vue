@@ -113,16 +113,12 @@ export default {
     onClickCancel() {
       this.$store.dispatch("form/onClickCancel");
     },
-    async submitForm(){      
+    submitForm(){      
       this.$store.dispatch("form/closeForm");
-      await this.$store.dispatch(
+      this.$store.dispatch(
         "hypothesis/createGoal", 
         {project: this.project, hypothesisName: this.name}
-      ).then((result) => {
-        console.info(result); 
-      }).catch((err) => {
-             console.info(err);     
-      });
+      )
     }
   },
 };

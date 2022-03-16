@@ -56,7 +56,6 @@ const actions = {
     const response = await axios.post ('/api/login', data);
 
     if (response.status === OK) {
-      console.info(response.data);
       context.commit ('setApiStatus', true);
       context.commit ('setUser', response.data);
       return false;
