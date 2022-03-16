@@ -30,7 +30,7 @@
             <v-textarea
               label="ゴールを入力"
               v-model="hypothesis.name"
-              @keyup.enter="edit"
+              @change="edit"
               class="pa-0 text-h5"
               rows="1"
               auto-grow
@@ -225,12 +225,7 @@ export default {
         name : this.inputFormName,
         parent_uuid: this.hypothesis.uuid,
       }
-      const createdHypothesis = await this.$store.dispatch("hypothesis/createHypothesis", hypothesis);
-      // ゴール作成後の遷移先
-      const url = "/hypothesis/" + createdHypothesis.hypothesis.uuid;
-      if (this.apiStatus) {
-        this.$router.push(url);
-      }
+      await this.$store.dispatch("hypothesis/createHypothesis", hypothesis);
     },
     edit(){
         this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);

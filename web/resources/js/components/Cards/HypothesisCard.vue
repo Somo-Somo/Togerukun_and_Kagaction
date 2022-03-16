@@ -98,8 +98,6 @@ export default {
       uuid : null,
     },
     cardMenu: [
-      {title: "ゴールにする", color:""},
-      {title: "今日の目標にする", color: ""},
       {title: "削除", color:"color: red"},
     ],
   }),

@@ -11,7 +11,7 @@
 <script>
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
-import { NOT_FOUND, INTERNAL_SERVER_ERROR } from "./util";
+import { NOT_FOUND, INTERNAL_SERVER_ERROR, UNAUTHORIZED, } from "./util";
 import { mapGetters } from 'vuex'
 
 export default {
@@ -27,7 +27,10 @@ export default {
   },
   watch: {
     errorCode(val, old) {
-        if (val === INTERNAL_SERVER_ERROR) {
+        if (val === UNAUTHORIZED) {
+           this.$router.push("/login");
+        }
+        else if (val === INTERNAL_SERVER_ERROR) {
           this.$router.push("/500");
         } else if (val === NOT_FOUND) {
           this.$router.push('/not-found');

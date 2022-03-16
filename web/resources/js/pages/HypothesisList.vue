@@ -26,7 +26,7 @@
             class="hidden-sm-and-down my-3"
             size="24"
             height="24"
-            @click="isDisplay()"
+            @click="onClickCreate()"
             >mdi-plus-circle</v-icon
           >
         </div>
@@ -113,16 +113,12 @@ export default {
     onClickCancel() {
       this.$store.dispatch("form/onClickCancel");
     },
-    async submitForm(){      
+    submitForm(){      
       this.$store.dispatch("form/closeForm");
-      await this.$store.dispatch(
+      this.$store.dispatch(
         "hypothesis/createGoal", 
         {project: this.project, hypothesisName: this.name}
-      ).then((result) => {
-        console.info(result); 
-      }).catch((err) => {
-             console.info(err);     
-      });
+      )
     }
   },
 };

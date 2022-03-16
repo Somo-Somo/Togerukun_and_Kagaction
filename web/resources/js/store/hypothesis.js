@@ -111,7 +111,6 @@ const actions = {
         } 
 
         if (response.status === CREATED) {
-            context.commit ('setHypothesis', response.data.hypothesis);
             context.commit ('setHypothesisListAfterHypothesisCreation', response.data.hypothesisList);
             return;
         } else {
