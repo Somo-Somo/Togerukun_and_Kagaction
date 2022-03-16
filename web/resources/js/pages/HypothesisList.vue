@@ -26,7 +26,7 @@
             class="hidden-sm-and-down my-3"
             size="24"
             height="24"
-            @click="isDisplay()"
+            @click="onClickCreate()"
             >mdi-plus-circle</v-icon
           >
         </div>
