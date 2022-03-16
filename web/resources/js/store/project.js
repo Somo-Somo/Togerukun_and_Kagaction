@@ -46,6 +46,7 @@ const actions = {
             context.commit ('auth/setApiStatus', true, {root: true});
             context.commit ('setProject', response.data.project);
             context.commit ('addProjectList', response.data.project);
+            context.commit ('hypothesis/selectHypothesisList', response.data.project.uuid, {root: true});
             return response.data;
         }
         else {
