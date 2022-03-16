@@ -15,6 +15,7 @@ class LoginController extends Controller
 
     public function authStatus(Request $request)
     {
+        var_dump($_SERVER['HTTP_HOST']);
         if ($request->user()) {
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
         }
