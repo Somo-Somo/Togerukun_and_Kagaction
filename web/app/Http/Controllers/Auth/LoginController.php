@@ -21,7 +21,6 @@ class LoginController extends Controller
             'env' => config('app.env'),
             'username' => config('database.connections.neo4j.username'),
             'password' => config('database.connections.neo4j.password'),
-            'http_host' => $_SERVER['HTTP_HOST'],
             'enviroment' => $enviroment,
             'pgsql' => config('database.connections.pgsql'),
             'defalut' => config('database.defalut'),
