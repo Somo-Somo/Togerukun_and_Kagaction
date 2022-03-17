@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use \Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\App;
 
 
 class LoginController extends Controller
@@ -15,10 +16,15 @@ class LoginController extends Controller
 
     public function authStatus(Request $request)
     {
+        $enviroment = App::environment();
         $config = [
             'env' => config('app.env'),
             'username' => config('database.connections.neo4j.username'),
-            'password' => config('database.connections.neo4j.password')
+            'password' => config('database.connections.neo4j.password'),
+            'http_host' => $_SERVER['HTTP_HOST'],
+            'enviroment' => $enviroment,
+            'pgsql' => config('database.connections.pgsql'),
+            'defalut' => config('database.defalut'),
         ];
         if ($request->user()) {
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
