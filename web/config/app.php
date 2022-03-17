@@ -233,7 +233,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Neo4jDB' => Illuminate\Support\Facades\Neo4jDB::class,
+        'Neo4jDB' => App\Facades\Neo4jDB::class,
 
     ],
 
