@@ -23,9 +23,6 @@ class ConnectNeo4jDB {
         $database_password = config('database.connections.neo4j.password');
         $database_user_name = config('database.connections.neo4j.username');
 
-        var_dump($database_password);
-        var_dump($database_user_name);
-
         $this->client = ClientBuilder::create()
         ->withDriver(
             'aura',

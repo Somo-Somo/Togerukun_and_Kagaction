@@ -15,10 +15,16 @@ class LoginController extends Controller
 
     public function authStatus(Request $request)
     {
+        $database_password = config('database.connections.neo4j.password');
+        $database_user_name = config('database.connections.neo4j.username');
+        $config = [
+            'username' => $database_user_name,
+            'password' => $database_password
+        ];
         if ($request->user()) {
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
         }
-        return response()->json(['message' => 'ログインしていません。'], Response::HTTP_UNAUTHORIZED);
+        return response()->json(['message' => 'ログインしていません。', 'config' => $config], Response::HTTP_UNAUTHORIZED);
     }
 
     public function login(LoginRequest $request)
