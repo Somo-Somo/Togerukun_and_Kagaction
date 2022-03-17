@@ -15,11 +15,10 @@ class LoginController extends Controller
 
     public function authStatus(Request $request)
     {
-        $database_password = config('database.connections.neo4j.password');
-        $database_user_name = config('database.connections.neo4j.username');
         $config = [
-            'username' => $database_user_name,
-            'password' => $database_password
+            'env' => config('app.env'),
+            'username' => config('database.connections.neo4j.username'),
+            'password' => config('database.connections.neo4j.password')
         ];
         if ($request->user()) {
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
