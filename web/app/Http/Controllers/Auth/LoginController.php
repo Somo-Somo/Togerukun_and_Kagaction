@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use \Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\App;
 
 
 class LoginController extends Controller
@@ -15,10 +16,11 @@ class LoginController extends Controller
 
     public function authStatus(Request $request)
     {
+        $app = APP::environment();
         if ($request->user()) {
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
         }
-        return response()->json(['message' => 'ログインしていません。'], Response::HTTP_UNAUTHORIZED);
+        return response()->json(['message' => 'ログインしていません。', 'env' => $app], Response::HTTP_UNAUTHORIZED);
     }
 
     public function login(LoginRequest $request)
