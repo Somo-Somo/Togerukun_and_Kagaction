@@ -100,7 +100,7 @@ return [
         'neo4j' => [
             'driver' => 'aura',
             'url' => env('NEO4JDB_URL'),
-            'username' => env('NEO4JDB_USERNAME'),
+            'username' => env('NEO4JDB_USERNAME', 'neo4j'),
             'password' => env('NEO4JDB_PASSWORD')
         ],
 
