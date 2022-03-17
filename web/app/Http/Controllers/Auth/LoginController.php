@@ -23,6 +23,7 @@ class LoginController extends Controller
             'password' => config('database.connections.neo4j.password'),
             'pgsql' => config('database.connections.pgsql'),
             'defalut' => config('database.defalut'),
+            'sanctum' => config('sanctum.stateful'),
         ];
         if ($request->user()) {
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
