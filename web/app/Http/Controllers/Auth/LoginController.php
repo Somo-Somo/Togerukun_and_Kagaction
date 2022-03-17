@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use \Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\App;
 
 
 class LoginController extends Controller
@@ -16,7 +15,9 @@ class LoginController extends Controller
 
     public function authStatus(Request $request)
     {
-        $enviroment = App::environment();
+        var_dump($request->user());
+        dd($request->user());
+        var_dump($request);
         if ($request->user()) {
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
         }
@@ -30,7 +31,6 @@ class LoginController extends Controller
             'env' => config('app.env'),
             'username' => config('database.connections.neo4j.username'),
             'password' => config('database.connections.neo4j.password'),
-            'pgsql' => config('database.connections.pgsql'),
             'defalut' => config('database.defalut'),
             'sanctum' => config('sanctum.stateful'),
         ];
