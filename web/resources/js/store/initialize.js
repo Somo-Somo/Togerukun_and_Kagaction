@@ -19,8 +19,9 @@ const actions = {
     async getUserHasProjectAndHypothesis (context, route) {
         const response = await axios.get('/api/initialize')
                 .catch(err => {
-                    err.response || err
+                    console.error(err);
                 });
+        console.error(response);
 
         if (response.status === OK) {
             context.commit ('project/setProjectList', response.data.project, { root: true });
