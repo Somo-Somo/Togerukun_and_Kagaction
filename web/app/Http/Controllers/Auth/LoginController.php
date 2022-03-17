@@ -15,9 +15,6 @@ class LoginController extends Controller
 
     public function authStatus(Request $request)
     {
-        var_dump($request->user());
-        dd($request->user());
-        var_dump($request);
         if ($request->user()) {
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
         }
@@ -37,7 +34,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return response()->json(new UserResource($request->user()), Response::HTTP_OK);
+            return response()->json($request->user(), Response::HTTP_OK);
         }
 
         return response()->json(['errors' => 'ユーザーが見つかりませんでした。','config' => $config], Response::HTTP_UNAUTHORIZED);
