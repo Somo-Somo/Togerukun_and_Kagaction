@@ -34,7 +34,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return response()->json($request->user(), Response::HTTP_OK);
+            return response()->json(new UserResource($request->user()), Response::HTTP_OK);
         }
 
         return response()->json(['errors' => 'ユーザーが見つかりませんでした。','config' => $config], Response::HTTP_UNAUTHORIZED);
