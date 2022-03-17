@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Hypothesis;
 
-use Illuminate\Support\Facades\Neo4jDB;
+use App\Facades\Neo4jDB;
 use App\Repositories\Hypothesis\HypothesisRepositoryInterface;
 
 class HypothesisRepository implements HypothesisRepositoryInterface

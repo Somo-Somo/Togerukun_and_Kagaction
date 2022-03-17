@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Project;
 
-use Illuminate\Support\Facades\Neo4jDB;
+use App\Facades\Neo4jDB;
 use App\Repositories\Project\ProjectRepositoryInterface;
 
 class ProjectRepository implements ProjectRepositoryInterface

@@ -2,7 +2,7 @@
 
 namespace App\Repositories\User;
 
-use Illuminate\Support\Facades\Neo4jDB;
+use App\Facades\Neo4jDB;
 use App\Repositories\User\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface
