@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Auth;
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
-Route::get('/auth_status', [LoginController::class, 'authStatus']);
+Route::middleware('auth:sanctum')->get('/auth_status', [LoginController::class, 'authStatus']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/initialize', Initialize::class);
