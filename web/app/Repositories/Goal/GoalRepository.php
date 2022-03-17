@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Goal;
 
-use Illuminate\Support\Facades\Neo4jDB;
+use App\Facades\Neo4jDB;
 use App\Repositories\Goal\GoalRepositoryInterface;
 
 class GoalRepository implements GoalRepositoryInterface
