@@ -60,7 +60,7 @@ const actions = {
       context.commit ('setUser', response.data);
       return false;
     }
-
+    console.log(response);
     context.commit ('setApiStatus', false);
     if (response.status === UNPROCESSABLE_ENTITY) {
       context.commit ('setLoginErrorMessages', response.data.errors);

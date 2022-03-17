@@ -17,6 +17,15 @@ class LoginController extends Controller
     public function authStatus(Request $request)
     {
         $enviroment = App::environment();
+        if ($request->user()) {
+            return response()->json(new UserResource($request->user()), Response::HTTP_OK);
+        }
+        return response()->json(['message' => 'ログインしていません。'], Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function login(LoginRequest $request)
+    {
+        $credentials = $request->validated();
         $config = [
             'env' => config('app.env'),
             'username' => config('database.connections.neo4j.username'),
@@ -25,22 +34,13 @@ class LoginController extends Controller
             'defalut' => config('database.defalut'),
             'sanctum' => config('sanctum.stateful'),
         ];
-        if ($request->user()) {
-            return response()->json(new UserResource($request->user()), Response::HTTP_OK);
-        }
-        return response()->json(['message' => 'ログインしていません。', 'config' => $config], Response::HTTP_UNAUTHORIZED);
-    }
-
-    public function login(LoginRequest $request)
-    {
-        $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
         }
 
-        return response()->json(['errors' => 'ユーザーが見つかりませんでした。'], Response::HTTP_UNAUTHORIZED);
+        return response()->json(['errors' => 'ユーザーが見つかりませんでした。','config' => $config], Response::HTTP_UNAUTHORIZED);
     }
 
     public function logout(Request $request)
