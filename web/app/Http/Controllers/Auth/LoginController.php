@@ -24,20 +24,13 @@ class LoginController extends Controller
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
-        $config = [
-            'env' => config('app.env'),
-            'username' => config('database.connections.neo4j.username'),
-            'password' => config('database.connections.neo4j.password'),
-            'defalut' => config('database.defalut'),
-            'sanctum' => config('sanctum.stateful'),
-        ];
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return response()->json(new UserResource($request->user()), Response::HTTP_OK);
         }
 
-        return response()->json(['errors' => 'ユーザーが見つかりませんでした。','config' => $config], Response::HTTP_UNAUTHORIZED);
+        return response()->json(['errors' => 'ユーザーが見つかりませんでした。'], Response::HTTP_UNAUTHORIZED);
     }
 
     public function logout(Request $request)
