@@ -119,11 +119,11 @@ export default {
     cardShow() {
       return function (hypothesis) {
         if (this.hypothesisStatus.name === "ゴール") 
-          return hypothesis.depth === 0 ? this.existsCard() : false;
+          return hypothesis.depth === 1 ? this.existsCard() : false;
         if (this.hypothesisStatus.name === "今日の目標") 
           return hypothesis.todaysGoal ? this.existsCard() : false;  
         if (this.hypothesisStatus.name === "仮説") 
-          return hypothesis.depth !== 0 ? this.existsCard() : false ;
+          return hypothesis.depth !== 1 ? this.existsCard() : false ;
         if (this.hypothesisStatus.name === "完了") 
           return hypothesis.status ? this.existsCard() : false; 
         if (this.hypothesisStatus.name === "仮説詳細") 
@@ -147,9 +147,9 @@ export default {
     },
     parent() {
       return (hypothesis) => {
-        if (hypothesis.depth === 0) {
+        if (hypothesis.depth === 1) {
            return '「' + this.project.name + '」のゴール';
-        } else if (hypothesis.depth > 0)  {
+        } else if (hypothesis.depth > 1)  {
           let parentName;
           this.hypothesisList.map((value) => {
             if (hypothesis.parentUuid === value.uuid) parentName =  value.name;

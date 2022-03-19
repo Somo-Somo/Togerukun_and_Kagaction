@@ -49,10 +49,11 @@ class HypothesisRepository implements HypothesisRepositoryInterface
                             :TO_ACHIEVE{at:localdatetime({timezone: 'Asia/Tokyo'})}  
                         ]->(parent)
                 WITH project
-                MATCH  len = (project:Project) <- [*] - (parent:Hypothesis)
+                MATCH  len = (project:Project) <- [r*] - (parent:Hypothesis)
                 OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
                 OPTIONAL MATCH (:User)-[todaysGoal:SET_TODAYS_GOAL]->(parent)
-                RETURN project,parent,collect(child),length(len),todaysGoal
+                RETURN project,parent,r,collect(child),length(len),todaysGoal
+                ORDER BY r
                 CYPHER,
                 [
                     'name' => $hypothesis['name'], 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\UseCases\Hypothesis\IndexAction;
 use App\UseCases\Hypothesis\StoreAction;
 use App\UseCases\Hypothesis\UpdateAction;
 use App\UseCases\Hypothesis\DestroyAction;
@@ -15,18 +14,11 @@ class HypothesisController extends Controller
     /**
      * Display a listing of the resource.
      * 
-     * @param string $projectUuid
-     * @param  \App\UseCases\Hypothesis\IndexAction $indexAction
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index(string $projectUuid, Request $request, IndexAction $indexAction)
+    public function index()
     {
-        // ユースケースを実行し、レスポンスの元になるデータを受け取る
-        // $HypothesisList = $indexAction->invoke($projectUuid);
-        $HypothesisList = $indexAction->invoke($request->user()->email);
 
-        return response()->json($HypothesisList, Response::HTTP_OK);
     }
 
     /**
