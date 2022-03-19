@@ -88,9 +88,9 @@ export default {
   data: () => ({
     tab: null,
     hypothesisStatuses: [
+      {name : "仮説一覧", existsCard: false},
       {name : "ゴール", existsCard: false},
       {name : "今日の目標", existsCard: false}, 
-      {name : "仮説", existsCard: false},
       {name : "完了", existsCard: false}
     ],
     existsCard: false,

@@ -118,12 +118,12 @@ export default {
   computed : {
     cardShow() {
       return function (hypothesis) {
+        if (this.hypothesisStatus.name === "仮説一覧") 
+          return this.existsCard();
         if (this.hypothesisStatus.name === "ゴール") 
           return hypothesis.depth === 1 ? this.existsCard() : false;
         if (this.hypothesisStatus.name === "今日の目標") 
           return hypothesis.todaysGoal ? this.existsCard() : false;  
-        if (this.hypothesisStatus.name === "仮説") 
-          return hypothesis.depth !== 1 ? this.existsCard() : false ;
         if (this.hypothesisStatus.name === "完了") 
           return hypothesis.status ? this.existsCard() : false; 
         if (this.hypothesisStatus.name === "仮説詳細") 
