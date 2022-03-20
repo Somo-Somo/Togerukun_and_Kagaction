@@ -26,7 +26,7 @@ class HypothesisListConverter
             $projectUuid = $project['uuid'];
             $parent = $value['parent']->getProperties()->toArray();
             $childs = $value['collect(child)']->toArray();
-            $depth = $value['length(len)'];
+            $len = $value['length(len)'];
 
             if ($childs) {
                 // 子どもに親のデータを持たせて$hypothesisDataに格納。
@@ -37,8 +37,8 @@ class HypothesisListConverter
                     // 子仮説の親UUID
                     $child['parentUuid'] = $parent['uuid'];
 
-                    // プロジェクトからの仮説の階層の深さ
-                    $child['depth'] = $depth + 1;
+                    // ゴールからの仮説の階層の深さ
+                    $child['depth'] = $len;
 
                     // 仮説一覧のトグルの状態
                     $child['toggle'] = 'mdi-menu-right';
@@ -48,18 +48,18 @@ class HypothesisListConverter
             } else {
                 // 子仮説がない場合
                 // 仮説にnoChild: true を持たせる
-                $depth === 1 ? 
+                $len === 1 ? 
                 $parent['noChild'] = true : $hypothesisData[$parent['uuid']]['noChild'] = true;
             }
 
             
             // 仮説 = ゴールの場合
-            if ($depth === 1) {
+            if ($len === 1) {
                 // ゴールは親仮説がいないので親の親UUIDはプロジェクトUUID
                 $parent['parentUuid'] = $projectUuid;
 
-                // プロジェクトからの仮説の階層の深さ
-                $parent['depth'] = $depth;
+                // ゴールからの仮説の階層の深さ
+                $parent['depth'] = 0;
 
                 // 仮説一覧のトグルの状態
                 $parent['toggle'] = 'mdi-menu-right';

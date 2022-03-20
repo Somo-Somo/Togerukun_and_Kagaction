@@ -9,10 +9,10 @@
       :class="cardShow(hypothesis) ? '' : 'd-none'"
       >
       <div class="d-flex">
-        
       <div 
         v-if="hypothesisStatus.name === '仮説一覧'"
         class="d-flex">
+        <div :style="depth(hypothesis)"></div>
         <div v-if="hypothesis.noChild" style="width: 24px"></div>
         <div v-if="!hypothesis.noChild" class="d-flex align-content-center"> 
           <v-icon
@@ -136,11 +136,11 @@ export default {
     cardShow() {
       return function (hypothesis) {        
         if (this.hypothesisStatus.name === "ゴール") 
-          return hypothesis.depth === 1 ? this.showHypothesis() : false;
+          return hypothesis.depth === 0 ? this.showHypothesis() : false;
         
         if (this.hypothesisStatus.name === "仮説一覧") {
           if(hypothesis) this.hypothesisStatus.show = true;
-          if (hypothesis.depth === 1) hypothesis.showHypothesisList = true;
+          if (hypothesis.depth === 0) hypothesis.showHypothesisList = true;
           return hypothesis.showHypothesisList ? true : false;
         }
 
@@ -172,9 +172,9 @@ export default {
     },
     parent() {
       return (hypothesis) => {
-        if (hypothesis.depth === 1) {
+        if (hypothesis.depth === 0) {
            return '「' + this.project.name + '」のゴール';
-        } else if (hypothesis.depth > 1)  {
+        } else if (hypothesis.depth > 0)  {
           let parentName;
           this.hypothesisList.map((value) => {
             if (hypothesis.parentUuid === value.uuid) parentName =  value.name;
@@ -182,7 +182,12 @@ export default {
           return '「' + parentName + '」の仮説';
         }
       }
-    }, 
+    },
+    depth() {
+      return (hypothesis) => {
+        return 'padding-left:'+(Number(hypothesis.depth) * 8) + 'px'; 
+      }
+    } 
   },
   methods: {
     showHypothesis(){
