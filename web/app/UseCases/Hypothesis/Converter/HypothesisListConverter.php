@@ -28,9 +28,6 @@ class HypothesisListConverter
             $childs = $value['collect(child)']->toArray();
             $depth = $value['length(len)'];
 
-            // 今日の目標
-            if ($value['todaysGoal']) $parent['todaysGoal'] = true;
-
             if ($childs) {
                 // 子どもに親のデータを持たせて$hypothesisDataに格納。
                 // 親になった時にこのhypothesisDataからhypothesisList仮説一覧配列に格納する
@@ -42,6 +39,9 @@ class HypothesisListConverter
 
                     // プロジェクトからの仮説の階層の深さ
                     $child['depth'] = $depth + 1;
+
+                    // 仮説一覧のトグルの状態
+                    $child['toggle'] = 'mdi-menu-right';
                     
                     $hypothesisData[$child['uuid']] = $child;
                 }
@@ -61,10 +61,18 @@ class HypothesisListConverter
                 // プロジェクトからの仮説の階層の深さ
                 $parent['depth'] = $depth;
 
+                // 仮説一覧のトグルの状態
+                $parent['toggle'] = 'mdi-menu-right';
+
+                // 今日の目標
+                if ($value['todaysGoal']) $parent['todaysGoal'] = true;
+
                 // ゴールは常に配列のケツに追加
                 $hypothesisList[$projectUuid][] = $parent;
 
             } else {
+                // 今日の目標
+                if ($value['todaysGoal']) $hypothesisData[$parent['uuid']]['todaysGoal'] = true;
                 // $hypothesisDataから
                 $hypothesisList[$projectUuid][] = $hypothesisData[$parent['uuid']];
             }
