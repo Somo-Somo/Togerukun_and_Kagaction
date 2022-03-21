@@ -25,10 +25,10 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">ゴール</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">{{ subHeader }}</p>
             </v-subheader>
             <v-textarea
-              label="ゴールを入力"
+              label="subHeader + 'を入力'"
               v-model="hypothesis.name"
               @change="edit"
               class="pa-0 text-h5"
@@ -191,6 +191,9 @@ export default {
         if(this.todaysGoal === undefined) this.todaysGoal = getterHypothesis.todaysGoal;
         return getterHypothesis;
     },
+    subHeader() {
+      return this.hypothesis.depth === 0 ? 'ゴール' : '課題';
+    }
   },
   methods: {
     onClickStatus (btn){
