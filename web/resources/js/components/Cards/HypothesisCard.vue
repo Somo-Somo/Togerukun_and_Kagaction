@@ -10,7 +10,7 @@
       >
       <div class="d-flex">
       <div 
-        v-if="hypothesisStatus.name === '仮説一覧'"
+        v-if="hypothesisStatus.name === '課題一覧'"
         class="d-flex">
         <div :style="depth(hypothesis)"></div>
         <div v-if="hypothesis.noChild" style="width: 24px"></div>
@@ -138,19 +138,19 @@ export default {
         if (this.hypothesisStatus.name === "ゴール") 
           return hypothesis.depth === 0 ? this.showHypothesis() : false;
         
-        if (this.hypothesisStatus.name === "仮説一覧") {
+        if (this.hypothesisStatus.name === "課題一覧") {
           if(hypothesis) this.hypothesisStatus.show = true;
           if (hypothesis.depth === 0) hypothesis.showHypothesisList = true;
           return hypothesis.showHypothesisList ? true : false;
         }
 
-        if (this.hypothesisStatus.name === "今日の目標") 
+        if (this.hypothesisStatus.name === "現在の目標") 
           return hypothesis.todaysGoal ? this.showHypothesis() : false; 
 
         if (this.hypothesisStatus.name === "完了") 
           return hypothesis.status ? this.showHypothesis() : false; 
 
-        if (this.hypothesisStatus.name === "仮説詳細") 
+        if (this.hypothesisStatus.name === "課題") 
           return this.selectHypothesis.uuid === hypothesis.parentUuid ? this.showHypothesis() : false;
 
         return false;
@@ -159,7 +159,7 @@ export default {
     showStatus() {
       return (hypothesis) => {
         if (hypothesis.todaysGoal) {
-          return {title: '今日の目標', color:'blue'};
+          return {title: '現在の目標', color:'blue'};
         } else if (hypothesis.limit) {
           return {title: hypothesis.limit, color: 'purple'};
         } else if (hypothesis.status) {
@@ -179,7 +179,7 @@ export default {
           this.hypothesisList.map((value) => {
             if (hypothesis.parentUuid === value.uuid) parentName =  value.name;
           })
-          return '「' + parentName + '」の仮説';
+          return '「' + parentName + '」の課題';
         }
       }
     },
@@ -201,7 +201,7 @@ export default {
     selectMenu(menuTitle, hypothesis){
       if (menuTitle === "ゴールにする") {
         
-      } else if (menuTitle === "今日の目標にする") {
+      } else if (menuTitle === "現在の目標にする") {
         
       } else if (menuTitle === "削除") {
         this.deletingConfirmationDialog = true;

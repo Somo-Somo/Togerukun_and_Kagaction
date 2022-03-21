@@ -25,10 +25,10 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">ゴール</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">{{ subHeader }}</p>
             </v-subheader>
             <v-textarea
-              label="ゴールを入力"
+              label="subHeader + 'を入力'"
               v-model="hypothesis.name"
               @change="edit"
               class="pa-0 text-h5"
@@ -93,7 +93,7 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">今日の目標:</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">現在の目標:</p>
             </v-subheader>
             <v-col class="px-4 px-md-6 d-flex align-self-center">
               <v-checkbox
@@ -112,7 +112,7 @@
                     : 'spHypothesisSubTitle'
                 "
               >
-                <p class="ma-0 font-weight-bold" color="grey darken-1">仮説</p>
+                <p class="ma-0 font-weight-bold" color="grey darken-1">「{{hypothesis.name}}」の課題</p>
               </v-subheader>
               <v-icon
                 class="hidden-sm-and-down my-3"
@@ -134,7 +134,7 @@
               <!-- PC版追加カード -->
               <NewAdditionalCard 
                @clickAditional="onClickCreate" 
-               :category="hypothesisStatus.name"/>
+               :category="additionalInputFormLabel"/>
             </div>
           </div>
         </div>
@@ -145,7 +145,7 @@
         <InputForm
           @onClickCancel="onClickCancel"
           @submitForm="submitForm"
-          :category="hypothesisStatus.name"
+          :category="additionalInputFormLabel"
           :inputForm="inputForm"
         />
       </form>
@@ -169,8 +169,8 @@ export default {
     InputForm,
   },
   data: () => ({
-    hypothesisStatus: {name: "仮説詳細", show: false },
-    page: "仮説",
+    hypothesisStatus: {name: "課題", show: false },
+    page: "課題",
     result: undefined,
     todaysGoal: undefined,
   }),
@@ -191,6 +191,12 @@ export default {
         if(this.todaysGoal === undefined) this.todaysGoal = getterHypothesis.todaysGoal;
         return getterHypothesis;
     },
+    subHeader() {
+      return this.hypothesis.depth === 0 ? 'ゴール' : '課題';
+    },
+    additionalInputFormLabel(){
+      return '「' +this.hypothesis.name + '」の課題';
+    }
   },
   methods: {
     onClickStatus (btn){
