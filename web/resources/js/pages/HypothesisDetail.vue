@@ -112,7 +112,7 @@
                     : 'spHypothesisSubTitle'
                 "
               >
-                <p class="ma-0 font-weight-bold" color="grey darken-1">課題</p>
+                <p class="ma-0 font-weight-bold" color="grey darken-1">「{{hypothesis.name}}」の課題</p>
               </v-subheader>
               <v-icon
                 class="hidden-sm-and-down my-3"
