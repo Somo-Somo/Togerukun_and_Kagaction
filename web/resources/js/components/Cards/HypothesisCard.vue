@@ -150,7 +150,7 @@ export default {
         if (this.hypothesisStatus.name === "完了") 
           return hypothesis.status ? this.showHypothesis() : false; 
 
-        if (this.hypothesisStatus.name === "課題詳細") 
+        if (this.hypothesisStatus.name === "課題") 
           return this.selectHypothesis.uuid === hypothesis.parentUuid ? this.showHypothesis() : false;
 
         return false;

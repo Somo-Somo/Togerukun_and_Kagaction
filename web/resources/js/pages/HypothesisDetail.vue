@@ -134,7 +134,7 @@
               <!-- PC版追加カード -->
               <NewAdditionalCard 
                @clickAditional="onClickCreate" 
-               :category="hypothesisStatus.name"/>
+               :category="additionalInputFormLabel"/>
             </div>
           </div>
         </div>
@@ -145,7 +145,7 @@
         <InputForm
           @onClickCancel="onClickCancel"
           @submitForm="submitForm"
-          :category="hypothesisStatus.name"
+          :category="additionalInputFormLabel"
           :inputForm="inputForm"
         />
       </form>
@@ -169,7 +169,7 @@ export default {
     InputForm,
   },
   data: () => ({
-    hypothesisStatus: {name: "課題詳細", show: false },
+    hypothesisStatus: {name: "課題", show: false },
     page: "課題",
     result: undefined,
     todaysGoal: undefined,
@@ -193,6 +193,9 @@ export default {
     },
     subHeader() {
       return this.hypothesis.depth === 0 ? 'ゴール' : '課題';
+    },
+    additionalInputFormLabel(){
+      return '「' +this.hypothesis.name + '」の課題';
     }
   },
   methods: {
