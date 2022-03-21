@@ -82,29 +82,35 @@
 
             <div class="my-4" v-if="!isLoginForm">
               <span>すでにアカウントをお持ちですか？</span>
-              <p
+              <v-btn
+                class="my-2"
                 @click="
                   isLoginForm = true;
                   email = '';
                   password = '';
                   clearError()
+                  text
+                  small
                 "
               >
                 ログインに移動
-              </p>
+              </v-btn>
             </div>
-            <div class="pt-8 pb-4" v-if="isLoginForm">
+            <div class="my-4" v-if="isLoginForm">
               <span>アカウントをお持ちでない方はこちらへ</span>
-              <p
+              <v-btn
+                class="my-2"
                 @click="
                   isLoginForm = false;
                   email = '';
                   password = '';
                   clearError()
+                  text
+                  small
                 "
               >
                 会員登録に移動
-              </p>
+              </v-btn>
             </div>
           </div>
         </div>
