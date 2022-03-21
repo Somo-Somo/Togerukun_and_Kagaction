@@ -56,7 +56,7 @@
         <SpBottomBtn 
         @clickAditional="onClickCreate" 
         :tab="tab" 
-        :headerTitle="'仮説一覧'" />
+        :headerTitle="'課題一覧'" />
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
@@ -89,7 +89,7 @@ export default {
     tab: null,
     hypothesisStatuses: [
       {name : "ゴール", show: false},
-      {name : "仮説一覧", show: false},
+      {name : "課題一覧", show: false},
       {name : "現在の目標", show: false}, 
       {name : "完了", show: false}
     ],

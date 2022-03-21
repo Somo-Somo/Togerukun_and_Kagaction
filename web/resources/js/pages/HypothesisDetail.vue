@@ -112,7 +112,7 @@
                     : 'spHypothesisSubTitle'
                 "
               >
-                <p class="ma-0 font-weight-bold" color="grey darken-1">仮説</p>
+                <p class="ma-0 font-weight-bold" color="grey darken-1">課題</p>
               </v-subheader>
               <v-icon
                 class="hidden-sm-and-down my-3"
@@ -169,8 +169,8 @@ export default {
     InputForm,
   },
   data: () => ({
-    hypothesisStatus: {name: "仮説詳細", show: false },
-    page: "仮説",
+    hypothesisStatus: {name: "課題詳細", show: false },
+    page: "課題",
     result: undefined,
     todaysGoal: undefined,
   }),
