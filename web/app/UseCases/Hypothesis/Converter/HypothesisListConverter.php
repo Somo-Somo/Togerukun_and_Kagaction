@@ -26,39 +26,55 @@ class HypothesisListConverter
             $projectUuid = $project['uuid'];
             $parent = $value['parent']->getProperties()->toArray();
             $childs = $value['collect(child)']->toArray();
-            $depth = $value['length(len)'];
+            $len = $value['length(len)'];
 
-            // 今日の目標
-            if ($value['todaysGoal']) $parent['todaysGoal'] = true;
+            if ($childs) {
+                // 子どもに親のデータを持たせて$hypothesisDataに格納。
+                // 親になった時にこのhypothesisDataからhypothesisList仮説一覧配列に格納する
+                foreach ($childs as $childValue) {
+                    $child = $childValue->getProperties()->toArray();
+
+                    // 子仮説の親UUID
+                    $child['parentUuid'] = $parent['uuid'];
+
+                    // ゴールからの仮説の階層の深さ
+                    $child['depth'] = $len;
+
+                    // 仮説一覧のトグルの状態
+                    $child['toggle'] = 'mdi-menu-right';
+                    
+                    $hypothesisData[$child['uuid']] = $child;
+                }
+            } else {
+                // 子仮説がない場合
+                // 仮説にnoChild: true を持たせる
+                $len === 1 ? 
+                $parent['noChild'] = true : $hypothesisData[$parent['uuid']]['noChild'] = true;
+            }
+
             
-            // もし仮説一覧に親のUUIDがない場合（親仮説=ゴールの場合のみ）
-            if ($depth === 1) {
+            // 仮説 = ゴールの場合
+            if ($len === 1) {
                 // ゴールは親仮説がいないので親の親UUIDはプロジェクトUUID
                 $parent['parentUuid'] = $projectUuid;
 
-                // プロジェクトからの仮説の階層の深さ
-                $parent['depth'] = $depth;
+                // ゴールからの仮説の階層の深さ
+                $parent['depth'] = 0;
+
+                // 仮説一覧のトグルの状態
+                $parent['toggle'] = 'mdi-menu-right';
+
+                // 今日の目標
+                if ($value['todaysGoal']) $parent['todaysGoal'] = true;
 
                 // ゴールは常に配列のケツに追加
                 $hypothesisList[$projectUuid][] = $parent;
 
             } else {
+                // 今日の目標
+                if ($value['todaysGoal']) $hypothesisData[$parent['uuid']]['todaysGoal'] = true;
                 // $hypothesisDataから
                 $hypothesisList[$projectUuid][] = $hypothesisData[$parent['uuid']];
-            }
-
-            // 子どもに親のデータを持たせて$hypothesisDataに格納。
-            // 親になった時にこのhypothesisDataからhypothesisList仮説一覧配列に格納する
-            foreach ($childs as $childValue) {
-                $child = $childValue->getProperties()->toArray();
-
-                // 子仮説の親UUID
-                $child['parentUuid'] = $parent['uuid'];
-
-                // プロジェクトからの仮説の階層の深さ
-                $child['depth'] = $depth + 1;
-                
-                $hypothesisData[$child['uuid']] = $child;
             }
         }
         

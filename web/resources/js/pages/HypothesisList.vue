@@ -88,12 +88,12 @@ export default {
   data: () => ({
     tab: null,
     hypothesisStatuses: [
-      {name : "ゴール", existsCard: false},
-      {name : "今日の目標", existsCard: false}, 
-      {name : "仮説", existsCard: false},
-      {name : "完了", existsCard: false}
+      {name : "ゴール", show: false},
+      {name : "仮説一覧", show: false},
+      {name : "今日の目標", show: false}, 
+      {name : "完了", show: false}
     ],
-    existsCard: false,
+    show: false,
   }),
   computed: {
     ...mapState({

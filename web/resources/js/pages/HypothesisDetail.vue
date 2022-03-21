@@ -169,7 +169,7 @@ export default {
     InputForm,
   },
   data: () => ({
-    hypothesisStatus: {name: "仮説詳細", existsCard: false },
+    hypothesisStatus: {name: "仮説詳細", show: false },
     page: "仮説",
     result: undefined,
     todaysGoal: undefined,
