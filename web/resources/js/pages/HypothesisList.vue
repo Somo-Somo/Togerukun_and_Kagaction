@@ -90,7 +90,7 @@ export default {
     hypothesisStatuses: [
       {name : "ゴール", show: false},
       {name : "仮説一覧", show: false},
-      {name : "今日の目標", show: false}, 
+      {name : "現在の目標", show: false}, 
       {name : "完了", show: false}
     ],
     show: false,

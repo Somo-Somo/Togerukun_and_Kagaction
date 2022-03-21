@@ -144,7 +144,7 @@ export default {
           return hypothesis.showHypothesisList ? true : false;
         }
 
-        if (this.hypothesisStatus.name === "今日の目標") 
+        if (this.hypothesisStatus.name === "現在の目標") 
           return hypothesis.todaysGoal ? this.showHypothesis() : false; 
 
         if (this.hypothesisStatus.name === "完了") 
@@ -159,7 +159,7 @@ export default {
     showStatus() {
       return (hypothesis) => {
         if (hypothesis.todaysGoal) {
-          return {title: '今日の目標', color:'blue'};
+          return {title: '現在の目標', color:'blue'};
         } else if (hypothesis.limit) {
           return {title: hypothesis.limit, color: 'purple'};
         } else if (hypothesis.status) {
@@ -201,7 +201,7 @@ export default {
     selectMenu(menuTitle, hypothesis){
       if (menuTitle === "ゴールにする") {
         
-      } else if (menuTitle === "今日の目標にする") {
+      } else if (menuTitle === "現在の目標にする") {
         
       } else if (menuTitle === "削除") {
         this.deletingConfirmationDialog = true;
