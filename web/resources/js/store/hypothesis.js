@@ -91,7 +91,7 @@ const actions = {
         }
 
         if (response.status === CREATED) {
-            response.data.goal.depth = 1;
+            response.data.goal.depth = 0;
             context.commit ('setHypothesis', response.data.goal);
             context.commit ('addGoal', response.data);
             return response.data;
