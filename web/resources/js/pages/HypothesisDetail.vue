@@ -112,7 +112,7 @@
                     : 'spHypothesisSubTitle'
                 "
               >
-                <p class="ma-0 font-weight-bold" color="grey darken-1">「{{hypothesis.name}}」の課題</p>
+                <p class="ma-0 font-weight-bold" color="grey darken-1">「{{hypothesis.name}}」の仮説</p>
               </v-subheader>
               <v-icon
                 class="hidden-sm-and-down my-3"
@@ -169,8 +169,8 @@ export default {
     InputForm,
   },
   data: () => ({
-    hypothesisStatus: {name: "課題", show: false },
-    page: "課題",
+    hypothesisStatus: {name: "仮説", show: false },
+    page: "仮説",
     result: undefined,
     todaysGoal: undefined,
   }),
@@ -192,10 +192,10 @@ export default {
         return getterHypothesis;
     },
     subHeader() {
-      return this.hypothesis.depth === 0 ? 'ゴール' : '課題';
+      return this.hypothesis.depth === 0 ? 'ゴール' : '仮説';
     },
     additionalInputFormLabel(){
-      return '「' +this.hypothesis.name + '」の課題';
+      return '「' +this.hypothesis.name + '」の仮説';
     }
   },
   methods: {

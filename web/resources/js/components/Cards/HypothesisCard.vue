@@ -10,7 +10,7 @@
       >
       <div class="d-flex">
       <div 
-        v-if="hypothesisStatus.name === '課題一覧'"
+        v-if="hypothesisStatus.name === '仮説一覧'"
         class="d-flex">
         <div :style="depth(hypothesis)"></div>
         <div v-if="hypothesis.noChild" style="width: 24px"></div>
@@ -138,7 +138,7 @@ export default {
         if (this.hypothesisStatus.name === "ゴール") 
           return hypothesis.depth === 0 ? this.showHypothesis() : false;
         
-        if (this.hypothesisStatus.name === "課題一覧") {
+        if (this.hypothesisStatus.name === "仮説一覧") {
           if(hypothesis) this.hypothesisStatus.show = true;
           if (hypothesis.depth === 0) hypothesis.showHypothesisList = true;
           return hypothesis.showHypothesisList ? true : false;
@@ -150,7 +150,7 @@ export default {
         if (this.hypothesisStatus.name === "完了") 
           return hypothesis.status ? this.showHypothesis() : false; 
 
-        if (this.hypothesisStatus.name === "課題") 
+        if (this.hypothesisStatus.name === "仮説") 
           return this.selectHypothesis.uuid === hypothesis.parentUuid ? this.showHypothesis() : false;
 
         return false;
@@ -179,7 +179,7 @@ export default {
           this.hypothesisList.map((value) => {
             if (hypothesis.parentUuid === value.uuid) parentName =  value.name;
           })
-          return '「' + parentName + '」の課題';
+          return '「' + parentName + '」の仮説';
         }
       }
     },
