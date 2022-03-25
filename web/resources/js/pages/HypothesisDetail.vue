@@ -54,7 +54,7 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">結果:</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">結果：</p>
             </v-subheader>
             <v-col class="px-4 px-md-6 d-flex align-self-center">
               <v-btn
@@ -93,7 +93,7 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">現在の目標:</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">現在の目標：</p>
             </v-subheader>
             <v-col class="px-4 px-md-6 d-flex align-self-center">
               <v-checkbox
@@ -112,7 +112,10 @@
                     : 'spHypothesisSubTitle'
                 "
               >
-                <p class="ma-0 font-weight-bold" color="grey darken-1">「{{hypothesis.name}}」の課題</p>
+                <p class="ma-0 font-weight-bold align-self-center" color="grey darken-1">仮説：</p>
+                <p class="ma-0 font-weight-black caption align-self-center" color="grey lighten-1">
+                  「{{hypothesis.name}}」を達成するためには？
+                </p>
               </v-subheader>
               <v-icon
                 class="hidden-sm-and-down my-3"
@@ -169,8 +172,8 @@ export default {
     InputForm,
   },
   data: () => ({
-    hypothesisStatus: {name: "課題", show: false },
-    page: "課題",
+    hypothesisStatus: {name: "仮説", show: false },
+    page: "仮説",
     result: undefined,
     todaysGoal: undefined,
   }),
@@ -192,10 +195,10 @@ export default {
         return getterHypothesis;
     },
     subHeader() {
-      return this.hypothesis.depth === 0 ? 'ゴール' : '課題';
+      return this.hypothesis.depth === 0 ? 'ゴール' : '仮説';
     },
     additionalInputFormLabel(){
-      return '「' +this.hypothesis.name + '」の課題';
+      return '「' +this.hypothesis.name + '」の仮説';
     }
   },
   methods: {
