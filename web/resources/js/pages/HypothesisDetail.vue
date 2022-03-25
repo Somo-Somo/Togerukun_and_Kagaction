@@ -54,7 +54,7 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">結果:</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">結果：</p>
             </v-subheader>
             <v-col class="px-4 px-md-6 d-flex align-self-center">
               <v-btn
@@ -93,7 +93,7 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">現在の目標:</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">現在の目標：</p>
             </v-subheader>
             <v-col class="px-4 px-md-6 d-flex align-self-center">
               <v-checkbox
