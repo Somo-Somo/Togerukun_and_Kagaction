@@ -112,7 +112,10 @@
                     : 'spHypothesisSubTitle'
                 "
               >
-                <p class="ma-0 font-weight-bold" color="grey darken-1">「{{hypothesis.name}}」の仮説</p>
+                <p class="ma-0 font-weight-bold align-self-center" color="grey darken-1">仮説：</p>
+                <p class="ma-0 font-weight-black caption align-self-center" color="grey lighten-1">
+                  「{{hypothesis.name}}」を達成するためには？
+                </p>
               </v-subheader>
               <v-icon
                 class="hidden-sm-and-down my-3"
