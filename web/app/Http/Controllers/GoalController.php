@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\UseCases\Goal\StoreAction;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
 
 class GoalController extends Controller
@@ -29,18 +28,15 @@ class GoalController extends Controller
     {
         $goal = [
             'name' => $request->name,
-            'uuid' => (string) Str::uuid(),
-            'parent_uuid' => $request->project['uuid'],
+            'uuid' => $request->uuid,
+            'parent_uuid' => $request->parentUuid,
             'created_by_user_email' => $request->user()->email,
         ];
 
         $storeAction->invoke($goal);
 
        // 本当はResourcesにかきたいけど
-       unset($goal['created_by_user_email']);
        $json = [
-            'project' => $request->project,
-            'goal' => $goal,
             'message' => 'ゴールが追加されました',
             'error' => '',
         ];

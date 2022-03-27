@@ -1,4 +1,5 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
+import { v4 as uuidv4 } from 'uuid';
 
 const state = {
     hypothesis: null,
@@ -47,7 +48,7 @@ const mutations = {
     },
 
     addGoal (state, data) {
-        state.hypothesisList.push(data.goal);
+        state.hypothesisList.push(data);
     },
 
     updateHypothesisName (state, data) {
@@ -92,9 +93,15 @@ const actions = {
 
     async createGoal (context, {project, hypothesisName}){
         const goal = {
-            project: project,
-            name : hypothesisName
+            name : hypothesisName,
+            uuid: uuidv4(),
+            parentUuid: project.uuid,
+            depth: 0,
         };
+
+        context.commit ('setHypothesis', goal);
+        context.commit ('addGoal', goal);
+
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.post('/api/goal', goal);
 
@@ -103,12 +110,7 @@ const actions = {
             // context.commit ('setRegisterErrorMessages', response.data.errors);
         }
 
-        if (response.status === CREATED) {
-            response.data.goal.depth = 0;
-            context.commit ('setHypothesis', response.data.goal);
-            context.commit ('addGoal', response.data);
-            return response.data;
-        } else {
+        if (response.status !== CREATED) {
             context.commit ('error/setCode', response.status, {root: true});
             return false;
         }
