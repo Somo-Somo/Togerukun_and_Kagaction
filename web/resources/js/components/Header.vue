@@ -32,11 +32,13 @@
         <h1 style="font-size: 20px">プロジェクト一覧</h1>
       </div>
       <div v-if="project" class="d-flex align-self-center">
-        <h1 
-          style="font-size: 20px" 
-          class="px-2"
-          link
-        >{{ project.name }}</h1>
+        <v-btn 
+          class="px-2" 
+          @click="onClickHeaderTitle('project', project)" 
+          text
+        >
+          <h1 style="font-size: 20px">{{ project.name }}</h1>
+        </v-btn>
       </div>
       <div v-if="hypothesis" class="d-flex align-self-center">
         <h1 v-if="hypothesis.depth > 1" style="font-size: 20px">/</h1>
@@ -44,19 +46,23 @@
       </div>
       <div v-if="parentHypothesis" class="d-flex align-self-center"> 
         <h1 style="font-size: 20px"> / </h1>
-        <h1 
-          style="font-size: 20px" 
-          class="px-2"
-          link
-        > {{ parentHypothesis.name }} </h1>
+        <v-btn 
+          class="px-2" 
+          @click="onClickHeaderTitle('hypothesis', parentHypothesis)" 
+          text
+        >
+          <h1 style="font-size: 20px" >{{ parentHypothesis.name }}</h1>
+        </v-btn>
       </div>
       <div v-if="hypothesis" class="d-flex align-self-center" >
         <h1 style="font-size: 20px"> / </h1>
-        <h1 
-          style="font-size: 20px" 
-          class="px-2"
-          link  
-        > {{ hypothesis.name }} </h1>
+        <v-btn 
+          class="px-2" 
+          @click="onClickHeaderTitle('hypothesis', hypothesis)" 
+          text
+        >
+          <h1 style="font-size: 20px" > {{ hypothesis.name }} </h1>
+        </v-btn>
       </div>
     </v-toolbar-title>
   </v-app-bar>
@@ -94,6 +100,15 @@ export default {
         this.$router.back();
       }
     },
+    async onClickHeaderTitle(key, value){
+      if (key === 'project') {
+        await this.$store.dispatch("project/selectProject", value);
+        this.$router.push({ path: "/project/" + value.uuid });
+      } else if (key === 'hypothesis') {
+        await this.$store.dispatch("hypothesis/selectHypothesis", value);
+        this.$router.push({ path: "/hypothesis/" + value.uuid });
+      }
+    }
   },
 };
 </script>
