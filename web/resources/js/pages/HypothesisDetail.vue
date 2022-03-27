@@ -1,6 +1,6 @@
 <template>
   <v-container
-    class="d-flex flex-column py-6 my-md-2 px-md-16"
+    class="d-flex flex-column py-0 my-md-2 px-md-16"
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
