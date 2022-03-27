@@ -2,12 +2,14 @@ import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
 
 const state = {
     hypothesis: null,
+    parentHypothesis: null,
     hypothesisList: [],
     allHypothesisList: null,
 };
 
 const getters = {
     hypothesis: state => (state.hypothesis.name && state.hypothesis.uuid) ? state.hypothesis: null,
+    parentHypothesis: state => state.parentHypothesis ? state.parentHypothesis: null,
     hypothesisList: state => state.hypothesisList ? state.hypothesisList : null,
 };
 
@@ -18,6 +20,16 @@ const mutations = {
 
     setHypothesis (state, hypothesis) {
         state.hypothesis = hypothesis;
+    },
+
+    setParentHypothesis (state, hypothesis) {
+        state.parentHypothesis = null;
+        const hypothesisList = state.hypothesisList
+        for (const [key, value] of Object.entries(hypothesisList)) {
+            if(value.uuid === hypothesis.parentUuid){
+                state.parentHypothesis = value;
+            }
+        }
     },
 
     selectHypothesisList (state, projectUuid) {
@@ -75,6 +87,7 @@ const actions = {
 
     selectHypothesis (context, hypothesis) {
         context.commit ('setHypothesis', hypothesis);
+        context.commit ('setParentHypothesis', hypothesis);
     },
 
     async createGoal (context, {project, hypothesisName}){

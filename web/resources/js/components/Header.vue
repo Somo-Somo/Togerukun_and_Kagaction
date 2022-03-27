@@ -12,22 +12,45 @@
       class="mt-3 hidden-sm-and-down"
     ></v-app-bar-nav-icon>
     <v-toolbar-title class="d-flex justify-start mt-3 px-0 ml-md-2">
-      <v-btn
-        class="d-flex align-self-center"
-        v-if="thisPageParamsId"
-        @click="toBack()"
-        small
-        icon
-        link
+      <div 
+        v-if="!project && !hypothesis && !parentHypothesis"
+        class="d-flex align-self-center px-1"
       >
-        <v-icon
-          class="px-2"
-          >mdi-chevron-left</v-icon
+        <h1 style="font-size: 20px">プロジェクト一覧</h1>
+      </div>
+      <div v-if="project" class="d-flex align-self-center">
+        <v-btn 
+          class="px-2" 
+          @click="onClickHeaderTitle('project', project)" 
+          text
         >
-      </v-btn>
-      <h1 class="px-2 d-flex align-self-center" style="font-size: 24px">
-        {{ headerTitle }}
-      </h1>
+          <h1 style="font-size: 20px">{{ project.name }}</h1>
+        </v-btn>
+      </div>
+      <div v-if="hypothesis" class="d-flex align-self-center">
+        <h1 v-if="hypothesis.depth > 1" style="font-size: 20px">/</h1>
+        <h1 v-if="hypothesis.depth > 1" style="font-size: 20px" class="px-2">...</h1>
+      </div>
+      <div v-if="parentHypothesis" class="d-flex align-self-center"> 
+        <h1 style="font-size: 20px"> / </h1>
+        <v-btn 
+          class="px-2" 
+          @click="onClickHeaderTitle('hypothesis', parentHypothesis)" 
+          text
+        >
+          <h1 style="font-size: 20px" >{{ parentHypothesis.name }}</h1>
+        </v-btn>
+      </div>
+      <div v-if="hypothesis" class="d-flex align-self-center" >
+        <h1 style="font-size: 20px"> / </h1>
+        <v-btn 
+          class="px-2" 
+          @click="onClickHeaderTitle('hypothesis', hypothesis)" 
+          text
+        >
+          <h1 style="font-size: 20px" > {{ hypothesis.name }} </h1>
+        </v-btn>
+      </div>
     </v-toolbar-title>
   </v-app-bar>
 </template> 
@@ -35,32 +58,36 @@
 <script>
 export default {
   props: {
-    headerTitle: {
-      type: String,
-    },
-    parent: {
+    project: {
       type: Object,
-    }
+    },
+    hypothesis: {
+      type: Object,
+    },
+    parentHypothesis: {
+      type: Object,
+    },
   },
   computed: {
     navigation() {
       return this.$store.getters['navigation/navigation'];
     },
-    thisPageParamsId() {
-      return this.$route.params.id;
-    }
   },
   methods: {
     clickHumburgerMenu() {
       this.$store.dispatch("navigation/changeNavState");
     },
-    toBack (headerTitle) {
-      if (this.$route.name === "hypothesisList") {
-        this.$router.push({ path: "/projects" });
-      } else if (this.$route.name === "hypothesisDetail") {
-        this.$router.back();
+    async onClickHeaderTitle(key, value){
+      if (this.$route.params.id !== value.uuid) {
+        if (key === 'project') {
+          await this.$store.dispatch("project/selectProject", value);
+          this.$router.push({ path: "/project/" + value.uuid });
+        } else if (key === 'hypothesis') {
+          await this.$store.dispatch("hypothesis/selectHypothesis", value);
+          this.$router.push({ path: "/hypothesis/" + value.uuid });
+        }        
       }
-    },
+    }
   },
 };
 </script>

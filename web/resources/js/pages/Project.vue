@@ -4,7 +4,7 @@
     style="max-width: 900px"
     fluid
   >
-  <Header :headerTitle="category"/>
+  <Header/>
       <template>
         <div
           class="d-flex justify-space-between"

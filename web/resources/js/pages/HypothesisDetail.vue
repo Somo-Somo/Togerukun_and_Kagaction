@@ -1,10 +1,14 @@
 <template>
   <v-container
-    class="d-flex flex-column py-6 my-md-2 px-md-16"
+    class="d-flex flex-column py-0 my-md-2 px-md-16"
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
-     <Header :headerTitle="hypothesis.name"/>
+     <Header 
+      :project="project"
+      :hypothesis="hypothesis"
+      :parentHypothesis="parentHypothesis"
+      />
       <template>
         <div
           class="d-flex flex-column"
@@ -179,13 +183,13 @@ export default {
   }),
   computed : {
     ...mapState({
-      hypothesis: (state) => state.hypothesis.hypothesis,
       apiStatus: (state) => state.auth.apiStatus,
     }),
    ...mapGetters({
       inputFormName: 'form/name',
       inputForm: 'form/inputForm',
       project: 'project/project',
+      parentHypothesis: 'hypothesis/parentHypothesis',
       hypothesisList: 'hypothesis/hypothesisList',
     }),
     hypothesis() {
@@ -238,7 +242,7 @@ export default {
     },
     edit(){
         this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
-    }
+    },
   },
 };
 </script>
