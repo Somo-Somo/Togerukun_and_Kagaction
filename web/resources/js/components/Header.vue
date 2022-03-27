@@ -48,7 +48,7 @@
         <h1 style="font-size: 20px"> / </h1>
         <v-btn 
           class="px-2" 
-          @click="onClickHeaderTitle('hypothesis', parentHypothesis)" 
+          @click="onClickHeaderTitle('parentHypothesis', parentHypothesis)" 
           text
         >
           <h1 style="font-size: 20px" >{{ parentHypothesis.name }}</h1>
@@ -104,7 +104,7 @@ export default {
       if (key === 'project') {
         await this.$store.dispatch("project/selectProject", value);
         this.$router.push({ path: "/project/" + value.uuid });
-      } else if (key === 'hypothesis') {
+      } else if (key === 'parentHypothesis') {
         await this.$store.dispatch("hypothesis/selectHypothesis", value);
         this.$router.push({ path: "/hypothesis/" + value.uuid });
       }
