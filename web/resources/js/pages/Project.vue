@@ -4,7 +4,7 @@
     style="max-width: 900px"
     fluid
   >
-  <Header/>
+  <Header :headerTitle="'プロジェクト一覧'"/>
       <template>
         <div
           class="d-flex justify-space-between"

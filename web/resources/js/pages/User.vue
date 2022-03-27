@@ -4,7 +4,7 @@
         style="max-width: 900px"
         fluid
     >
-        <Header :headerTitle="category" />
+        <Header :headerTitle="'ユーザー'" />
         <div>
             <v-row class="d-flex justify-start ma-2">
                 <div class="ma-2 align-self-center">
@@ -54,7 +54,6 @@ export default {
         Header,
     },
     data: () => ({
-        category: "ユーザー",
         items: [
             {
                 icon: "mdi-help-circle-outline",

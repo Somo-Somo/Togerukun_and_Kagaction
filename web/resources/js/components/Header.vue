@@ -16,7 +16,7 @@
         v-if="!project && !hypothesis && !parentHypothesis"
         class="d-flex align-self-center px-1"
       >
-        <h1 style="font-size: 20px">プロジェクト一覧</h1>
+        <h1 style="font-size: 20px">{{ headerTitle }}</h1>
       </div>
       <div v-if="project" class="d-flex align-self-center">
         <v-btn 
@@ -58,6 +58,9 @@
 <script>
 export default {
   props: {
+    headerTitle: {
+      type: String,
+    },
     project: {
       type: Object,
     },
