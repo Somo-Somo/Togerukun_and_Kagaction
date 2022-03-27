@@ -15,7 +15,7 @@
       <v-btn
         class="d-flex align-self-center"
         v-if="thisPageParamsId"
-        @click="toBack()"
+        @click="isBack()"
         small
         icon
         link
@@ -40,6 +40,9 @@ export default {
     },
     parent: {
       type: Object,
+    },
+    hypothesis: {
+      type: Object,
     }
   },
   computed: {
@@ -54,7 +57,7 @@ export default {
     clickHumburgerMenu() {
       this.$store.dispatch("navigation/changeNavState");
     },
-    toBack (headerTitle) {
+    isBack (headerTitle) {
       if (this.$route.name === "hypothesisList") {
         this.$router.push({ path: "/projects" });
       } else if (this.$route.name === "hypothesisDetail") {

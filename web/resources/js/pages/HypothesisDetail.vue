@@ -4,7 +4,10 @@
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
-     <Header :headerTitle="hypothesis.name"/>
+     <Header 
+      :headerTitle="hypothesis.name" 
+      :hypothesis="hypothesis"
+      />
       <template>
         <div
           class="d-flex flex-column"
@@ -179,7 +182,6 @@ export default {
   }),
   computed : {
     ...mapState({
-      hypothesis: (state) => state.hypothesis.hypothesis,
       apiStatus: (state) => state.auth.apiStatus,
     }),
    ...mapGetters({
@@ -238,7 +240,7 @@ export default {
     },
     edit(){
         this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
-    }
+    },
   },
 };
 </script>
