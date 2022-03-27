@@ -25,8 +25,36 @@
           >mdi-chevron-left</v-icon
         >
       </v-btn>
-      <h1 class="px-2 d-flex align-self-center" style="font-size: 24px">
-        {{ headerTitle }}
+      <h1 
+        class="px-2 d-flex align-self-center" 
+        style="font-size: 24px"
+        v-if="!project && !hypothesis && !parentHypothesis"
+      >
+        プロジェクト一覧
+      </h1>
+      <h1 
+        class="px-2 d-flex align-self-center" 
+        style="font-size: 20px"
+        v-if="project"
+      >
+        {{ project.name || null }} 
+      </h1>
+      <div v-if="hypothesis">
+        <h1 v-if="hypothesis.depth > 1">/...</h1>
+      </div>
+      <h1 
+        class="px-2 d-flex align-self-center" 
+        style="font-size: 20px"
+        v-if="parentHypothesis"
+      >
+        / {{ parentHypothesis.name }}
+      </h1>
+      <h1 
+        class="px-2 d-flex align-self-center" 
+        style="font-size: 20px"
+        v-if="hypothesis"
+        >
+        / {{ hypothesis.name }} 
       </h1>
     </v-toolbar-title>
   </v-app-bar>
@@ -35,15 +63,15 @@
 <script>
 export default {
   props: {
-    headerTitle: {
-      type: String,
-    },
-    parent: {
+    project: {
       type: Object,
     },
     hypothesis: {
       type: Object,
-    }
+    },
+    parentHypothesis: {
+      type: Object,
+    },
   },
   computed: {
     navigation() {
@@ -51,7 +79,7 @@ export default {
     },
     thisPageParamsId() {
       return this.$route.params.id;
-    }
+    },
   },
   methods: {
     clickHumburgerMenu() {

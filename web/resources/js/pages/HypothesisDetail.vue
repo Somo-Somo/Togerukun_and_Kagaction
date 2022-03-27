@@ -5,8 +5,9 @@
     fluid
   >
      <Header 
-      :headerTitle="hypothesis.name" 
+      :project="project"
       :hypothesis="hypothesis"
+      :parentHypothesis="parentHypothesis"
       />
       <template>
         <div
@@ -188,6 +189,7 @@ export default {
       inputFormName: 'form/name',
       inputForm: 'form/inputForm',
       project: 'project/project',
+      parentHypothesis: 'hypothesis/parentHypothesis',
       hypothesisList: 'hypothesis/hypothesisList',
     }),
     hypothesis() {

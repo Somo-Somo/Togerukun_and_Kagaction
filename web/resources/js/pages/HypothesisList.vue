@@ -4,7 +4,7 @@
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
-   <Header :headerTitle="project.name"/>
+   <Header :project="project"/>
       <template>
         <div
           class="d-flex justify-space-between"

@@ -9,7 +9,7 @@ const state = {
 
 const getters = {
     hypothesis: state => (state.hypothesis.name && state.hypothesis.uuid) ? state.hypothesis: null,
-    parentHypothesis: state => (state.parentHypothesis.name && state.parentHypothesis.uuid) ? state.parentHypothesis: null,
+    parentHypothesis: state => state.parentHypothesis ? state.parentHypothesis: null,
     hypothesisList: state => state.hypothesisList ? state.hypothesisList : null,
 };
 
@@ -23,13 +23,13 @@ const mutations = {
     },
 
     setParentHypothesis (state, hypothesis) {
+        state.parentHypothesis = null;
         const hypothesisList = state.hypothesisList
         for (const [key, value] of Object.entries(hypothesisList)) {
             if(value.uuid === hypothesis.parentUuid){
                 state.parentHypothesis = value;
             }
         }
-        console.info(state.parentHypothesis);
     },
 
     selectHypothesisList (state, projectUuid) {
