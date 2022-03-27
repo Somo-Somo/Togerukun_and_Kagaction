@@ -111,7 +111,7 @@ export default {
       this.$store.dispatch("form/onClickCreate");
     },  
     onClickCancel() {
-      this.$store.dispatch("form/onClickCancel");
+      this.$store.dispatch("form/closeForm");
     },
     submitForm(){      
       this.$store.dispatch("form/closeForm");
