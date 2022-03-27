@@ -25,37 +25,39 @@
           >mdi-chevron-left</v-icon
         >
       </v-btn>
-      <h1 
-        class="px-2 d-flex align-self-center" 
-        style="font-size: 24px"
+      <div 
         v-if="!project && !hypothesis && !parentHypothesis"
+        class="d-flex align-self-center px-1"
       >
-        プロジェクト一覧
-      </h1>
-      <h1 
-        class="px-2 d-flex align-self-center" 
-        style="font-size: 20px"
-        v-if="project"
-      >
-        {{ project.name || null }} 
-      </h1>
-      <div v-if="hypothesis">
-        <h1 v-if="hypothesis.depth > 1">/...</h1>
+        <h1 style="font-size: 20px">プロジェクト一覧</h1>
       </div>
-      <h1 
-        class="px-2 d-flex align-self-center" 
-        style="font-size: 20px"
-        v-if="parentHypothesis"
-      >
-        / {{ parentHypothesis.name }}
-      </h1>
-      <h1 
-        class="px-2 d-flex align-self-center" 
-        style="font-size: 20px"
-        v-if="hypothesis"
-        >
-        / {{ hypothesis.name }} 
-      </h1>
+      <div v-if="project" class="d-flex align-self-center">
+        <h1 
+          style="font-size: 20px" 
+          class="px-2"
+          link
+        >{{ project.name }}</h1>
+      </div>
+      <div v-if="hypothesis" class="d-flex align-self-center">
+        <h1 v-if="hypothesis.depth > 1" style="font-size: 20px">/</h1>
+        <h1 v-if="hypothesis.depth > 1" style="font-size: 20px" class="px-2">...</h1>
+      </div>
+      <div v-if="parentHypothesis" class="d-flex align-self-center"> 
+        <h1 style="font-size: 20px"> / </h1>
+        <h1 
+          style="font-size: 20px" 
+          class="px-2"
+          link
+        > {{ parentHypothesis.name }} </h1>
+      </div>
+      <div v-if="hypothesis" class="d-flex align-self-center" >
+        <h1 style="font-size: 20px"> / </h1>
+        <h1 
+          style="font-size: 20px" 
+          class="px-2"
+          link  
+        > {{ hypothesis.name }} </h1>
+      </div>
     </v-toolbar-title>
   </v-app-bar>
 </template> 
