@@ -232,13 +232,12 @@ export default {
     onClickCancel() {
       this.$store.dispatch("form/closeForm");
     },
-    async submitForm(){
+    submitForm(){
       this.$store.dispatch("form/closeForm");
-      const hypothesis = {
-        name : this.inputFormName,
-        parent_uuid: this.hypothesis.uuid,
-      }
-      await this.$store.dispatch("hypothesis/createHypothesis", hypothesis);
+      this.$store.dispatch(
+        "hypothesis/createHypothesis", 
+        {parent: this.hypothesis, name: this.inputFormName}
+      );
     },
     edit(){
         this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);

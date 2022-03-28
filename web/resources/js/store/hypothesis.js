@@ -1,4 +1,5 @@
 import {OK, CREATED, UNPROCESSABLE_ENTITY} from '../util';
+import { v4 as uuidv4 } from 'uuid';
 
 const state = {
     hypothesis: null,
@@ -42,12 +43,39 @@ const mutations = {
         state.allHypothesisList = data;
     },
 
+    addHypothesisForHypothesisList (state, newHypothesis){
+        console.info(state.hypothesisList);
+        const hypothesisList = state.hypothesisList
+        const newHypothesisList = []
+        let addHypothesisParentOrBrother = false;
+        
+        for (const [key, hypothesis] of Object.entries(hypothesisList)) {
+            if (hypothesis.uuid === newHypothesis.parentUuid || hypothesis.parentUuid === newHypothesis.parentUuid){
+                addHypothesisParentOrBrother = true;
+                newHypothesisList.push(hypothesis);
+            } else if (addHypothesisParentOrBrother) {
+                addHypothesisParentOrBrother = false;
+                newHypothesisList.push(newHypothesis);
+                newHypothesisList.push(hypothesis);
+            } else {
+                newHypothesisList.push(hypothesis);
+            }
+        }
+        if(addHypothesisParentOrBrother) newHypothesisList.push(newHypothesis);
+        state.hypothesisList = newHypothesisList;
+    },
+
     setHypothesisListAfterHypothesisCreation(state, hypothesisList) {
         state.hypothesisList = Object.values(hypothesisList)[0];
     },
 
     addGoal (state, data) {
-        state.hypothesisList.push(data.goal);
+        state.hypothesisList.push(data);
+    },
+
+    updateAllHypothesisList (state) {
+        const projectUuid =  state.hypothesisList[0].parentUuid;
+        state.allHypothesisList[projectUuid] = state.hypothesisList;
     },
 
     updateHypothesisName (state, data) {
@@ -92,9 +120,16 @@ const actions = {
 
     async createGoal (context, {project, hypothesisName}){
         const goal = {
-            project: project,
-            name : hypothesisName
+            name : hypothesisName,
+            uuid: uuidv4(),
+            parentUuid: project.uuid,
+            depth: 0,
+            noChild: true,
         };
+
+        await context.commit ('addGoal', goal);
+        context.commit ('updateAllHypothesisList');
+
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.post('/api/goal', goal);
 
@@ -103,31 +138,35 @@ const actions = {
             // context.commit ('setRegisterErrorMessages', response.data.errors);
         }
 
-        if (response.status === CREATED) {
-            response.data.goal.depth = 0;
-            context.commit ('setHypothesis', response.data.goal);
-            context.commit ('addGoal', response.data);
-            return response.data;
-        } else {
+        if (response.status !== CREATED) {
             context.commit ('error/setCode', response.status, {root: true});
             return false;
         }
     },
 
-    async createHypothesis (context, data){
+    async createHypothesis (context, {parent, name}){
+        const hypothesis = {
+            name : name,
+            uuid: uuidv4(),
+            parentUuid: parent.uuid,
+            depth: Number(parent.depth) + 1,
+            noChild: true,
+        };
+
+        await context.commit ('addHypothesisForHypothesisList', hypothesis);
+        context.commit ('updateAllHypothesisList');
+
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-        const response = await axios.post('/api/hypothesis', data);
+        const response = await axios.post('/api/hypothesis', hypothesis);
 
         if (response.status === UNPROCESSABLE_ENTITY) {
             console.info('エラー')
             // context.commit ('setRegisterErrorMessages', response.data.errors);
         } 
 
-        if (response.status === CREATED) {
-            context.commit ('setHypothesisListAfterHypothesisCreation', response.data.hypothesisList);
-            return;
-        } else {
+        if (response.status !== CREATED) {
             context.commit ('error/setCode', response.status, {root: true});
+            return;
         }
     },
 
