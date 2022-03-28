@@ -32,20 +32,14 @@ class HypothesisController extends Controller
     {
         $hypothesis = [
             'name' => $request->name,
-            'uuid' => (string) Str::uuid(),
-            'parent_uuid' => $request->parent_uuid,
+            'uuid' => $request->uuid,
+            'parent_uuid' => $request->parentUuid,
             'created_by_user_email' => $request->user()->email,
         ];
 
-        $createdHypothesis = $storeAction->invoke($hypothesis);
+        $storeAction->invoke($hypothesis);
 
-
-        // 本当はResourcesにかきたいけど
-        unset($hypothesis['created_by_user_email']);
        $json = [
-            'project' => $createdHypothesis['project'],
-            'hypothesis' => $hypothesis,
-            'hypothesisList' => $createdHypothesis['hypothesis'],
             'message' => '仮設が追加されました',
             'error' => '',
         ];
