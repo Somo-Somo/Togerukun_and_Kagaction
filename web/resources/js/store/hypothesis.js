@@ -73,6 +73,11 @@ const mutations = {
         state.hypothesisList.push(data);
     },
 
+    updateAllHypothesisList (state) {
+        const projectUuid =  state.hypothesisList[0].parentUuid;
+        state.allHypothesisList[projectUuid] = state.hypothesisList;
+    },
+
     updateHypothesisName (state, data) {
         state.hypothesisList[data.uuid]['name'] = data.name;
     },
@@ -119,10 +124,11 @@ const actions = {
             uuid: uuidv4(),
             parentUuid: project.uuid,
             depth: 0,
+            noChild: true,
         };
 
-        context.commit ('setHypothesis', goal);
-        context.commit ('addGoal', goal);
+        await context.commit ('addGoal', goal);
+        context.commit ('updateAllHypothesisList');
 
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.post('/api/goal', goal);
@@ -144,9 +150,11 @@ const actions = {
             uuid: uuidv4(),
             parentUuid: parent.uuid,
             depth: Number(parent.depth) + 1,
+            noChild: true,
         };
 
-        context.commit ('addHypothesisForHypothesisList', hypothesis);
+        await context.commit ('addHypothesisForHypothesisList', hypothesis);
+        context.commit ('updateAllHypothesisList');
 
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.post('/api/hypothesis', hypothesis);
