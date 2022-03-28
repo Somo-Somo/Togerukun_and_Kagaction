@@ -43,6 +43,28 @@ const mutations = {
         state.allHypothesisList = data;
     },
 
+    addHypothesisForHypothesisList (state, newHypothesis){
+        console.info(state.hypothesisList);
+        const hypothesisList = state.hypothesisList
+        const newHypothesisList = []
+        let addHypothesisParentOrBrother = false;
+        
+        for (const [key, hypothesis] of Object.entries(hypothesisList)) {
+            if (hypothesis.uuid === newHypothesis.parentUuid || hypothesis.parentUuid === newHypothesis.parentUuid){
+                addHypothesisParentOrBrother = true;
+                newHypothesisList.push(hypothesis);
+            } else if (addHypothesisParentOrBrother) {
+                addHypothesisParentOrBrother = false;
+                newHypothesisList.push(newHypothesis);
+                newHypothesisList.push(hypothesis);
+            } else {
+                newHypothesisList.push(hypothesis);
+            }
+        }
+        if(addHypothesisParentOrBrother) newHypothesisList.push(newHypothesis);
+        state.hypothesisList = newHypothesisList;
+    },
+
     setHypothesisListAfterHypothesisCreation(state, hypothesisList) {
         state.hypothesisList = Object.values(hypothesisList)[0];
     },
@@ -116,20 +138,27 @@ const actions = {
         }
     },
 
-    async createHypothesis (context, data){
+    async createHypothesis (context, {parent, name}){
+        const hypothesis = {
+            name : name,
+            uuid: uuidv4(),
+            parentUuid: parent.uuid,
+            depth: Number(parent.depth) + 1,
+        };
+
+        context.commit ('addHypothesisForHypothesisList', hypothesis);
+
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-        const response = await axios.post('/api/hypothesis', data);
+        const response = await axios.post('/api/hypothesis', hypothesis);
 
         if (response.status === UNPROCESSABLE_ENTITY) {
             console.info('エラー')
             // context.commit ('setRegisterErrorMessages', response.data.errors);
         } 
 
-        if (response.status === CREATED) {
-            context.commit ('setHypothesisListAfterHypothesisCreation', response.data.hypothesisList);
-            return;
-        } else {
+        if (response.status !== CREATED) {
             context.commit ('error/setCode', response.status, {root: true});
+            return;
         }
     },
 
