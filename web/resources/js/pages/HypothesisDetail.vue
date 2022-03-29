@@ -64,7 +64,7 @@
               <v-btn
                 class="mx-1"
                 @click="onClickStatus('success')"
-                :color="result === 'success' ? 'green' : ''"
+                :color="hypothesis.status === 'success' ? 'green' : ''"
                 size="36"
                 icon
                 text
@@ -74,7 +74,7 @@
               <v-btn
                 class="mx-1"
                 @click="onClickStatus('failure')"
-                :color="result === 'failure' ? 'pink' : ''"
+                :color="hypothesis.status === 'failure' ? 'pink' : ''"
                 size="36"
                 icon
                 text
@@ -101,8 +101,8 @@
             </v-subheader>
             <v-col class="px-4 px-md-6 d-flex align-self-center">
               <v-checkbox
-                v-model="todaysGoal"
-                @click="onClickTodaysGoal(todaysGoal)"
+                v-model="hypothesis.todaysGoal"
+                @click="onClickTodaysGoal(hypothesis.todaysGoal)"
               ></v-checkbox>
             </v-col>
           </div>
@@ -178,8 +178,6 @@ export default {
   data: () => ({
     hypothesisStatus: {name: "仮説", show: false },
     page: "仮説",
-    result: undefined,
-    todaysGoal: undefined,
   }),
   computed : {
     ...mapState({
@@ -190,14 +188,9 @@ export default {
       inputForm: 'form/inputForm',
       project: 'project/project',
       parentHypothesis: 'hypothesis/parentHypothesis',
+      hypothesis: 'hypothesis/hypothesis',
       hypothesisList: 'hypothesis/hypothesisList',
     }),
-    hypothesis() {
-        let getterHypothesis = this.$store.getters['hypothesis/hypothesis'];
-        if(this.result === undefined) this.result = getterHypothesis.status;
-        if(this.todaysGoal === undefined) this.todaysGoal = getterHypothesis.todaysGoal;
-        return getterHypothesis;
-    },
     subHeader() {
       return this.hypothesis.depth === 0 ? 'ゴール' : '仮説';
     },
@@ -209,11 +202,9 @@ export default {
     onClickStatus (btn){
       let click;
       if (btn === 'success') {
-        click = this.result === 'success' ?  'remove'  : 'success';
-        this.result = this.result === 'success' ? null : 'success';
+        click = this.hypothesis.status === 'success' ?  'remove'  : 'success';
       } else if (btn === 'failure') {
-        click = this.result === 'failure' ?  'remove'  : 'failure';
-        this.result = this.result === 'failure' ? null : 'failure'; 
+        click = this.hypothesis.status === 'failure' ?  'remove'  : 'failure';
       }
       this.$store.dispatch(
         "hypothesis/updateStatus", 

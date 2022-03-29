@@ -21,6 +21,7 @@ const mutations = {
 
     setHypothesis (state, hypothesis) {
         state.hypothesis = hypothesis;
+        console.info(state.hypothesis);
     },
 
     setParentHypothesis (state, hypothesis) {
@@ -44,7 +45,6 @@ const mutations = {
     },
 
     addHypothesisForHypothesisList (state, newHypothesis){
-        console.info(state.hypothesisList);
         const hypothesisList = state.hypothesisList
         const newHypothesisList = []
         let addHypothesisParentOrBrother = false;
@@ -197,6 +197,7 @@ const actions = {
     },
 
     async updateStatus (context, {click,hypothesisUuid}) {
+        context.commit('updateHypothesisStatus', click);
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         if (click === 'remove') {
             const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/status')
@@ -211,11 +212,11 @@ const actions = {
                 return false;
             }
         }
-        context.commit('updateHypothesisStatus', click);
         return;
     },
 
     async updateTodaysGoal (context, {todaysGoal, hypothesisUuid}) {
+        context.commit('updateHypothesisTodaysGoal', todaysGoal);
         if (todaysGoal) {
             const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
             if (response.status !== OK) {
@@ -229,7 +230,6 @@ const actions = {
                 return false;
             }
         }
-        context.commit('updateHypothesisTodaysGoal', todaysGoal);
         return; 
     }
 }
