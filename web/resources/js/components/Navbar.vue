@@ -10,7 +10,7 @@
       >
         <v-hover v-slot="{ hover }">
           <div class="d-flex justify-space-between" style="width: 222px">
-            <img :src="'/img/VizHD_logo_app.png'" alt="アプリロゴ" />
+            <img :src="'/img/Kagaction_logo_app.png'" alt="アプリロゴ" />
             <v-icon
               class="my-6"
               style="height: 24px"
