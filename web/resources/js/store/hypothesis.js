@@ -50,7 +50,12 @@ const mutations = {
         let addHypothesisParentOrBrother = false;
         
         for (const [key, hypothesis] of Object.entries(hypothesisList)) {
-            if (hypothesis.uuid === newHypothesis.parentUuid || hypothesis.parentUuid === newHypothesis.parentUuid){
+            if (hypothesis.uuid === newHypothesis.parentUuid ){
+                addHypothesisParentOrBrother = true;
+                hypothesis.toggle = 'mdi-menu-right';
+                hypothesis.noChild = false;
+                newHypothesisList.push(hypothesis);
+            } else if (hypothesis.parentUuid === newHypothesis.parentUuid) {
                 addHypothesisParentOrBrother = true;
                 newHypothesisList.push(hypothesis);
             } else if (addHypothesisParentOrBrother) {
