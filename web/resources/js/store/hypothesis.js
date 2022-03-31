@@ -21,7 +21,6 @@ const mutations = {
 
     setHypothesis (state, hypothesis) {
         state.hypothesis = hypothesis;
-        console.info(state.hypothesis);
     },
 
     setParentHypothesis (state, hypothesis) {
