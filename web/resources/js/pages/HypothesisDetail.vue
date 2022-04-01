@@ -60,9 +60,10 @@
             >
               <p class="ma-0 font-weight-bold" color="grey darken-1">結果：</p>
             </v-subheader>
-            <v-col v-model="hypothesis.status" class="px-4 px-md-6 d-flex align-self-center">
+            <v-col class="px-4 px-md-6 d-flex align-self-center">
               <v-btn
                 class="mx-1"
+                v-model="hypothesis.status"
                 @click="onClickStatus('success')"
                 :color="hypothesis.status === 'success' ? 'green' : ''"
                 size="36"
