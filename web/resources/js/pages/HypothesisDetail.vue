@@ -200,15 +200,12 @@ export default {
   },
   methods: {
     onClickStatus (btn){
-      console.info(btn);
-      console.info(this.hypothesis.status);
       let click;
       if (btn === 'success') {
         click = this.hypothesis.status === 'success' ?  'remove'  : 'success';
       } else if (btn === 'failure') {
         click = this.hypothesis.status === 'failure' ?  'remove'  : 'failure';
       }
-      console.info(click);
       this.$store.dispatch(
         "hypothesis/updateStatus", 
         { click:click, hypothesisUuid:this.hypothesis.uuid }
