@@ -16,7 +16,9 @@
       会員登録が完了しました。<br>先ほどご登録いただいたメールアドレスとパスワードをこちらでご入力ください。
     </v-alert>
       <v-card-title class="text-center pa-8">
-        <h4 class="fill-width">{{ isLoginForm ? "ログイン" : "会員登録" }}</h4>
+        <h4 class="fill-width">
+          Kagaction(テスト版)&nbsp;{{ isLoginForm ? "ログイン" : "会員登録" }}
+        </h4>
       </v-card-title>
       <v-divider> </v-divider>
       <form class="form" @submit.prevent="submitForm()">
@@ -112,6 +114,11 @@
                 会員登録に移動
               </v-btn>
             </div>
+          </div>
+          <div class="d-md-none">
+            <p class="ma-0" style="color:red;">※ 注意</p>
+            <p>現在スマートフォンでのご利用に対応しておりません。<br>
+            お手数おかけしますがPCでのご利用をお願いいたします。</p>
           </div>
         </div>
       </form>
