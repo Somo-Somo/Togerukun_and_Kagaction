@@ -60,10 +60,9 @@
             >
               <p class="ma-0 font-weight-bold" color="grey darken-1">結果：</p>
             </v-subheader>
-            <v-col class="px-4 px-md-6 d-flex align-self-center">
+            <v-col class="px-4 px-md-6 d-flex align-self-center" v-model="hypothesis.status">
               <v-btn
                 class="mx-1"
-                v-model="hypothesis.status"
                 @click="onClickStatus('success')"
                 :color="hypothesis.status === 'success' ? 'green' : ''"
                 size="36"
@@ -201,12 +200,15 @@ export default {
   },
   methods: {
     onClickStatus (btn){
+      console.info(btn);
+      console.info(this.hypothesis.status);
       let click;
       if (btn === 'success') {
         click = this.hypothesis.status === 'success' ?  'remove'  : 'success';
       } else if (btn === 'failure') {
         click = this.hypothesis.status === 'failure' ?  'remove'  : 'failure';
       }
+      console.info(click);
       this.$store.dispatch(
         "hypothesis/updateStatus", 
         { click:click, hypothesisUuid:this.hypothesis.uuid }

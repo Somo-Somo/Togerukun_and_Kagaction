@@ -86,9 +86,9 @@ const mutations = {
 
     updateHypothesisStatus (state, click){
         if (click === 'success') {
-            state.hypothesis.status = state.hypothesis.status === 'success' ? null : 'success';
+            state.hypothesis.status = 'success'
         } else if (click === 'failure') {
-            state.hypothesis.status = state.hypothesis.status === 'failure' ? null : 'failure';
+            state.hypothesis.status =  'failure';
         } else if (click === 'remove') {
             state.hypothesis.status = null;
         }
