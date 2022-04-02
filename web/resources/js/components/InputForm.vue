@@ -7,6 +7,7 @@
             v-model="formName"
             counter="64"
             :label="category"
+            @keypress.enter.prevent="$emit('submitForm')"
             clearable
           ></v-text-field>
         </v-card-text>

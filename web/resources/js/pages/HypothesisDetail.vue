@@ -225,10 +225,12 @@ export default {
     },
     submitForm(){
       this.$store.dispatch("form/closeForm");
-      this.$store.dispatch(
-        "hypothesis/createHypothesis", 
-        {parent: this.hypothesis, name: this.inputFormName}
-      );
+      if (this.inputFormName) {
+        this.$store.dispatch(
+          "hypothesis/createHypothesis", 
+          {parent: this.hypothesis, name: this.inputFormName}
+        );
+      }
     },
     edit(){
         this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
