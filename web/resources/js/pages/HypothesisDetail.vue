@@ -234,6 +234,11 @@ export default {
         this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
     },
   },
+  watch: {
+    'hypothesis.status': function(next, prev) {
+      return;
+    }
+  },
 };
 </script>
 
