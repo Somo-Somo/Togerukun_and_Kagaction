@@ -46,24 +46,33 @@ const mutations = {
     addHypothesisForHypothesisList (state, newHypothesis){
         const hypothesisList = state.hypothesisList
         const newHypothesisList = []
-        let hypothesisBrother = false;
+        let hypothesisParemtOrBrother = false;
         
         for (const [key, hypothesis] of Object.entries(hypothesisList)) {
+            // 追加する親仮説の場合
             if (hypothesis.uuid === newHypothesis.parentUuid ){
                 hypothesis.toggle = 'mdi-menu-right';
                 hypothesis.noChild = false;
+                hypothesisParemtOrBrother = true;
                 newHypothesisList.push(hypothesis);
-            } else if (hypothesis.parentUuid === newHypothesis.parentUuid) {
-                hypothesisBrother = true;
+            } 
+            // 追加する仮説と同じ階層にある仮説の場合
+            else if (hypothesis.parentUuid === newHypothesis.parentUuid) {
+                hypothesisParemtOrBrother = true;
                 newHypothesisList.push(hypothesis);
-            } else if (hypothesisBrother && newHypothesis.depth > hypothesis.depth) {
-                hypothesisBrother = false;
+            } 
+            // 追加する仮説と同じ階層の仮説があるかつ親仮説以上の階層に仮説が戻った場合
+            else if (hypothesisParemtOrBrother && newHypothesis.depth > hypothesis.depth) {
+                hypothesisParemtOrBrother = false;
                 newHypothesisList.push(newHypothesis);
                 newHypothesisList.push(hypothesis);
             } else {
                 newHypothesisList.push(hypothesis);
             }
         }
+
+        if(hypothesisParemtOrBrother) newHypothesisList.push(newHypothesis);
+
         state.hypothesisList = newHypothesisList;
     },
 
