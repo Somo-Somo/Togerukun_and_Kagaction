@@ -64,7 +64,7 @@
               <v-btn
                 class="mx-1"
                 @click="onClickStatus('success')"
-                :color="hypothesis.status === 'success' ? 'green' : ''"
+                :color="hypothesisStatus.type === 'success' ? 'green' : ''"
                 size="36"
                 icon
                 text
@@ -74,7 +74,7 @@
               <v-btn
                 class="mx-1"
                 @click="onClickStatus('failure')"
-                :color="hypothesis.status === 'failure' ? 'pink' : ''"
+                :color="hypothesisStatus.type === 'failure' ? 'pink' : ''"
                 size="36"
                 icon
                 text
@@ -176,7 +176,7 @@ export default {
     InputForm,
   },
   data: () => ({
-    hypothesisStatus: {name: "仮説", show: false },
+    hypothesisStatus: {name: "仮説", show: false, type: null, },
     page: "仮説",
   }),
   computed : {
@@ -188,9 +188,13 @@ export default {
       inputForm: 'form/inputForm',
       project: 'project/project',
       parentHypothesis: 'hypothesis/parentHypothesis',
-      hypothesis: 'hypothesis/hypothesis',
       hypothesisList: 'hypothesis/hypothesisList',
     }),
+    hypothesis() {
+      const hypothesis = this.$store.getters['hypothesis/hypothesis'];
+      this.hypothesisStatus.type = hypothesis.status ? hypothesis.status : null ;
+      return hypothesis;
+    },
     subHeader() {
       return this.hypothesis.depth === 0 ? 'ゴール' : '仮説';
     },
@@ -202,9 +206,21 @@ export default {
     onClickStatus (btn){
       let click;
       if (btn === 'success') {
-        click = this.hypothesis.status === 'success' ?  'remove'  : 'success';
+        if (this.hypothesis.status === 'success') {
+          click = 'remove';
+          this.hypothesisStatus.type = null
+        } else {
+          click = 'success';
+          this.hypothesisStatus.type = 'success'
+        }
       } else if (btn === 'failure') {
-        click = this.hypothesis.status === 'failure' ?  'remove'  : 'failure';
+        if (this.hypothesis.status === 'failure') {
+          click = 'remove';
+          this.hypothesisStatus.type = null
+        } else {
+          click = 'failure';
+          this.hypothesisStatus.type = 'failure';
+        }
       }
       this.$store.dispatch(
         "hypothesis/updateStatus", 
@@ -235,11 +251,6 @@ export default {
     edit(){
         this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
     },
-  },
-  watch: {
-    'hypothesis.status': function(next, prev) {
-      return;
-    }
   },
 };
 </script>
