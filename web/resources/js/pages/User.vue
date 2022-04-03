@@ -56,11 +56,6 @@ export default {
     data: () => ({
         items: [
             {
-                icon: "mdi-help-circle-outline",
-                text: "ガイド",
-                click: "guide",
-            },
-            {
                 icon: "mdi-email-fast-outline ",
                 text: "お問い合わせ",
                 click: "contact",
@@ -89,7 +84,7 @@ export default {
     methods: {
         onClickItem: function (click) {
             if (click === "guide") return;
-            if (click === "contact") return;
+            if (click === "contact") return this.contact();
             if (click === "logout") return this.logout();
             return;
         },
@@ -99,6 +94,9 @@ export default {
                 this.$router.go({path: '/login', force: true})
             }
         },
+        contact() {
+            window.open('https://forms.gle/uzKkE8FGqThyWWgD8', '_blank');
+        }
     },
 };
 </script>
