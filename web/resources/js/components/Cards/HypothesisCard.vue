@@ -223,32 +223,41 @@ export default {
     onClickShowAndHideHypothesis(hypothesis){
       for (const hypothesisKey in this.hypothesisList) {
         let key = Number(hypothesisKey);
-       if (hypothesis.uuid === this.hypothesisList[hypothesisKey].parentUuid){     
-          if(hypothesis.toggle === 'mdi-menu-right') {
-            this.hypothesisList[hypothesisKey].showHypothesisList = true
-          } else if (hypothesis.toggle === 'mdi-menu-down') {
-            this.hypothesisList[hypothesisKey].showHypothesisList = false;
+       // クリックされた仮説と同じ仮説の時
+       if (hypothesis.uuid === this.hypothesisList[hypothesisKey].uuid) {
+         this.hypothesisList[hypothesisKey].toggle = 
+          hypothesis.toggle === "mdi-menu-right" ? "mdi-menu-down" : "mdi-menu-right"; 
+       }
+        // クリックされた仮説の子仮説の時
+       if (hypothesis.uuid === this.hypothesisList[hypothesisKey].parentUuid){  
+          // onClickOpenの時   
+          if (hypothesis.toggle === "mdi-menu-down") {
+            this.hypothesisList[key].showHypothesisList = true;
+          } 
+          // onClickCloseの時
+          else if (hypothesis.toggle === "mdi-menu-right") {
+            this.hypothesisList[key].showHypothesisList = false;
             while (key < Object.keys(this.hypothesisList).length) {
-              if(this.hypothesisList[hypothesisKey].depth  >  this.hypothesisList[key].depth){
-                break;
-              }
+              if(this.hypothesisList[Number(hypothesisKey)].depth > this.hypothesisList[key].depth) break;
               this.hypothesisList[key].showHypothesisList = false;
-              if(this.hypothesisList[key].toggle === 'mdi-menu-down') 
-                this.hypothesisList[key].toggle = 'mdi-menu-right';
-              
+              if(this.hypothesisList[key].toggle === "mdi-menu-down") 
+                this.hypothesisList[key].toggle = "mdi-menu-right";
+              if(key + 1 === Object.keys(this.hypothesisList).length) break;
               key = key + 1;
             }
           } 
        }
+       this.$set(this.hypothesisList, key, this.hypothesisList[key]);
+       this.cardShow(this.hypothesisList[key]);
       }
-      if (hypothesis.toggle === 'mdi-menu-right') {
-        hypothesis.toggle = 'mdi-menu-down';
-      } else if (hypothesis.toggle === 'mdi-menu-down') {
-        hypothesis.toggle = 'mdi-menu-right';
-      }
-      return this.cardShow(hypothesis);
+      return this.hypothesisList;
     }
   },
+  watch: {
+    hypothesisList (next,prev) {
+      return;
+    }
+  }
 };
 </script>
 <style scoped lang='sass'>

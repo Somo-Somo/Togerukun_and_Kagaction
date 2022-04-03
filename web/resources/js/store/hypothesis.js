@@ -51,8 +51,8 @@ const mutations = {
         for (const [key, hypothesis] of Object.entries(hypothesisList)) {
             // 追加する親仮説の場合
             if (hypothesis.uuid === newHypothesis.parentUuid ){
-                hypothesis.toggle = 'mdi-menu-right';
-                hypothesis.noChild = false;
+                hypothesis['toggle'] = "mdi-menu-right";
+                delete hypothesis.noChild;
                 hypothesisParemtOrBrother = true;
                 newHypothesisList.push(hypothesis);
             } 
