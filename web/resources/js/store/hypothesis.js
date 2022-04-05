@@ -121,11 +121,9 @@ const mutations = {
         let parentKey = null;
         const childList = [];
         for (const [key, value] of Object.entries(hypothesisList)) {
-            console.info(hypothesis);
-            console.info(value.depth);
             // 削除する仮説の子以下の場合
             deleteHypothesisChild = deleteHypothesisChild && hypothesis.depth < value.depth ? true : false;
-            console.info(deleteHypothesisChild);
+
             if (value.uuid !== hypothesis.uuid && !deleteHypothesisChild) {
                 if(value.uuid === hypothesis.parentUuid) parentKey = key;
                 if (value.parentUuid === hypothesis.parentUuid) {
@@ -136,8 +134,7 @@ const mutations = {
                 deleteHypothesisChild = true;
             }
         }
-        console.info(childList);       
-        console.info(newHypothesisList);
+
         // 仮説を削除した結果、親仮説の子がいなくなった場合
         if(!childList.length) newHypothesisList[parentKey]['noChild'] = true;
         state.hypothesisList = newHypothesisList;
