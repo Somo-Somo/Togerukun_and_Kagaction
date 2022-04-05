@@ -69,14 +69,14 @@ class HypothesisListConverter
                 $parent['toggle'] = 'mdi-menu-right';
 
                 // 今日の目標
-                if ($value['todaysGoal']) $parent['todaysGoal'] = true;
+                if ($value['currentGoal']) $parent['currentGoal'] = true;
 
                 // ゴールは常に配列のケツに追加
                 $hypothesisList[$projectUuid][] = $parent;
 
             } else {
                 // 今日の目標
-                if ($value['todaysGoal']) $hypothesisData[$parent['uuid']]['todaysGoal'] = true;
+                if ($value['currentGoal']) $hypothesisData[$parent['uuid']]['currentGoal'] = true;
                 // $hypothesisDataから
                 $hypothesisList[$projectUuid][] = $hypothesisData[$parent['uuid']];
             }
