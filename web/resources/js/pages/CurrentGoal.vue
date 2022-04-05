@@ -27,6 +27,11 @@
             color="grey lighten-1"
             indeterminate
           ></v-progress-circular>
+          
+        <CurrentGoalCards
+            :projectList="projectList" 
+            :currentGoalList="currentGoalList" 
+        />
 
         <div class="my-4" v-show="!currentGoalList.length && !loading">
             <p class="grey--text font-weight-bold ma-0 py-2">
@@ -40,11 +45,13 @@
 
 <script>
 import Header from "../components/Header.vue";
+import CurrentGoalCards from "../components/Cards/CurrentGoalCard.vue";
 import { mapGetters } from 'vuex';
 
 export default {
   components: {
     Header,
+    CurrentGoalCards
   },
   data: () => ({
     category : "現在の目標",
@@ -53,6 +60,7 @@ export default {
     ...mapGetters({
       loading: 'initialize/loading',
       currentGoalList: 'hypothesis/currentGoalList',
+      projectList: 'project/projectList',
     }),
   }
 };

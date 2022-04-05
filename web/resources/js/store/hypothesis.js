@@ -45,9 +45,18 @@ const mutations = {
         state.allHypothesisList = data;
     },
 
-    setCurrentGoalList (state, data) {
+    setCurrentGoalList (state) {
         const allHypothesisList = state.allHypothesisList;
-
+        const currentGoalList = [];
+        for (const [hypothesisListKey, hypothesisList] of Object.entries(allHypothesisList)) {
+            for (const [hypothesisKey, hypothesis] of Object.entries(hypothesisList)) {
+                if (hypothesis.currentGoal) {
+                    hypothesis.projectUuid = hypothesisListKey;
+                    currentGoalList.push(hypothesis);
+                }
+            }
+        }
+        state.currentGoalList = currentGoalList; 
     },
 
     addHypothesisForHypothesisList (state, newHypothesis){
@@ -152,6 +161,10 @@ const actions = {
         context.commit ('setParentHypothesis', hypothesis);
     },
 
+    selectCurrentGoalPage (context){
+        context.commit ('setCurrentGoalList');
+    },
+
     async createGoal (context, {project, hypothesisName}){
         const goal = {
             name : hypothesisName,
@@ -252,6 +265,7 @@ const actions = {
 
     async updateCurrentGoal (context, {currentGoal, hypothesisUuid}) {
         context.commit('updateHypothesisCurrentGoal', currentGoal);
+        context.commit ('hypothesis/setCurrentGoalList');
         if (currentGoal) {
             const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/current_goal')
             if (response.status !== OK) {
