@@ -21,14 +21,14 @@
           class="overflow-y-auto d-flex flex-column"
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
-          <!-- <v-progress-circular
+          <v-progress-circular
             class="mx-auto my-8"
             v-if="loading"
             color="grey lighten-1"
             indeterminate
-          ></v-progress-circular> -->
-{{currentGoalList}}
-        <div class="my-4" v-show="!currentGoalList">
+          ></v-progress-circular>
+
+        <div class="my-4" v-show="!currentGoalList.length && !loading">
             <p class="grey--text font-weight-bold ma-0 py-2">
                 現在の目標はありません
             </p>
@@ -50,7 +50,10 @@ export default {
     category : "現在の目標",
   }),
   computed: {
+    ...mapGetters({
+      loading: 'initialize/loading',
       currentGoalList: 'hypothesis/currentGoalList',
+    }),
   }
 };
 </script>
