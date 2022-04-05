@@ -45,6 +45,11 @@ const mutations = {
         state.allHypothesisList = data;
     },
 
+    setCurrentGoalList (state, data) {
+        const allHypothesisList = state.allHypothesisList;
+
+    },
+
     addHypothesisForHypothesisList (state, newHypothesis){
         const hypothesisList = state.hypothesisList
         const newHypothesisList = []
@@ -105,8 +110,8 @@ const mutations = {
         }
      },
 
-    updateHypothesisTodaysGoal (state, todaysGoal){
-        state.hypothesis.todaysGoal = todaysGoal;
+    updateHypothesisCurrentGoal (state, currentGoal){
+        state.hypothesis.currentGoal = currentGoal;
     },
 
     deleteHypothesis (state, hypothesis){
@@ -248,16 +253,16 @@ const actions = {
         return;
     },
 
-    async updateTodaysGoal (context, {todaysGoal, hypothesisUuid}) {
-        context.commit('updateHypothesisTodaysGoal', todaysGoal);
-        if (todaysGoal) {
-            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
+    async updateCurrentGoal (context, {currentGoal, hypothesisUuid}) {
+        context.commit('updateHypothesisCurrentGoal', currentGoal);
+        if (currentGoal) {
+            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/current_goal')
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
             }
         } else {
-            const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
+            const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/current_goal')
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
