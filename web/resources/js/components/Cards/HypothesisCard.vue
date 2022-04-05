@@ -110,10 +110,7 @@ export default {
   },
   data: () => ({
     deletingConfirmationDialog: false,
-    selectedDeletingHypothesis: {
-      name : null,
-      uuid : null,
-    },
+    selectedDeletingHypothesis: null,
     cardMenu: [
       {title: "削除", color:"color: red"},
     ],
@@ -205,20 +202,17 @@ export default {
         
       } else if (menuTitle === "削除") {
         this.deletingConfirmationDialog = true;
-        this.selectedDeletingHypothesis.name = hypothesis.name;
-        this.selectedDeletingHypothesis.uuid = hypothesis.uuid;
+        this.selectedDeletingHypothesis = hypothesis;
       }
     },
-    deleteHypothesis(){
-      this.$store.dispatch("hypothesis/deleteHypothesis", this.selectedDeletingHypothesis);
+    async deleteHypothesis(){
       this.deletingConfirmationDialog = false;
-      this.selectedDeletingHypothesis.name = null;
-      this.selectedDeletingHypothesis.uuid = null;
+      await this.$store.dispatch("hypothesis/deleteHypothesis", this.selectedDeletingHypothesis);
+      this.selectedDeletingHypothesis = null;
     },
     onClickCancel(){
       this.deletingConfirmationDialog = false;
-      this.selectedDeletingHypothesis.name = null;
-      this.selectedDeletingHypothesis.uuid = null;
+      this.selectedDeletingHypothesis = null;
     },
     onClickShowAndHideHypothesis(hypothesis){
       for (const hypothesisKey in this.hypothesisList) {
