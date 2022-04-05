@@ -142,7 +142,7 @@ export default {
         }
 
         if (this.hypothesisStatus.name === "現在の目標") 
-          return hypothesis.todaysGoal ? this.showHypothesis() : false; 
+          return hypothesis.currentGoal ? this.showHypothesis() : false; 
 
         if (this.hypothesisStatus.name === "完了") 
           return hypothesis.status ? this.showHypothesis() : false; 
@@ -155,7 +155,7 @@ export default {
     },
     showStatus() {
       return (hypothesis) => {
-        if (hypothesis.todaysGoal) {
+        if (hypothesis.currentGoal) {
           return {title: '現在の目標', color:'blue'};
         } else if (hypothesis.limit) {
           return {title: hypothesis.limit, color: 'purple'};

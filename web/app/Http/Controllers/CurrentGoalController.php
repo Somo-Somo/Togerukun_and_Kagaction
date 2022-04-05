@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\UseCases\TodaysGoal\UpdateAction;
-use App\UseCases\TodaysGoal\DestroyAction;
+use App\UseCases\CurrentGoal\UpdateAction;
+use App\UseCases\CurrentGoal\DestroyAction;
 use Illuminate\Http\Request;
 use \Symfony\Component\HttpFoundation\Response;
 
-class TodaysGoalController extends Controller
+class CurrentGoalController extends Controller
 {
     /**
      * Display a listing of the resource.

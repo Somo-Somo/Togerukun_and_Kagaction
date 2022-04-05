@@ -6,12 +6,14 @@ const state = {
     parentHypothesis: null,
     hypothesisList: [],
     allHypothesisList: null,
+    currentGoalList: [],
 };
 
 const getters = {
     hypothesis: state => (state.hypothesis.name && state.hypothesis.uuid) ? state.hypothesis: null,
     parentHypothesis: state => state.parentHypothesis ? state.parentHypothesis: null,
     hypothesisList: state => state.hypothesisList ? state.hypothesisList : null,
+    currentGoalList: state => state.currentGoalList ? state.currentGoalList : null,
 };
 
 const mutations = {
@@ -41,6 +43,20 @@ const mutations = {
 
     setAllHypothesisList (state, data) {
         state.allHypothesisList = data;
+    },
+
+    setCurrentGoalList (state) {
+        const allHypothesisList = state.allHypothesisList;
+        const currentGoalList = [];
+        for (const [hypothesisListKey, hypothesisList] of Object.entries(allHypothesisList)) {
+            for (const [hypothesisKey, hypothesis] of Object.entries(hypothesisList)) {
+                if (hypothesis.currentGoal) {
+                    hypothesis.projectUuid = hypothesisListKey;
+                    currentGoalList.push(hypothesis);
+                }
+            }
+        }
+        state.currentGoalList = currentGoalList; 
     },
 
     addHypothesisForHypothesisList (state, newHypothesis){
@@ -103,8 +119,8 @@ const mutations = {
         }
      },
 
-    updateHypothesisTodaysGoal (state, todaysGoal){
-        state.hypothesis.todaysGoal = todaysGoal;
+    updateHypothesisCurrentGoal (state, currentGoal){
+        state.hypothesis.currentGoal = currentGoal;
     },
 
     deleteHypothesis (state, hypothesis){
@@ -114,11 +130,9 @@ const mutations = {
         let parentKey = null;
         const childList = [];
         for (const [key, value] of Object.entries(hypothesisList)) {
-            console.info(hypothesis);
-            console.info(value.depth);
             // 削除する仮説の子以下の場合
             deleteHypothesisChild = deleteHypothesisChild && hypothesis.depth < value.depth ? true : false;
-            console.info(deleteHypothesisChild);
+
             if (value.uuid !== hypothesis.uuid && !deleteHypothesisChild) {
                 if(value.uuid === hypothesis.parentUuid) parentKey = key;
                 if (value.parentUuid === hypothesis.parentUuid) {
@@ -129,8 +143,7 @@ const mutations = {
                 deleteHypothesisChild = true;
             }
         }
-        console.info(childList);       
-        console.info(newHypothesisList);
+
         // 仮説を削除した結果、親仮説の子がいなくなった場合
         if(!childList.length) newHypothesisList[parentKey]['noChild'] = true;
         state.hypothesisList = newHypothesisList;
@@ -146,6 +159,10 @@ const actions = {
     selectHypothesis (context, hypothesis) {
         context.commit ('setHypothesis', hypothesis);
         context.commit ('setParentHypothesis', hypothesis);
+    },
+
+    selectCurrentGoalPage (context){
+        context.commit ('setCurrentGoalList');
     },
 
     async createGoal (context, {project, hypothesisName}){
@@ -246,16 +263,17 @@ const actions = {
         return;
     },
 
-    async updateTodaysGoal (context, {todaysGoal, hypothesisUuid}) {
-        context.commit('updateHypothesisTodaysGoal', todaysGoal);
-        if (todaysGoal) {
-            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
+    async updateCurrentGoal (context, {currentGoal, hypothesisUuid}) {
+        context.commit('updateHypothesisCurrentGoal', currentGoal);
+        context.commit ('hypothesis/setCurrentGoalList');
+        if (currentGoal) {
+            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/current_goal')
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
             }
         } else {
-            const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/todays_goal')
+            const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/current_goal')
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;

@@ -26,7 +26,7 @@
         <v-list-item
           v-for="item in items"
           :key="item.icon"
-          @click="fromItem(item.url)"
+          @click="fromItem(item)"
           class="d-flex px-8"
           style="height: 48px"
           link
@@ -98,6 +98,7 @@ export default {
   data: () => ({
     items: [
       {icon: "mdi-folder-multiple-outline", text: "プロジェクト", url: "/projects"},
+      {icon: "mdi-flag-outline", text: "現在の目標", url: "/current_goals"},
       {icon: "mdi-account-circle-outline", text: "ユーザー", url: "/user"},
     ],
     transparent: 'rgba(128, 128, 128, 0.3)',
@@ -120,8 +121,9 @@ export default {
     clickChevronDoubleLeft() {
       this.$store.dispatch("navigation/changeNavState");
     },
-    fromItem: function (url) {
-      return this.$router.push({ path: url });
+    async fromItem (item) {
+      if(item.text === "現在の目標") await this.$store.dispatch("hypothesis/selectCurrentGoalPage");
+      return this.$router.push({ path: item.url });
     },
     selectProject (project) {
       if (this.$route.params.id !== project.uuid) {

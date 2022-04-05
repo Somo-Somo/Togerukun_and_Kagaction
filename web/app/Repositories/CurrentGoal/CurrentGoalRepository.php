@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repositories\TodaysGoal;
+namespace App\Repositories\CurrentGoal;
 
 use App\Facades\Neo4jDB;
-use App\Repositories\TodaysGoal\TodaysGoalRepositoryInterface;
+use App\Repositories\CurrentGoal\CurrentGoalRepositoryInterface;
 
-class TodaysGoalRepository implements TodaysGoalRepositoryInterface
+class CurrentGoalRepository implements CurrentGoalRepositoryInterface
 {
     protected $client;
 
@@ -14,13 +14,13 @@ class TodaysGoalRepository implements TodaysGoalRepositoryInterface
         $this->client = Neo4jDB::call();
     }
 
-    public function updateTodaysGoal(array $hypothesis)
+    public function updateCurrentGoal(array $hypothesis)
     {
-        $updateHypothesisTodaysGoal = $this->client->run(
+        $updateHypothesisCurrentGoal = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
                 CREATE (user) - [
-                    todaysGoal: SET_TODAYS_GOAL{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                    currentGoal: SET_CURRENT_GOAL{at:localdatetime({timezone: 'Asia/Tokyo'})}
                 ] -> (hypothesis)
                 RETURN hypothesis
                 CYPHER,
@@ -32,14 +32,14 @@ class TodaysGoalRepository implements TodaysGoalRepositoryInterface
         return;
     }
 
-    public function destroyTodaysGoal(array $hypothesis)
+    public function destroyCurrentGoal(array $hypothesis)
     {
-        $deleteHypothesisTodaysGoal = $this->client->run(
+        $deleteHypothesisCurrentGoal = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - 
-                [todaysGoal: SET_TODAYS_GOAL]
+                [currentGoal: SET_CURRENT_GOAL]
                 ->(hypothesis:Hypothesis { uuid: $uuid })
-                DELETE todaysGoal
+                DELETE currentGoal
                 RETURN hypothesis
                 CYPHER,
                 [

@@ -24,7 +24,8 @@ const actions = {
 
         if (response.status === OK) {
             context.commit ('project/setProjectList', response.data.project, { root: true });
-            context.commit ('hypothesis/setAllHypothesisList', response.data.hypothesis, { root: true });
+            await context.commit ('hypothesis/setAllHypothesisList', response.data.hypothesis, { root: true });
+            context.commit ('hypothesis/setCurrentGoalList', false, { root: true });
             context.commit ('finishedLoading');
             if (route.name === "hypothesisList") {
                 const projectUuid = route.params.id

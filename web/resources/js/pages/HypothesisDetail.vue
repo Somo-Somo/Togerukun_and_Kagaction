@@ -101,8 +101,8 @@
             </v-subheader>
             <v-col class="px-4 px-md-6 d-flex align-self-center">
               <v-checkbox
-                v-model="hypothesis.todaysGoal"
-                @click="onClickTodaysGoal(hypothesis.todaysGoal)"
+                v-model="hypothesis.currentGoal"
+                @click="onClickCurrentGoal(hypothesis.currentGoal)"
               ></v-checkbox>
             </v-col>
           </div>
@@ -227,10 +227,10 @@ export default {
         { click:click, hypothesisUuid:this.hypothesis.uuid }
       );
     },
-    onClickTodaysGoal (todaysGoal){
+    onClickCurrentGoal (currentGoal){
       this.$store.dispatch(
-        "hypothesis/updateTodaysGoal",
-         { todaysGoal:todaysGoal, hypothesisUuid:this.hypothesis.uuid }
+        "hypothesis/updateCurrentGoal",
+         { currentGoal:currentGoal, hypothesisUuid:this.hypothesis.uuid }
       );
     },
     onClickCreate () {
