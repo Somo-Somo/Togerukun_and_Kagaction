@@ -119,6 +119,10 @@ const mutations = {
         }
      },
 
+    updateHypothesisAccomplish (state, accomplish){
+        state.hypothesis.accomplish = accomplish;
+    },
+
     updateHypothesisCurrentGoal (state, currentGoal){
         state.hypothesis.currentGoal = currentGoal;
     },
@@ -261,6 +265,24 @@ const actions = {
             }
         }
         return;
+    },
+
+    async updateAccomplish (context, {accomplish, hypothesisUuid}) {
+        context.commit('updateHypothesisAccomplish', accomplish);
+        if (accomplish) {
+            // const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/current_goal')
+            // if (response.status !== OK) {
+            //     context.commit ('error/setCode', response.status, {root: true});
+            //     return false;
+            // }
+        } else {
+            // const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/current_goal')
+            // if (response.status !== OK) {
+            //     context.commit ('error/setCode', response.status, {root: true});
+            //     return false;
+            // }
+        }
+        return; 
     },
 
     async updateCurrentGoal (context, {currentGoal, hypothesisUuid}) {

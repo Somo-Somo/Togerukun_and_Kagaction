@@ -97,6 +97,29 @@
                   : 'spHypothesisSubTitle'
               "
             >
+              <p class="ma-0 font-weight-bold" color="grey darken-1">達成：</p>
+            </v-subheader>
+            <v-col class="px-4 px-md-6 d-flex align-self-center">
+              <v-checkbox
+                v-model="hypothesis.accomplish"
+                @click="onClickAccomplish(hypothesis.accomplish)"
+              ></v-checkbox>
+            </v-col>
+          </div>
+          <div
+            class="py-2 d-flex justify-start"
+            :style="
+              $vuetify.breakpoint.mdAndUp ? 'height: 80px' : 'height: 64px'
+            "
+          >
+            <v-subheader
+              class="d-flex align-self-center pa-md-0"
+              :class="
+                $vuetify.breakpoint.mdAndUp
+                  ? 'hypothesisSubTitle'
+                  : 'spHypothesisSubTitle'
+              "
+            >
               <p class="ma-0 font-weight-bold" color="grey darken-1">現在の目標：</p>
             </v-subheader>
             <v-col class="px-4 px-md-6 d-flex align-self-center">
@@ -225,6 +248,12 @@ export default {
       this.$store.dispatch(
         "hypothesis/updateStatus", 
         { click:click, hypothesisUuid:this.hypothesis.uuid }
+      );
+    },
+    onClickAccomplish (accomplish){
+      this.$store.dispatch(
+        "hypothesis/updateAccomplish",
+         { accomplish:accomplish, hypothesisUuid:this.hypothesis.uuid }
       );
     },
     onClickCurrentGoal (currentGoal){
