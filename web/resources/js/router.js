@@ -51,9 +51,9 @@ const routes = [
     name: "hypothesisDetail"
   },
   {
-    path: '/current_goal',
+    path: '/current_goals',
     component: CurrentGoal,
-    name: "currentGoal"
+    name: "currentGoals"
   },
   {
     path: '/500',
