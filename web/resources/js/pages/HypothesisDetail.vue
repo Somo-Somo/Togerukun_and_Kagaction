@@ -58,45 +58,6 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">結果：</p>
-            </v-subheader>
-            <v-col class="px-4 px-md-6 d-flex align-self-center" v-model="hypothesis.status">
-              <v-btn
-                class="mx-1"
-                @click="onClickStatus('success')"
-                :color="hypothesisStatus.type === 'success' ? 'green' : ''"
-                size="36"
-                icon
-                text
-              >
-                <v-icon size="32">mdi-check-circle-outline</v-icon>
-              </v-btn>
-              <v-btn
-                class="mx-1"
-                @click="onClickStatus('failure')"
-                :color="hypothesisStatus.type === 'failure' ? 'pink' : ''"
-                size="36"
-                icon
-                text
-              >
-                <v-icon size="32">mdi-close-circle-outline</v-icon>
-              </v-btn>
-            </v-col>
-          </div>
-          <div
-            class="py-2 d-flex justify-start"
-            :style="
-              $vuetify.breakpoint.mdAndUp ? 'height: 80px' : 'height: 64px'
-            "
-          >
-            <v-subheader
-              class="d-flex align-self-center pa-md-0"
-              :class="
-                $vuetify.breakpoint.mdAndUp
-                  ? 'hypothesisSubTitle'
-                  : 'spHypothesisSubTitle'
-              "
-            >
               <p class="ma-0 font-weight-bold" color="grey darken-1">達成：</p>
             </v-subheader>
             <v-col class="px-4 px-md-6 d-flex align-self-center">
@@ -226,30 +187,6 @@ export default {
     }
   },
   methods: {
-    onClickStatus (btn){
-      let click;
-      if (btn === 'success') {
-        if (this.hypothesis.status === 'success') {
-          click = 'remove';
-          this.hypothesisStatus.type = null
-        } else {
-          click = 'success';
-          this.hypothesisStatus.type = 'success'
-        }
-      } else if (btn === 'failure') {
-        if (this.hypothesis.status === 'failure') {
-          click = 'remove';
-          this.hypothesisStatus.type = null
-        } else {
-          click = 'failure';
-          this.hypothesisStatus.type = 'failure';
-        }
-      }
-      this.$store.dispatch(
-        "hypothesis/updateStatus", 
-        { click:click, hypothesisUuid:this.hypothesis.uuid }
-      );
-    },
     onClickAccomplish (accomplish){
       this.$store.dispatch(
         "hypothesis/updateAccomplish",
