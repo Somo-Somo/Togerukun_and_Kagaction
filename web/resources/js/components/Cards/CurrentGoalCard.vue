@@ -103,6 +103,7 @@ export default {
   },
   methods: {
     async toHypothesisDetail (hypothesis) {
+      this.$store.dispatch("project/selectProject", this.projectList[hypothesis.projectUuid]);
       await this.$store.dispatch("hypothesis/selectHypothesis", hypothesis);
       return this.$router.push({ path: "/hypothesis/" + hypothesis.uuid });
     },
