@@ -107,15 +107,34 @@ const mutations = {
         state.hypothesis.todaysGoal = todaysGoal;
     },
 
-    deleteHypothesis (state, hypothesisUuid){
+    deleteHypothesis (state, hypothesis){
         const hypothesisList = state.hypothesisList
-        let newHypothesisList = [];
+        const newHypothesisList = [];
+        let deleteHypothesisChild = false;
+        let parentKey = null;
+        const childList = [];
         for (const [key, value] of Object.entries(hypothesisList)) {
-            if(value.uuid !== hypothesisUuid && value.parentUuid !== hypothesisUuid){
+            console.info(hypothesis);
+            console.info(value.depth);
+            // 削除する仮説の子以下の場合
+            deleteHypothesisChild = deleteHypothesisChild && hypothesis.depth < value.depth ? true : false;
+            console.info(deleteHypothesisChild);
+            if (value.uuid !== hypothesis.uuid && !deleteHypothesisChild) {
+                if(value.uuid === hypothesis.parentUuid) parentKey = key;
+                if (value.parentUuid === hypothesis.parentUuid) {
+                    childList.push(value);
+                }
                 newHypothesisList.push(value);
+            } else {
+                deleteHypothesisChild = true;
             }
         }
+        console.info(childList);       
+        console.info(newHypothesisList);
+        // 仮説を削除した結果、親仮説の子がいなくなった場合
+        if(!childList.length) newHypothesisList[parentKey]['noChild'] = true;
         state.hypothesisList = newHypothesisList;
+        state.allHypothesisList[hypothesisList[0]['parentUuid']] = newHypothesisList;
     },
 }
 
@@ -195,8 +214,9 @@ const actions = {
     },
 
     async deleteHypothesis (context, selectedDeletingHypothesis) {
+        console.info(selectedDeletingHypothesis);
         const hypothesisUuid = selectedDeletingHypothesis.uuid;
-        context.commit('deleteHypothesis', hypothesisUuid);
+        context.commit('deleteHypothesis', selectedDeletingHypothesis);
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.delete('/api/hypothesis/'+ hypothesisUuid)
 

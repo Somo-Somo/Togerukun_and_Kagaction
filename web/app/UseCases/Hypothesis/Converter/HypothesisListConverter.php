@@ -45,6 +45,10 @@ class HypothesisListConverter
                     
                     $hypothesisData[$child['uuid']] = $child;
                 }
+                // 子仮説がある場合
+                // 仮説にnoChild: false を持たせる
+                $len === 1 ? $parent['noChild'] = false 
+                    : $hypothesisData[$parent['uuid']]['noChild'] = false;
             } else {
                 // 子仮説がない場合
                 // 仮説にnoChild: true を持たせる
