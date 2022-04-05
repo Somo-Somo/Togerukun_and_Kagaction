@@ -8,6 +8,7 @@ import Login from './pages/Login.vue';
 import Project from './pages/Project.vue';
 import HypothesisList from './pages/HypothesisList.vue';
 import HypothesisDetail from './pages/HypothesisDetail.vue';
+import CurrentGoal from './pages/CurrentGoal.vue';
 import SystemError from './pages/errors/System.vue';
 import NotFound from './pages/errors/NotFound.vue';
 
@@ -48,6 +49,11 @@ const routes = [
     path: '/hypothesis/:id',
     component: HypothesisDetail,
     name: "hypothesisDetail"
+  },
+  {
+    path: '/current_goal',
+    component: CurrentGoal,
+    name: "currentGoal"
   },
   {
     path: '/500',
