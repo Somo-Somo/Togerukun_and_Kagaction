@@ -6,12 +6,14 @@ const state = {
     parentHypothesis: null,
     hypothesisList: [],
     allHypothesisList: null,
+    currentGoalList: [],
 };
 
 const getters = {
     hypothesis: state => (state.hypothesis.name && state.hypothesis.uuid) ? state.hypothesis: null,
     parentHypothesis: state => state.parentHypothesis ? state.parentHypothesis: null,
     hypothesisList: state => state.hypothesisList ? state.hypothesisList : null,
+    currentGoalList: state => state.currentGoalList ? state.currentGoalList : null,
 };
 
 const mutations = {

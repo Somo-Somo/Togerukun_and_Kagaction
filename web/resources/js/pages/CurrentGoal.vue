@@ -27,8 +27,12 @@
             color="grey lighten-1"
             indeterminate
           ></v-progress-circular> -->
-
- 
+{{currentGoalList}}
+        <div class="my-4" v-show="!currentGoalList">
+            <p class="grey--text font-weight-bold ma-0 py-2">
+                現在の目標はありません
+            </p>
+        </div>
         </div>
       </template>
   </v-container>
@@ -36,6 +40,7 @@
 
 <script>
 import Header from "../components/Header.vue";
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -44,6 +49,9 @@ export default {
   data: () => ({
     category : "現在の目標",
   }),
+  computed: {
+      currentGoalList: 'hypothesis/currentGoalList',
+  }
 };
 </script>
 
