@@ -97,7 +97,7 @@ export default {
   computed : {
     parent() {
       return (hypothesis) => {
-        return 'プロジェクト: 「' + this.projectList[hypothesis.projectUuid].name + '」の現在の目標';
+        return ' 「' + this.projectList[hypothesis.projectUuid].name + '」の現在の目標';
       }
     },
   },
