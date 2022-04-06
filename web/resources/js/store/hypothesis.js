@@ -109,16 +109,6 @@ const mutations = {
         state.hypothesisList[data.uuid]['name'] = data.name;
     },
 
-    updateHypothesisStatus (state, click){
-        if (click === 'success') {
-            state.hypothesis.status = 'success'
-        } else if (click === 'failure') {
-            state.hypothesis.status =  'failure';
-        } else if (click === 'remove') {
-            state.hypothesis.status = null;
-        }
-     },
-
     updateHypothesisAccomplish (state, accomplish){
         state.hypothesis.accomplish = accomplish;
     },
@@ -248,39 +238,20 @@ const actions = {
         return;
     },
 
-    async updateStatus (context, {click,hypothesisUuid}) {
-        context.commit('updateHypothesisStatus', click);
-        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
-        if (click === 'remove') {
-            const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/status')
-            if (response.status !== OK) {
-                context.commit ('error/setCode', response.status, {root: true});
-                return false;
-            } 
-        } else {
-            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/status', {status:click})
+    async updateAccomplish (context, {accomplish, hypothesisUuid}) {
+        context.commit('updateHypothesisAccomplish', accomplish);
+        if (accomplish) {
+            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/accomplish')
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
             }
-        }
-        return;
-    },
-
-    async updateAccomplish (context, {accomplish, hypothesisUuid}) {
-        context.commit('updateHypothesisAccomplish', accomplish);
-        if (accomplish) {
-            // const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/current_goal')
-            // if (response.status !== OK) {
-            //     context.commit ('error/setCode', response.status, {root: true});
-            //     return false;
-            // }
         } else {
-            // const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/current_goal')
-            // if (response.status !== OK) {
-            //     context.commit ('error/setCode', response.status, {root: true});
-            //     return false;
-            // }
+            const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/accomplish')
+            if (response.status !== OK) {
+                context.commit ('error/setCode', response.status, {root: true});
+                return false;
+            }
         }
         return; 
     },

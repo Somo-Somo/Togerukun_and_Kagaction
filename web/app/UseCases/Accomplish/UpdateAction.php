@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UseCases\HypothesisStatus;
+namespace App\UseCases\Accomplish;
 
 use App\Repositories\Hypothesis\HypothesisRepositoryInterface;
 
@@ -16,7 +16,7 @@ class UpdateAction
     public function invoke(array $hypothesis)
     {
 
-        $this->hypothesis_repository->updateStatus($hypothesis);
+        $this->hypothesis_repository->updateAccomplish($hypothesis);
         return; 
     }
 }

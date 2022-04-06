@@ -68,8 +68,10 @@ class HypothesisListConverter
                 // 仮説一覧のトグルの状態
                 $parent['toggle'] = 'mdi-menu-right';
 
-                // 今日の目標
+                // 現在の目標
                 if ($value['currentGoal']) $parent['currentGoal'] = true;
+                // 進捗
+                if ($value['accomplish']) $parent['accomplish'] = true;
 
                 // ゴールは常に配列のケツに追加
                 $hypothesisList[$projectUuid][] = $parent;
@@ -77,6 +79,8 @@ class HypothesisListConverter
             } else {
                 // 今日の目標
                 if ($value['currentGoal']) $hypothesisData[$parent['uuid']]['currentGoal'] = true;
+                // 今日の目標
+                if ($value['accomplish']) $hypothesisData[$parent['uuid']]['accomplish'] = true;
                 // $hypothesisDataから
                 $hypothesisList[$projectUuid][] = $hypothesisData[$parent['uuid']];
             }
