@@ -58,7 +58,7 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">達成：</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">完了：</p>
             </v-subheader>
             <v-col class="px-4 py-0 d-flex align-self-center">
               <v-checkbox
