@@ -20,7 +20,7 @@
           "
           absolute
         >
-          <div class="py-2 d-flex justify-start flex-column">
+          <div class="py-4 d-flex justify-start flex-column">
             <v-subheader
               class="pa-md-0 d-flex"
               :class="
@@ -47,7 +47,7 @@
           <div
             class="py-2 d-flex justify-start"
             :style="
-              $vuetify.breakpoint.mdAndUp ? 'height: 80px' : 'height: 64px'
+              $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 64px'
             "
           >
             <v-subheader
@@ -58,35 +58,19 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">結果：</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">完了：</p>
             </v-subheader>
-            <v-col class="px-4 px-md-6 d-flex align-self-center" v-model="hypothesis.status">
-              <v-btn
-                class="mx-1"
-                @click="onClickStatus('success')"
-                :color="hypothesisStatus.type === 'success' ? 'green' : ''"
-                size="36"
-                icon
-                text
-              >
-                <v-icon size="32">mdi-check-circle-outline</v-icon>
-              </v-btn>
-              <v-btn
-                class="mx-1"
-                @click="onClickStatus('failure')"
-                :color="hypothesisStatus.type === 'failure' ? 'pink' : ''"
-                size="36"
-                icon
-                text
-              >
-                <v-icon size="32">mdi-close-circle-outline</v-icon>
-              </v-btn>
+            <v-col class="px-4 py-0 d-flex align-self-center">
+              <v-checkbox
+                v-model="hypothesis.accomplish"
+                @click="onClickAccomplish(hypothesis.accomplish)"
+              ></v-checkbox>
             </v-col>
           </div>
           <div
             class="py-2 d-flex justify-start"
             :style="
-              $vuetify.breakpoint.mdAndUp ? 'height: 80px' : 'height: 64px'
+              $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 64px'
             "
           >
             <v-subheader
@@ -99,14 +83,14 @@
             >
               <p class="ma-0 font-weight-bold" color="grey darken-1">現在の目標：</p>
             </v-subheader>
-            <v-col class="px-4 px-md-6 d-flex align-self-center">
+            <v-col class="px-4 py-0 d-flex align-self-center">
               <v-checkbox
                 v-model="hypothesis.currentGoal"
                 @click="onClickCurrentGoal(hypothesis.currentGoal)"
               ></v-checkbox>
             </v-col>
           </div>
-          <div class="py-2">
+          <div class="py-4">
             <div class="d-flex justify-space-between">
               <v-subheader
                 class="pa-md-0"
@@ -203,28 +187,10 @@ export default {
     }
   },
   methods: {
-    onClickStatus (btn){
-      let click;
-      if (btn === 'success') {
-        if (this.hypothesis.status === 'success') {
-          click = 'remove';
-          this.hypothesisStatus.type = null
-        } else {
-          click = 'success';
-          this.hypothesisStatus.type = 'success'
-        }
-      } else if (btn === 'failure') {
-        if (this.hypothesis.status === 'failure') {
-          click = 'remove';
-          this.hypothesisStatus.type = null
-        } else {
-          click = 'failure';
-          this.hypothesisStatus.type = 'failure';
-        }
-      }
+    onClickAccomplish (accomplish){
       this.$store.dispatch(
-        "hypothesis/updateStatus", 
-        { click:click, hypothesisUuid:this.hypothesis.uuid }
+        "hypothesis/updateAccomplish",
+         { accomplish:accomplish, hypothesisUuid:this.hypothesis.uuid }
       );
     },
     onClickCurrentGoal (currentGoal){

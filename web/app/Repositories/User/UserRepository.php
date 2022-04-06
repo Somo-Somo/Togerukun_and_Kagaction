@@ -45,7 +45,8 @@ class UserRepository implements UserRepositoryInterface
                     len = (project) <- [r*] - (parent:Hypothesis)
                 OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
                 OPTIONAL MATCH (:User)-[currentGoal:SET_CURRENT_GOAL]->(parent)
-                RETURN project,parent,r,collect(child),length(len),currentGoal
+                OPTIONAL MATCH (:User)-[accomplish:ACCOMPLISHED]->(parent)
+                RETURN project,parent,r,collect(child),length(len),currentGoal,accomplish
                 ORDER BY r
                 CYPHER,
                 [

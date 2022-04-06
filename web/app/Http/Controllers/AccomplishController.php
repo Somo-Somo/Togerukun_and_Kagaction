@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\UseCases\HypothesisStatus\UpdateAction;
-use App\UseCases\HypothesisStatus\DestroyAction;
+use App\UseCases\Accomplish\UpdateAction;
+use App\UseCases\Accomplish\DestroyAction;
 use Illuminate\Http\Request;
 use \Symfony\Component\HttpFoundation\Response;
 
-class HypothesisStatusController extends Controller
+class AccomplishController extends Controller
 {
     /**
      * Update the specified resource in storage.
@@ -20,7 +20,6 @@ class HypothesisStatusController extends Controller
     {
         $hypothesis = [
             'uuid' => $hypothesisUuid,
-            'status' => $request->status,
             'user_email' => $request->user()->email,
         ];
 
@@ -45,7 +44,6 @@ class HypothesisStatusController extends Controller
     {
         $hypothesis = [
             'uuid' => $hypothesisUuid,
-            'status' => $request->click,
             'user_email' => $request->user()->email,
         ];
 

@@ -110,36 +110,30 @@ class HypothesisRepository implements HypothesisRepositoryInterface
         return $deletingHypothesis;
     }
 
-    public function updateStatus(array $hypothesis)
+    public function updateAccomplish(array $hypothesis)
     {
-        $updateHypothesisStatus = $this->client->run(
+        $updateHypothesisAccomplish = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
-                SET hypothesis.status = $status
-                WITH user,hypothesis
-                OPTIONAL MATCH x = (:User)-[evaluated:EVALUATED]->(hypothesis)
-                WHERE x IS NOT NULL 
-                DELETE evaluated
-                WITH user,hypothesis
-                CREATE (user)-[:EVALUATED{at:localdatetime({timezone: 'Asia/Tokyo'})}]->(hypothesis)
+                CREATE (user) - [
+                    accomplished:ACCOMPLISHED{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                ] -> (hypothesis)
                 RETURN hypothesis
                 CYPHER,
                 [
                     'uuid' => $hypothesis['uuid'], 
-                    'status' => $hypothesis['status'], 
                     'user_email' => $hypothesis['user_email'], 
                 ]
             );
-        return $updateHypothesisStatus;
+        return $updateHypothesisAccomplish;
     }
 
-    public function destroyStatus(array $hypothesis)
+    public function destroyAccomplish(array $hypothesis)
     {
-        $deleteHypothesisStatus = $this->client->run(
+        $deleteHypothesisAccomplish = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email })-[evaluated:EVALUATED]->(hypothesis:Hypothesis { uuid: $uuid })
-                DELETE evaluated
-                REMOVE hypothesis.status
+                MATCH (user:User { email : $user_email })-[accomplish:ACCOMPLISHED]->(hypothesis:Hypothesis { uuid: $uuid })
+                DELETE accomplish
                 RETURN hypothesis
                 CYPHER,
                 [
@@ -147,6 +141,6 @@ class HypothesisRepository implements HypothesisRepositoryInterface
                     'user_email' => $hypothesis['user_email'], 
                 ]
             );
-        return $deleteHypothesisStatus;
+        return $deleteHypothesisAccomplish;
     }
 }
