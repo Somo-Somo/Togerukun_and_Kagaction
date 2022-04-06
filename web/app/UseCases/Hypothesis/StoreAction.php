@@ -22,16 +22,8 @@ class StoreAction
     public function invoke(array $hypothesis)
     {
 
-        $fetchProjectAndHypothesisFromNeo4j = $this->hypothesis_repository->create($hypothesis);
-
-        $projectList = $this->projectListConverter->invoke($fetchProjectAndHypothesisFromNeo4j);
-        $hypothesisList = $this->hypothesisListConverter->invoke($fetchProjectAndHypothesisFromNeo4j);
-
-        $createdHypothesisIsRelatedProjectAndHypothesis = [
-            'project' => $projectList,
-            'hypothesis' => $hypothesisList,
-        ];
+        $this->hypothesis_repository->create($hypothesis);
         
-        return $createdHypothesisIsRelatedProjectAndHypothesis;
+        return;
     }
 }
