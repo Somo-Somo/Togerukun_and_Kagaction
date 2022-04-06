@@ -145,7 +145,7 @@ export default {
           return hypothesis.currentGoal ? this.showHypothesis() : false; 
 
         if (this.hypothesisStatus.name === "完了") 
-          return hypothesis.status ? this.showHypothesis() : false; 
+          return hypothesis.accomplish ? this.showHypothesis() : false; 
 
         if (this.hypothesisStatus.name === "仮説") 
           return this.selectHypothesis.uuid === hypothesis.parentUuid ? this.showHypothesis() : false;
@@ -155,13 +155,10 @@ export default {
     },
     showStatus() {
       return (hypothesis) => {
-        if (hypothesis.currentGoal) {
+        if (hypothesis.accomplish) {
+          return {title: '完了', color: 'green'}; 
+        } else if (hypothesis.currentGoal) {
           return {title: '現在の目標', color:'blue'};
-        } else if (hypothesis.limit) {
-          return {title: hypothesis.limit, color: 'purple'};
-        } else if (hypothesis.status) {
-          if(hypothesis.status === 'success') return {title: '成功', color: 'green'}; 
-          if(hypothesis.status === 'failure') return {title: '失敗', color: 'red'}; 
         } else {
           return false;
         }
