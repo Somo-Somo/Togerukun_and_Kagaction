@@ -134,7 +134,6 @@ const mutations = {
             }
         }
 
-        console.info(newHypothesisList);
         // 仮説を削除した結果、親仮説の子がいなくなった場合
         if(newHypothesisList.length && !childList.length) newHypothesisList[parentKey]['child'] = false;
         state.hypothesisList = newHypothesisList;
@@ -218,7 +217,6 @@ const actions = {
     },
 
     async deleteHypothesis (context, selectedDeletingHypothesis) {
-        console.info(selectedDeletingHypothesis);
         const hypothesisUuid = selectedDeletingHypothesis.uuid;
         context.commit('deleteHypothesis', selectedDeletingHypothesis);
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
