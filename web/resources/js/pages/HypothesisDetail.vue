@@ -34,7 +34,7 @@
             <v-textarea
               label="subHeader + 'を入力'"
               v-model="hypothesis.name"
-              @change="edit"
+              @change="editHypothesisName"
               class="pa-0 text-h5"
               rows="1"
               auto-grow
@@ -210,7 +210,7 @@ export default {
         );
       }
     },
-    edit(){
+    editHypothesisName(){
         this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
     },
   },
