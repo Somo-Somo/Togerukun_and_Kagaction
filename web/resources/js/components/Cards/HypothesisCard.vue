@@ -13,8 +13,7 @@
         v-if="hypothesisStatus.name === '仮説一覧'"
         class="d-flex">
         <div :style="depth(hypothesis)"></div>
-        <div v-if="hypothesis.noChild" style="width: 24px"></div>
-        <div v-if="!hypothesis.noChild" class="d-flex align-content-center"> 
+        <div v-if="hypothesis.child" class="d-flex align-content-center"> 
           <v-icon
             v-if="hypothesis.toggle"
             @click="onClickShowAndHideHypothesis(hypothesis)"
@@ -22,6 +21,7 @@
             >{{ hypothesis.toggle }}
           </v-icon>
         </div>
+      <div v-if="!hypothesis.child" style="width: 24px"></div>
       </div>
       <v-card class="rounded" style="width: 100%;" outlined>
         <v-list class="py-0 d-flex align-content-center" style="height: 80px">
