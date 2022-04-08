@@ -211,7 +211,11 @@ export default {
       }
     },
     editHypothesisName(){
-        this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
+      console.info(this.hypothesis)
+        if (this.hypothesis.name) {
+          console.info(this.hypothesis.name);
+          this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
+        }
     },
   },
 };
