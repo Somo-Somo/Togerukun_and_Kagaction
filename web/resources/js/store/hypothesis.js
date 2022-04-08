@@ -10,7 +10,7 @@ const state = {
 };
 
 const getters = {
-    hypothesis: state => (state.hypothesis.name && state.hypothesis.uuid) ? state.hypothesis: null,
+    hypothesis: state => state.hypothesis.uuid ? state.hypothesis: null,
     parentHypothesis: state => state.parentHypothesis ? state.parentHypothesis: null,
     hypothesisList: state => state.hypothesisList ? state.hypothesisList : null,
     currentGoalList: state => state.currentGoalList ? state.currentGoalList : null,
@@ -103,10 +103,6 @@ const mutations = {
     updateAllHypothesisList (state) {
         const projectUuid =  state.hypothesisList[0].parentUuid;
         state.allHypothesisList[projectUuid] = state.hypothesisList;
-    },
-
-    updateHypothesisName (state, data) {
-        state.hypothesisList[data.uuid]['name'] = data.name;
     },
 
     updateHypothesisAccomplish (state, accomplish){
@@ -215,11 +211,7 @@ const actions = {
     async editHypothesis (context, data) {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.put('/api/hypothesis/'+ data.uuid, data)
-
-        if (response.status === OK) {
-            context.commit('updateHypothesisName', data);
-            return false;
-        } else {
+        if (response.status !== OK) {
             context.commit ('error/setCode', response.status, {root: true});
             return false;
         }
