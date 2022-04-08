@@ -32,7 +32,7 @@
               <p class="ma-0 font-weight-bold" color="grey darken-1">{{ subHeader }}</p>
             </v-subheader>
             <v-textarea
-              label="subHeader + 'を入力'"
+              label="名前を入力"
               v-model="hypothesis.name"
               @change="editHypothesisName"
               class="pa-0 text-h5"
@@ -211,11 +211,9 @@ export default {
       }
     },
     editHypothesisName(){
-      console.info(this.hypothesis)
-        if (this.hypothesis.name) {
-          console.info(this.hypothesis.name);
-          this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
-        }
+      if (this.hypothesis.name) {
+        this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
+      }
     },
   },
 };

@@ -105,10 +105,6 @@ const mutations = {
         state.allHypothesisList[projectUuid] = state.hypothesisList;
     },
 
-    updateHypothesisName (state, data) {
-        state.hypothesisList[data.uuid]['name'] = data.name;
-    },
-
     updateHypothesisAccomplish (state, accomplish){
         state.hypothesis.accomplish = accomplish;
     },
@@ -215,11 +211,7 @@ const actions = {
     async editHypothesis (context, data) {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await axios.put('/api/hypothesis/'+ data.uuid, data)
-
-        if (response.status === OK) {
-            context.commit('updateHypothesisName', data);
-            return false;
-        } else {
+        if (response.status !== OK) {
             context.commit ('error/setCode', response.status, {root: true});
             return false;
         }
