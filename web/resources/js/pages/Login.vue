@@ -17,7 +17,7 @@
     </v-alert>
       <v-card-title class="text-center pa-8">
         <h4 class="fill-width">
-          Kagaction(テスト版)&nbsp;{{ isLoginForm ? "ログイン" : "会員登録" }}
+          Kagaction(トライアル版)&nbsp;{{ isLoginForm ? "ログイン" : "会員登録" }}
         </h4>
       </v-card-title>
       <v-divider> </v-divider>
