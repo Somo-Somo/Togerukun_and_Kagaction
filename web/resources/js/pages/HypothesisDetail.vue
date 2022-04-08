@@ -160,7 +160,7 @@ export default {
     InputForm,
   },
   data: () => ({
-    hypothesisStatus: {name: "仮説", show: false, type: null, },
+    hypothesisStatus: {name: "仮説", show: false},
     page: "仮説",
   }),
   computed : {
@@ -171,14 +171,10 @@ export default {
       inputFormName: 'form/name',
       inputForm: 'form/inputForm',
       project: 'project/project',
+      hypothesis: 'hypothesis/hypothesis',
       parentHypothesis: 'hypothesis/parentHypothesis',
       hypothesisList: 'hypothesis/hypothesisList',
     }),
-    hypothesis() {
-      const hypothesis = this.$store.getters['hypothesis/hypothesis'];
-      this.hypothesisStatus.type = hypothesis.status ? hypothesis.status : null ;
-      return hypothesis;
-    },
     subHeader() {
       return this.hypothesis.depth === 0 ? 'ゴール' : '仮説';
     },
