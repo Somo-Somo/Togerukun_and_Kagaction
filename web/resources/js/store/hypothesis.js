@@ -68,7 +68,7 @@ const mutations = {
             // 追加する親仮説の場合
             if (hypothesis.uuid === newHypothesis.parentUuid ){
                 hypothesis['toggle'] = "mdi-menu-right";
-                delete hypothesis.noChild;
+                hypothesis.child = true;
                 hypothesisParemtOrBrother = true;
                 newHypothesisList.push(hypothesis);
             } 
@@ -138,8 +138,9 @@ const mutations = {
             }
         }
 
+        console.info(newHypothesisList);
         // 仮説を削除した結果、親仮説の子がいなくなった場合
-        if(!childList.length) newHypothesisList[parentKey]['noChild'] = true;
+        if(newHypothesisList.length && !childList.length) newHypothesisList[parentKey]['child'] = false;
         state.hypothesisList = newHypothesisList;
         state.allHypothesisList[hypothesisList[0]['parentUuid']] = newHypothesisList;
     },
@@ -165,7 +166,7 @@ const actions = {
             uuid: uuidv4(),
             parentUuid: project.uuid,
             depth: 0,
-            noChild: true,
+            child: false,
         };
 
         await context.commit ('addGoal', goal);
@@ -191,7 +192,7 @@ const actions = {
             uuid: uuidv4(),
             parentUuid: parent.uuid,
             depth: Number(parent.depth) + 1,
-            noChild: true,
+            child: false,
         };
 
         await context.commit ('addHypothesisForHypothesisList', hypothesis);
