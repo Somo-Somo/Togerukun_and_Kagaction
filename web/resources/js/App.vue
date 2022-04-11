@@ -4,6 +4,7 @@
     <v-main class="my-md-2">
       <RouterView />
     </v-main>
+    <Footer />
   </v-app>
 </template>
 

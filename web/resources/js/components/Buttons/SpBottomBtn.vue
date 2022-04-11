@@ -5,7 +5,7 @@
         class="d-flex justify-center"
         size="80"
         color="white"
-        style="position: fixed; right: 24px; bottom: 24px; z-index: 10"
+        style="position: fixed; right: 24px; bottom: 64px; z-index: 10"
       >
         <v-avatar
           size="64"
