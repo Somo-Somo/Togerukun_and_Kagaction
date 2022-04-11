@@ -130,6 +130,8 @@ export default {
 
 .spTabStyle
   width: calc(100vw - 24px)
+  position: relative
+  top: 72px
 
 .cardStyle
   height: calc(100vh - 152px)
@@ -139,6 +141,7 @@ export default {
 .spCardStyle
   height: calc(100vh - 224px)
   position: relative
+  top: 56px
 </style>
 
 <style lang='sass'>
