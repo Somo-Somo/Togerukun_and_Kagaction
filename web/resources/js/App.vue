@@ -4,7 +4,7 @@
     <v-main class="my-md-2">
       <RouterView />
     </v-main>
-    <Footer />
+    <Footer v-if="user" />
   </v-app>
 </template>
 
@@ -22,6 +22,7 @@ export default {
   computed: {
     ...mapGetters({
       check: 'auth/check',
+      user: 'auth/user',
       errorCode: 'error/code',
     }),
   },
