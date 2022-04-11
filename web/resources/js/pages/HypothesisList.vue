@@ -54,9 +54,11 @@
         </div>
         <!-- スマホ版追加ボタン -->
         <SpBottomBtn 
-        @clickAditional="onClickCreate" 
-        :tab="tab" 
-        :headerTitle="'仮説一覧'" />
+          v-if="tab === 0"
+          @clickAditional="onClickCreate" 
+          :tab="tab" 
+          :headerTitle="'仮説一覧'" 
+        />
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
