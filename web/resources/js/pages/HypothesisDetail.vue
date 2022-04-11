@@ -12,13 +12,11 @@
       <template>
         <div
           class="d-flex flex-column"
-          style="position: fixed"
-          :style="
+          :class="
             $vuetify.breakpoint.mdAndUp
-              ? 'width: 772px'
-              : 'width: calc(100vw - 24px)'
+              ? 'hypothesisDetailMain'
+              : 'spHypothesisDetailMain'
           "
-          absolute
         >
           <div class="py-4 d-flex justify-start flex-column">
             <v-subheader
@@ -220,6 +218,15 @@ export default {
 </script>
 
 <style scoped lang='sass'>
+.hypothesisDetailMain
+  width: 772px
+  position: fixed
+
+.spHypothesisDetailMain
+  width: calc(100vw - 24px)
+  position: fixed
+  top: 72px
+
 .hypothesisSubTitle
   font-size: 1rem
 
@@ -233,6 +240,6 @@ export default {
   position: relative
 
 .spCardStyle
-  height: calc(100vh - 224px)
+  height: calc(100vh - 360px)
   position: relative
 </style>
