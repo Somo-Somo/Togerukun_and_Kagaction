@@ -54,9 +54,11 @@
         </div>
         <!-- スマホ版追加ボタン -->
         <SpBottomBtn 
-        @clickAditional="onClickCreate" 
-        :tab="tab" 
-        :headerTitle="'仮説一覧'" />
+          v-if="tab === 0"
+          @clickAditional="onClickCreate" 
+          :tab="tab" 
+          :headerTitle="'仮説一覧'" 
+        />
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
@@ -130,6 +132,8 @@ export default {
 
 .spTabStyle
   width: calc(100vw - 24px)
+  position: relative
+  top: 80px
 
 .cardStyle
   height: calc(100vh - 152px)
@@ -139,6 +143,7 @@ export default {
 .spCardStyle
   height: calc(100vh - 224px)
   position: relative
+  top: 64px
 </style>
 
 <style lang='sass'>
