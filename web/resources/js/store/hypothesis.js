@@ -249,7 +249,7 @@ const actions = {
 
     async updateCurrentGoal (context, {currentGoal, hypothesisUuid}) {
         context.commit('updateHypothesisCurrentGoal', currentGoal);
-        context.commit ('hypothesis/setCurrentGoalList');
+        context.commit ('setCurrentGoalList');
         if (currentGoal) {
             const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/current_goal')
             if (response.status !== OK) {
