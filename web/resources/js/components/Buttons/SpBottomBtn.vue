@@ -22,7 +22,7 @@
         </v-avatar>
       </v-avatar>
       <v-avatar
-        v-if="tab === 0"
+        v-if="tab === 0 || $route.matched[0].path === '/projects'"
         class="d-flex justify-center"
         size="80"
         color="white"
