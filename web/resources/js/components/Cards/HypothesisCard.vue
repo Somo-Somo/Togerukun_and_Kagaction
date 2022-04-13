@@ -29,7 +29,7 @@
           :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:72px'"
         >
           <v-list-item @click="toHypothesisDetail(hypothesis)" link>
-            <v-list-item-content class="pa-0 d-flex flex-nowrap">
+            <v-list-item-content class="pa-0 d-flex">
               <div>
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
                   <div class="d-flex pr-1" v-if="showStatus(hypothesis)">
@@ -61,7 +61,7 @@
                       class="ma-0"
                       style="
                         position: absolute;
-                        top: 32px;
+                        top: 28px;
                         right: 16px;
                       "
                     >
