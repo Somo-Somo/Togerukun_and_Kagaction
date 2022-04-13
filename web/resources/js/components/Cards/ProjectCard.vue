@@ -1,10 +1,19 @@
 <template>
 <div>
   <v-list class="py-0" width="100%">
-    <v-col class="px-md-0" v-for="project in projectList" :key="project.name">
+    <v-col 
+      class="px-md-0" 
+      v-for="project in projectList" 
+      :key="project.name"
+      :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
+    >
       <v-card class="rounded" outlined>
-        <v-list class="py-0" style="height: 80px">
-          <v-list-item @click="toHypothesis(project)" style="height: 80px" link>
+        <v-list class="py-0" :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'">
+          <v-list-item 
+            @click="toHypothesis(project)" 
+            :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'"
+            link
+          >
             <v-list-item-content>
               <v-list-item-title
                 ><p class="font-weight-black ma-0">
@@ -103,3 +112,6 @@ export default {
   },
 };
 </script>
+<style scoped lang='sass'>
+
+</style>
