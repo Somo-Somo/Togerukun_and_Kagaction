@@ -16,7 +16,7 @@
           >
             <v-list-item-content>
               <v-list-item-title
-                ><p class="font-weight-black ma-0" :style="$vuetify.breakpoint.smAndUp ? 'font-size:1rem' : 'font-size:0.8rem'">
+                ><p class="font-weight-black ma-0">
                   {{ project.name }}
                 </p></v-list-item-title
               >
