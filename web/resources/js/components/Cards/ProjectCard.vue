@@ -16,7 +16,7 @@
           >
             <v-list-item-content>
               <v-list-item-title
-                ><p class="font-weight-black ma-0">
+                ><p class="font-weight-black ma-0" :style="$vuetify.breakpoint.smAndUp ? 'font-size:1rem' : 'font-size:0.8rem'">
                   {{ project.name }}
                 </p></v-list-item-title
               >
@@ -24,10 +24,7 @@
 
             <v-menu class="rounded-lg elevation-0" offset-y>
               <template v-slot:activator="{ on, attrs }">
-                <v-list-item-action
-                  class="ma-0"
-                  style="position: absolute; top: 32px; right: 16px"
-                >
+                <v-list-item-action class="ma-0">
                   <v-btn v-bind="attrs" v-on="on" small icon link>
                     <v-icon>mdi-dots-vertical</v-icon>
                   </v-btn>
