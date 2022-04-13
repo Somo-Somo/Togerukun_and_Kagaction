@@ -24,7 +24,10 @@
       <div v-if="!hypothesis.child" style="width: 24px"></div>
       </div>
       <v-card class="rounded" style="width: 100%;" outlined>
-        <v-list class="py-0 d-flex align-content-center" style="height: 80px">
+        <v-list 
+          class="py-0 d-flex align-content-center" 
+          :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:72px'"
+        >
           <v-list-item @click="toHypothesisDetail(hypothesis)" link>
             <v-list-item-content class="pa-0 d-flex flex-nowrap">
               <div>
