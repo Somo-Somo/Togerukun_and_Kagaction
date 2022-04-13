@@ -26,7 +26,9 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-list-item-action class="ma-0">
                   <v-btn v-bind="attrs" v-on="on" small icon link>
-                    <v-icon>mdi-dots-vertical</v-icon>
+                    <v-icon :size="$vuetify.breakpoint.smAndUp ? '24' : '20'">
+                      mdi-dots-vertical
+                    </v-icon>
                   </v-btn>
                 </v-list-item-action>
               </template>
