@@ -16,7 +16,7 @@
         v-if="!project && !hypothesis && !parentHypothesis"
         class="d-flex align-self-center px-1"
       >
-        <h1 style="font-size: 20px">{{ headerTitle }}</h1>
+        <h1 style="font-size: 18px">{{ headerTitle }}</h1>
       </div>
       <div v-if="project" class="d-flex align-self-center">
         <v-btn 
@@ -24,31 +24,31 @@
           @click="onClickHeaderTitle('project', project)" 
           text
         >
-          <h1 style="font-size: 20px">{{ project.name }}</h1>
+          <h1 style="font-size: 18px">{{ project.name }}</h1>
         </v-btn>
       </div>
       <div v-if="hypothesis" class="d-flex align-self-center">
-        <h1 v-if="hypothesis.depth > 1" style="font-size: 20px">/</h1>
-        <h1 v-if="hypothesis.depth > 1" style="font-size: 20px" class="px-2">...</h1>
+        <h1 v-if="hypothesis.depth > 1" style="font-size: 18px">/</h1>
+        <h1 v-if="hypothesis.depth > 1" style="font-size: 18px" class="px-2">...</h1>
       </div>
       <div v-if="parentHypothesis" class="d-flex align-self-center"> 
-        <h1 style="font-size: 20px"> / </h1>
+        <h1 style="font-size: 18px"> / </h1>
         <v-btn 
           class="px-2" 
           @click="onClickHeaderTitle('hypothesis', parentHypothesis)" 
           text
         >
-          <h1 style="font-size: 20px" >{{ parentHypothesis.name }}</h1>
+          <h1 style="font-size: 18px" >{{ parentHypothesis.name }}</h1>
         </v-btn>
       </div>
       <div v-if="hypothesis" class="d-flex align-self-center" >
-        <h1 style="font-size: 20px"> / </h1>
+        <h1 style="font-size: 18px"> / </h1>
         <v-btn 
           class="px-2" 
           @click="onClickHeaderTitle('hypothesis', hypothesis)" 
           text
         >
-          <h1 style="font-size: 20px" > {{ hypothesis.name }} </h1>
+          <h1 style="font-size: 18px" > {{ hypothesis.name }} </h1>
         </v-btn>
       </div>
     </v-toolbar-title>
