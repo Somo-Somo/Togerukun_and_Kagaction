@@ -14,7 +14,10 @@
             <v-icon class="pa-2">mdi-plus</v-icon>
             <v-list-item-content>
               <v-list-item-title>
-                <p class="grey--text font-weight-bold ma-0 pa-2">
+                <p 
+                  class="grey--text font-weight-bold ma-0 pa-2"
+                  :style="$vuetify.breakpoint.smAndUp ? 'font-size:1rem' : 'font-size:0.75rem'"
+                >
                   {{category}}を追加する
                 </p>
               </v-list-item-title>
