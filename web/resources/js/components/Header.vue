@@ -1,7 +1,7 @@
 <template>
   <v-app-bar
     class="my-1 mt-md-1 mb-md-0"
-    :style="$vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 64px'"
+    :style="$vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 56px'"
     color="white"
     elevation="0"
     app
@@ -16,7 +16,7 @@
         v-if="!project && !hypothesis && !parentHypothesis"
         class="d-flex align-self-center px-1"
       >
-        <h1 :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'">
+        <h1 :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 1rem'">
           {{ headerTitle }}
         </h1>
       </div>
