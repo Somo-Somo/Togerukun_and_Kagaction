@@ -240,6 +240,6 @@ export default {
   position: relative
 
 .spCardStyle
-  height: calc(100vh - 360px)
+  height: calc(100vh - 412px)
   position: relative
 </style>
