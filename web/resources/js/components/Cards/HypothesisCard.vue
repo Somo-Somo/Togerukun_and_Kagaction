@@ -89,8 +89,16 @@
       </v-card>
       </div>
     </v-col>
-    <div class="my-4" v-show="!hypothesisStatus.show && hypothesisStatus.name !== 'ゴール'">
-      <p class="grey--text font-weight-bold ma-0 pa-2">
+    <div 
+      class="my-4" 
+      v-show="
+        !hypothesisStatus.show && (hypothesisStatus.name !== 'ゴール' || !$vuetify.breakpoint.mdAndUp)
+      "
+    >
+      <p 
+        class="grey--text font-weight-bold ma-0 pa-md-2 px-4 py-2"
+        :size="$vuetify.breakpoint.smAndUp ? '20': '16'"
+      >
           {{hypothesisStatus.name}}はありません
       </p>
     </div>
@@ -257,6 +265,7 @@ export default {
 <style scoped lang='sass'>
 .toggleTransrateRight
   transform: rotate(0.25turn)
+
 .v-icon.v-icon:after
   background-color: transparent !important
 </style>
