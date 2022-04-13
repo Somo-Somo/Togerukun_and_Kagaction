@@ -32,7 +32,7 @@
         <h1 v-if="hypothesis.depth > 1" style="font-size: 18px" class="px-2">...</h1>
       </div>
       <div v-if="parentHypothesis" class="d-flex align-self-center"> 
-        <h1 style="font-size: 18px"> / </h1>
+        <h1 style="font-size: 18px" class="d-flex align-self-center"> / </h1>
         <v-btn 
           class="px-2" 
           @click="onClickHeaderTitle('hypothesis', parentHypothesis)" 
@@ -42,7 +42,7 @@
         </v-btn>
       </div>
       <div v-if="hypothesis" class="d-flex align-self-center" >
-        <h1 style="font-size: 18px"> / </h1>
+        <h1 style="font-size: 18px" class="d-flex align-self-center"> / </h1>
         <v-btn 
           class="px-2" 
           @click="onClickHeaderTitle('hypothesis', hypothesis)" 
