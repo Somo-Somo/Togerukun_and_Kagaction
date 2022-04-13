@@ -24,9 +24,12 @@
       <div v-if="!hypothesis.child" style="width: 24px"></div>
       </div>
       <v-card class="rounded" style="width: 100%;" outlined>
-        <v-list class="py-0 d-flex align-content-center" style="height: 80px">
+        <v-list 
+          class="py-0 d-flex align-content-center" 
+          :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:72px'"
+        >
           <v-list-item @click="toHypothesisDetail(hypothesis)" link>
-            <v-list-item-content class="pa-0 d-flex flex-nowrap">
+            <v-list-item-content class="pa-0 d-flex">
               <div>
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
                   <div class="d-flex pr-1" v-if="showStatus(hypothesis)">
@@ -58,7 +61,7 @@
                       class="ma-0"
                       style="
                         position: absolute;
-                        top: 32px;
+                        top: 28px;
                         right: 16px;
                       "
                     >
@@ -86,8 +89,16 @@
       </v-card>
       </div>
     </v-col>
-    <div class="my-4" v-show="!hypothesisStatus.show && hypothesisStatus.name !== 'ゴール'">
-      <p class="grey--text font-weight-bold ma-0 pa-2">
+    <div 
+      class="my-4" 
+      v-show="
+        !hypothesisStatus.show && (hypothesisStatus.name !== 'ゴール' || !$vuetify.breakpoint.mdAndUp)
+      "
+    >
+      <p 
+        class="grey--text font-weight-bold ma-0 pa-md-2 px-4 py-2"
+        :size="$vuetify.breakpoint.smAndUp ? '20': '16'"
+      >
           {{hypothesisStatus.name}}はありません
       </p>
     </div>
@@ -254,6 +265,7 @@ export default {
 <style scoped lang='sass'>
 .toggleTransrateRight
   transform: rotate(0.25turn)
+
 .v-icon.v-icon:after
   background-color: transparent !important
 </style>

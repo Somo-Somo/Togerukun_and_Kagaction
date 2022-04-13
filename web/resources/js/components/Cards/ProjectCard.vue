@@ -1,10 +1,19 @@
 <template>
 <div>
   <v-list class="py-0" width="100%">
-    <v-col class="px-md-0" v-for="project in projectList" :key="project.name">
+    <v-col 
+      class="px-md-0" 
+      v-for="project in projectList" 
+      :key="project.name"
+      :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
+    >
       <v-card class="rounded" outlined>
-        <v-list class="py-0" style="height: 80px">
-          <v-list-item @click="toHypothesis(project)" style="height: 80px" link>
+        <v-list class="py-0" :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:72px'">
+          <v-list-item 
+            @click="toHypothesis(project)" 
+            :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:72px'"
+            link
+          >
             <v-list-item-content>
               <v-list-item-title
                 ><p class="font-weight-black ma-0">
@@ -15,12 +24,11 @@
 
             <v-menu class="rounded-lg elevation-0" offset-y>
               <template v-slot:activator="{ on, attrs }">
-                <v-list-item-action
-                  class="ma-0"
-                  style="position: absolute; top: 32px; right: 16px"
-                >
+                <v-list-item-action class="ma-0">
                   <v-btn v-bind="attrs" v-on="on" small icon link>
-                    <v-icon>mdi-dots-vertical</v-icon>
+                    <v-icon :size="$vuetify.breakpoint.smAndUp ? '24' : '20'">
+                      mdi-dots-vertical
+                    </v-icon>
                   </v-btn>
                 </v-list-item-action>
               </template>
@@ -103,3 +111,6 @@ export default {
   },
 };
 </script>
+<style scoped lang='sass'>
+
+</style>

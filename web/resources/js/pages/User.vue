@@ -8,13 +8,18 @@
         <div>
             <v-row class="d-flex justify-start ma-2">
                 <div class="ma-2 align-self-center">
-                    <v-avatar color="brown" size="64">
-                        <span class="white--text text-h5">{{ initial }}</span>
+                    <v-avatar color="brown" :size="$vuetify.breakpoint.smAndUp ? '64' : '56'">
+                        <span class="white--text" :class="$vuetify.breakpoint.smAndUp ? 'text-h5' : 'text-h6'">
+                            {{ initial }}
+                        </span>
                     </v-avatar>
                 </div>
-                <div class="mx-4 my-2">
+                <div class="mx-4 my-auto">
                     <span v-if="isLogin" class="navbar__item">
-                        <p class="ma-0 text-h4">{{ user.name }}</p>
+                        <p 
+                         class="ma-0 text-h4"
+                         :class="$vuetify.breakpoint.smAndUp ? 'text-h4' : 'text-h6'"
+                        >{{ user.name }}</p>
                         <p class="text-subtitle-2 grey--text ma-0">
                             ID:{{ userId }}
                         </p>
