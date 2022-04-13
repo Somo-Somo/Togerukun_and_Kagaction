@@ -115,11 +115,6 @@
               </v-btn>
             </div>
           </div>
-          <div class="d-md-none">
-            <p class="ma-0" style="color:red;">※ 注意</p>
-            <p>現在スマートフォンでのご利用に対応しておりません。<br>
-            お手数おかけしますがPCでのご利用をお願いいたします。</p>
-          </div>
         </div>
       </form>
     </v-card>
