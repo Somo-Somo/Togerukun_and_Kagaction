@@ -8,8 +8,8 @@
       <template>
         <div
           class="d-flex justify-space-between"
-          style="position: fixed;  width: 772px"
-          :class="$vuetify.breakpoint.mdAndUp ? 'tabStyle' : 'spTabStyle'"
+          style="position: fixed;"
+          :class="$vuetify.breakpoint.smAndUp ? 'tabStyle' : 'spTabStyle'"
           absolute
         >
           <v-tabs v-model="tab" class="px-3 px-md-0" color="black" center-active>
