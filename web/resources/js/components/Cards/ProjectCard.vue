@@ -8,10 +8,10 @@
       :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
     >
       <v-card class="rounded" outlined>
-        <v-list class="py-0" :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:72px'">
+        <v-list class="py-0" :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'">
           <v-list-item 
             @click="toHypothesis(project)" 
-            :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:72px'"
+            :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'"
             link
           >
             <v-list-item-content>
