@@ -50,7 +50,7 @@
               />
               <!-- PC版追加カード -->
               <NewAdditionalCard
-                v-if="tab === 0"
+                v-if="tab === 0 && $vuetify.breakpoint.mdAndUp"
                 @clickAditional="onClickCreate"
                 :category="hypothesisStatus.name"
               />
