@@ -4,11 +4,11 @@
         style="max-width: 900px"
         fluid
     >
-        <Header :headerTitle="'ユーザー'" />
+        <Header :headerTitle="'ユーザー'" v-if="$vuetify.breakpoint.mdAndUp" />
         <div>
             <v-row class="d-flex justify-start ma-2">
                 <div class="ma-2 align-self-center">
-                    <v-avatar color="brown" :size="$vuetify.breakpoint.smAndUp ? '64' : '56'">
+                    <v-avatar color="brown" :size="$vuetify.breakpoint.smAndUp ? '64' : '48'">
                         <span class="white--text" :class="$vuetify.breakpoint.smAndUp ? 'text-h5' : 'text-h6'">
                             {{ initial }}
                         </span>
@@ -26,7 +26,7 @@
                     </span>
                 </div>
             </v-row>
-            <v-list>
+            <v-list class="pa-0 ma-2">
                 <v-list-item-group>
                     <v-list-item
                         v-for="(item, i) in items"
