@@ -39,7 +39,8 @@
                         <v-list-item-content>
                             <v-list-item-title
                                 class="font-weight-bold"
-                                :class="item.color ? item.color : false"
+                                :class="item.color ? item.color : false "
+                                :style="$vuetify.breakpoint.smAndUp ? 'font-size: 1rem;' : 'font-size: 0.9rem;'"
                                 v-text="item.text"
                             ></v-list-item-title>
                         </v-list-item-content>
