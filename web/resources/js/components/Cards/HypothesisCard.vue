@@ -29,9 +29,12 @@
           class="py-0 d-flex align-content-center" 
           :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'"
         >
-          <v-list-item @click="toHypothesisDetail(hypothesis)" link>
+          <v-list-item 
+            style="width: 100%" 
+            @click="toHypothesisDetail(hypothesis)" 
+            link>
             <v-list-item-content class="pa-0 d-flex">
-              <div>
+              <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
                   <div class="d-flex pr-1" v-if="showStatus(hypothesis)">
                     <v-icon size="8" :color="showStatus(hypothesis).color">circle</v-icon>
@@ -45,7 +48,7 @@
                   <div class="d-flex"> 
                       <p
                         class="ma-0 grey--text font-weight-bold align-self-center"
-                        style="font-size: 8px"
+                        style="font-size: 8px;"
                       >
                        {{ parent(hypothesis) }}
                       </p>
@@ -54,6 +57,7 @@
                 <v-list-item-title class="py-2 pb-4">
                   <p 
                     class="font-weight-black ma-0"
+                    style="max-width:calc(100% - 36px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                     :style="$vuetify.breakpoint.smAndUp ? 'font-size:1rem' : 'font-size:0.8rem'"
                   >
                     {{ hypothesis.name }}
