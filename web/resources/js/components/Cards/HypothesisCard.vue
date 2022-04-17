@@ -96,15 +96,13 @@
       </v-card>
       </div>
     </v-col>
-    <div 
+    <div
       class="my-4" 
-      v-show="
-        !hypothesisStatus.show && (hypothesisStatus.name !== 'ゴール' || !$vuetify.breakpoint.mdAndUp)
-      "
+      v-show="!hypothesisStatus.show && hypothesisStatus.name !== 'ゴール'"
     >
-      <p 
+      <p
         class="grey--text font-weight-bold ma-0 pa-md-2 px-4 py-2"
-        :size="$vuetify.breakpoint.smAndUp ? '20': '16'"
+        :style="$vuetify.breakpoint.smAndUp ? 'font-size:18px;' : 'font-size:14px;'"
       >
           {{hypothesisStatus.name}}はありません
       </p>
