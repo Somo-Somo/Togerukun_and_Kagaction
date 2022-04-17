@@ -8,15 +8,18 @@
       :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
     >
       <v-card class="rounded" outlined>
-        <v-list class="py-0" :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:72px'">
+        <v-list class="py-0" :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'">
           <v-list-item 
             @click="toHypothesis(project)" 
-            :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:72px'"
+            :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'"
             link
           >
             <v-list-item-content>
               <v-list-item-title
-                ><p class="font-weight-black ma-0">
+                ><p 
+                 class="font-weight-black ma-0"
+                 :style="$vuetify.breakpoint.smAndUp ? 'font-size:1rem' : 'font-size:0.75rem'
+                ">
                   {{ project.name }}
                 </p></v-list-item-title
               >
@@ -111,6 +114,3 @@ export default {
   },
 };
 </script>
-<style scoped lang='sass'>
-
-</style>

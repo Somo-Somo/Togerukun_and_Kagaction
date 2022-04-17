@@ -18,7 +18,7 @@
               : 'spHypothesisDetailMain'
           "
         >
-          <div class="py-4 d-flex justify-start flex-column">
+          <div class="py-2 py-md-4 d-flex justify-start flex-column">
             <v-subheader
               class="pa-md-0 d-flex"
               :class="
@@ -33,8 +33,9 @@
               label="名前を入力"
               v-model="hypothesis.name"
               @change="editHypothesisName"
-              class="pa-0 text-h5"
+              class="pa-0 "
               rows="1"
+              :class="$vuetify.breakpoint.smAndUp ? 'text-h5' : 'text-h6'"
               auto-grow
               single-line
               solo
@@ -45,7 +46,7 @@
           <div
             class="py-2 d-flex justify-start"
             :style="
-              $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 64px'
+              $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 48px'
             "
           >
             <v-subheader
@@ -68,7 +69,7 @@
           <div
             class="py-2 d-flex justify-start"
             :style="
-              $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 64px'
+              $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 48px'
             "
           >
             <v-subheader
@@ -98,9 +99,23 @@
                     : 'spHypothesisSubTitle'
                 "
               >
-                <p class="ma-0 font-weight-bold align-self-center" color="grey darken-1">仮説：</p>
+                <p 
+                  class="ma-0 font-weight-bold align-self-center" 
+                  color="grey darken-1"
+                  :style="$vuetify.breakpoint.smAndUp ? '48px' : 'min-width: 36px'"
+                >
+                  仮説：
+                </p>
+                <p 
+                  class="ma-0 font-weight-black caption align-self-center" 
+                  color="grey lighten-1"
+                  style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                  :style="$vuetify.breakpoint.smAndUp ? 'max-width: 70%' : 'max-width: 40vw'"
+                >
+                  「{{hypothesis.name}}
+                </p>
                 <p class="ma-0 font-weight-black caption align-self-center" color="grey lighten-1">
-                  「{{hypothesis.name}}」を達成するためには？
+                  」を達成するためには？
                 </p>
               </v-subheader>
               <v-icon
@@ -123,12 +138,12 @@
               <!-- PC版追加カード -->
               <NewAdditionalCard 
                @clickAditional="onClickCreate" 
-               :category="additionalInputFormLabel"/>
+               :category="page"/>
             </div>
           </div>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpBottomBtn @clickAditional="onClickCreate" :headerTitle="page" />
+        <!-- <SpBottomBtn @clickAditional="onClickCreate" :headerTitle="page" /> -->
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
@@ -231,7 +246,7 @@ export default {
   font-size: 1rem
 
 .spHypothesisSubTitle
-  font-size: 14px
+  font-size: 12px
   height: 24px
   padding: 0 0 0 12px
 
@@ -240,6 +255,6 @@ export default {
   position: relative
 
 .spCardStyle
-  height: calc(100vh - 412px)
+  height: calc(100vh - 360px)
   position: relative
 </style>

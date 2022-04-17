@@ -1,17 +1,21 @@
 <template>
   <v-container
-    class="d-flex flex-column py-6 my-md-2 px-md-16"
+    class="d-flex flex-column py-0 my-md-2 px-md-16"
     style="max-width: 900px"
     fluid
   >
   <Header :headerTitle="'プロジェクト一覧'"/>
       <template>
         <div
+          v-if="$vuetify.breakpoint.mdAndUp"
           class="d-flex justify-space-between"
           style="position: fixed; width: 772px"
           absolute
         >
-          <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
+          <v-subheader 
+            class="pa-md-0 d-flex" 
+            :style="'font-size: 1rem'"
+          >
             <p class="ma-0 font-weight-bold" color="grey darken-1">
               プロジェクト一覧 
             </p>
@@ -29,6 +33,7 @@
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
           <ProjectCards :projectList="projectList" @onClickEdit="onClickEdit" />
+          <NewAdditionalCard v-if="!loading" @clickAditional="onClickCreate" :category="category" />
           <v-progress-circular
             class="mx-auto my-8"
             v-if="loading"
@@ -36,10 +41,9 @@
             indeterminate
           ></v-progress-circular>
           <!-- PC版追加カード -->
-          <NewAdditionalCard v-if="!loading" @clickAditional="onClickCreate" :category="category" />
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpButtomBtn @clickAditional="onClickCreate" :headerTitle="category" />
+        <!-- <SpButtomBtn @clickAditional="onClickCreate" :headerTitle="category" /> -->
       
       </template>
       <!-- 追加のフォーム -->
@@ -121,7 +125,7 @@ export default {
   top: 48px
 
 .spCardStyle
-  height: calc(100vh - 224px)
+  height: calc(100vh - 156px)
   position: relative
-  top: 48px
+  top: 72px
 </style>

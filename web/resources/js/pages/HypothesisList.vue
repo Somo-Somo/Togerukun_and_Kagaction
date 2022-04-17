@@ -1,6 +1,6 @@
 <template>
   <v-container
-    class="d-flex flex-column px-md-16"
+    class="d-flex flex-column px-0 px-md-16"
     :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
     fluid
   >
@@ -8,15 +8,20 @@
       <template>
         <div
           class="d-flex justify-space-between"
-          style="position: fixed;"
-          :class="$vuetify.breakpoint.smAndUp ? 'tabStyle' : 'spTabStyle'"
-          absolute
+          :class="$vuetify.breakpoint.mdAndUp ? 'tabsStyle' : 'spTabsStyle'"
         >
-          <v-tabs v-model="tab" class="px-3 px-md-0" color="black" center-active>
+          <v-tabs 
+            v-model="tab" 
+            class="px-md-0" 
+            color="black" 
+            :height="$vuetify.breakpoint.mdAndUp ? '' : '40'"
+            >
             <v-tabs-slider color="#80CBC4"></v-tabs-slider>
             <v-tab
+              class="px-0"
               v-for="hypothesisStatus in hypothesisStatuses"
               :key="hypothesisStatus.name"
+              :class="$vuetify.breakpoint.mdAndUp ? 'tabStyle' : 'spTabStyle'"
             >
               <p class="ma-0 font-weight-bold">{{ hypothesisStatus.name }}</p>
             </v-tab>
@@ -30,18 +35,19 @@
             >mdi-plus-circle</v-icon
           >
         </div>
+        <v-divider style="position:relative; top:92px;"></v-divider>
         <!-- PC版 -->
         <div
-          class="d-flex flex-column"
+          class="d-flex flex-column px-2 px-md-0"
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
           <v-tabs-items class="overflow-y-auto" v-model="tab">
             <v-tab-item v-for="hypothesisStatus in hypothesisStatuses" :key="hypothesisStatus.name">
               <HypothesisCards
-               :project="project" 
-               :hypothesisList="hypothesisList" 
-               :hypothesisStatus="hypothesisStatuses[tab]" 
-               />
+              :project="project" 
+              :hypothesisList="hypothesisList" 
+              :hypothesisStatus="hypothesisStatuses[tab]" 
+              />
               <!-- PC版追加カード -->
               <NewAdditionalCard
                 v-if="tab === 0"
@@ -53,12 +59,12 @@
           </v-tabs-items>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpBottomBtn 
+        <!-- <SpBottomBtn 
           v-if="tab === 0"
           @clickAditional="onClickCreate" 
           :tab="tab" 
           :headerTitle="'仮説一覧'" 
-        />
+        /> -->
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
@@ -127,13 +133,23 @@ export default {
 </script>
 
 <style scoped lang='sass'>
-.tabStyle
+.tabsStyle
   width: 772px
+  position: absolute
+
+
+.spTabsStyle
+  width: 100%
+  height: 40px
+  position: absolute
+  top: 64px
+
+.tabStyle
 
 .spTabStyle
-  width: calc(100vw - 24px)
-  position: relative
-  top: 80px
+  width: 25%
+  height: 40px
+  font-size: 0.75rem
 
 .cardStyle
   height: calc(100vh - 152px)
@@ -141,9 +157,9 @@ export default {
   top: 48px
 
 .spCardStyle
-  height: calc(100vh - 224px)
+  height: calc(100vh - 192px)
   position: relative
-  top: 64px
+  top: 96px
 </style>
 
 <style lang='sass'>

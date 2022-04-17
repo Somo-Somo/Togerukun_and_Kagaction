@@ -1,7 +1,7 @@
 <template>
   <v-app-bar
-    class="my-3 mt-md-1 mb-md-0"
-    style="height: 72px"
+    class="my-1 mt-md-1 mb-md-0"
+    :style="$vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 56px'"
     color="white"
     elevation="0"
     app
@@ -16,7 +16,9 @@
         v-if="!project && !hypothesis && !parentHypothesis"
         class="d-flex align-self-center px-1"
       >
-        <h1 style="font-size: 18px">{{ headerTitle }}</h1>
+        <h1 :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 1rem'">
+          {{ headerTitle }}
+        </h1>
       </div>
       <div v-if="project" class="d-flex align-self-center">
         <v-btn 
@@ -24,31 +26,50 @@
           @click="onClickHeaderTitle('project', project)" 
           text
         >
-          <h1 style="font-size: 18px">{{ project.name }}</h1>
+          <h1
+            :class="hypothesis ? 'omitHeaderTitle' : ''" 
+            :style="$vuetify.breakpoint.mdAndUp ? 
+              'font-size: 18px' : 'font-size: 16px'"
+            >{{ project.name }}</h1>
         </v-btn>
       </div>
       <div v-if="hypothesis" class="d-flex align-self-center">
-        <h1 v-if="hypothesis.depth > 1" style="font-size: 18px">/</h1>
-        <h1 v-if="hypothesis.depth > 1" style="font-size: 18px" class="px-2">...</h1>
+        <h1 
+          v-if="hypothesis.depth > 1" 
+          :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'"
+         >/</h1>
+        <h1 
+          v-if="hypothesis.depth > 1" 
+          :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'" 
+          class="px-2"
+         >...</h1>
       </div>
       <div v-if="parentHypothesis" class="d-flex align-self-center"> 
-        <h1 style="font-size: 18px" class="d-flex align-self-center"> / </h1>
+        <h1 :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'" class="d-flex align-self-center"> / </h1>
         <v-btn 
           class="px-2" 
           @click="onClickHeaderTitle('hypothesis', parentHypothesis)" 
           text
         >
-          <h1 style="font-size: 18px" >{{ parentHypothesis.name }}</h1>
+          <h1 
+            class="omitHeaderTitle" 
+            :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'
+            " >{{ parentHypothesis.name }}</h1>
         </v-btn>
       </div>
       <div v-if="hypothesis" class="d-flex align-self-center" >
-        <h1 style="font-size: 18px" class="d-flex align-self-center"> / </h1>
+        <h1 :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'" class="d-flex align-self-center"> / </h1>
         <v-btn 
           class="px-2" 
           @click="onClickHeaderTitle('hypothesis', hypothesis)" 
           text
         >
-          <h1 style="font-size: 18px" > {{ hypothesis.name }} </h1>
+          <h1 
+            class="omitHeaderTitle" 
+            :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'" 
+          > 
+            {{ hypothesis.name }} 
+          </h1>
         </v-btn>
       </div>
     </v-toolbar-title>
@@ -94,3 +115,10 @@ export default {
   },
 };
 </script>
+<style scoped lang='sass'>
+.omitHeaderTitle
+  max-width:30vw
+  white-space: nowrap 
+  overflow: hidden 
+  text-overflow: ellipsis
+</style>

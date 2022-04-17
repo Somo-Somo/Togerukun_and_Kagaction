@@ -33,8 +33,11 @@
             :currentGoalList="currentGoalList" 
         />
 
-        <div class="my-4" v-show="!currentGoalList.length && !loading">
-            <p class="grey--text font-weight-bold ma-0 py-2">
+        <div class="ma-2 mx-md-0 my-md-4" v-show="!currentGoalList.length && !loading">
+            <p 
+              class="grey--text font-weight-bold ma-0 py-2"
+              :style="$vuetify.breakpoint.smAndUp ? 'font-size:18px;' : 'font-size:14px;'"
+            >
                 現在の目標はありません
             </p>
         </div>
@@ -73,7 +76,7 @@ export default {
   top: 48px
 
 .spCardStyle
-  height: calc(100vh - 224px)
+  height: calc(100vh - 144px)
   position: relative
   top: 48px
 </style>

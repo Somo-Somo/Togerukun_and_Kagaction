@@ -4,9 +4,10 @@
     <v-col 
       class="px-md-0"
       v-for="hypothesis in hypothesisList" 
-      :key="hypothesis.uuid"
       v-model="hypothesis.showHypothesisList"
+      :key="hypothesis.uuid"
       :class="cardShow(hypothesis) ? '' : 'd-none'"
+      :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
       <div 
@@ -26,32 +27,45 @@
       <v-card class="rounded" style="width: 100%;" outlined>
         <v-list 
           class="py-0 d-flex align-content-center" 
-          :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:72px'"
+          :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'"
         >
-          <v-list-item @click="toHypothesisDetail(hypothesis)" link>
+          <v-list-item 
+            style="width: 100%" 
+            @click="toHypothesisDetail(hypothesis)" 
+            link>
             <v-list-item-content class="pa-0 d-flex">
-              <div>
+              <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
                   <div class="d-flex pr-1" v-if="showStatus(hypothesis)">
                     <v-icon size="8" :color="showStatus(hypothesis).color">circle</v-icon>
                     <p
                       class="ma-0 px-2 #212121--text font-weight-bold align-self-center"
-                      style="font-size: 12px"
+                      :style="$vuetify.breakpoint.smAndUp ? 'font-size:12px' : 'font-size:8px'"
                     >
                        {{ showStatus(hypothesis).title }}
                     </p>
                   </div>
-                  <div class="d-flex"> 
-                      <p
+                  <div class="d-flex" style="max-width:66%"> 
+                    <p
+                      class="ma-0 grey--text font-weight-bold align-self-center"
+                      style="font-size: 8px; max-width:100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                    >
+                      {{ parentName(hypothesis) }}
+                    </p>
+                    <p
                         class="ma-0 grey--text font-weight-bold align-self-center"
-                        style="font-size: 8px"
-                      >
-                       {{ parent(hypothesis) }}
-                      </p>
+                        style="font-size: 8px;"
+                    >
+                     {{ parentType(hypothesis) }}
+                    </p>
                   </div>
                 </v-list-item-subtitle>
                 <v-list-item-title class="py-2 pb-4">
-                  <p class="font-weight-black ma-0">
+                  <p 
+                    class="font-weight-black ma-0"
+                    style="max-width:calc(100% - 36px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                    :style="$vuetify.breakpoint.smAndUp ? 'font-size:1rem' : 'font-size:0.8rem'"
+                  >
                     {{ hypothesis.name }}
                   </p></v-list-item-title
                 >
@@ -59,11 +73,8 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-list-item-action
                       class="ma-0"
-                      style="
-                        position: absolute;
-                        top: 28px;
-                        right: 16px;
-                      "
+                      style="position: absolute; right: 16px;"
+                      :style="$vuetify.breakpoint.smAndUp ? 'top: 28px;' : 'top: 24px;'"
                     >
                       <v-btn
                         v-bind="attrs"
@@ -72,7 +83,9 @@
                         icon
                         link
                       >
-                        <v-icon>mdi-dots-vertical</v-icon>
+                        <v-icon :size="$vuetify.breakpoint.smAndUp ? '24' : '20'">
+                          mdi-dots-vertical
+                        </v-icon>
                       </v-btn>
                     </v-list-item-action>
                   </template>
@@ -89,15 +102,13 @@
       </v-card>
       </div>
     </v-col>
-    <div 
+    <div
       class="my-4" 
-      v-show="
-        !hypothesisStatus.show && (hypothesisStatus.name !== 'ゴール' || !$vuetify.breakpoint.mdAndUp)
-      "
+      v-show="!hypothesisStatus.show && hypothesisStatus.name !== 'ゴール'"
     >
-      <p 
+      <p
         class="grey--text font-weight-bold ma-0 pa-md-2 px-4 py-2"
-        :size="$vuetify.breakpoint.smAndUp ? '20': '16'"
+        :style="$vuetify.breakpoint.smAndUp ? 'font-size:18px;' : 'font-size:14px;'"
       >
           {{hypothesisStatus.name}}はありません
       </p>
@@ -175,17 +186,23 @@ export default {
         }
       }  
     },
-    parent() {
+    parentName() {
       return (hypothesis) => {
         if (hypothesis.depth === 0) {
-           return '「' + this.project.name + '」のゴール';
+           return '「' + this.project.name;
         } else if (hypothesis.depth > 0)  {
           let parentName;
           this.hypothesisList.map((value) => {
             if (hypothesis.parentUuid === value.uuid) parentName =  value.name;
           })
-          return '「' + parentName + '」の仮説';
+          return '「' + parentName ;
         }
+      }
+    },
+    parentType() {
+      return (hypothesis) => {
+        if (hypothesis.depth === 0)  return '」のゴール';
+        if (hypothesis.depth > 0) return '」の仮説';
       }
     },
     depth() {
