@@ -8,20 +8,20 @@
       <template>
         <div
           class="d-flex justify-space-between"
-          :class="$vuetify.breakpoint.smAndUp ? 'tabsStyle' : 'spTabsStyle'"
+          :class="$vuetify.breakpoint.mdAndUp ? 'tabsStyle' : 'spTabsStyle'"
         >
           <v-tabs 
             v-model="tab" 
             class="px-md-0" 
             color="black" 
-            :height="$vuetify.breakpoint.smAndUp ? '' : '40'"
+            :height="$vuetify.breakpoint.mdAndUp ? '' : '40'"
             >
             <v-tabs-slider color="#80CBC4"></v-tabs-slider>
             <v-tab
               class="px-0"
               v-for="hypothesisStatus in hypothesisStatuses"
               :key="hypothesisStatus.name"
-              :class="$vuetify.breakpoint.smAndUp ? 'tabStyle' : 'spTabStyle'"
+              :class="$vuetify.breakpoint.mdAndUp ? 'tabStyle' : 'spTabStyle'"
             >
               <p class="ma-0 font-weight-bold">{{ hypothesisStatus.name }}</p>
             </v-tab>
