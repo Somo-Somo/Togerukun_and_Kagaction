@@ -43,7 +43,7 @@
           <!-- PC版追加カード -->
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpButtomBtn @clickAditional="onClickCreate" :headerTitle="category" />
+        <!-- <SpButtomBtn @clickAditional="onClickCreate" :headerTitle="category" /> -->
       
       </template>
       <!-- 追加のフォーム -->

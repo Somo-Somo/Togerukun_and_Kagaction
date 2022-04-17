@@ -3,17 +3,17 @@
     <div class="d-flex d-md-none pa-6">
       <v-avatar
         class="d-flex justify-center"
-        size="80"
+        size="64"
         color="white"
         style="position: fixed; right: 24px; bottom: 64px; z-index: 10"
       >
         <v-avatar
-          size="64"
+          size="48"
           :class="{ 'show-plus': hover }"
           :color="transparent.plus"
           @click="$emit('clickAditional')"
         >
-          <v-icon size="32" color="white" style="backgroud-color: white">
+          <v-icon size="24" color="white" style="backgroud-color: white">
             mdi-plus
           </v-icon>
         </v-avatar>

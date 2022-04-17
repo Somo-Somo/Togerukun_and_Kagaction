@@ -50,7 +50,7 @@
               />
               <!-- PC版追加カード -->
               <NewAdditionalCard
-                v-if="tab === 0 && $vuetify.breakpoint.mdAndUp"
+                v-if="tab === 0"
                 @clickAditional="onClickCreate"
                 :category="hypothesisStatus.name"
               />
@@ -59,12 +59,12 @@
           </v-tabs-items>
         </div>
         <!-- スマホ版追加ボタン -->
-        <SpBottomBtn 
+        <!-- <SpBottomBtn 
           v-if="tab === 0"
           @clickAditional="onClickCreate" 
           :tab="tab" 
           :headerTitle="'仮説一覧'" 
-        />
+        /> -->
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
