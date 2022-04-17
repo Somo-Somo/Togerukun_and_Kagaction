@@ -45,13 +45,19 @@
                        {{ showStatus(hypothesis).title }}
                     </p>
                   </div>
-                  <div class="d-flex"> 
-                      <p
+                  <div class="d-flex" style="max-width:66%"> 
+                    <p
+                      class="ma-0 grey--text font-weight-bold align-self-center"
+                      style="font-size: 8px; max-width:100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                    >
+                      {{ parentName(hypothesis) }}
+                    </p>
+                    <p
                         class="ma-0 grey--text font-weight-bold align-self-center"
                         style="font-size: 8px;"
-                      >
-                       {{ parent(hypothesis) }}
-                      </p>
+                    >
+                     {{ parentType(hypothesis) }}
+                    </p>
                   </div>
                 </v-list-item-subtitle>
                 <v-list-item-title class="py-2 pb-4">
@@ -180,17 +186,23 @@ export default {
         }
       }  
     },
-    parent() {
+    parentName() {
       return (hypothesis) => {
         if (hypothesis.depth === 0) {
-           return '「' + this.project.name + '」のゴール';
+           return '「' + this.project.name;
         } else if (hypothesis.depth > 0)  {
           let parentName;
           this.hypothesisList.map((value) => {
             if (hypothesis.parentUuid === value.uuid) parentName =  value.name;
           })
-          return '「' + parentName + '」の仮説';
+          return '「' + parentName ;
         }
+      }
+    },
+    parentType() {
+      return (hypothesis) => {
+        if (hypothesis.depth === 0)  return '」のゴール';
+        if (hypothesis.depth > 0) return '」の仮説';
       }
     },
     depth() {
