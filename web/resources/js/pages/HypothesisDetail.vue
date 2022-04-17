@@ -138,7 +138,7 @@
               <!-- PC版追加カード -->
               <NewAdditionalCard 
                @clickAditional="onClickCreate" 
-               :category="additionalInputFormLabel"/>
+               :category="page"/>
             </div>
           </div>
         </div>
