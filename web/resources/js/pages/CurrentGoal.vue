@@ -73,7 +73,7 @@ export default {
   top: 48px
 
 .spCardStyle
-  height: calc(100vh - 224px)
+  height: calc(100vh - 144px)
   position: relative
   top: 48px
 </style>

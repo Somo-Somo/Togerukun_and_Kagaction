@@ -5,29 +5,37 @@
       class="px-md-0"
       v-for="hypothesis in currentGoalList" 
       :key="hypothesis.uuid"
+      :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
       <v-card class="rounded" style="width: 100%;" outlined>
         <v-list 
           class="py-0 d-flex align-content-center" 
-          :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:72px'"
+          :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'"
         >
-          <v-list-item @click="toHypothesisDetail(hypothesis)" link>
+          <v-list-item
+            style="width: 100%" 
+            @click="toHypothesisDetail(hypothesis)" 
+            link>
             <v-list-item-content class="pa-0 d-flex">
-              <div>
+              <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
                   <div class="d-flex pr-1">
                     <v-icon size="8" color="blue">circle</v-icon>
                     <p
                       class="ma-0 px-2 #212121--text font-weight-bold align-self-center"
-                      style="font-size: 12px"
+                      :style="$vuetify.breakpoint.smAndUp ? 'font-size:12px' : 'font-size:8px'"
                     >
                         {{ parent(hypothesis) }}
                     </p>
                   </div>
                 </v-list-item-subtitle>
                 <v-list-item-title class="py-2 pb-4">
-                  <p class="font-weight-black ma-0">
+                  <p 
+                    class="font-weight-black ma-0"
+                    style="max-width:calc(100% - 36px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                    :style="$vuetify.breakpoint.smAndUp ? 'font-size:1rem' : 'font-size:0.8rem'"
+                    >
                     {{ hypothesis.name }}
                   </p></v-list-item-title
                 >
@@ -35,11 +43,8 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-list-item-action
                       class="ma-0"
-                      style="
-                        position: absolute;
-                        top: 28px;
-                        right: 16px;
-                      "
+                      style="position: absolute; top: 28px; right: 16px;"
+                      :style="$vuetify.breakpoint.smAndUp ? 'top: 28px;' : 'top: 24px;'"
                     >
                       <v-btn
                         v-bind="attrs"
@@ -48,7 +53,9 @@
                         icon
                         link
                       >
-                        <v-icon>mdi-dots-vertical</v-icon>
+                        <v-icon :size="$vuetify.breakpoint.smAndUp ? '24' : '20'">
+                          mdi-dots-vertical
+                        </v-icon>
                       </v-btn>
                     </v-list-item-action>
                   </template>
