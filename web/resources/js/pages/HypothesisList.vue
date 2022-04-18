@@ -97,8 +97,8 @@ export default {
     tab: null,
     hypothesisStatuses: [
       {name : "ゴール", show: false},
-      {name : "仮説一覧", show: false},
-      {name : "現在の目標", show: false}, 
+      {name : "目標一覧", show: false},
+      {name : "todo", show: false}, 
       {name : "完了", show: false}
     ],
     show: false,
