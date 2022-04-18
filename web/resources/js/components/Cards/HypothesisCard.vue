@@ -104,7 +104,7 @@
     </v-col>
     <div
       class="my-4" 
-      v-show="!hypothesisStatus.show && hypothesisStatus.name !== 'ゴール'"
+      v-show="!hypothesisStatus.show && hypothesisStatus.name !== 'ゴール' && hypothesisStatus.name !== '目標'"
     >
       <p
         class="grey--text font-weight-bold ma-0 pa-md-2 px-4 py-2"
