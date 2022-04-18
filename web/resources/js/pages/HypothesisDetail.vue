@@ -189,7 +189,7 @@ export default {
       hypothesisList: 'hypothesis/hypothesisList',
     }),
     subHeader() {
-      return this.hypothesis.depth === 0 ? 'ゴール' : '目標';
+      return this.hypothesis.depth === 0 ? 'ゴール' : '｢'+ this.parentHypothesis.name +'｣ の課題';
     },
     additionalInputFormLabel(){
       return '「' +this.hypothesis.name + '」の課題';
