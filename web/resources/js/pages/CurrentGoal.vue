@@ -4,7 +4,7 @@
     style="max-width: 900px"
     fluid
   >
-  <Header :headerTitle="'TODO'"/>
+  <Header :headerTitle="'ToDo'"/>
       <template>
         <div
           class="d-flex justify-space-between"
@@ -13,7 +13,7 @@
         >
           <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
             <p class="ma-0 font-weight-bold" color="grey darken-1">
-              TODO一覧 
+              ToDo一覧 
             </p>
           </v-subheader>
         </div>
@@ -38,7 +38,7 @@
               class="grey--text font-weight-bold ma-0 py-2"
               :style="$vuetify.breakpoint.smAndUp ? 'font-size:18px;' : 'font-size:14px;'"
             >
-                TODOはありません
+                ToDoはありません
             </p>
         </div>
         </div>
@@ -57,7 +57,7 @@ export default {
     CurrentGoalCards
   },
   data: () => ({
-    category : "TODO",
+    category : "ToDo",
   }),
   computed: {
     ...mapGetters({

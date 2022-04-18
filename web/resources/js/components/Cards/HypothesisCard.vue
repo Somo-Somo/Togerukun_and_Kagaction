@@ -163,7 +163,7 @@ export default {
           return hypothesis.showHypothesisList ? true : false;
         }
 
-        if (this.hypothesisStatus.name === "todo") 
+        if (this.hypothesisStatus.name === "ToDo") 
           return hypothesis.currentGoal ? this.showHypothesis() : false; 
 
         if (this.hypothesisStatus.name === "完了") 
@@ -180,7 +180,7 @@ export default {
         if (hypothesis.accomplish) {
           return {title: '完了', color: 'green'}; 
         } else if (hypothesis.currentGoal) {
-          return {title: 'TODO', color:'blue'};
+          return {title: 'ToDo', color:'blue'};
         } else {
           return false;
         }
