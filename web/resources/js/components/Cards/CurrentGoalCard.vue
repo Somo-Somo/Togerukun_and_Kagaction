@@ -26,7 +26,21 @@
                       class="ma-0 px-2 #212121--text font-weight-bold align-self-center"
                       :style="$vuetify.breakpoint.smAndUp ? 'font-size:12px' : 'font-size:8px'"
                     >
-                        {{ parent(hypothesis) }}
+                        ToDo
+                    </p>
+                  </div>
+                  <div class="d-flex" style="max-width:66%"> 
+                    <p
+                      class="ma-0 grey--text font-weight-bold align-self-center"
+                      style="font-size: 8px; max-width:100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                    >
+                      {{ parentName(hypothesis) }}
+                    </p>
+                    <p
+                        class="ma-0 grey--text font-weight-bold align-self-center"
+                        style="font-size: 8px;"
+                    >
+                      」のToDo
                     </p>
                   </div>
                 </v-list-item-subtitle>
@@ -105,9 +119,9 @@ export default {
     },
   },
   computed : {
-    parent() {
+    parentName() {
       return (hypothesis) => {
-        return ' 「' + this.projectList[hypothesis.projectUuid].name + '」の現在の目標';
+        return ' 「' + this.projectList[hypothesis.projectUuid].name;
       }
     },
   },
