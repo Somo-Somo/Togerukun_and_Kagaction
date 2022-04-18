@@ -11,7 +11,7 @@
       >
       <div class="d-flex">
       <div 
-        v-if="hypothesisStatus.name === '仮説一覧'"
+        v-if="hypothesisStatus.name === '課題一覧'"
         class="d-flex">
         <div :style="depth(hypothesis)"></div>
         <div v-if="hypothesis.child" class="d-flex align-content-center"> 
@@ -104,7 +104,7 @@
     </v-col>
     <div
       class="my-4" 
-      v-show="!hypothesisStatus.show && hypothesisStatus.name !== 'ゴール'"
+      v-show="!hypothesisStatus.show && hypothesisStatus.name !== 'ゴール' && hypothesisStatus.name !== '目標'"
     >
       <p
         class="grey--text font-weight-bold ma-0 pa-md-2 px-4 py-2"
@@ -157,19 +157,19 @@ export default {
         if (this.hypothesisStatus.name === "ゴール") 
           return hypothesis.depth === 0 ? this.showHypothesis() : false;
         
-        if (this.hypothesisStatus.name === "仮説一覧") {
+        if (this.hypothesisStatus.name === "課題一覧") {
           if(hypothesis) this.hypothesisStatus.show = true;
           if (hypothesis.depth === 0) hypothesis.showHypothesisList = true;
           return hypothesis.showHypothesisList ? true : false;
         }
 
-        if (this.hypothesisStatus.name === "現在の目標") 
+        if (this.hypothesisStatus.name === "ToDo") 
           return hypothesis.currentGoal ? this.showHypothesis() : false; 
 
         if (this.hypothesisStatus.name === "完了") 
           return hypothesis.accomplish ? this.showHypothesis() : false; 
 
-        if (this.hypothesisStatus.name === "仮説") 
+        if (this.hypothesisStatus.name === "目標") 
           return this.selectHypothesis.uuid === hypothesis.parentUuid ? this.showHypothesis() : false;
 
         return false;
@@ -180,7 +180,7 @@ export default {
         if (hypothesis.accomplish) {
           return {title: '完了', color: 'green'}; 
         } else if (hypothesis.currentGoal) {
-          return {title: '現在の目標', color:'blue'};
+          return {title: 'ToDo', color:'blue'};
         } else {
           return false;
         }
@@ -202,7 +202,7 @@ export default {
     parentType() {
       return (hypothesis) => {
         if (hypothesis.depth === 0)  return '」のゴール';
-        if (hypothesis.depth > 0) return '」の仮説';
+        if (hypothesis.depth > 0) return '」の課題';
       }
     },
     depth() {
@@ -221,11 +221,7 @@ export default {
       return this.$router.push({ path: "/hypothesis/" + hypothesis.uuid });
     },
     selectMenu(menuTitle, hypothesis){
-      if (menuTitle === "ゴールにする") {
-        
-      } else if (menuTitle === "現在の目標にする") {
-        
-      } else if (menuTitle === "削除") {
+      if (menuTitle === "削除") {
         this.deletingConfirmationDialog = true;
         this.selectedDeletingHypothesis = hypothesis;
       }
