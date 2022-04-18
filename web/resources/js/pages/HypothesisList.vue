@@ -21,7 +21,7 @@
               class="px-0"
               v-for="hypothesisStatus in hypothesisStatuses"
               :key="hypothesisStatus.name"
-              :class="$vuetify.breakpoint.mdAndUp ? 'tabStyle' : 'spTabStyle'"
+              :class="$vuetify.breakpoint.mdAndUp ? '' : 'spTabStyle'"
             >
               <p class="ma-0 font-weight-bold">{{ hypothesisStatus.name }}</p>
             </v-tab>
@@ -143,8 +143,6 @@ export default {
   height: 40px
   position: absolute
   top: 64px
-
-.tabStyle
 
 .spTabStyle
   width: 25%
