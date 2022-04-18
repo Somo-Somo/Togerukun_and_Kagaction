@@ -11,7 +11,7 @@
       >
       <div class="d-flex">
       <div 
-        v-if="hypothesisStatus.name === '目標一覧'"
+        v-if="hypothesisStatus.name === '課題一覧'"
         class="d-flex">
         <div :style="depth(hypothesis)"></div>
         <div v-if="hypothesis.child" class="d-flex align-content-center"> 
@@ -157,7 +157,7 @@ export default {
         if (this.hypothesisStatus.name === "ゴール") 
           return hypothesis.depth === 0 ? this.showHypothesis() : false;
         
-        if (this.hypothesisStatus.name === "目標一覧") {
+        if (this.hypothesisStatus.name === "課題一覧") {
           if(hypothesis) this.hypothesisStatus.show = true;
           if (hypothesis.depth === 0) hypothesis.showHypothesisList = true;
           return hypothesis.showHypothesisList ? true : false;
@@ -202,7 +202,7 @@ export default {
     parentType() {
       return (hypothesis) => {
         if (hypothesis.depth === 0)  return '」のゴール';
-        if (hypothesis.depth > 0) return '」の目標';
+        if (hypothesis.depth > 0) return '」の課題';
       }
     },
     depth() {
@@ -221,11 +221,7 @@ export default {
       return this.$router.push({ path: "/hypothesis/" + hypothesis.uuid });
     },
     selectMenu(menuTitle, hypothesis){
-      if (menuTitle === "ゴールにする") {
-        
-      } else if (menuTitle === "現在の目標にする") {
-        
-      } else if (menuTitle === "削除") {
+      if (menuTitle === "削除") {
         this.deletingConfirmationDialog = true;
         this.selectedDeletingHypothesis = hypothesis;
       }
