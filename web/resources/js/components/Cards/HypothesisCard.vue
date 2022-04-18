@@ -169,7 +169,7 @@ export default {
         if (this.hypothesisStatus.name === "完了") 
           return hypothesis.accomplish ? this.showHypothesis() : false; 
 
-        if (this.hypothesisStatus.name === "仮説") 
+        if (this.hypothesisStatus.name === "目標") 
           return this.selectHypothesis.uuid === hypothesis.parentUuid ? this.showHypothesis() : false;
 
         return false;

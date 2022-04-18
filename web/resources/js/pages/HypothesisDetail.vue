@@ -80,7 +80,7 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">現在の目標：</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">TODO :</p>
             </v-subheader>
             <v-col class="px-4 py-0 d-flex align-self-center">
               <v-checkbox
@@ -104,7 +104,7 @@
                   color="grey darken-1"
                   :style="$vuetify.breakpoint.smAndUp ? '48px' : 'min-width: 36px'"
                 >
-                  仮説：
+                  課題：
                 </p>
                 <p 
                   class="ma-0 font-weight-black caption align-self-center" 
@@ -138,7 +138,7 @@
               <!-- PC版追加カード -->
               <NewAdditionalCard 
                @clickAditional="onClickCreate" 
-               :category="page"/>
+               :category="'課題'"/>
             </div>
           </div>
         </div>
@@ -173,8 +173,8 @@ export default {
     InputForm,
   },
   data: () => ({
-    hypothesisStatus: {name: "仮説", show: false},
-    page: "仮説",
+    hypothesisStatus: {name: "目標", show: false},
+    page: "目標",
   }),
   computed : {
     ...mapState({
@@ -189,10 +189,10 @@ export default {
       hypothesisList: 'hypothesis/hypothesisList',
     }),
     subHeader() {
-      return this.hypothesis.depth === 0 ? 'ゴール' : '仮説';
+      return this.hypothesis.depth === 0 ? 'ゴール' : '目標';
     },
     additionalInputFormLabel(){
-      return '「' +this.hypothesis.name + '」の仮説';
+      return '「' +this.hypothesis.name + '」の課題';
     }
   },
   methods: {
