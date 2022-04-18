@@ -151,6 +151,7 @@
           @submitForm="submitForm"
           :category="additionalInputFormLabel"
           :inputForm="inputForm"
+          :loading="submitLoading" 
         />
       </form>
   </v-container>
@@ -175,6 +176,7 @@ export default {
   data: () => ({
     hypothesisStatus: {name: "目標", show: false},
     page: "目標",
+    submitLoading: false,
   }),
   computed : {
     ...mapState({

@@ -72,6 +72,7 @@
           @submitForm="submitForm"
           :category="hypothesisStatuses[0].name"
           :inputForm="inputForm"
+          :loading="submitLoading" 
         />
       </form>
   </v-container>
@@ -102,6 +103,7 @@ export default {
       {name : "完了", show: false}
     ],
     show: false,
+    submitLoading: false,
   }),
   computed: {
     ...mapState({
