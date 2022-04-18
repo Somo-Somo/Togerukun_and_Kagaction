@@ -117,6 +117,7 @@
     <DeletingConfirmationDialog 
       :deletingConfirmationDialog="deletingConfirmationDialog"
       :selectedDeletingItem="selectedDeletingHypothesis"
+      :loading="false"
       @deleteItem="deleteHypothesis"
       @onClickCancel="onClickCancel"
     />

@@ -52,7 +52,8 @@
           @onClickCancel="onClickCancel" 
           @submitForm="submitForm"
           :inputForm="inputForm" 
-          :category="category" 
+          :category="category"
+          :loading="submitLoading" 
         />
       </form>
   </v-container>
@@ -76,6 +77,7 @@ export default {
   },
   data: () => ({
     category : "プロジェクト",
+    submitLoading: false,
   }),
   computed: {
     ...mapState({
@@ -104,7 +106,9 @@ export default {
     },
     async submitForm(){
       if (this.submitType === 'create') {
+        this.submitLoading = true;
         const response = await this.$store.dispatch("project/createProject", {'name' : this.name});
+        this.submitLoading = false;
         this.$store.dispatch("form/closeForm");
         this.$router.push("/project/" + response.project.uuid);
       } else if (this.submitType === 'edit') {

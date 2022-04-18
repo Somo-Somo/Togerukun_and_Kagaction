@@ -56,6 +56,7 @@
     <DeletingConfirmationDialog 
       :deletingConfirmationDialog="deletingConfirmationDialog"
       :selectedDeletingItem="selectedDeletingProject"
+      :loading="submitLoading"
       @deleteItem="deleteProject"
       @onClickCancel="onClickCancel"
     />
@@ -79,6 +80,7 @@ export default {
       name: null,
       uuid: null,
     },
+    submitLoading: false,
   }),
   props: {
     projectList: {
@@ -101,7 +103,9 @@ export default {
       }
     },
     async deleteProject(){
+      this.submitLoading = true;
       await this.$store.dispatch("project/deleteProject", this.selectedDeletingProject);
+      this.submitLoading = false;
       this.deletingConfirmationDialog = false;
       this.selectedDeletingProject.name = null;
       this.selectedDeletingProject.uuid = null;

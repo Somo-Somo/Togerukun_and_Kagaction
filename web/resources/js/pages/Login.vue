@@ -73,8 +73,10 @@
                 type="submit"
                 class="fill-width caption"
                 color="#FFCB00"
-                depressed
                 height="48px"
+                :loading="loading"
+                :disabled="loading"
+                depressed
                 tile
               >
                 {{ isLoginForm ? "ログイン" : "会員登録" }}
@@ -140,6 +142,7 @@ export default {
     },
     passwordShow: false,
     completedRegister: false,
+    loading: false,
   }),
   computed: {
     ...mapState({
@@ -167,9 +170,11 @@ export default {
       // 共通フォームを使ってためここでDataをSET
       this.registerForm.email = this.email;
       this.registerForm.password = this.password;
+      this.loading = true;
 
       await this.$store.dispatch("auth/register", this.registerForm);
-
+      
+      this.loading = false;
       if (this.apiStatus) {
         this.completedRegister = true;
         this.email = null;
@@ -182,12 +187,15 @@ export default {
       // 共通フォームを使ってためここでDataをSET
       this.loginForm.email = this.email;
       this.loginForm.password = this.password;
+      this.loading = true;
       await this.$store.dispatch("auth/login", this.loginForm);
 
       if (this.apiStatus) {
         await this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
+        this.loading = false;
         this.$router.push("/projects");
       }
+      this.loading = false;
     },
     clearError() {
       this.$store.commit("auth/setLoginErrorMessages", null);

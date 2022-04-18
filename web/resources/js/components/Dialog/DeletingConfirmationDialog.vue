@@ -25,6 +25,8 @@
                 color="error"
                 text
                 @click="$emit('deleteItem')"
+                :loading="loading"
+                :disabled="loading"
             >
                 OK
             </v-btn>
@@ -41,6 +43,9 @@ export default {
     },
     selectedDeletingItem: {
       type: Object,
+    },
+    loading: {
+      type: Boolean,
     },
   },
 };

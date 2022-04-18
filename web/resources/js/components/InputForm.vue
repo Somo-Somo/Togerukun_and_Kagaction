@@ -20,7 +20,8 @@
       <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
       <v-btn
         type="submit"
-        :disabled="!formName"
+        :loading="loading"
+        :disabled="!formName || loading"
         color="primary"
         @click="$emit('submitForm')"
         text
@@ -47,6 +48,9 @@ export default {
     },
     hypotheses: {
       type: Object,
+    },
+    loading: {
+      type: Boolean,
     },
   },
   computed: {
