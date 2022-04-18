@@ -115,7 +115,7 @@
                   「{{hypothesis.name}}
                 </p>
                 <p class="ma-0 font-weight-black caption align-self-center" color="grey lighten-1">
-                  」を達成するためには？
+                  」を完了するためには？
                 </p>
               </v-subheader>
               <v-icon
