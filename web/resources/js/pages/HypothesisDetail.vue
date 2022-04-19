@@ -231,6 +231,14 @@ export default {
       }
     },
   },
+  watch: {
+    $route (to, from) {
+      //ブラウザバックで戻った先が再び仮説詳細ページだった場合
+      if (to.params.id === this.parentHypothesis.uuid) {
+        this.$store.dispatch("hypothesis/selectHypothesis", this.parentHypothesis);
+      }
+    }
+  },
 };
 </script>
 
