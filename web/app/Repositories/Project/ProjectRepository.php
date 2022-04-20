@@ -4,6 +4,7 @@ namespace App\Repositories\Project;
 
 use App\Facades\Neo4jDB;
 use App\Repositories\Project\ProjectRepositoryInterface;
+use Illuminate\Support\Str;
 
 class ProjectRepository implements ProjectRepositoryInterface
 {
@@ -97,5 +98,26 @@ class ProjectRepository implements ProjectRepositoryInterface
             );
 
         return $deletedDataFromDB;
+    }
+
+
+    /**
+     * ※絶対にこんな書き方して言い訳がない
+     * 会員登録後の使い方のテンプレをKagaction内で表示する
+     */
+    public function generateInitialTemplate(string $user_email)
+    {
+        $this->client->run(
+            <<<'CYPHER'
+                    MATCH (user:User{email:$user_email})
+                    CREATE (user) - [:HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (:Project{name:'仕事', uuid:'$projectWorkUuid'})
+                    CREATE (user) - [:HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (:Project{name:'生活', uuid:'$projectLifeUuid'})
+                CYPHER,
+                [
+                    'user_email' => $user_email,
+                    'projectWorkUuid' => (string) Str::uuid(),
+                    'projectLifeUuid' => (string) Str::uuid(),
+                ]
+            );
     }
 }
