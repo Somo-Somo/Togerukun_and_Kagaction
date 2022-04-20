@@ -39,7 +39,7 @@
                 <Menu :menus="cardMenus" :selectCard="project" @selectedMenu="selectedMenu"/>
             </v-list-item-icon>
         </v-list-item>
-        <v-list-item @click="onClickCreate" class="d-flex px-8" style="height: 48px" link>
+        <v-list-item v-if="!loading" @click="onClickCreate" class="d-flex px-8" style="height: 48px" link>
             <v-list-item-icon class="align-self-center mr-6">
                 <v-icon color="teal lighten-5">mdi-plus</v-icon>
             </v-list-item-icon>
