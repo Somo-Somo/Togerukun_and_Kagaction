@@ -147,6 +147,7 @@
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
+          v-if="form"
           @onClickCancel="onClickCancel"
           @submitForm="submitForm"
           :category="additionalInputFormLabel"
@@ -177,6 +178,7 @@ export default {
     hypothesisStatus: {name: "目標", show: false},
     page: "目標",
     submitLoading: false,
+    form: false,
   }),
   computed : {
     ...mapState({
@@ -212,9 +214,11 @@ export default {
     },
     onClickCreate () {
       this.$store.dispatch("form/onClickCreate");
+      this.form = true;
     },    
     onClickCancel() {
       this.$store.dispatch("form/closeForm");
+      this.form = false;
     },
     submitForm(){
       this.$store.dispatch("form/closeForm");
@@ -224,6 +228,7 @@ export default {
           {parent: this.hypothesis, name: this.inputFormName}
         );
       }
+      this.form = false;
     },
     editHypothesisName(){
       if (this.hypothesis.name) {
@@ -237,7 +242,12 @@ export default {
       if (to.params.id === this.parentHypothesis.uuid) {
         this.$store.dispatch("hypothesis/selectHypothesis", this.parentHypothesis);
       }
-    }
+    },
+    inputForm(inputForm) {
+      if (!inputForm) {
+        this.form = false;
+      }
+    },
   },
 };
 </script>
