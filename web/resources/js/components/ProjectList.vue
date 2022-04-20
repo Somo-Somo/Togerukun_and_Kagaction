@@ -1,7 +1,7 @@
 <template>
   <div class="mt-4">
-    <div class="d-flex justify-space-between px-4">
-        <v-subheader class="d-flex align-self-center" style="font-size: 0.8em; height: 32px;"
+    <div class="d-flex justify-space-between px-2">
+        <v-subheader class="d-flex align-self-center" style="font-size: 0.825em; height: 32px;"
             >プロジェクト
         </v-subheader>
         <v-icon
