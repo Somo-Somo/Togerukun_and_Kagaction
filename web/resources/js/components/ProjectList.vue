@@ -13,7 +13,7 @@
         >
     </div>
     <v-progress-circular
-        class="d-flex mx-auto my-4"
+        class="d-flex mx-auto my-8"
         v-if="loading"
         color="grey darken-1"
         indeterminate
@@ -39,7 +39,7 @@
                 <v-icon color="teal lighten-5">mdi-plus</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="align-self-center">
-                <v-list-item-title>プロジェクトを追加</v-list-item-title>
+                <v-list-item-title style="font-size: 0.9em;">プロジェクト追加</v-list-item-title>
             </v-list-item-content>
         </v-list-item>
     </v-list>
