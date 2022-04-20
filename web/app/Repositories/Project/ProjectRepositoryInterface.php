@@ -8,4 +8,6 @@ interface ProjectRepositoryInterface
     public function create($project);
     public function update(array $project);
     public function destroy(array $project);
+    public function generateInitialTemplate(string $user_email);
+
 }

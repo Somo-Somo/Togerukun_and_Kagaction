@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Http\Resources\UserResource;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Requests\RegisterRequest;
-use App\UseCases\HowToKagaction\StoreAction;
+use App\UseCases\Initialize\Template\GenerateAction;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ class RegisterController extends Controller
         $this->user_repository = $userRepositoryInterface;
     }
 
-    public function register(RegisterRequest $request, StoreAction $storeAction)
+    public function register(RegisterRequest $request, GenerateAction $generateAction)
     {
         //バリエーションで問題がなかった場合にはユーザを作成する。
         $user = User::create([
@@ -35,7 +35,7 @@ class RegisterController extends Controller
         $createUser = $this->user_repository->register($user);
 
         if ($createUser) {
-            $storeAction->invoke($user->email);
+            $generateAction->invoke($user->email);
         }
 
  
