@@ -110,8 +110,8 @@ class ProjectRepository implements ProjectRepositoryInterface
         $this->client->run(
             <<<'CYPHER'
                     MATCH (user:User{email:$user_email})
-                    CREATE (user) - [:HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (:Project{name:'仕事', uuid:'$projectWorkUuid'})
-                    CREATE (user) - [:HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (:Project{name:'生活', uuid:'$projectLifeUuid'})
+                    CREATE (user) - [:HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (:Project{name:'仕事', uuid:$projectWorkUuid})
+                    CREATE (user) - [:HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (:Project{name:'生活', uuid:$projectLifeUuid})
                 CYPHER,
                 [
                     'user_email' => $user_email,
