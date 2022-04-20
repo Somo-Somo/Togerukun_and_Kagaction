@@ -46,6 +46,7 @@
     <!-- 追加のフォーム -->
     <form class="form" @submit.prevent="submitForm()">
         <InputForm
+            v-if="form"
             @onClickCancel="onClickCancel"
             @submitForm="submitForm"
             :inputForm="inputForm"
@@ -67,6 +68,7 @@ export default {
     data: () => ({
         category: "プロジェクト",
         submitLoading: false,
+        form: false,
     }),
     computed: {
         ...mapState({
@@ -86,12 +88,14 @@ export default {
     methods: {
         onClickCreate() {
             this.$store.dispatch("form/onClickCreate");
+            this.form = true;
         },
         onClickEdit(value) {
             this.$store.dispatch("form/onClickEdit", value);
         },
         onClickCancel() {
             this.$store.dispatch("form/closeForm");
+            this.form = false;
         },
         selectProject(project) {
             this.$store.dispatch("project/selectProject", project);
@@ -106,13 +110,23 @@ export default {
                 );
                 this.submitLoading = false;
                 this.$store.dispatch("form/closeForm");
+                this.form = false;
                 this.$router.push("/project/" + response.project.uuid);
             } else if (this.submitType === "edit") {
                 // 名前を更新
                 this.editObject.name = this.name;
                 this.$store.dispatch("project/editProject", this.editObject);
                 this.$store.dispatch("form/closeForm");
+                this.form = false;
             }
+        },
+    },
+    watch: {
+        // ダイアログが閉じた後フォームの値を全て空にする * computedに移行したい
+        inputForm(inputForm) {
+        if (!inputForm) {
+            this.form = false;
+        }
         },
     },
 };
