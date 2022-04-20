@@ -193,7 +193,7 @@ export default {
       if (this.apiStatus) {
         await this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
         this.loading = false;
-        this.$router.push("/projects");
+        this.$router.push("/user");
       }
       this.loading = false;
     },

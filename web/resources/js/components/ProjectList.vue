@@ -1,0 +1,115 @@
+<template>
+  <div class="mt-4">
+    <div class="d-flex justify-space-between px-4">
+        <v-subheader class="d-flex align-self-center" style="font-size: 0.8em; height: 32px;"
+            >プロジェクト
+        </v-subheader>
+        <v-icon
+            class="hidden-sm-and-down pr-2"
+            size="18"
+            height="18"
+            @click="onClickCreate"
+            >mdi-plus-circle</v-icon
+        >
+    </div>
+    <v-progress-circular
+        class="d-flex mx-auto my-4"
+        v-if="loading"
+        color="grey darken-1"
+        indeterminate
+    ></v-progress-circular>
+    <v-list class="overflow-y-auto py-0" height="calc(100% - 304px)">
+        <v-list-item
+            v-for="project in projectList"
+            :key="project.uuid"
+            @click="selectProject(project)"
+            class="d-flex px-8"
+            style="height: 48px"
+            link
+        >
+            <v-list-item-icon class="align-self-center mr-6">
+                <v-icon color="teal lighten-5">mdi-folder-outline</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="align-self-center">
+                <v-list-item-title>{{ project.name }}</v-list-item-title>
+            </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="onClickCreate" class="d-flex px-8" style="height: 48px" link>
+            <v-list-item-icon class="align-self-center mr-6">
+                <v-icon color="teal lighten-5">mdi-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="align-self-center">
+                <v-list-item-title>プロジェクトを追加</v-list-item-title>
+            </v-list-item-content>
+        </v-list-item>
+    </v-list>
+    <!-- 追加のフォーム -->
+    <form class="form" @submit.prevent="submitForm()">
+        <InputForm
+            @onClickCancel="onClickCancel"
+            @submitForm="submitForm"
+            :inputForm="inputForm"
+            :category="category"
+            :loading="submitLoading"
+        />
+    </form>
+  </div>
+</template>
+
+<script>
+import InputForm from "../components/InputForm.vue";
+import { mapGetters, mapState } from "vuex";
+
+export default {
+    components: {
+        InputForm,
+    },
+    data: () => ({
+        category: "プロジェクト",
+        submitLoading: false,
+    }),
+    computed: {
+        ...mapState({
+            apiStatus: (state) => state.auth.apiStatus,
+        }),
+        // 後でmapGettersからprops,$emitに移行したい
+        ...mapGetters({
+            loading: "initialize/loading",
+            name: "form/name",
+            editObject: "form/editObject",
+            inputForm: "form/inputForm",
+            submitType: "form/submitType",
+            project: "project/project",
+            projectList: "project/projectList",
+        }),
+    },
+    methods: {
+        onClickCreate() {
+            this.$store.dispatch("form/onClickCreate");
+        },
+        onClickEdit(value) {
+            this.$store.dispatch("form/onClickEdit", value);
+        },
+        onClickCancel() {
+            this.$store.dispatch("form/closeForm");
+        },
+        async submitForm() {
+            if (this.submitType === "create") {
+                this.submitLoading = true;
+                const response = await this.$store.dispatch(
+                    "project/createProject",
+                    { name: this.name }
+                );
+                this.submitLoading = false;
+                this.$store.dispatch("form/closeForm");
+                this.$router.push("/project/" + response.project.uuid);
+            } else if (this.submitType === "edit") {
+                // 名前を更新
+                this.editObject.name = this.name;
+                this.$store.dispatch("project/editProject", this.editObject);
+                this.$store.dispatch("form/closeForm");
+            }
+        },
+    },
+};
+</script>

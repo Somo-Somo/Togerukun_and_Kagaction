@@ -5,7 +5,6 @@ import store from './store';
 // ページコンポーネントをインポートする
 import User from './pages/User.vue';
 import Login from './pages/Login.vue';
-import Project from './pages/Project.vue';
 import HypothesisList from './pages/HypothesisList.vue';
 import HypothesisDetail from './pages/HypothesisDetail.vue';
 import CurrentGoal from './pages/CurrentGoal.vue';
@@ -34,11 +33,6 @@ const routes = [
   {
     path: '/user',
     component: User,
-  },
-  {
-    path: '/projects',
-    component: Project,
-    name: "project"
   },
   {
     path: '/project/:id',
