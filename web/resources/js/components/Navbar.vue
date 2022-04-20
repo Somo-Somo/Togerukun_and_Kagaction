@@ -40,32 +40,7 @@
         </v-list-item>
       </v-list>
       <v-divider class="mx-6" color="#80CBC4"></v-divider>
-      <v-subheader class="px-8 pt-4" style="font-size: 0.75em"
-        >プロジェクト</v-subheader
-      >
-      <v-progress-circular
-        class="d-flex mx-auto my-4"
-        v-if="loading"
-        color="grey darken-1"
-        indeterminate
-      ></v-progress-circular>
-      <v-list class="overflow-y-auto py-0" height="calc(100% - 304px)">
-        <v-list-item
-          v-for="project in projectList"
-          :key="project.uuid"
-          @click="selectProject(project)"
-          class="d-flex px-8"
-          style="height: 48px"
-          link
-        >
-          <v-list-item-icon class="align-self-center mr-6">
-            <v-icon color="teal lighten-5">mdi-folder-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content class="align-self-center">
-            <v-list-item-title>{{ project.name }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+      <ProjectList />
       <v-footer color="#80CBC4" absolute>
         <v-divider color="#80CBC4"></v-divider>
         <v-sheet
@@ -92,12 +67,15 @@
 </template>
 
 <script>
+import ProjectList from "../components/ProjectList.vue";
 import { mapGetters } from "vuex";
 
 export default {
+    components: {
+        ProjectList,
+    },
   data: () => ({
     items: [
-      {icon: "mdi-folder-multiple-outline", text: "プロジェクト", url: "/projects"},
       {icon: "mdi-flag-outline", text: "ToDo", url: "/current_goals"},
       {icon: "mdi-account-circle-outline", text: "ユーザー", url: "/user"},
     ],
@@ -130,7 +108,10 @@ export default {
         this.$store.dispatch("project/selectProject", project);
         return this.$router.push({ path: "/project/" + project.uuid });
       }
-    }
+    },
+    onClickCreate () {
+      this.$store.dispatch("form/onClickCreate");
+    },
   },
 };
 </script>

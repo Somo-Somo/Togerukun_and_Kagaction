@@ -60,7 +60,7 @@ const actions = {
       context.commit ('setUser', response.data);
       return false;
     }
-    console.log(response);
+
     context.commit ('setApiStatus', false);
     if (response.status === UNPROCESSABLE_ENTITY) {
       context.commit ('setLoginErrorMessages', response.data.errors);
@@ -94,7 +94,7 @@ const actions = {
     await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
     const response = await axios.get('/api/auth_status');
     const user = typeof(response.data.id) ? response.data : null;
-    console.log(response);
+
     if (response.status === OK) {
       context.commit ('setApiStatus', true);
       context.commit ('setUser', user);
