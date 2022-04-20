@@ -93,6 +93,10 @@ export default {
         onClickCancel() {
             this.$store.dispatch("form/closeForm");
         },
+        selectProject(project) {
+            this.$store.dispatch("project/selectProject", project);
+            return this.$router.push({ path: "/project/" + project.uuid });
+        },
         async submitForm() {
             if (this.submitType === "create") {
                 this.submitLoading = true;
