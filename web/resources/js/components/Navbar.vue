@@ -76,7 +76,6 @@ export default {
     },
   data: () => ({
     items: [
-      {icon: "mdi-folder-multiple-outline", text: "プロジェクト", url: "/projects"},
       {icon: "mdi-flag-outline", text: "ToDo", url: "/current_goals"},
       {icon: "mdi-account-circle-outline", text: "ユーザー", url: "/user"},
     ],
