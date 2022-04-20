@@ -68,6 +68,7 @@
       </template>
       <form class="form" @submit.prevent="submitForm()">
         <InputForm
+          v-if="form"
           @onClickCancel="onClickCancel"
           @submitForm="submitForm"
           :category="hypothesisStatuses[0].name"
@@ -104,6 +105,7 @@ export default {
     ],
     show: false,
     submitLoading: false,
+    form: false,
   }),
   computed: {
     ...mapState({
@@ -119,17 +121,28 @@ export default {
   methods: {
     onClickCreate () {
       this.$store.dispatch("form/onClickCreate");
+      this.form = true;
     },  
     onClickCancel() {
       this.$store.dispatch("form/closeForm");
+      this.form = false;
     },
     submitForm(){      
       this.$store.dispatch("form/closeForm");
       this.$store.dispatch(
         "hypothesis/createGoal", 
         {project: this.project, hypothesisName: this.name}
-      )
+      );
+      this.form = false;
     }
+  },
+  watch: {
+    // ダイアログが閉じた後フォームの値を全て空にする * computedに移行したい
+    inputForm(inputForm) {
+      if (!inputForm) {
+        this.form = false;
+      }
+    },
   },
 };
 </script>
