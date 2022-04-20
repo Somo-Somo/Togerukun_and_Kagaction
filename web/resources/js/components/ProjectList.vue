@@ -33,6 +33,9 @@
             <v-list-item-content class="align-self-center">
                 <v-list-item-title>{{ project.name }}</v-list-item-title>
             </v-list-item-content>
+            <v-list-item-content>
+                <Menu :menus="cardMenus" :selectCard="project" @selectedMenu="selectedMenu"/>
+            </v-list-item-content>
         </v-list-item>
         <v-list-item @click="onClickCreate" class="d-flex px-8" style="height: 48px" link>
             <v-list-item-icon class="align-self-center mr-6">
@@ -46,7 +49,7 @@
     <!-- 追加のフォーム -->
     <form class="form" @submit.prevent="submitForm()">
         <InputForm
-            v-if="form"
+            v-if="inputFormCard"
             @onClickCancel="onClickCancel"
             @submitForm="submitForm"
             :inputForm="inputForm"
@@ -54,21 +57,41 @@
             :loading="submitLoading"
         />
     </form>
+    <DeletingConfirmationDialog 
+      :deletingConfirmationDialog="deletingConfirmationDialog"
+      :selectedDeletingItem="selectedDeletingProject"
+      :loading="submitLoading"
+      @deleteItem="deleteProject"
+      @onClickCancel="onClickCancel"
+    />
   </div>
 </template>
 
 <script>
 import InputForm from "../components/InputForm.vue";
+import Menu from "../components/Buttons/Menu.vue";
+import DeletingConfirmationDialog from "../components/Dialog/DeletingConfirmationDialog.vue";
 import { mapGetters, mapState } from "vuex";
 
 export default {
     components: {
         InputForm,
+        Menu,
+        DeletingConfirmationDialog,
     },
     data: () => ({
         category: "プロジェクト",
+        inputFormCard: false,
+        deletingConfirmationDialog: false,
+        selectedDeletingProject: {
+            name: null,
+            uuid: null,
+        },
+        cardMenus: [
+            {title: "編集", color:"color: black"},
+            {title: "削除", color:"color: red"},
+        ],
         submitLoading: false,
-        form: false,
     }),
     computed: {
         ...mapState({
@@ -88,18 +111,39 @@ export default {
     methods: {
         onClickCreate() {
             this.$store.dispatch("form/onClickCreate");
-            this.form = true;
+            this.inputFormCard = true;
         },
         onClickEdit(value) {
             this.$store.dispatch("form/onClickEdit", value);
+            this.inputFormCard = true;
         },
         onClickCancel() {
             this.$store.dispatch("form/closeForm");
-            this.form = false;
+            this.inputFormCard = false;
+            this.deletingConfirmationDialog = false;
+            this.selectedDeletingProject.name = null;
+            this.selectedDeletingProject.uuid = null;
         },
         selectProject(project) {
             this.$store.dispatch("project/selectProject", project);
             return this.$router.push({ path: "/project/" + project.uuid });
+        },
+        selectedMenu(menuTitle, project){
+            if (menuTitle === "編集") {
+                this.onClickEdit(project);
+            } else if (menuTitle === "削除") {
+                this.deletingConfirmationDialog = true;
+                this.selectedDeletingProject.name = project.name;
+                this.selectedDeletingProject.uuid = project.uuid;
+            }
+        },
+        async deleteProject(){
+            this.submitLoading = true;
+            await this.$store.dispatch("project/deleteProject", this.selectedDeletingProject);
+            this.submitLoading = false;
+            this.deletingConfirmationDialog = false;
+            this.selectedDeletingProject.name = null;
+            this.selectedDeletingProject.uuid = null;
         },
         async submitForm() {
             if (this.submitType === "create") {
@@ -110,23 +154,26 @@ export default {
                 );
                 this.submitLoading = false;
                 this.$store.dispatch("form/closeForm");
-                this.form = false;
+                this.inputFormCard = false;
                 this.$router.push("/project/" + response.project.uuid);
             } else if (this.submitType === "edit") {
                 // 名前を更新
                 this.editObject.name = this.name;
                 this.$store.dispatch("project/editProject", this.editObject);
                 this.$store.dispatch("form/closeForm");
-                this.form = false;
+                this.inputFormCard = false;
             }
         },
     },
     watch: {
         // ダイアログが閉じた後フォームの値を全て空にする * computedに移行したい
         inputForm(inputForm) {
-        if (!inputForm) {
-            this.form = false;
-        }
+            if (!inputForm) {
+                this.inputFormCard = false;
+                this.deletingConfirmationDialog = false;
+                this.selectedDeletingProject.name = null;
+                this.selectedDeletingProject.uuid = null;
+            }
         },
     },
 };
