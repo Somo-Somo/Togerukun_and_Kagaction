@@ -44,7 +44,7 @@ class DateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  string  $hypothesisUuid
+     * @param  object  $hypothesis
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -52,6 +52,7 @@ class DateController extends Controller
     {
         $hypothesis = [
             'uuid' => $hypothesisUuid,
+            'date' => $request->date,
             'user_email' => $request->user()->email,
         ];
 

@@ -20,13 +20,14 @@ class DateRepository implements DateRepositoryInterface
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
                 CREATE (user) - [
-                    currentGoal: SET_CURRENT_GOAL{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                    date: DATE{ at: $date )}
                 ] -> (hypothesis)
                 RETURN hypothesis
                 CYPHER,
                 [
                     'uuid' => $hypothesis['uuid'], 
                     'user_email' => $hypothesis['user_email'], 
+                    'date' => $hypothesis['date']
                 ]
             );
         return;
@@ -37,14 +38,14 @@ class DateRepository implements DateRepositoryInterface
         $deleteHypothesisDate = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - 
-                [currentGoal: SET_CURRENT_GOAL]
+                [date: DATE]
                 ->(hypothesis:Hypothesis { uuid: $uuid })
-                DELETE currentGoal
+                DELETE date
                 RETURN hypothesis
                 CYPHER,
                 [
                     'uuid' => $hypothesis['uuid'], 
-                    'user_email' => $hypothesis['user_email'], 
+                    'user_email' => $hypothesis['user_email']
                 ]
             );
         return;
