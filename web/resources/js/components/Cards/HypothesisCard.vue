@@ -37,7 +37,7 @@
               <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
                   <div class="d-flex pr-1" v-if="showStatus(hypothesis)">
-                    <v-icon size="8" :color="showStatus(hypothesis).color">circle</v-icon>
+                    <v-icon :size="showStatus(hypothesis).iconSize" :color="showStatus(hypothesis).color">{{ showStatus(hypothesis).icon }}</v-icon>
                     <p
                       class="ma-0 px-2 #212121--text font-weight-bold align-self-center"
                       :style="$vuetify.breakpoint.smAndUp ? 'font-size:12px' : 'font-size:8px'"
@@ -179,9 +179,9 @@ export default {
     showStatus() {
       return (hypothesis) => {
         if (hypothesis.accomplish) {
-          return {title: '完了', color: 'green'}; 
-        } else if (hypothesis.currentGoal) {
-          return {title: 'ToDo', color:'blue'};
+          return {icon: 'mdi-circle', iconSize: 8, title: '完了', color: 'green'}; 
+        } else if (hypothesis.date) {
+          return {icon: 'mdi-clock-outline', iconSize: 14 , title: hypothesis.date, color:'grey'};
         } else {
           return false;
         }
