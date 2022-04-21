@@ -19,8 +19,13 @@ class DateRepository implements DateRepositoryInterface
         $updateHypothesisDate = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
+                OPTIONAL MATCH x = (user) - [date:DATE] -> (hypothesis)
+                WHERE x IS NOT NULL
+                SET date.on = $date
+                WITH user, hypothesis, x
+                WHERE x IS NULL
                 CREATE (user) - [
-                    date:DATE { on: $date }
+                    :DATE { on: $date }
                 ] -> (hypothesis)
                 RETURN hypothesis
                 CYPHER,
