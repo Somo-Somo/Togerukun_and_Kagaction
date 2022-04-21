@@ -43,48 +43,50 @@
               hide-details
             ></v-textarea>
           </div>
-          <div
-            class="py-2 d-flex justify-start"
-            :style="
-              $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 48px'
-            "
-          >
-            <v-subheader
-              class="d-flex align-self-center pa-md-0"
-              :class="
-                $vuetify.breakpoint.mdAndUp
-                  ? 'hypothesisSubTitle'
-                  : 'spHypothesisSubTitle'
+          <div class="d-flex py-2">
+            <div
+              class="py-2 d-flex justify-start"
+              :style="
+                $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 48px'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">完了：</p>
-            </v-subheader>
-            <v-col class="px-4 py-0 d-flex align-self-center">
-              <v-checkbox
-                v-model="hypothesis.accomplish"
-                @click="onClickAccomplish(hypothesis.accomplish)"
-              ></v-checkbox>
-            </v-col>
-          </div>
-          <div
-            class="py-2 d-flex justify-start"
-            :style="
-              $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 48px'
-            "
-          >
-            <v-subheader
-              class="d-flex align-self-center pa-md-0"
-              :class="
-                $vuetify.breakpoint.mdAndUp
-                  ? 'hypothesisSubTitle'
-                  : 'spHypothesisSubTitle'
+              <v-subheader
+                class="d-flex align-self-center pa-md-0"
+                :class="
+                  $vuetify.breakpoint.mdAndUp
+                    ? 'hypothesisSubTitle'
+                    : 'spHypothesisSubTitle'
+                "
+              >
+                <p class="ma-0 font-weight-bold" style="min-width:36px;" color="grey darken-1">完了：</p>
+              </v-subheader>
+              <v-col class="px-4 py-0 d-flex align-self-center">
+                <v-checkbox
+                  v-model="hypothesis.accomplish"
+                  @click="onClickAccomplish(hypothesis.accomplish)"
+                ></v-checkbox>
+              </v-col>
+            </div>
+            <div
+              class="py-2 ml-md-2 d-flex align-self-center"
+              :style="
+                $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 48px'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">日付 :</p>
-            </v-subheader>
-            <v-col class="px-4 py-0 d-flex align-self-center">
-              <Calender />
-            </v-col>
+              <v-subheader
+                class="d-flex align-self-center pa-md-0"
+                :class="
+                  $vuetify.breakpoint.mdAndUp
+                    ? 'hypothesisSubTitle'
+                    : 'spHypothesisSubTitle'
+                "
+              >
+                <p class="ma-0 font-weight-bold" color="grey darken-1">日付 :</p>
+              </v-subheader>
+              <v-col class="px-4 py-0 d-flex align-self-center">
+                <Calender />
+              </v-col>
+            </div>
           </div>
           <div class="py-4">
             <div class="d-flex justify-space-between">
@@ -271,10 +273,10 @@ export default {
   padding: 0 0 0 12px
 
 .cardStyle
-  height: calc(100vh - 432px)
+  height: calc(100vh - 360px)
   position: relative
 
 .spCardStyle
-  height: calc(100vh - 360px)
+  height: calc(100vh - 320px)
   position: relative
 </style>

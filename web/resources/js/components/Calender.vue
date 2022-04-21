@@ -10,6 +10,7 @@
     >
         <template v-slot:activator="{ on, attrs }">
             <v-text-field
+                class="d-flex align-self-center ma-0 pt-5"
                 v-model="date"
                 prepend-icon="mdi-calendar"
                 readonly
