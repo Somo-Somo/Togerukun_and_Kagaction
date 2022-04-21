@@ -208,12 +208,6 @@ export default {
          { accomplish:accomplish, hypothesisUuid:this.hypothesis.uuid }
       );
     },
-    onClickCurrentGoal (currentGoal){
-      this.$store.dispatch(
-        "hypothesis/updateCurrentGoal",
-         { currentGoal:currentGoal, hypothesisUuid:this.hypothesis.uuid }
-      );
-    },
     onClickCreate () {
       this.$store.dispatch("form/onClickCreate");
       this.form = true;
