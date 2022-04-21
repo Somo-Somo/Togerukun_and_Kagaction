@@ -43,14 +43,12 @@ export default {
         },
     },
     methods: {
-        async onClickSave(date) {
-            // $refs.calenderMenu.save(date);
-            console.info(date);
-            await this.$store.dispatch(
+        onClickSave(date) {
+            this.calenderMenu = false;
+            this.$store.dispatch(
                 "hypothesis/updateDate",
                 { date:date, hypothesisUuid:this.hypothesis.uuid }
             );
-            this.calenderMenu = false;
         }
     },
 };
