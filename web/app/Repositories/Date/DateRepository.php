@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repositories\CurrentGoal;
+namespace App\Repositories\Date;
 
 use App\Facades\Neo4jDB;
-use App\Repositories\CurrentGoal\CurrentGoalRepositoryInterface;
+use App\Repositories\Date\DateRepositoryInterface;
 
-class CurrentGoalRepository implements CurrentGoalRepositoryInterface
+class DateRepository implements DateRepositoryInterface
 {
     protected $client;
 
@@ -14,9 +14,9 @@ class CurrentGoalRepository implements CurrentGoalRepositoryInterface
         $this->client = Neo4jDB::call();
     }
 
-    public function updateCurrentGoal(array $hypothesis)
+    public function updateDate(array $hypothesis)
     {
-        $updateHypothesisCurrentGoal = $this->client->run(
+        $updateHypothesisDate = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
                 CREATE (user) - [
@@ -32,9 +32,9 @@ class CurrentGoalRepository implements CurrentGoalRepositoryInterface
         return;
     }
 
-    public function destroyCurrentGoal(array $hypothesis)
+    public function destroyDate(array $hypothesis)
     {
-        $deleteHypothesisCurrentGoal = $this->client->run(
+        $deleteHypothesisDate = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - 
                 [currentGoal: SET_CURRENT_GOAL]
