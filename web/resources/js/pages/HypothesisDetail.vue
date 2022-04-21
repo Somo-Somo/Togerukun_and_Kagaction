@@ -80,13 +80,10 @@
                   : 'spHypothesisSubTitle'
               "
             >
-              <p class="ma-0 font-weight-bold" color="grey darken-1">ToDo :</p>
+              <p class="ma-0 font-weight-bold" color="grey darken-1">日付 :</p>
             </v-subheader>
             <v-col class="px-4 py-0 d-flex align-self-center">
-              <v-checkbox
-                v-model="hypothesis.currentGoal"
-                @click="onClickCurrentGoal(hypothesis.currentGoal)"
-              ></v-checkbox>
+              <Calender />
             </v-col>
           </div>
           <div class="py-4">
@@ -160,6 +157,7 @@
 
 <script>
 import Header from "../components/Header.vue";
+import Calender from "../components/Calender.vue";
 import HypothesisCards from "../components/Cards/HypothesisCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
@@ -169,6 +167,7 @@ import { mapGetters, mapState } from 'vuex';
 export default {
   components: {
     Header,
+    Calender,
     HypothesisCards,
     NewAdditionalCard,
     SpBottomBtn,
@@ -179,6 +178,7 @@ export default {
     page: "目標",
     submitLoading: false,
     form: false,
+    date: null,
   }),
   computed : {
     ...mapState({
