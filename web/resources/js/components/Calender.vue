@@ -3,7 +3,6 @@
         ref="calenderMenu"
         v-model="calenderMenu"
         :close-on-content-click="false"
-        :return-value.sync="hypothesis.date"
         transition="scale-transition"
         offset-y
         min-width="auto"
@@ -18,12 +17,12 @@
                 v-on="on"
             ></v-text-field>
         </template>
-        <v-date-picker v-model="date" no-title scrollable>
+        <v-date-picker v-model="hypothesis.date" no-title scrollable>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="calenderMenu = false">
                 キャンセル
             </v-btn>
-            <v-btn text color="primary" @click="$refs.calenderMenu.save(hypothesis.date)">
+            <v-btn text color="primary" @click="onClickSave(hypothesis.date)">
                 保存
             </v-btn>
         </v-date-picker>
@@ -36,11 +35,23 @@ export default {
         calenderMenu: false,
     }),
     props: {
-        hypothesis: {
-            type: Object,
+
+    },
+    computed: {
+      hypothesis() {
+            return this.$store.getters['hypothesis/hypothesis'];
         },
     },
-    computed: {},
-    methods: {},
+    methods: {
+        async onClickSave(date) {
+            // $refs.calenderMenu.save(date);
+            console.info(date);
+            await this.$store.dispatch(
+                "hypothesis/updateDate",
+                { date:date, hypothesisUuid:this.hypothesis.uuid }
+            );
+            this.calenderMenu = false;
+        }
+    },
 };
 </script>

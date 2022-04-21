@@ -109,8 +109,12 @@ const mutations = {
         state.hypothesis.accomplish = accomplish;
     },
 
-    updateHypothesisCurrentGoal (state, currentGoal){
-        state.hypothesis.currentGoal = currentGoal;
+    updateDate (state, date){
+        // const hypothesis = state.hypothesis;
+        // hypothesis.date = date;
+        state.hypothesis.date = date;
+        console.info(date);
+        console.info(state.hypothesis);
     },
 
     deleteHypothesis (state, hypothesis){
@@ -247,24 +251,26 @@ const actions = {
         return; 
     },
 
-    async updateCurrentGoal (context, {currentGoal, hypothesisUuid}) {
-        context.commit('updateHypothesisCurrentGoal', currentGoal);
-        context.commit ('setCurrentGoalList');
-        if (currentGoal) {
-            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/current_goal')
-            if (response.status !== OK) {
-                context.commit ('error/setCode', response.status, {root: true});
-                return false;
-            }
+    async updateDate (context, {date, hypothesisUuid}) {
+        context.commit('updateDate', date);
+        // 後ほど予定TodoListを作ります
+        // context.commit ('setScaduleGoalList');
+        if (date) {
+            // const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/current_goal')
+            // if (response.status !== OK) {
+            //     context.commit ('error/setCode', response.status, {root: true});
+            //     return false;
+            // }
         } else {
-            const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/current_goal')
-            if (response.status !== OK) {
-                context.commit ('error/setCode', response.status, {root: true});
-                return false;
-            }
+            // const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/current_goal')
+            // if (response.status !== OK) {
+            //     context.commit ('error/setCode', response.status, {root: true});
+            //     return false;
+            // }
         }
         return; 
     }
+
 }
 
 export default {
