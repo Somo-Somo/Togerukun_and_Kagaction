@@ -3,7 +3,7 @@
         ref="calenderMenu"
         v-model="calenderMenu"
         :close-on-content-click="false"
-        :return-value.sync="date"
+        :return-value.sync="hypothesis.date"
         transition="scale-transition"
         offset-y
         min-width="auto"
@@ -11,7 +11,7 @@
         <template v-slot:activator="{ on, attrs }">
             <v-text-field
                 class="d-flex align-self-center ma-0 pt-5"
-                v-model="date"
+                v-model="hypothesis.date"
                 prepend-icon="mdi-calendar"
                 readonly
                 v-bind="attrs"
@@ -23,7 +23,7 @@
             <v-btn text color="primary" @click="calenderMenu = false">
                 キャンセル
             </v-btn>
-            <v-btn text color="primary" @click="$refs.calenderMenu.save(date)">
+            <v-btn text color="primary" @click="$refs.calenderMenu.save(hypothesis.date)">
                 保存
             </v-btn>
         </v-date-picker>
@@ -34,20 +34,13 @@
 export default {
     data: () => ({
         calenderMenu: false,
-        date: null,
     }),
     props: {
-
-    },
-    computed: {
-        date() {
-            return this.date
-                ? this.date
-                : new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-                      .toISOString()
-                      .substr(0, 10);
+        hypothesis: {
+            type: Object,
         },
     },
+    computed: {},
     methods: {},
 };
 </script>

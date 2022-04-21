@@ -84,7 +84,7 @@
                 <p class="ma-0 font-weight-bold" color="grey darken-1">日付 :</p>
               </v-subheader>
               <v-col class="px-4 py-0 d-flex align-self-center">
-                <Calender />
+                <Calender :hypothesis="hypothesis"/>
               </v-col>
             </div>
           </div>
@@ -195,6 +195,7 @@ export default {
       hypothesisList: 'hypothesis/hypothesisList',
     }),
     subHeader() {
+      console.info(this.hypothesis);
       return this.hypothesis.depth === 0 ? 'ゴール' : '｢'+ this.parentHypothesis.name +'｣ の課題';
     },
     additionalInputFormLabel(){
