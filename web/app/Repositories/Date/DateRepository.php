@@ -20,7 +20,7 @@ class DateRepository implements DateRepositoryInterface
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
                 CREATE (user) - [
-                    date: DATE{ at: $date )}
+                    date:DATE { on: $date }
                 ] -> (hypothesis)
                 RETURN hypothesis
                 CYPHER,

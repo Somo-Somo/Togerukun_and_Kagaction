@@ -46,7 +46,7 @@ class UserRepository implements UserRepositoryInterface
                 MATCH (user:User{email:$user_email}) - [:HAS] -> (project:Project),
                     len = (project) <- [r*] - (parent:Hypothesis)
                 OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
-                OPTIONAL MATCH (:User)-[date:SET_A_DATE]->(parent)
+                OPTIONAL MATCH (:User)-[date:DATE]->(parent)
                 OPTIONAL MATCH (:User)-[accomplish:ACCOMPLISHED]->(parent)
                 RETURN project,parent,r,collect(child),length(len),date,accomplish
                 ORDER BY r

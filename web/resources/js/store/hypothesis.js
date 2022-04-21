@@ -254,7 +254,7 @@ const actions = {
         // 後ほど予定TodoListを作ります
         // context.commit ('setScaduleGoalList');
         if (date) {
-            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/date', date)
+            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/date', {date: date})
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
