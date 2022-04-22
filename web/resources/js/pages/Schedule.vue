@@ -4,7 +4,7 @@
     style="max-width: 900px"
     fluid
   >
-  <Header :headerTitle="'ToDo'"/>
+  <Header :headerTitle="'予定'"/>
       <template>
         <div
           class="d-flex justify-space-between"
@@ -13,7 +13,7 @@
         >
           <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
             <p class="ma-0 font-weight-bold" color="grey darken-1">
-              ToDo一覧 
+              予定一覧 
             </p>
           </v-subheader>
         </div>
