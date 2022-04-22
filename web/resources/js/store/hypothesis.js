@@ -111,8 +111,6 @@ const mutations = {
 
     updateDate (state, date){
         state.hypothesis.date = date;
-        console.info(date);
-        console.info(state.hypothesis);
     },
 
     deleteHypothesis (state, hypothesis){

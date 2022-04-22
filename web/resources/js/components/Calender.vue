@@ -7,7 +7,7 @@
         offset-y
         min-width="auto"
     >
-        <template v-slot:activator="{ on, attrs }">
+        <template class="d-flex" v-slot:activator="{ on, attrs }">
             <v-text-field
                 class="d-flex align-self-center ma-0 pt-5"
                 v-model="hypothesis.date"
@@ -15,7 +15,16 @@
                 readonly
                 v-bind="attrs"
                 v-on="on"
-            ></v-text-field>
+            > 
+            </v-text-field>
+            <v-btn
+                class="d-flex align-self-center" 
+                style="position: relative; left: -20px;"
+                @click="removeDate(hypothesis.date)"
+                small 
+                icon>
+                <v-icon :size="$vuetify.breakpoint.smAndUp ? '20' : '14'">mdi-close</v-icon>
+            </v-btn> 
         </template>
         <v-date-picker v-model="hypothesis.date" no-title scrollable>
             <v-spacer></v-spacer>
@@ -49,7 +58,15 @@ export default {
                 "hypothesis/updateDate",
                 { date:date, hypothesisUuid:this.hypothesis.uuid }
             );
-        }
+        },
+        removeDate(date) {
+            if (date) {
+                this.$store.dispatch(
+                    "hypothesis/updateDate",
+                    { date:null, hypothesisUuid:this.hypothesis.uuid }
+                );
+            }
+        },
     },
 };
 </script>
