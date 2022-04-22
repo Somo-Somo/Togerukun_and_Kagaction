@@ -36,14 +36,14 @@
             <v-list-item-content class="pa-0 d-flex">
               <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
-                  <div class="d-flex pr-1" :style="showStatus(hypothesis).backgroundColor" v-if="showStatus(hypothesis)">
-                    <v-icon :size="showStatus(hypothesis).iconSize" :color="showStatus(hypothesis).iconColor">{{ showStatus(hypothesis).icon }}</v-icon>
+                  <div class="d-flex pr-1" :style="subTitle(hypothesis).backgroundColor" v-if="subTitle(hypothesis)">
+                    <v-icon :size="subTitle(hypothesis).iconSize" :color="subTitle(hypothesis).iconColor">{{ subTitle(hypothesis).icon }}</v-icon>
                     <p
                       class="ma-0 px-2 font-weight-bold align-self-center"
-                      :class="showStatus(hypothesis).fontColor"
+                      :class="subTitle(hypothesis).fontColor"
                       :style="$vuetify.breakpoint.smAndUp ? 'font-size:12px' : 'font-size:8px'"
                     >
-                       {{ showStatus(hypothesis).title }}
+                       {{ subTitle(hypothesis).title }}
                     </p>
                   </div>
                   <div class="d-flex" style="max-width:66%"> 
@@ -193,7 +193,7 @@ export default {
         return false;
       }
     },
-    showStatus() {
+    subTitle() {
       return (hypothesis) => {
         if (hypothesis.accomplish) {
           return this.subtitle.accomplish; 
