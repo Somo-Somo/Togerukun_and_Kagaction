@@ -198,19 +198,7 @@ export default {
         if (hypothesis.accomplish) {
           return this.subtitle.accomplish; 
         } else if (hypothesis.date) {
-          const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
-          const diff = (new Date(hypothesis.date) - new Date(today)) / (60*60*1000*24);
-          if (diff > 0) {
-            this.subtitle.date.title = diff < 8 ? '残り' + diff + '日' : hypothesis.date;
-            this.subtitle.date.backgroundColor = diff < 4 ? 'background-color: yellow' : null;
-          } else if (diff === 0) {
-            this.subtitle.date.title = '今日';
-            this.subtitle.date.backgroundColor = 'background-color: skyblue';
-          } else {
-            this.subtitle.date.title = Math.abs(diff) + '日経過';
-            this.subtitle.date.backgroundColor = 'background-color: coral'
-          }
-          return this.subtitle.date;
+          return this.calcDate(hypothesis);
         } else {
           return false;
         }
@@ -296,6 +284,21 @@ export default {
        this.cardShow(this.hypothesisList[key]);
       }
       return this.hypothesisList;
+    },
+    calcDate (hypothesis){
+        const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+        const diff = (new Date(hypothesis.date) - new Date(today)) / (60*60*1000*24);
+        if (diff > 0) {
+          this.subtitle.date.title = diff < 8 ? '残り' + diff + '日' : hypothesis.date;
+          this.subtitle.date.backgroundColor = diff < 4 ? 'background-color: yellow' : null;
+        } else if (diff === 0) {
+          this.subtitle.date.title = '今日';
+          this.subtitle.date.backgroundColor = 'background-color: skyblue';
+        } else {
+          this.subtitle.date.title = Math.abs(diff) + '日経過';
+          this.subtitle.date.backgroundColor = 'background-color: coral'
+        }
+        return this.subtitle.date;
     }
   },
   watch: {
