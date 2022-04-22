@@ -28,17 +28,17 @@
             indeterminate
           ></v-progress-circular>
           
-        <CurrentGoalCards
+        <ScheduleCards
             :projectList="projectList" 
-            :currentGoalList="currentGoalList" 
+            :scheduleList="scheduleList" 
         />
 
-        <div class="ma-2 mx-md-0 my-md-4" v-show="!currentGoalList.length && !loading">
+        <div class="ma-2 mx-md-0 my-md-4" v-show="!scheduleList.length && !loading">
             <p 
               class="grey--text font-weight-bold ma-0 py-2"
               :style="$vuetify.breakpoint.smAndUp ? 'font-size:18px;' : 'font-size:14px;'"
             >
-                ToDoはありません
+                予定はありません
             </p>
         </div>
         </div>
@@ -48,13 +48,13 @@
 
 <script>
 import Header from "../components/Header.vue";
-import CurrentGoalCards from "../components/Cards/CurrentGoalCard.vue";
+import ScheduleCards from "../components/Cards/ScheduleCard.vue";
 import { mapGetters } from 'vuex';
 
 export default {
   components: {
     Header,
-    CurrentGoalCards
+    ScheduleCards
   },
   data: () => ({
     category : "ToDo",
@@ -62,8 +62,8 @@ export default {
   computed: {
     ...mapGetters({
       loading: 'initialize/loading',
-      currentGoalList: 'hypothesis/currentGoalList',
       projectList: 'project/projectList',
+      scheduleList: 'schedule/scheduleList',
     }),
   }
 };
