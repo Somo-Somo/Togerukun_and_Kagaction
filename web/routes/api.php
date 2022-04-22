@@ -7,7 +7,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\HypothesisController;
 use App\Http\Controllers\AccomplishController;
 use App\Http\Controllers\GoalController;
-use App\Http\Controllers\CurrentGoalController;
+use App\Http\Controllers\DateController;
 use App\Http\Controllers\Initialize;
 
 
@@ -58,6 +58,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/hypothesis/{hypothesisId}/accomplish', [AccomplishController::class, 'destroy']);
 
     // 今日の目標
-    Route::put('/hypothesis/{hypothesisId}/current_goal', [CurrentGoalController::class, 'update']);
-    Route::delete('/hypothesis/{hypothesisId}/current_goal', [CurrentGoalController::class, 'destroy']);
+    Route::put('/hypothesis/{hypothesisId}/date', [DateController::class, 'update']);
+    Route::delete('/hypothesis/{hypothesisId}/date', [DateController::class, 'destroy']);
 });
