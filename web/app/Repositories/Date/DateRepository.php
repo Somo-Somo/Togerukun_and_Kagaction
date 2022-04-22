@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repositories\CurrentGoal;
+namespace App\Repositories\Date;
 
 use App\Facades\Neo4jDB;
-use App\Repositories\CurrentGoal\CurrentGoalRepositoryInterface;
+use App\Repositories\Date\DateRepositoryInterface;
 
-class CurrentGoalRepository implements CurrentGoalRepositoryInterface
+class DateRepository implements DateRepositoryInterface
 {
     protected $client;
 
@@ -14,37 +14,43 @@ class CurrentGoalRepository implements CurrentGoalRepositoryInterface
         $this->client = Neo4jDB::call();
     }
 
-    public function updateCurrentGoal(array $hypothesis)
+    public function updateDate(array $hypothesis)
     {
-        $updateHypothesisCurrentGoal = $this->client->run(
+        $updateHypothesisDate = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
+                OPTIONAL MATCH x = (user) - [date:DATE] -> (hypothesis)
+                WHERE x IS NOT NULL
+                SET date.on = $date
+                WITH user, hypothesis, x
+                WHERE x IS NULL
                 CREATE (user) - [
-                    currentGoal: SET_CURRENT_GOAL{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                    :DATE { on: $date }
                 ] -> (hypothesis)
                 RETURN hypothesis
                 CYPHER,
                 [
                     'uuid' => $hypothesis['uuid'], 
                     'user_email' => $hypothesis['user_email'], 
+                    'date' => $hypothesis['date']
                 ]
             );
         return;
     }
 
-    public function destroyCurrentGoal(array $hypothesis)
+    public function destroyDate(array $hypothesis)
     {
-        $deleteHypothesisCurrentGoal = $this->client->run(
+        $deleteHypothesisDate = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - 
-                [currentGoal: SET_CURRENT_GOAL]
+                [date: DATE]
                 ->(hypothesis:Hypothesis { uuid: $uuid })
-                DELETE currentGoal
+                DELETE date
                 RETURN hypothesis
                 CYPHER,
                 [
                     'uuid' => $hypothesis['uuid'], 
-                    'user_email' => $hypothesis['user_email'], 
+                    'user_email' => $hypothesis['user_email']
                 ]
             );
         return;

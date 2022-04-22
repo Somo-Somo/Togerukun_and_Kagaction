@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\UseCases\CurrentGoal\UpdateAction;
-use App\UseCases\CurrentGoal\DestroyAction;
+use App\UseCases\Date\UpdateAction;
+use App\UseCases\Date\DestroyAction;
 use Illuminate\Http\Request;
 use \Symfony\Component\HttpFoundation\Response;
 
-class CurrentGoalController extends Controller
+class DateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -44,7 +44,7 @@ class CurrentGoalController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  string  $hypothesisUuid
+     * @param  object  $hypothesis
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -52,13 +52,14 @@ class CurrentGoalController extends Controller
     {
         $hypothesis = [
             'uuid' => $hypothesisUuid,
+            'date' => $request->date,
             'user_email' => $request->user()->email,
         ];
 
         $updateAction->invoke($hypothesis);
 
         $json = [
-            'message' => '今日の目標を設定しました',
+            'message' => '日付を設定しました',
             'error' => '',
         ];
 
@@ -82,7 +83,7 @@ class CurrentGoalController extends Controller
         $destroyAction->invoke($hypothesis);
 
         $json = [
-            'message' => '今日の目標を取り消しました',
+            'message' => '日付を取り消しました',
             'error' => '',
         ];
 

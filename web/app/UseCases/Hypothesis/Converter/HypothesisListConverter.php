@@ -27,6 +27,7 @@ class HypothesisListConverter
             $parent = $value['parent']->getProperties()->toArray();
             $childs = $value['collect(child)']->toArray();
             $len = $value['length(len)'];
+            $date = $value['date'] ? $value['date']->toArray()['properties']->toArray() : null;
 
             if ($childs) {
                 // 子どもに親のデータを持たせて$hypothesisDataに格納。
@@ -68,8 +69,9 @@ class HypothesisListConverter
                 // 仮説一覧のトグルの状態
                 $parent['toggle'] = 'mdi-menu-right';
 
-                // 現在の目標
-                if ($value['currentGoal']) $parent['currentGoal'] = true;
+                // 日付
+                $parent['date'] = $date ? $date['on'] : null;
+
                 // 進捗
                 if ($value['accomplish']) $parent['accomplish'] = true;
 
@@ -77,15 +79,15 @@ class HypothesisListConverter
                 $hypothesisList[$projectUuid][] = $parent;
 
             } else {
-                // 今日の目標
-                if ($value['currentGoal']) $hypothesisData[$parent['uuid']]['currentGoal'] = true;
-                // 今日の目標
+                // 日付
+                $hypothesisData[$parent['uuid']]['date'] =  $date ? $date['on'] : null;
+                // 完了
                 if ($value['accomplish']) $hypothesisData[$parent['uuid']]['accomplish'] = true;
                 // $hypothesisDataから
                 $hypothesisList[$projectUuid][] = $hypothesisData[$parent['uuid']];
             }
         }
-        
+
         return $hypothesisList;
     }
 }

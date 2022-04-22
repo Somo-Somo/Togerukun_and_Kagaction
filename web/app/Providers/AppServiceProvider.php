@@ -18,8 +18,8 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\Project\ProjectRepository::class,
         );
         $this->app->bind( 
-            \App\Repositories\CurrentGoal\CurrentGoalRepositoryInterface::class,
-            \App\Repositories\CurrentGoal\CurrentGoalRepository::class,
+            \App\Repositories\Date\DateRepositoryInterface::class,
+            \App\Repositories\Date\DateRepository::class,
         );
     }
 

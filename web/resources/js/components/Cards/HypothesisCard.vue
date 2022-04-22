@@ -3,13 +3,14 @@
   <v-list class="py-0" width="100%">
     <v-col 
       class="px-md-0"
-      v-for="hypothesis in hypothesisList" 
+      v-for="hypothesis in selectHypothesisList" 
       v-model="hypothesis.showHypothesisList"
       :key="hypothesis.uuid"
       :class="cardShow(hypothesis) ? '' : 'd-none'"
       :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
+      <!-- 課題一覧 -->
       <div 
         v-if="hypothesisStatus.name === '課題一覧'"
         class="d-flex">
@@ -22,7 +23,10 @@
             >{{ hypothesis.toggle }}
           </v-icon>
         </div>
-      <div v-if="!hypothesis.child" style="width: 24px"></div>
+        <div v-if="!hypothesis.child" style="width: 24px"></div>
+      </div>
+      <!-- 予定 -->
+      <div v-if="hypothesisStatus.name === '課題一覧'" class="d-flex">
       </div>
       <v-card class="rounded" style="width: 100%;" outlined>
         <v-list 
@@ -36,13 +40,14 @@
             <v-list-item-content class="pa-0 d-flex">
               <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
-                  <div class="d-flex pr-1" v-if="showStatus(hypothesis)">
-                    <v-icon size="8" :color="showStatus(hypothesis).color">circle</v-icon>
+                  <div class="d-flex pr-1" :style="subTitle(hypothesis).backgroundColor" v-if="subTitle(hypothesis)">
+                    <v-icon :size="subTitle(hypothesis).iconSize" :color="subTitle(hypothesis).iconColor">{{ subTitle(hypothesis).icon }}</v-icon>
                     <p
-                      class="ma-0 px-2 #212121--text font-weight-bold align-self-center"
+                      class="ma-0 px-2 font-weight-bold align-self-center"
+                      :class="subTitle(hypothesis).fontColor"
                       :style="$vuetify.breakpoint.smAndUp ? 'font-size:12px' : 'font-size:8px'"
                     >
-                       {{ showStatus(hypothesis).title }}
+                       {{ subTitle(hypothesis).title }}
                     </p>
                   </div>
                   <div class="d-flex" style="max-width:66%"> 
@@ -137,6 +142,22 @@ export default {
     cardMenu: [
       {title: "削除", color:"color: red"},
     ],
+    subtitle: {
+      accomplish : {
+            icon: 'mdi-circle', 
+            iconSize: 8, 
+            title: '完了', 
+            backgroundColor: 'background-color: null', 
+            iconColor: 'green',
+            fontColor : '#212121--text'
+      },
+      date : {
+            icon: 'mdi-clock-outline',
+            iconSize: 14, 
+            iconColor: '#212121',
+            fontColor : '#212121--text'
+      }
+    }
   }),
   props: {
     project : {
@@ -153,6 +174,9 @@ export default {
     },
   },
   computed : {
+    selectHypothesisList(){
+      return this.hypothesisStatus.name === "予定" ? this.sortScheduleList() : this.hypothesisList;
+    },
     cardShow() {
       return function (hypothesis) {        
         if (this.hypothesisStatus.name === "ゴール") 
@@ -164,8 +188,8 @@ export default {
           return hypothesis.showHypothesisList ? true : false;
         }
 
-        if (this.hypothesisStatus.name === "ToDo") 
-          return hypothesis.currentGoal ? this.showHypothesis() : false; 
+        if (this.hypothesisStatus.name === "予定") 
+          return hypothesis.date ? this.showHypothesis() : false; 
 
         if (this.hypothesisStatus.name === "完了") 
           return hypothesis.accomplish ? this.showHypothesis() : false; 
@@ -176,12 +200,12 @@ export default {
         return false;
       }
     },
-    showStatus() {
+    subTitle() {
       return (hypothesis) => {
         if (hypothesis.accomplish) {
-          return {title: '完了', color: 'green'}; 
-        } else if (hypothesis.currentGoal) {
-          return {title: 'ToDo', color:'blue'};
+          return this.subtitle.accomplish; 
+        } else if (hypothesis.date) {
+          return this.calcDate(hypothesis);
         } else {
           return false;
         }
@@ -267,6 +291,31 @@ export default {
        this.cardShow(this.hypothesisList[key]);
       }
       return this.hypothesisList;
+    },
+    calcDate (hypothesis){
+        const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+        const diff = (new Date(hypothesis.date) - new Date(today)) / (60*60*1000*24);
+        if (diff > 0) {
+          this.subtitle.date.title = diff < 8 ? '残り' + diff + '日' : hypothesis.date;
+          this.subtitle.date.backgroundColor = diff < 4 ? 'background-color: yellow' : null;
+        } else if (diff === 0) {
+          this.subtitle.date.title = '今日';
+          this.subtitle.date.backgroundColor = 'background-color: skyblue';
+        } else {
+          this.subtitle.date.title = Math.abs(diff) + '日経過';
+          this.subtitle.date.backgroundColor = 'background-color: coral'
+        }
+        return this.subtitle.date;
+    },
+    sortScheduleList (){
+        const scheduleList = [];
+        for (const [key, todo] of Object.entries(this.hypothesisList)) {
+          if (todo.date) scheduleList.push(todo);
+        }
+        let sortScheduleList = scheduleList.sort(function(a, b) {
+          return (a.date < b.date) ? -1 : 1;  //オブジェクトの昇順ソート
+        });
+        return sortScheduleList;
     }
   },
   watch: {
