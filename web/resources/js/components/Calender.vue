@@ -22,7 +22,8 @@
                 style="position: relative; left: -20px;"
                 @click="removeDate(hypothesis.date)"
                 small 
-                icon>
+                icon
+            >
                 <v-icon :size="$vuetify.breakpoint.smAndUp ? '20' : '14'">mdi-close</v-icon>
             </v-btn> 
         </template>
