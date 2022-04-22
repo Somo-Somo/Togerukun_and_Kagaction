@@ -14,6 +14,22 @@ class DateRepository implements DateRepositoryInterface
         $this->client = Neo4jDB::call();
     }
 
+    public function getDate(string $user_email)
+    {
+        $todoAndSchedule = $this->client->run(
+            <<<'CYPHER'
+                MATCH (user:User { email : $user_email }) - [date:DATE] -> (hypothesis:Hypothesis) - [*] -> (project:Project)
+                OPTIONAL MATCH (user) - [accomplished:ACCOMPLISHED] -> (hypothesis)
+                RETURN project, hypothesis, accomplished , date
+                ORDER BY date.on ASC
+                CYPHER,
+                [
+                    'user_email' => $user_email, 
+                ]
+        );
+        return $todoAndSchedule;
+    }
+
     public function updateDate(array $hypothesis)
     {
         $updateHypothesisDate = $this->client->run(
