@@ -45,7 +45,9 @@ export default {
         calenderMenu: false,
     }),
     props: {
-
+        project : {
+            type: Object,
+        },
     },
     computed: {
       hypothesis() {
@@ -57,14 +59,14 @@ export default {
             this.calenderMenu = false;
             this.$store.dispatch(
                 "hypothesis/updateDate",
-                { date:date, hypothesisUuid:this.hypothesis.uuid }
+                { date:date, hypothesis:this.hypothesis, project:this.project }
             );
         },
         removeDate(date) {
             if (date) {
                 this.$store.dispatch(
                     "hypothesis/updateDate",
-                    { date:null, hypothesisUuid:this.hypothesis.uuid }
+                    { date:null, hypothesis:this.hypothesis }
                 );
             }
         },

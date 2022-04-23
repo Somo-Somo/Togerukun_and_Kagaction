@@ -84,7 +84,7 @@
                 <p class="ma-0 font-weight-bold" color="grey darken-1">日付 :</p>
               </v-subheader>
               <v-col class="px-4 py-0 d-flex align-self-center">
-                <Calender />
+                <Calender :project="project"/>
               </v-col>
             </div>
           </div>
