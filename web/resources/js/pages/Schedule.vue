@@ -8,15 +8,26 @@
       <template>
         <div
           class="d-flex justify-space-between"
-          style="position: fixed; width: 772px"
-          absolute
+          :class="$vuetify.breakpoint.mdAndUp ? 'tabsStyle' : 'spTabsStyle'"
         >
-          <v-subheader class="pa-md-0 d-flex" style="font-size: 1rem">
-            <p class="ma-0 font-weight-bold" color="grey darken-1">
-              予定一覧 
-            </p>
-          </v-subheader>
+          <v-tabs 
+            v-model="tab" 
+            class="px-md-0" 
+            color="black" 
+            :height="$vuetify.breakpoint.mdAndUp ? '' : '40'"
+            >
+            <v-tabs-slider color="#80CBC4"></v-tabs-slider>
+            <v-tab
+              class="px-0"
+              v-for="period in periods"
+              :key="period.name"
+              :class="$vuetify.breakpoint.mdAndUp ? '' : 'spTabStyle'"
+            >
+              <p class="ma-0 font-weight-bold">{{ period.name }}</p>
+            </v-tab>
+          </v-tabs>
         </div>
+        <v-divider style="position:relative; top:92px;"></v-divider>
         <div
           class="overflow-y-auto d-flex flex-column"
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
@@ -59,6 +70,13 @@ export default {
   },
   data: () => ({
     category : "ToDo",
+    tab: null,
+    periods: [
+      {name : "今日", show: false},
+      {name : "7日以内", show: false},
+      {name : "全て", show: false}, 
+      {name : "期限切れ", show: false}
+    ],
   }),
   computed: {
     ...mapGetters({
@@ -72,13 +90,29 @@ export default {
 </script>
 
 <style scoped lang='sass'>
+.tabsStyle
+  width: 772px
+  position: absolute
+
+
+.spTabsStyle
+  width: 100%
+  height: 40px
+  position: absolute
+  top: 64px
+
+.spTabStyle
+  width: 25%
+  height: 40px
+  font-size: 0.75rem
+
 .cardStyle
   height: calc(100vh - 152px)
   position: relative
   top: 48px
 
 .spCardStyle
-  height: calc(100vh - 144px)
+  height: calc(100vh - 192px)
   position: relative
-  top: 48px
+  top: 96px
 </style>

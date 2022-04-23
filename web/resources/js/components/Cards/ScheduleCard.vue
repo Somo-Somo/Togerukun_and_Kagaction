@@ -4,10 +4,11 @@
     <v-col 
       class="px-md-0"
       v-for="hypothesis in scheduleList"
+      v-show="!hypothesis.accomplish"
       :key="hypothesis.uuid"
       :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
       >
-      <div class="d-flex" v-if="!hypothesis.accomplish">
+      <div class="d-flex">
       <v-card class="rounded" style="width: 100%;" outlined>
         <v-list 
           class="py-0 d-flex align-content-center" 
