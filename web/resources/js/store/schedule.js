@@ -11,8 +11,6 @@ const mutations = {
         state.scheduleList = data;
     },
     updateScheduleList (state, {date, hypothesis, project}){
-        console.info(date);
-        console.info(hypothesis);
         const scheduleList = state.scheduleList;
         const newScheduleList = [];
 
@@ -35,7 +33,6 @@ const mutations = {
             return (a.date < b.date) ? -1 : 1;  //オブジェクトの昇順ソート
         });
         state.scheduleList = sortNewScheduleList;
-        console.info(state.scheduleList);
     },
 }
 

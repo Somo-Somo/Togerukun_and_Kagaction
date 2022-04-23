@@ -30,6 +30,7 @@
           
         <ScheduleCards
             :projectList="projectList" 
+            :hypothesisList="hypothesisList" 
             :scheduleList="scheduleList" 
         />
 
@@ -63,6 +64,7 @@ export default {
     ...mapGetters({
       loading: 'initialize/loading',
       projectList: 'project/projectList',
+      hypothesisList: 'hypothesis/hypothesisList',
       scheduleList: 'schedule/scheduleList',
     }),
   }

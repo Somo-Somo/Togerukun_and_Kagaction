@@ -18,9 +18,12 @@ class DateRepository implements DateRepositoryInterface
     {
         $todoAndSchedule = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }) - [date:DATE] -> (hypothesis:Hypothesis) - [*] -> (project:Project)
+                MATCH (user:User { email : $user_email }) - [date:DATE] -> (hypothesis:Hypothesis),
+                len = (project:Project) <- [r*] - (hypothesis)
                 OPTIONAL MATCH (user) - [accomplished:ACCOMPLISHED] -> (hypothesis)
-                RETURN project, hypothesis, accomplished , date
+                OPTIONAL MATCH (hypothesis) - [:TO_ACHIEVE] -> (parent:Hypothesis)
+                OPTIONAL MATCH (hypothesis) <- [:TO_ACHIEVE] - (child:Hypothesis)
+                RETURN project, hypothesis, accomplished, date, parent, length(len), child
                 ORDER BY date.on ASC
                 CYPHER,
                 [
