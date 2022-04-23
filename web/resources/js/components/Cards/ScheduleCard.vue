@@ -3,11 +3,11 @@
   <v-list class="py-0" width="100%">
     <v-col 
       class="px-md-0"
-      v-for="hypothesis in scheduleList" 
+      v-for="hypothesis in scheduleList"
       :key="hypothesis.uuid"
       :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
       >
-      <div class="d-flex">
+      <div class="d-flex" v-if="!hypothesis.accomplish">
       <v-card class="rounded" style="width: 100%;" outlined>
         <v-list 
           class="py-0 d-flex align-content-center" 
@@ -20,13 +20,13 @@
             <v-list-item-content class="pa-0 d-flex">
               <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
-                  <div class="d-flex pr-1">
-                    <v-icon size="8" color="blue">circle</v-icon>
+                  <div class="d-flex pr-1" :style="subTitle(hypothesis).backgroundColor">
+                    <v-icon size="8" color="#212121">mdi-clock-outline</v-icon>
                     <p
                       class="ma-0 px-2 #212121--text font-weight-bold align-self-center"
                       :style="$vuetify.breakpoint.smAndUp ? 'font-size:12px' : 'font-size:8px'"
                     >
-                        ToDo
+                         {{ subTitle(hypothesis).title }}
                     </p>
                   </div>
                   <div class="d-flex" style="max-width:66%"> 
@@ -110,6 +110,14 @@ export default {
     cardMenu: [
       {title: "削除", color:"color: red"},
     ],
+   subtitle: {
+      date : {
+            icon: 'mdi-clock-outline',
+            iconSize: 14, 
+            iconColor: '#212121',
+            fontColor : '#212121--text'
+      }
+    }
   }),
   props: {
     projectList : {
@@ -120,6 +128,11 @@ export default {
     },
   },
   computed : {
+    subTitle() {
+        return (hypothesis) => {
+            return this.calcDate(hypothesis);
+        }
+    },
     parentName() {
       return (hypothesis) => {
         return ' 「' + this.projectList[hypothesis.projectUuid].name;
@@ -147,6 +160,21 @@ export default {
       this.deletingConfirmationDialog = false;
       this.selectedDeletingHypothesis = null;
     },
+    calcDate(hypothesis){
+        const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+        const diff = (new Date(hypothesis.date) - new Date(today)) / (60*60*1000*24);
+        if (diff > 0) {
+          this.subtitle.date.title = diff < 8 ? '残り' + diff + '日' : hypothesis.date;
+          this.subtitle.date.backgroundColor = diff < 4 ? 'background-color: yellow' : null;
+        } else if (diff === 0) {
+          this.subtitle.date.title = '今日';
+          this.subtitle.date.backgroundColor = 'background-color: skyblue';
+        } else {
+          this.subtitle.date.title = Math.abs(diff) + '日経過';
+          this.subtitle.date.backgroundColor = 'background-color: coral'
+        }
+        return this.subtitle.date;
+    }
   },
 };
 </script>
