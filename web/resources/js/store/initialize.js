@@ -34,7 +34,7 @@ const actions = {
                 context.commit ('project/setProject', response.data.project[projectUuid] , { root: true });
                 context.commit ('hypothesis/selectHypothesisList', projectUuid , { root: true });
             } else if (route.name === "hypothesisDetail") {
-                router.push({ path: '/user' });
+                router.push({ path: '/setting' });
             }            
             return false;
         }

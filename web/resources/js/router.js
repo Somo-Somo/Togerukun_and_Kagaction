@@ -23,7 +23,7 @@ const routes = [
     beforeEnter (to, from, next) {
       if (store.getters['auth/check']) {
         console.info('ログインしてます')
-        next ('/user');
+        next ('/setting');
       } else {
         console.info('ログインしてません')
         next ();
@@ -31,7 +31,7 @@ const routes = [
     },
   },
   {
-    path: '/user',
+    path: '/setting',
     component: User,
   },
   {
