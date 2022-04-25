@@ -191,9 +191,18 @@ export default {
       await this.$store.dispatch("auth/login", this.loginForm);
 
       if (this.apiStatus) {
-        await this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
+        const data = await this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
         this.loading = false;
-        this.$router.push("/setting");
+        console.info(Object.entries(data.project)[0]);
+        if (Object.keys(data.schedule).length) {
+          this.$router.push("/schedule");
+        } else if (Object.keys(data.project).length) {
+          const firstProject = Object.entries(data.project)[0][1];
+          this.$store.dispatch("project/selectProject", firstProject);
+          this.$router.push("/project/" + firstProject.uuid );
+        } else {
+          this.$router.push("/schedule");
+        }
       }
       this.loading = false;
     },

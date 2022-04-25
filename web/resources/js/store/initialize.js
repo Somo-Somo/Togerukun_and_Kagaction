@@ -36,7 +36,7 @@ const actions = {
             } else if (route.name === "hypothesisDetail") {
                 router.push({ path: '/schedule' });
             }            
-            return false;
+            return response.data;
         }
         context.commit('setApiStatus', false);
         context.commit('error/setCode', response.status, { root: true })
