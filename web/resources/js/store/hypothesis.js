@@ -247,18 +247,17 @@ const actions = {
         return; 
     },
 
-    async updateDate (context, {date, hypothesisUuid}) {
+    async updateDate (context, {date, hypothesis, project}) {
         context.commit('updateDate', date);
-        // 後ほど予定TodoListを作ります
-        // context.commit ('setScaduleGoalList');
+        context.commit ('schedule/updateScheduleList', {date:date, hypothesis:hypothesis, project:project}, {root: true});
         if (date) {
-            const response = await axios.put('/api/hypothesis/'+hypothesisUuid+'/date', {date: date})
+            const response = await axios.put('/api/hypothesis/'+hypothesis.uuid+'/date', {date: date})
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
             }
         } else {
-            const response = await axios.delete('/api/hypothesis/'+hypothesisUuid+'/date')
+            const response = await axios.delete('/api/hypothesis/'+hypothesis.uuid+'/date')
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;

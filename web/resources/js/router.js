@@ -7,7 +7,7 @@ import User from './pages/User.vue';
 import Login from './pages/Login.vue';
 import HypothesisList from './pages/HypothesisList.vue';
 import HypothesisDetail from './pages/HypothesisDetail.vue';
-import CurrentGoal from './pages/CurrentGoal.vue';
+import Schedule from './pages/Schedule.vue';
 import SystemError from './pages/errors/System.vue';
 import NotFound from './pages/errors/NotFound.vue';
 
@@ -45,9 +45,9 @@ const routes = [
     name: "hypothesisDetail"
   },
   {
-    path: '/current_goals',
-    component: CurrentGoal,
-    name: "currentGoals"
+    path: '/schedule',
+    component: Schedule,
+    name: "schedule"
   },
   {
     path: '/500',

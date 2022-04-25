@@ -76,7 +76,7 @@ export default {
     },
   data: () => ({
     items: [
-      {icon: "mdi-flag-outline", text: "ToDo", url: "/current_goals"},
+      {icon: "mdi-calendar-text", text: "予定", url: "/schedule"},
       {icon: "mdi-account-circle-outline", text: "ユーザー", url: "/user"},
     ],
     transparent: 'rgba(128, 128, 128, 0.3)',
