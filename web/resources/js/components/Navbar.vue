@@ -100,7 +100,6 @@ export default {
       this.$store.dispatch("navigation/changeNavState");
     },
     async fromItem (item) {
-      if(item.text === "ToDo") await this.$store.dispatch("hypothesis/selectCurrentGoalPage");
       return this.$router.push({ path: item.url });
     },
     selectProject (project) {
