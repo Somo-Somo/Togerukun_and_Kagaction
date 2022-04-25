@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import store from './store';
 
 // ページコンポーネントをインポートする
-import User from './pages/User.vue';
+import Setting from './pages/Setting.vue';
 import Login from './pages/Login.vue';
 import HypothesisList from './pages/HypothesisList.vue';
 import HypothesisDetail from './pages/HypothesisDetail.vue';
@@ -32,7 +32,7 @@ const routes = [
   },
   {
     path: '/setting',
-    component: User,
+    component: Setting,
   },
   {
     path: '/project/:id',
