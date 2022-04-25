@@ -189,7 +189,7 @@ export default {
         }
 
         if (this.hypothesisStatus.name === "予定") 
-          return hypothesis.date ? this.showHypothesis() : false; 
+          return hypothesis.date && !hypothesis.accomplish ? this.showHypothesis() : false; 
 
         if (this.hypothesisStatus.name === "完了") 
           return hypothesis.accomplish ? this.showHypothesis() : false; 
