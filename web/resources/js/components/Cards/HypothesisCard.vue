@@ -10,9 +10,9 @@
       :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
-      <!-- 課題一覧 -->
+      <!-- ToDo一覧 -->
       <div 
-        v-if="hypothesisStatus.name === '課題一覧'"
+        v-if="hypothesisStatus.name === 'ToDo一覧'"
         class="d-flex">
         <div :style="depth(hypothesis)"></div>
         <div v-if="hypothesis.child" class="d-flex align-content-center"> 
@@ -26,7 +26,7 @@
         <div v-if="!hypothesis.child" style="width: 24px"></div>
       </div>
       <!-- 予定 -->
-      <div v-if="hypothesisStatus.name === '課題一覧'" class="d-flex">
+      <div v-if="hypothesisStatus.name === 'ToDo一覧'" class="d-flex">
       </div>
       <v-card class="rounded" style="width: 100%;" outlined>
         <v-list 
@@ -182,7 +182,7 @@ export default {
         if (this.hypothesisStatus.name === "ゴール") 
           return hypothesis.depth === 0 ? this.showHypothesis() : false;
         
-        if (this.hypothesisStatus.name === "課題一覧") {
+        if (this.hypothesisStatus.name === "ToDo一覧") {
           if(hypothesis) this.hypothesisStatus.show = true;
           if (hypothesis.depth === 0) hypothesis.showHypothesisList = true;
           return hypothesis.showHypothesisList ? true : false;
@@ -227,7 +227,7 @@ export default {
     parentType() {
       return (hypothesis) => {
         if (hypothesis.depth === 0)  return '」のゴール';
-        if (hypothesis.depth > 0) return '」の課題';
+        if (hypothesis.depth > 0) return '」のためのToDo';
       }
     },
     depth() {

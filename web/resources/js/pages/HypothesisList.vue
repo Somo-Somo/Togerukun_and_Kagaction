@@ -99,7 +99,7 @@ export default {
     tab: null,
     hypothesisStatuses: [
       {name : "ゴール", show: false},
-      {name : "課題一覧", show: false},
+      {name : "ToDo一覧", show: false},
       {name : "予定", show: false}, 
       {name : "完了", show: false}
     ],

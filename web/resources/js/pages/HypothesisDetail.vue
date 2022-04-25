@@ -103,7 +103,7 @@
                   color="grey darken-1"
                   :style="$vuetify.breakpoint.smAndUp ? '48px' : 'min-width: 36px'"
                 >
-                  課題：
+                  ToDo：
                 </p>
                 <p 
                   class="ma-0 font-weight-black caption align-self-center" 
@@ -137,7 +137,7 @@
               <!-- PC版追加カード -->
               <NewAdditionalCard 
                @clickAditional="onClickCreate" 
-               :category="'課題'"/>
+               :category="'ToDo'"/>
             </div>
           </div>
         </div>
@@ -195,10 +195,10 @@ export default {
       hypothesisList: 'hypothesis/hypothesisList',
     }),
     subHeader() {
-      return this.hypothesis.depth === 0 ? 'ゴール' : '｢'+ this.parentHypothesis.name +'｣ の課題';
+      return this.hypothesis.depth === 0 ? 'ゴール' : '｢'+ this.parentHypothesis.name +'｣ ためのToDo';
     },
     additionalInputFormLabel(){
-      return '「' +this.hypothesis.name + '」の課題';
+      return '「' +this.hypothesis.name + '」ためのToDo';
     }
   },
   methods: {
