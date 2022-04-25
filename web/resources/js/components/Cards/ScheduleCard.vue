@@ -6,6 +6,7 @@
       v-for="hypothesis in scheduleList"
       v-show="!hypothesis.accomplish"
       :key="hypothesis.uuid"
+      :class="showCard(hypothesis) ? '' : 'd-none'"
       :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
@@ -87,6 +88,17 @@
       </v-card>
       </div>
     </v-col>
+    <div
+      class="my-4" 
+      v-show="!existCard"
+    >
+      <p
+        class="grey--text font-weight-bold ma-0 pa-md-2 px-4 py-2"
+        :style="$vuetify.breakpoint.smAndUp ? 'font-size:16px;' : 'font-size:14px;'"
+      >
+          {{ noCard() }}
+      </p>
+    </div>
   </v-list>
     <DeletingConfirmationDialog 
       :deletingConfirmationDialog="deletingConfirmationDialog"
@@ -118,14 +130,18 @@ export default {
             iconColor: '#212121',
             fontColor : '#212121--text'
       }
-    }
+    },
+    existCard: false,
   }),
   props: {
     projectList : {
-      type: Object,
+        type: Object,
     },
     scheduleList: {
-      type: Array,
+        type: Array,
+    },
+    period: {
+        type: Object,
     },
   },
   computed : {
@@ -139,6 +155,44 @@ export default {
         return ' 「' + this.projectList[hypothesis.projectUuid].name;
       }
     },
+    showCard() {
+        return (hypothesis) => {
+            const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+            const diff = (new Date(hypothesis.date) - new Date(today)) / (60*60*1000*24);
+            let showCard = false;
+            if (this.period.name === "今日") {
+                showCard = diff === 0 ? true : false;
+            }
+            if (this.period.name === "7日以内") {
+                showCard = 0 <= diff && diff < 8 ? true : false;
+            }
+            if (this.period.name === "全期間") {
+                showCard = true;
+            }
+            if (this.period.name === "期限切れ") {
+                showCard = diff < 0 ? true : false;
+            }
+            // 選択されたタブに表示できるカードがあるかのチェック
+            if(showCard) this.existCard = true;
+            return showCard;
+        }
+    },
+    noCard() {
+        return () => {
+            if (this.period.name === "今日") {
+                return '今日予定しているToDoはありません'
+            }
+            if (this.period.name === "7日以内") {
+                return '7日以内に予定しているToDoはありません'
+            }
+            if (this.period.name === "全期間") {
+                return '予定しているToDoはありません'
+            }
+            if (this.period.name === "期限切れ") {
+                return '期限切れのToDoはありません'
+            }
+        }
+    }
   },
   methods: {
     async toHypothesisDetail (hypothesis) {
@@ -177,5 +231,11 @@ export default {
         return this.subtitle.date;
     }
   },
+  watch: {
+    period (next,prev) {
+      this.existCard = false;  
+      return;
+    }
+  }
 };
 </script>

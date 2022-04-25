@@ -42,7 +42,9 @@
         <ScheduleCards
             :projectList="projectList" 
             :hypothesisList="hypothesisList" 
-            :scheduleList="scheduleList" 
+            :scheduleList="scheduleList"
+            :period="periods[tab]"
+            :loading="loading" 
         />
 
         <div class="ma-2 mx-md-0 my-md-4" v-show="!scheduleList.length && !loading">
@@ -74,7 +76,7 @@ export default {
     periods: [
       {name : "今日", show: false},
       {name : "7日以内", show: false},
-      {name : "全て", show: false}, 
+      {name : "全期間", show: false}, 
       {name : "期限切れ", show: false}
     ],
   }),
