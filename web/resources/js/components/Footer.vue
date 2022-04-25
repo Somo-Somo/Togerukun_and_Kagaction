@@ -25,8 +25,7 @@ export default {
   data: () => ({
     sheet: false,
     tiles: [
-      {icon: "mdi-folder-multiple-outline", text: "Projects", url: "/projects"},
-      {icon: "mdi-flag-outline", text: "ToDo", url: "/current_goals"},
+      {icon: "mdi-calendar-text", text: "予定", url: "/schedule"},
       {icon: "mdi-account-circle-outline", text: "User", url: "/user"},
     ],
   }),
