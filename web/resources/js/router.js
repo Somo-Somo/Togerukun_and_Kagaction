@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import store from './store';
 
 // ページコンポーネントをインポートする
-import User from './pages/User.vue';
+import Setting from './pages/Setting.vue';
 import Login from './pages/Login.vue';
 import HypothesisList from './pages/HypothesisList.vue';
 import HypothesisDetail from './pages/HypothesisDetail.vue';
@@ -23,7 +23,7 @@ const routes = [
     beforeEnter (to, from, next) {
       if (store.getters['auth/check']) {
         console.info('ログインしてます')
-        next ('/user');
+        next ('/setting');
       } else {
         console.info('ログインしてません')
         next ();
@@ -31,8 +31,8 @@ const routes = [
     },
   },
   {
-    path: '/user',
-    component: User,
+    path: '/setting',
+    component: Setting,
   },
   {
     path: '/project/:id',

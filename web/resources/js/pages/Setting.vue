@@ -4,7 +4,7 @@
         style="max-width: 900px"
         fluid
     >
-        <Header :headerTitle="'ユーザー'" v-if="$vuetify.breakpoint.mdAndUp" />
+        <Header :headerTitle="'設定'" v-if="$vuetify.breakpoint.mdAndUp" />
         <div>
             <v-row class="d-flex justify-start ma-2">
                 <div class="ma-2 align-self-center">
