@@ -27,7 +27,7 @@
             </v-tab>
           </v-tabs>
         </div>
-        <v-divider style="position:relative; top:92px;"></v-divider>
+        <v-divider v-if="!$vuetify.breakpoint.mdAndUp" style="position:relative; top:92px;"></v-divider>
         <div
           class="overflow-y-auto d-flex flex-column"
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
