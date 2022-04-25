@@ -4,9 +4,8 @@
     <v-col 
       class="px-md-0"
       v-for="hypothesis in scheduleList"
-      v-show="!hypothesis.accomplish"
+      v-show="showCard(hypothesis)"
       :key="hypothesis.uuid"
-      :class="showCard(hypothesis) ? '' : 'd-none'"
       :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
@@ -90,13 +89,13 @@
     </v-col>
     <div
       class="my-4" 
-      v-show="!existCard"
+      v-show="!existCard && !loading"
     >
       <p
         class="grey--text font-weight-bold ma-0 pa-md-2 px-4 py-2"
         :style="$vuetify.breakpoint.smAndUp ? 'font-size:16px;' : 'font-size:14px;'"
       >
-          {{ noCard() }}
+          {{ noCard(period) }}
       </p>
     </div>
   </v-list>
@@ -143,6 +142,9 @@ export default {
     period: {
         type: Object,
     },
+    loading: {
+        type: Boolean,
+    },
   },
   computed : {
     subTitle() {
@@ -157,38 +159,42 @@ export default {
     },
     showCard() {
         return (hypothesis) => {
-            const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
-            const diff = (new Date(hypothesis.date) - new Date(today)) / (60*60*1000*24);
-            let showCard = false;
-            if (this.period.name === "今日") {
-                showCard = diff === 0 ? true : false;
+            if (!hypothesis.accomplish) {
+                const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+                const diff = (new Date(hypothesis.date) - new Date(today)) / (60*60*1000*24);
+                let showCard = false;
+                if (this.period.name === "今日") {
+                    showCard = diff === 0 ? true : false;
+                }
+                if (this.period.name === "7日以内") {
+                    showCard = 0 <= diff && diff < 8 ? true : false;
+                }
+                if (this.period.name === "全期間") {
+                    showCard = true;
+                }
+                if (this.period.name === "期限切れ") {
+                    showCard = diff < 0 ? true : false;
+                }
+                // 選択されたタブに表示できるカードがあるかのチェック
+                if(showCard) this.existCard = true;
+                return showCard;
+            } else {
+                return false;
             }
-            if (this.period.name === "7日以内") {
-                showCard = 0 <= diff && diff < 8 ? true : false;
-            }
-            if (this.period.name === "全期間") {
-                showCard = true;
-            }
-            if (this.period.name === "期限切れ") {
-                showCard = diff < 0 ? true : false;
-            }
-            // 選択されたタブに表示できるカードがあるかのチェック
-            if(showCard) this.existCard = true;
-            return showCard;
         }
     },
     noCard() {
-        return () => {
-            if (this.period.name === "今日") {
+        return (period) => {
+            if (period.name === "今日") {
                 return '今日予定しているToDoはありません'
             }
-            if (this.period.name === "7日以内") {
+            if (period.name === "7日以内") {
                 return '7日以内に予定しているToDoはありません'
             }
-            if (this.period.name === "全期間") {
+            if (period.name === "全期間") {
                 return '予定しているToDoはありません'
             }
-            if (this.period.name === "期限切れ") {
+            if (period.name === "期限切れ") {
                 return '期限切れのToDoはありません'
             }
         }
@@ -235,7 +241,7 @@ export default {
     period (next,prev) {
       this.existCard = false;  
       return;
-    }
+    },
   }
 };
 </script>
