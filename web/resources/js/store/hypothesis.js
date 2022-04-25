@@ -6,14 +6,12 @@ const state = {
     parentHypothesis: null,
     hypothesisList: [],
     allHypothesisList: null,
-    currentGoalList: [],
 };
 
 const getters = {
     hypothesis: state => state.hypothesis.uuid ? state.hypothesis: null,
     parentHypothesis: state => state.parentHypothesis ? state.parentHypothesis: null,
     hypothesisList: state => state.hypothesisList ? state.hypothesisList : null,
-    currentGoalList: state => state.currentGoalList ? state.currentGoalList : null,
 };
 
 const mutations = {
@@ -43,20 +41,6 @@ const mutations = {
 
     setAllHypothesisList (state, data) {
         state.allHypothesisList = data;
-    },
-
-    setCurrentGoalList (state) {
-        const allHypothesisList = state.allHypothesisList;
-        const currentGoalList = [];
-        for (const [hypothesisListKey, hypothesisList] of Object.entries(allHypothesisList)) {
-            for (const [hypothesisKey, hypothesis] of Object.entries(hypothesisList)) {
-                if (hypothesis.currentGoal) {
-                    hypothesis.projectUuid = hypothesisListKey;
-                    currentGoalList.push(hypothesis);
-                }
-            }
-        }
-        state.currentGoalList = currentGoalList; 
     },
 
     addHypothesisForHypothesisList (state, newHypothesis){
@@ -149,10 +133,6 @@ const actions = {
     selectHypothesis (context, hypothesis) {
         context.commit ('setHypothesis', hypothesis);
         context.commit ('setParentHypothesis', hypothesis);
-    },
-
-    selectCurrentGoalPage (context){
-        context.commit ('setCurrentGoalList');
     },
 
     async createGoal (context, {project, hypothesisName}){
