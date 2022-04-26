@@ -46,15 +46,6 @@
             :period="periods[tab]"
             :loading="loading" 
         />
-
-        <div class="ma-2 mx-md-0 my-md-4" v-show="!scheduleList.length && !loading">
-            <p 
-              class="grey--text font-weight-bold ma-0 py-2"
-              :style="$vuetify.breakpoint.smAndUp ? 'font-size:18px;' : 'font-size:14px;'"
-            >
-                予定はありません
-            </p>
-        </div>
         </div>
       </template>
   </v-container>
