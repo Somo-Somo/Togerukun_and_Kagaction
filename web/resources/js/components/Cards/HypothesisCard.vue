@@ -7,7 +7,7 @@
       v-model="hypothesis.showHypothesisList"
       :key="hypothesis.uuid"
       :class="cardShow(hypothesis) ? '' : 'd-none'"
-      :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
+      :style="$vuetify.breakpoint.smAndUp ? 'padding:8px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
       <!-- ToDo一覧 -->

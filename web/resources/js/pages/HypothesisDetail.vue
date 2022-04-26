@@ -43,7 +43,7 @@
               hide-details
             ></v-textarea>
           </div>
-          <div class="d-flex py-2">
+          <div class="d-flex">
             <div
               class="py-2 d-flex justify-start"
               :style="
@@ -73,28 +73,21 @@
                 $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 48px'
               "
             >
-              <v-subheader
-                class="d-flex align-self-center pa-md-0"
-                :class="
-                  $vuetify.breakpoint.mdAndUp
-                    ? 'hypothesisSubTitle'
-                    : 'spHypothesisSubTitle'
-                "
-              >
+              <v-subheader class="d-flex align-self-center pa-md-0">
                 <p class="ma-0 font-weight-bold" color="grey darken-1">日付 :</p>
               </v-subheader>
-              <v-col class="px-4 py-0 d-flex align-self-center">
+              <v-col class="px-md-4 pa-0 d-flex align-self-center">
                 <Calender :project="project"/>
               </v-col>
             </div>
           </div>
-          <div class="py-4">
+          <div class="pt-2">
             <div class="d-flex justify-space-between flex-column">    
               <v-tabs 
                 v-model="tab" 
-                class="px-md-0" 
+                class="px-0" 
                 color="black" 
-                :height="$vuetify.breakpoint.mdAndUp ? '' : '40'"
+                :height="$vuetify.breakpoint.mdAndUp ? '' : '36'"
               >
                 <v-tabs-slider color="#80CBC4"></v-tabs-slider>
                 <v-tab
@@ -107,12 +100,8 @@
                 </v-tab>
               </v-tabs>
               <v-subheader
-                class="px-md-0 mt-3"
-                :class="
-                  $vuetify.breakpoint.mdAndUp
-                    ? 'hypothesisSubTitle'
-                    : 'spHypothesisSubTitle'
-                "
+                class="px-md-0 mt-3 hypothesisSubTitle"
+                v-show="$vuetify.breakpoint.smAndUp"
               >
                 <p 
                   class="ma-0 font-weight-black caption align-self-center" 
@@ -274,11 +263,11 @@ export default {
 
 .spTabStyle
   width: 25%
-  height: 40px
+  height: 36px
   font-size: 0.75rem
 
 .cardStyle
-  height: calc(100vh - 360px)
+  height: calc(100vh - 376px)
   position: relative
 
 .spCardStyle
