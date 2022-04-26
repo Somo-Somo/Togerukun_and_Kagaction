@@ -100,6 +100,7 @@
                 </v-tab>
               </v-tabs>
               <v-subheader
+                v-if="tab === 0"
                 class="px-md-0 mt-3 hypothesisSubTitle"
                 v-show="$vuetify.breakpoint.smAndUp"
               >
@@ -112,7 +113,7 @@
                   「{{hypothesis.name}}
                 </p>
                 <p class="ma-0 font-weight-black caption align-self-center" color="grey lighten-1">
-                  」を完了するためには？
+                  {{ assistSubHeaderText(tab) }}
                 </p>
               </v-subheader>
             </div>
@@ -121,6 +122,7 @@
               :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
             >
               <HypothesisCards 
+                v-if="tab === 0"
                :project="project" 
                :selectHypothesis="hypothesis" 
                :hypothesisList="hypothesisList" 
@@ -193,7 +195,14 @@ export default {
     },
     additionalInputFormLabel(){
       return '「' +this.hypothesis.name + '」ためのToDo';
-    }
+    },
+    assistSubHeaderText(){
+      return (tab) => {
+        if (tab === 0) {
+          return '」を完了するには？'; 
+        }
+      }  
+    },
   },
   methods: {
     onClickAccomplish (accomplish){
