@@ -89,22 +89,31 @@
             </div>
           </div>
           <div class="py-4">
-            <div class="d-flex justify-space-between">
+            <div class="d-flex justify-space-between flex-column">    
+              <v-tabs 
+                v-model="tab" 
+                class="px-md-0" 
+                color="black" 
+                :height="$vuetify.breakpoint.mdAndUp ? '' : '40'"
+              >
+                <v-tabs-slider color="#80CBC4"></v-tabs-slider>
+                <v-tab
+                  class="px-0"
+                  v-for="kind in linkedToDo"
+                  :key="kind.name"
+                  :class="$vuetify.breakpoint.mdAndUp ? '' : 'spTabStyle'"
+                >
+                  <p class="ma-0 font-weight-bold">{{ kind.name }}</p>
+                </v-tab>
+              </v-tabs>
               <v-subheader
-                class="pa-md-0"
+                class="px-md-0 mt-3"
                 :class="
                   $vuetify.breakpoint.mdAndUp
                     ? 'hypothesisSubTitle'
                     : 'spHypothesisSubTitle'
                 "
               >
-                <p 
-                  class="ma-0 font-weight-bold align-self-center" 
-                  color="grey darken-1"
-                  :style="$vuetify.breakpoint.smAndUp ? '48px' : 'min-width: 36px'"
-                >
-                  ToDo：
-                </p>
                 <p 
                   class="ma-0 font-weight-black caption align-self-center" 
                   color="grey lighten-1"
@@ -117,13 +126,6 @@
                   」を完了するためには？
                 </p>
               </v-subheader>
-              <v-icon
-                class="hidden-sm-and-down my-3"
-                size="24"
-                height="24"
-                @click="onClickCreate"
-                >mdi-plus-circle</v-icon
-              >
             </div>
             <div
               class="overflow-y-auto d-flex flex-column"
@@ -133,7 +135,7 @@
                :project="project" 
                :selectHypothesis="hypothesis" 
                :hypothesisList="hypothesisList" 
-               :hypothesisStatus="hypothesisStatus" />
+               :hypothesisStatus="linkedToDo[0]" />
               <!-- PC版追加カード -->
               <NewAdditionalCard 
                @clickAditional="onClickCreate" 
@@ -176,8 +178,11 @@ export default {
     InputForm,
   },
   data: () => ({
-    hypothesisStatus: {name: "目標", show: false},
-    page: "目標",
+    tab: null,
+    linkedToDo: [
+      {name: "ToDo", show: false},
+      {name: "コメント", show: false}
+    ],
     submitLoading: false,
     form: false,
     date: null,
@@ -260,11 +265,17 @@ export default {
 
 .hypothesisSubTitle
   font-size: 1rem
+  height: 36px
 
 .spHypothesisSubTitle
   font-size: 12px
   height: 24px
   padding: 0 0 0 12px
+
+.spTabStyle
+  width: 25%
+  height: 40px
+  font-size: 0.75rem
 
 .cardStyle
   height: calc(100vh - 360px)
