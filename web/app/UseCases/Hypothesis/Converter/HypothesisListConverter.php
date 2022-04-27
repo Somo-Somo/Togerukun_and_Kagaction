@@ -28,7 +28,7 @@ class HypothesisListConverter
             $childs = $value['collect(child)']->toArray();
             $len = $value['length(len)'];
             $date = $value['date'] ? $value['date']->toArray()['properties']->toArray() : null;
-            $comments = $value['collect(comment)'] ? $value['collect(comment)']->toArray() : null;
+            $comments = $value['comments'] ? $value['comments']->toArray() : null;
 
             if ($childs) {
                 // 子どもに親のデータを持たせて$hypothesisDataに格納。

@@ -14,9 +14,9 @@ class CommentRepository implements CommentRepositoryInterface
         $this->client = Neo4jDB::call();
     }
 
-    public function storeComment(array $hypothesis)
+    public function storeComment(array $comment)
     {
-        $comment = $this->client->run(
+        $comments = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - [:CREATED] -> (hypothesis:Hypothesis {uuid: $hypothesis_uuid})
                 CREATE (comment:Comment{
@@ -29,13 +29,13 @@ class CommentRepository implements CommentRepositoryInterface
                 RETURN user, hypothesis, comment
                 CYPHER,
                 [
-                    'user_email' => $hypothesis['user_email'],
-                    'hypothesis_uuid' => $hypothesis['comment_uuid'],
-                    'comment_uuid' => $hypothesis['comment_uuid'],
-                    'text' => $hypothesis['comment']
+                    'user_email' => $comment['user_email'],
+                    'hypothesis_uuid' => $comment['hypothesis_uuid'],
+                    'comment_uuid' => $comment['comment_uuid'],
+                    'text' => $comment['text']
                 ]
         );
-        return $comment;
+        return $comments;
     }
 
     public function updateComment(array $comment)
@@ -56,13 +56,13 @@ class CommentRepository implements CommentRepositoryInterface
                 [
                     'user_email' => $comment['user_email'],
                     'uuid' => $comment['uuid'],
-                    'text' => $comment['comment']
+                    'text' => $comment['text']
                 ]
             );
         return;
     }
 
-    public function destroyComment(array $hypothesis)
+    public function destroyComment(array $comment)
     {
         $deleteHypothesisComment = $this->client->run(
             <<<'CYPHER'
@@ -75,9 +75,9 @@ class CommentRepository implements CommentRepositoryInterface
                 RETURN user, comment
                 CYPHER,
                 [
-                    'user_email' => $hypothesis['user_email'],
-                    'hypothesis_uuid' => $hypothesis['comment_uuid'],
-                    'comment_uuid' => $hypothesis['comment_uuid']
+                    'user_email' => $comment['user_email'],
+                    'hypothesis_uuid' => $comment['hypothesis_uuid'],
+                    'comment_uuid' => $comment['comment_uuid']
                 ]
             );
         return;
