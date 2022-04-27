@@ -130,7 +130,7 @@
               <!-- PC版追加カード -->
               <NewAdditionalCard 
                @clickAditional="onClickCreate" 
-               :category="'ToDo'"/>
+               :category="linkedToDo[tab].name"/>
             </div>
           </div>
         </div>
@@ -169,7 +169,7 @@ export default {
     InputForm,
   },
   data: () => ({
-    tab: null,
+    tab: 0,
     linkedToDo: [
       {name: "ToDo", show: false},
       {name: "コメント", show: false}
@@ -194,7 +194,12 @@ export default {
       return this.hypothesis.depth === 0 ? 'ゴール' : '｢'+ this.parentHypothesis.name +'｣ ためのToDo';
     },
     additionalInputFormLabel(){
-      return '「' +this.hypothesis.name + '」ためのToDo';
+      if (this.tab === 0) {
+        return '「' +this.hypothesis.name + '」ためのToDo';
+      } else {
+        return 'コメント';
+        
+      }
     },
     assistSubHeaderText(){
       return (tab) => {
