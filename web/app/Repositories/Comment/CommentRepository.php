@@ -16,42 +16,47 @@ class CommentRepository implements CommentRepositoryInterface
 
     public function storeComment(array $hypothesis)
     {
-        $todoAndSchedule = $this->client->run(
+        $comment = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }) - [date:DATE] -> (hypothesis:Hypothesis),
-                len = (project:Project) <- [r*] - (hypothesis)
-                OPTIONAL MATCH (user) - [accomplished:ACCOMPLISHED] -> (hypothesis)
-                OPTIONAL MATCH (hypothesis) - [:TO_ACHIEVE] -> (parent:Hypothesis)
-                OPTIONAL MATCH (hypothesis) <- [:TO_ACHIEVE] - (child:Hypothesis)
-                RETURN project, hypothesis, accomplished, date, parent, length(len), child
-                ORDER BY date.on ASC
+                MATCH (user:User { email : $user_email }) - [:CREATED] -> (hypothesis:Hypothesis {uuid: $hypothesis_uuid})
+                CREATE (comment:Comment{
+                    uuid: $comment_uuid,
+                    text: $text
+                }) - [
+                    to:TO{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                ] -> (hypothesis)
+                CREATE (user) - [created:CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (comment)
+                RETURN user, hypothesis, comment
                 CYPHER,
                 [
-                    
+                    'user_email' => $hypothesis['user_email'],
+                    'hypothesis_uuid' => $hypothesis['comment_uuid'],
+                    'comment_uuid' => $hypothesis['comment_uuid'],
+                    'text' => $hypothesis['comment']
                 ]
         );
-        return $todoAndSchedule;
+        return $comment;
     }
 
-    public function updateComment(array $hypothesis)
+    public function updateComment(array $comment)
     {
         $updateHypothesisComment = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
-                OPTIONAL MATCH x = (user) - [date:DATE] -> (hypothesis)
+                MATCH (user:User { email : $user_email }), (comment:Comment { uuid: $uuid })
+                SET comment.text = $text
+                WITH user,comment
+                OPTIONAL MATCH x = (user)-[updated:UPDATED]->(comment)
                 WHERE x IS NOT NULL
-                SET date.on = $date
-                WITH user, hypothesis, x
+                SET updated.at = localdatetime({timezone: 'Asia/Tokyo'}) 
+                WITH user, comment, x
                 WHERE x IS NULL
-                CREATE (user) - [
-                    :DATE { on: $date }
-                ] -> (hypothesis)
-                RETURN hypothesis
+                CREATE (user)-[:UPDATED{at:localdatetime({timezone: 'Asia/Tokyo'})}]->(comment)
+                RETURN comment
                 CYPHER,
                 [
-                    'uuid' => $hypothesis['uuid'], 
-                    'user_email' => $hypothesis['user_email'], 
-                    'date' => $hypothesis['date']
+                    'user_email' => $comment['user_email'],
+                    'uuid' => $comment['uuid'],
+                    'text' => $comment['comment']
                 ]
             );
         return;
@@ -61,15 +66,18 @@ class CommentRepository implements CommentRepositoryInterface
     {
         $deleteHypothesisComment = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }) - 
-                [date: DATE]
-                ->(hypothesis:Hypothesis { uuid: $uuid })
-                DELETE date
-                RETURN hypothesis
+                MATCH (user:User { email : $user_email }),
+                (comment:Comment { uuid : $comment_uuid }) - [to: TO] -> (hypothesis:Hypothesis { uuid: $hypothesis_uuid })
+                CREATE (user) - [
+                    :DELETED{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                ] -> (comment)
+                DELETE to
+                RETURN user, comment
                 CYPHER,
                 [
-                    'uuid' => $hypothesis['uuid'], 
-                    'user_email' => $hypothesis['user_email']
+                    'user_email' => $hypothesis['user_email'],
+                    'hypothesis_uuid' => $hypothesis['comment_uuid'],
+                    'comment_uuid' => $hypothesis['comment_uuid']
                 ]
             );
         return;
