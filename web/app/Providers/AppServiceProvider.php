@@ -21,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\Date\DateRepositoryInterface::class,
             \App\Repositories\Date\DateRepository::class,
         );
+        $this->app->bind( 
+            \App\Repositories\Comment\CommentRepositoryInterface::class,
+            \App\Repositories\Comment\CommentRepository::class,
+        );
     }
 
     /**
