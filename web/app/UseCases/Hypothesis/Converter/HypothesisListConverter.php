@@ -28,6 +28,7 @@ class HypothesisListConverter
             $childs = $value['collect(child)']->toArray();
             $len = $value['length(len)'];
             $date = $value['date'] ? $value['date']->toArray()['properties']->toArray() : null;
+            $comments = $value['collect(comment)'] ? $value['collect(comment)']->toArray() : null;
 
             if ($childs) {
                 // 子どもに親のデータを持たせて$hypothesisDataに格納。
@@ -75,6 +76,9 @@ class HypothesisListConverter
                 // 進捗
                 if ($value['accomplish']) $parent['accomplish'] = true;
 
+                //コメント
+                $parent['comments'] = $comments ? $comments : [];
+
                 // ゴールは常に配列のケツに追加
                 $hypothesisList[$projectUuid][] = $parent;
 
@@ -83,6 +87,8 @@ class HypothesisListConverter
                 $hypothesisData[$parent['uuid']]['date'] =  $date ? $date['on'] : null;
                 // 完了
                 if ($value['accomplish']) $hypothesisData[$parent['uuid']]['accomplish'] = true;
+                //コメント
+                $hypothesisData[$parent['uuid']]['comments'] = $comments ? $comments : [];
                 // $hypothesisDataから
                 $hypothesisList[$projectUuid][] = $hypothesisData[$parent['uuid']];
             }
