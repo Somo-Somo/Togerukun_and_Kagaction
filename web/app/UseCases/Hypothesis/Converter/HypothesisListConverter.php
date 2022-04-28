@@ -2,8 +2,17 @@
 
 namespace App\UseCases\Hypothesis\Converter;
 
+use App\UseCases\Comment\Converter\CommentConverter;
+
 class HypothesisListConverter
 {
+    protected $commentConverter;
+
+    public function __construct(CommentConverter $commentConverter)
+    {
+        $this->commentConverter = $commentConverter;
+    }
+
     public function invoke($fetchProjectAndHypothesisFromNeo4j)
     {
         $arrayHypotheses= $fetchProjectAndHypothesisFromNeo4j->toArray();
@@ -28,7 +37,8 @@ class HypothesisListConverter
             $childs = $value['collect(child)']->toArray();
             $len = $value['length(len)'];
             $date = $value['date'] ? $value['date']->toArray()['properties']->toArray() : null;
-            $comments = $value['comments'] ? $value['comments']->toArray() : null;
+            $fetchComments = $value['comments'] ? $value['comments']->toArray() : null;
+            $comments = $fetchComments ? $this->commentConverter->invoke($fetchComments) : null;
 
             if ($childs) {
                 // 子どもに親のデータを持たせて$hypothesisDataに格納。
