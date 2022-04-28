@@ -23,7 +23,7 @@ class DateRepository implements DateRepositoryInterface
                 OPTIONAL MATCH (user) - [accomplished:ACCOMPLISHED] -> (hypothesis)
                 OPTIONAL MATCH (hypothesis) - [:TO_ACHIEVE] -> (parent:Hypothesis)
                 OPTIONAL MATCH (hypothesis) <- [:TO_ACHIEVE] - (child:Hypothesis)
-                RETURN project, hypothesis, accomplished, date, parent, length(len), child
+                RETURN project, hypothesis, accomplished, date, parent, length(len), collect(child)
                 ORDER BY date.on ASC
                 CYPHER,
                 [

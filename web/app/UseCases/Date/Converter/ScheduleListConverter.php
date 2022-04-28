@@ -18,7 +18,7 @@ class ScheduleListConverter
             $date = $value['date']->getProperties()->toArray();
             $parent = $value['parent'] ? $value['parent']->getProperties()->toArray() : null;
             $len = $value['length(len)'];
-            $child = $value['child'];
+            $child = $value['collect(child)'];
 
             // Todoにプロジェクトuuidとdateを合体させる
             $todo['projectUuid'] = $project['uuid'];
