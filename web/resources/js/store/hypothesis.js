@@ -21,6 +21,7 @@ const mutations = {
 
     setHypothesis (state, hypothesis) {
         state.hypothesis = hypothesis;
+        console.info(state.hypothesis);
     },
 
     setParentHypothesis (state, hypothesis) {
@@ -82,6 +83,16 @@ const mutations = {
 
     addGoal (state, data) {
         state.hypothesisList.push(data);
+    },
+
+    addComment (state, data){
+        const hypothesisList = state.hypothesisList;
+        let hypothesisKey;
+        for (const [key, todo] of Object.entries(hypothesisList)) {
+            if (todo.uuid = data.hypothesis.uuid) hypothesisKey = key;
+        }
+        hypothesisList[hypothesisKey]['comments'].push(data.text);
+        state.hypothesisList = hypothesisList;
     },
 
     updateAllHypothesisList (state) {
@@ -244,6 +255,22 @@ const actions = {
             }
         }
         return; 
+    },
+
+    async createComment (context, {hypothesis, text}){
+        const comment = {
+            text : text,
+            uuid: uuidv4(),
+            hypothesis: hypothesis,
+        };
+        context.commit('addComment', comment);
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        const response = await axios.post('/api/hypothesis/'+ hypothesis.uuid +'/comment', comment);
+        console.info(response);
+        if (response.status !== CREATED) {
+            context.commit ('error/setCode', response.status, {root: true});
+            return;
+        }
     }
 
 }

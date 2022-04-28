@@ -198,7 +198,7 @@ export default {
         return '「' +this.hypothesis.name + '」ためのToDo';
       } else {
         return 'コメント';
-        
+
       }
     },
     assistSubHeaderText(){
@@ -226,10 +226,15 @@ export default {
     },
     submitForm(){
       this.$store.dispatch("form/closeForm");
-      if (this.inputFormName) {
+      if (this.inputFormName && this.tab === 0) {
         this.$store.dispatch(
           "hypothesis/createHypothesis", 
           {parent: this.hypothesis, name: this.inputFormName}
+        );
+      } else if (this.inputFormName && this.tab === 1) {
+        this.$store.dispatch(
+          "hypothesis/createComment", 
+          {hypothesis: this.hypothesis, text: this.inputFormName}
         );
       }
       this.form = false;

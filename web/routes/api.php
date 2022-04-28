@@ -59,6 +59,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/hypothesis/{hypothesisId}/date', [DateController::class, 'destroy']);
 
     // コメント
+    Route::post('/hypothesis/{hypothesisId}/comment', [CommentController::class, 'store']);
     Route::put('/hypothesis/{hypothesisId}/comment', [CommentController::class, 'update']);
     Route::delete('/hypothesis/{hypothesisId}/comment', [CommentController::class, 'destroy']);
 });
