@@ -127,6 +127,10 @@
                :selectHypothesis="hypothesis" 
                :hypothesisList="hypothesisList" 
                :hypothesisStatus="linkedToDo[0]" />
+               <Comments 
+                v-if="tab === 1"
+                :hypothesis="hypothesis"
+               />
               <!-- PC版追加カード -->
               <NewAdditionalCard 
                @clickAditional="onClickCreate" 
@@ -154,6 +158,7 @@
 import Header from "../components/Header.vue";
 import Calender from "../components/Calender.vue";
 import HypothesisCards from "../components/Cards/HypothesisCard.vue";
+import Comments from "../components/Comments.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
 import InputForm from "../components/InputForm.vue";
@@ -164,6 +169,7 @@ export default {
     Header,
     Calender,
     HypothesisCards,
+    Comments,
     NewAdditionalCard,
     SpBottomBtn,
     InputForm,
