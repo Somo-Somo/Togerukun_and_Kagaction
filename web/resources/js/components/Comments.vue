@@ -24,7 +24,7 @@
                     <div class="d-flex" style="height: 24px">
                         <p
                             class="d-flex align-self-center font-weight-bold caption ma-0"
-                            style="font-size: 0.75rem !important"
+                            style="font-size: 0.65rem !important"
                         >
                             {{ comment.user_name }}
                         </p>
@@ -43,7 +43,7 @@
                 <div>
                     <p
                         class="d-flex align-self-center font-weight-bold caption ma-0"
-                        style="color: #424242; font-size: 0.9rem !important"
+                        style="color: #424242; font-size: 0.95rem !important"
                     >
                         {{ comment.text }}
                     </p>
