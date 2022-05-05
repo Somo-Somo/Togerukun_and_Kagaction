@@ -189,6 +189,7 @@ export default {
       apiStatus: (state) => state.auth.apiStatus,
     }),
    ...mapGetters({
+      user: 'auth/user',
       inputFormName: 'form/name',
       inputForm: 'form/inputForm',
       project: 'project/project',
@@ -204,7 +205,6 @@ export default {
         return '「' +this.hypothesis.name + '」ためのToDo';
       } else {
         return 'コメント';
-
       }
     },
     assistSubHeaderText(){
@@ -240,7 +240,7 @@ export default {
       } else if (this.inputFormName && this.tab === 1) {
         this.$store.dispatch(
           "hypothesis/createComment", 
-          {hypothesis: this.hypothesis, text: this.inputFormName}
+          {hypothesis: this.hypothesis, text: this.inputFormName, user: this.user}
         );
       }
       this.form = false;
