@@ -121,7 +121,7 @@
   </v-list>
     <DeletingConfirmationDialog 
       :deletingConfirmationDialog="deletingConfirmationDialog"
-      :selectedDeletingItem="selectedDeletingHypothesis"
+      :selectedDeletingItemName="selectedDeletingHypothesis.name"
       :loading="false"
       @deleteItem="deleteHypothesis"
       @onClickCancel="onClickCancel"

@@ -136,6 +136,14 @@ const mutations = {
         state.hypothesisList = newHypothesisList;
         state.allHypothesisList[hypothesisList[0]['parentUuid']] = newHypothesisList;
     },
+
+    deleteComment(state, {hypothesis, comment}){
+        const comments = [];
+        for (const [key, value] of Object.entries(hypothesis.comments)) {
+            if (value.uuid !== comment.uuid) comments.push(value);
+        }
+        state.hypothesis.comments = comments;
+    }
 }
 
 const actions = {
@@ -279,6 +287,10 @@ const actions = {
             context.commit ('error/setCode', response.status, {root: true});
             return;
         }
+    },
+
+    async deleteComment (context, {hypothesis, comment}){
+        context.commit('deleteComment', {hypothesis:hypothesis, comment: comment});
     }
 
 }

@@ -1,4 +1,5 @@
 <template>
+<div>
     <v-list>
         <v-list-item
             class="d-flex px-1 py-2"
@@ -72,17 +73,29 @@
             </div>
         </v-list-item>
     </v-list>
+    <DeletingConfirmationDialog 
+      :deletingConfirmationDialog="deletingConfirmationDialog"
+      :selectedDeletingItemName="selectedDeletingComment.text"
+      :loading="false"
+      @deleteItem="deleteComment"
+      @onClickCancel="onClickCancel"
+    />
+</div>
 </template>
 
 <script>
+import DeletingConfirmationDialog from "../components/Dialog/DeletingConfirmationDialog.vue";
 import Menu from "../components/Buttons/Menu.vue";
 export default {
     components: {
+        DeletingConfirmationDialog,
         Menu,
     },
     data: () => ({
         menus: [{ title: "削除", color: "color: red" }],
         commentIndex: false,
+        deletingConfirmationDialog: false,
+        selectedDeletingComment: { text: null },
     }),
     props: {
         hypothesis: {
@@ -102,8 +115,27 @@ export default {
             const minutes = dateAndTime.getMinutes();
             return month + "月" + date + "日 " + hours + ":" + minutes;
         },
-        selectedMenu(){
-            return;
+        selectedMenu(menuTitle, comment){
+            if (menuTitle === "削除") {
+                this.deletingConfirmationDialog = true;
+                this.selectedDeletingComment = comment;
+                console.info(this.selectedDeletingComment);
+            }
+        },
+        onClickCancel(){
+            this.deletingConfirmationDialog = false;
+            this.selectedDeletingHypothesis = { text: null };
+        },
+        async deleteComment(){
+            this.deletingConfirmationDialog = false;
+            await this.$store.dispatch(
+                "hypothesis/deleteComment", 
+                {
+                    hypothesis: this.hypothesis,
+                    comment: this.selectedDeletingComment,
+                }
+            );
+            this.selectedDeletingHypothesis = { text: null };
         }
     },
 };
