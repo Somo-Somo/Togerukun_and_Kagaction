@@ -64,19 +64,16 @@ class CommentRepository implements CommentRepositoryInterface
 
     public function destroyComment(array $comment)
     {
-        $deleteHypothesisComment = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }),
-                (comment:Comment { uuid : $comment_uuid }) - [to: TO] -> (hypothesis:Hypothesis { uuid: $hypothesis_uuid })
-                CREATE (user) - [
-                    :DELETED{at:localdatetime({timezone: 'Asia/Tokyo'})}
-                ] -> (comment)
-                DELETE to
-                RETURN user, comment
+                MATCH (user:User { email : $user_email }) - [created:CREATED] -> (comment:Comment { uuid : $comment_uuid }),
+                (comment) - [to: TO] -> (hypothesis:Hypothesis)
+                DELETE to, created
+                DELETE comment
+                RETURN user
                 CYPHER,
                 [
                     'user_email' => $comment['user_email'],
-                    'hypothesis_uuid' => $comment['hypothesis_uuid'],
                     'comment_uuid' => $comment['comment_uuid']
                 ]
             );

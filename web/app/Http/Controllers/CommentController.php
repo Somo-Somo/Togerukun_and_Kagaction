@@ -25,7 +25,7 @@ class CommentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  string  $hypothesisUuid
-     * @param  \Illuminate\Http\CommentRequest  $request
+     * @param  App\Http\Requests\CommentRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(string $hypothesisUuid, CommentRequest $request, StoreAction $storeAction)
@@ -61,7 +61,7 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\CommentRequest  $request
+     * @param  App\Http\Requests\CommentRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function update(CommentRequest $request, UpdateAction $updateAction)
@@ -85,14 +85,15 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+    * @param  string  $commentUuid
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, DestroyAction $destroyAction)
+    public function destroy(string $commentUuid, Request $request, DestroyAction $destroyAction)
     {
         $comment = [
             'user_email' => $request->user()->email,
-            'uuid' => $request->uuid
+            'comment_uuid' => $commentUuid,
         ];
 
         $destroyAction->invoke($comment);

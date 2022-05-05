@@ -93,8 +93,6 @@ const mutations = {
         }
         hypothesisList[hypothesisKey]['comments'].push(comment);
         state.hypothesisList = hypothesisList;
-        console.info(hypothesisList[hypothesisKey]);
-        console.info(hypothesisKey);
     },
 
     updateAllHypothesisList (state) {
@@ -290,7 +288,14 @@ const actions = {
     },
 
     async deleteComment (context, {hypothesis, comment}){
+        console.info(comment);
         context.commit('deleteComment', {hypothesis:hypothesis, comment: comment});
+        const response = await axios.delete('/api/comment/'+ comment.uuid);
+        if (response.status !== OK) {
+            context.commit ('error/setCode', response.status, {root: true});
+            return false;
+        }
+        return;
     }
 
 }

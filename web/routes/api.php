@@ -60,6 +60,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // コメント
     Route::post('/hypothesis/{hypothesisId}/comment', [CommentController::class, 'store']);
-    Route::put('/hypothesis/{hypothesisId}/comment', [CommentController::class, 'update']);
-    Route::delete('/hypothesis/{hypothesisId}/comment', [CommentController::class, 'destroy']);
+    Route::put('/comment/{commentId}/', [CommentController::class, 'update']);
+    Route::delete('/comment/{commentId}', [CommentController::class, 'destroy']);
 });
