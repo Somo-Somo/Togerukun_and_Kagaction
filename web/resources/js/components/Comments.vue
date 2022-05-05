@@ -70,7 +70,7 @@ export default {
         },
         getDateAndTime(comment) {
             const dateAndTime = new Date(comment.created_at);
-            const month = dateAndTime.getMonth();
+            const month = dateAndTime.getMonth() + 1;
             const date = dateAndTime.getDate();
             const hours = dateAndTime.getHours();
             const minutes = dateAndTime.getMinutes();
