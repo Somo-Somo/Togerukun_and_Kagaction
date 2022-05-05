@@ -43,7 +43,7 @@
               hide-details
             ></v-textarea>
           </div>
-          <div class="d-flex">
+          <div class="d-flex px-1">
             <div
               class="py-2 d-flex justify-start"
               :style="
@@ -81,8 +81,8 @@
               </v-col>
             </div>
           </div>
-          <div class="pt-2">
-            <div class="d-flex justify-space-between flex-column">    
+          <div class="">
+            <div class="d-flex justify-space-between flex-column pb-1">    
               <v-tabs 
                 v-model="tab" 
                 class="px-0" 
@@ -128,7 +128,7 @@
                :hypothesisList="hypothesisList" 
                :hypothesisStatus="linkedToDo[0]" />
                <Comments 
-                v-if="tab === 1"
+                v-if="tab === 1 && hypothesis.comments.length > 0"
                 :hypothesis="hypothesis"
                />
               <!-- PC版追加カード -->
