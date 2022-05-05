@@ -26,7 +26,7 @@
                             class="d-flex align-self-center font-weight-bold caption ma-0"
                             style="font-size: 0.75rem !important"
                         >
-                            Yujin Shitogishi
+                            {{ comment.user_name }}
                         </p>
                     </div>
                     <div>
