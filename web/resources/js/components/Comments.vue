@@ -119,7 +119,6 @@ export default {
             if (menuTitle === "削除") {
                 this.deletingConfirmationDialog = true;
                 this.selectedDeletingComment = comment;
-                console.info(this.selectedDeletingComment);
             }
         },
         onClickCancel(){

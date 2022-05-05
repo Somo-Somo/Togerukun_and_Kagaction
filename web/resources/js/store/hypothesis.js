@@ -21,7 +21,6 @@ const mutations = {
 
     setHypothesis (state, hypothesis) {
         state.hypothesis = hypothesis;
-        console.info(state.hypothesis);
     },
 
     setParentHypothesis (state, hypothesis) {
@@ -288,7 +287,6 @@ const actions = {
     },
 
     async deleteComment (context, {hypothesis, comment}){
-        console.info(comment);
         context.commit('deleteComment', {hypothesis:hypothesis, comment: comment});
         const response = await axios.delete('/api/comment/'+ comment.uuid);
         if (response.status !== OK) {
