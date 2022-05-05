@@ -111,8 +111,8 @@ export default {
             const dateAndTime = new Date(comment.created_at);
             const month = dateAndTime.getMonth() + 1;
             const date = dateAndTime.getDate();
-            const hours = dateAndTime.getHours();
-            const minutes = dateAndTime.getMinutes();
+            const hours = dateAndTime.getHours().toString().padStart(2, "0");
+            const minutes = dateAndTime.getMinutes().toString().padStart(2, "0");
             return month + "月" + date + "日 " + hours + ":" + minutes;
         },
         selectedMenu(menuTitle, comment){
