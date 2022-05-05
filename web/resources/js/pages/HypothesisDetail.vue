@@ -43,7 +43,7 @@
               hide-details
             ></v-textarea>
           </div>
-          <div class="d-flex py-2">
+          <div class="d-flex px-1">
             <div
               class="py-2 d-flex justify-start"
               :style="
@@ -73,38 +73,37 @@
                 $vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 48px'
               "
             >
-              <v-subheader
-                class="d-flex align-self-center pa-md-0"
-                :class="
-                  $vuetify.breakpoint.mdAndUp
-                    ? 'hypothesisSubTitle'
-                    : 'spHypothesisSubTitle'
-                "
-              >
+              <v-subheader class="d-flex align-self-center pa-md-0">
                 <p class="ma-0 font-weight-bold" color="grey darken-1">日付 :</p>
               </v-subheader>
-              <v-col class="px-4 py-0 d-flex align-self-center">
+              <v-col class="px-md-4 pa-0 d-flex align-self-center">
                 <Calender :project="project"/>
               </v-col>
             </div>
           </div>
-          <div class="py-4">
-            <div class="d-flex justify-space-between">
-              <v-subheader
-                class="pa-md-0"
-                :class="
-                  $vuetify.breakpoint.mdAndUp
-                    ? 'hypothesisSubTitle'
-                    : 'spHypothesisSubTitle'
-                "
+          <div class="">
+            <div class="d-flex justify-space-between flex-column pb-1">    
+              <v-tabs 
+                v-model="tab" 
+                class="px-0" 
+                color="black" 
+                :height="$vuetify.breakpoint.mdAndUp ? '' : '36'"
               >
-                <p 
-                  class="ma-0 font-weight-bold align-self-center" 
-                  color="grey darken-1"
-                  :style="$vuetify.breakpoint.smAndUp ? '48px' : 'min-width: 36px'"
+                <v-tabs-slider color="#80CBC4"></v-tabs-slider>
+                <v-tab
+                  class="px-0"
+                  v-for="kind in linkedToDo"
+                  :key="kind.name"
+                  :class="$vuetify.breakpoint.mdAndUp ? '' : 'spTabStyle'"
                 >
-                  ToDo：
-                </p>
+                  <p class="ma-0 font-weight-bold">{{ kind.name }}</p>
+                </v-tab>
+              </v-tabs>
+              <v-subheader
+                v-if="tab === 0"
+                class="px-md-0 mt-3 hypothesisSubTitle"
+                v-show="$vuetify.breakpoint.smAndUp"
+              >
                 <p 
                   class="ma-0 font-weight-black caption align-self-center" 
                   color="grey lighten-1"
@@ -114,30 +113,28 @@
                   「{{hypothesis.name}}
                 </p>
                 <p class="ma-0 font-weight-black caption align-self-center" color="grey lighten-1">
-                  」を完了するためには？
+                  {{ assistSubHeaderText(tab) }}
                 </p>
               </v-subheader>
-              <v-icon
-                class="hidden-sm-and-down my-3"
-                size="24"
-                height="24"
-                @click="onClickCreate"
-                >mdi-plus-circle</v-icon
-              >
             </div>
             <div
               class="overflow-y-auto d-flex flex-column"
               :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
             >
               <HypothesisCards 
+                v-if="tab === 0"
                :project="project" 
                :selectHypothesis="hypothesis" 
                :hypothesisList="hypothesisList" 
-               :hypothesisStatus="hypothesisStatus" />
+               :hypothesisStatus="linkedToDo[0]" />
+               <Comments 
+                v-if="tab === 1 && hypothesis.comments.length > 0"
+                :hypothesis="hypothesis"
+               />
               <!-- PC版追加カード -->
               <NewAdditionalCard 
                @clickAditional="onClickCreate" 
-               :category="'ToDo'"/>
+               :category="linkedToDo[tab].name"/>
             </div>
           </div>
         </div>
@@ -161,6 +158,7 @@
 import Header from "../components/Header.vue";
 import Calender from "../components/Calender.vue";
 import HypothesisCards from "../components/Cards/HypothesisCard.vue";
+import Comments from "../components/Comments.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
 import InputForm from "../components/InputForm.vue";
@@ -171,13 +169,17 @@ export default {
     Header,
     Calender,
     HypothesisCards,
+    Comments,
     NewAdditionalCard,
     SpBottomBtn,
     InputForm,
   },
   data: () => ({
-    hypothesisStatus: {name: "目標", show: false},
-    page: "目標",
+    tab: 0,
+    linkedToDo: [
+      {name: "ToDo", show: false},
+      {name: "コメント", show: false}
+    ],
     submitLoading: false,
     form: false,
     date: null,
@@ -187,6 +189,7 @@ export default {
       apiStatus: (state) => state.auth.apiStatus,
     }),
    ...mapGetters({
+      user: 'auth/user',
       inputFormName: 'form/name',
       inputForm: 'form/inputForm',
       project: 'project/project',
@@ -198,8 +201,19 @@ export default {
       return this.hypothesis.depth === 0 ? 'ゴール' : '｢'+ this.parentHypothesis.name +'｣ ためのToDo';
     },
     additionalInputFormLabel(){
-      return '「' +this.hypothesis.name + '」ためのToDo';
-    }
+      if (this.tab === 0) {
+        return '「' +this.hypothesis.name + '」ためのToDo';
+      } else {
+        return 'コメント';
+      }
+    },
+    assistSubHeaderText(){
+      return (tab) => {
+        if (tab === 0) {
+          return '」を完了するには？'; 
+        }
+      }  
+    },
   },
   methods: {
     onClickAccomplish (accomplish){
@@ -218,10 +232,15 @@ export default {
     },
     submitForm(){
       this.$store.dispatch("form/closeForm");
-      if (this.inputFormName) {
+      if (this.inputFormName && this.tab === 0) {
         this.$store.dispatch(
           "hypothesis/createHypothesis", 
           {parent: this.hypothesis, name: this.inputFormName}
+        );
+      } else if (this.inputFormName && this.tab === 1) {
+        this.$store.dispatch(
+          "hypothesis/createComment", 
+          {hypothesis: this.hypothesis, text: this.inputFormName, user: this.user}
         );
       }
       this.form = false;
@@ -260,14 +279,20 @@ export default {
 
 .hypothesisSubTitle
   font-size: 1rem
+  height: 36px
 
 .spHypothesisSubTitle
   font-size: 12px
   height: 24px
   padding: 0 0 0 12px
 
+.spTabStyle
+  width: 25%
+  height: 36px
+  font-size: 0.75rem
+
 .cardStyle
-  height: calc(100vh - 360px)
+  height: calc(100vh - 376px)
   position: relative
 
 .spCardStyle

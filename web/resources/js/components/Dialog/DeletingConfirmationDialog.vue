@@ -10,7 +10,7 @@
             削除
             </v-card-title>
             <v-card-text>
-            「{{selectedDeletingItem.name}}」を削除してもよろしいでしょうか。
+            「{{selectedDeletingItemName}}」を削除してもよろしいでしょうか。
             </v-card-text>
             <v-card-actions>
             <v-spacer></v-spacer>
@@ -41,8 +41,8 @@ export default {
     deletingConfirmationDialog: {
       type: Boolean,
     },
-    selectedDeletingItem: {
-      type: Object,
+    selectedDeletingItemName: {
+      type: String,
     },
     loading: {
       type: Boolean,

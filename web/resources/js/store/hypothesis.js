@@ -84,6 +84,16 @@ const mutations = {
         state.hypothesisList.push(data);
     },
 
+    addComment (state, {hypothesis, comment}){
+        const hypothesisList = state.hypothesisList;
+        let hypothesisKey;
+        for (const [key, todo] of Object.entries(hypothesisList)) {
+            if (todo.uuid === hypothesis.uuid) hypothesisKey = key;
+        }
+        hypothesisList[hypothesisKey]['comments'].push(comment);
+        state.hypothesisList = hypothesisList;
+    },
+
     updateAllHypothesisList (state) {
         const projectUuid =  state.hypothesisList[0].parentUuid;
         state.allHypothesisList[projectUuid] = state.hypothesisList;
@@ -123,6 +133,14 @@ const mutations = {
         state.hypothesisList = newHypothesisList;
         state.allHypothesisList[hypothesisList[0]['parentUuid']] = newHypothesisList;
     },
+
+    deleteComment(state, {hypothesis, comment}){
+        const comments = [];
+        for (const [key, value] of Object.entries(hypothesis.comments)) {
+            if (value.uuid !== comment.uuid) comments.push(value);
+        }
+        state.hypothesis.comments = comments;
+    }
 }
 
 const actions = {
@@ -244,6 +262,38 @@ const actions = {
             }
         }
         return; 
+    },
+
+    async createComment (context, {hypothesis, text, user}){
+        var date = new Date();
+        date.setTime(date.getTime() + (9*60*60*1000));
+        const str_date = date.toISOString().replace('T', ' ').substr(0, 19);
+        const comment = {
+            user_name: user.name,
+            user_uuid: user.uuid,
+            text : text,
+            uuid: uuidv4(),
+            created_at: str_date,
+        };
+
+        context.commit('addComment', {hypothesis:hypothesis, comment: comment});
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        const response = await axios.post('/api/hypothesis/'+ hypothesis.uuid +'/comment', comment);
+
+        if (response.status !== CREATED) {
+            context.commit ('error/setCode', response.status, {root: true});
+            return;
+        }
+    },
+
+    async deleteComment (context, {hypothesis, comment}){
+        context.commit('deleteComment', {hypothesis:hypothesis, comment: comment});
+        const response = await axios.delete('/api/comment/'+ comment.uuid);
+        if (response.status !== OK) {
+            context.commit ('error/setCode', response.status, {root: true});
+            return false;
+        }
+        return;
     }
 
 }

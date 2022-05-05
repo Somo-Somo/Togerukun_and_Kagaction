@@ -7,7 +7,7 @@
       v-model="hypothesis.showHypothesisList"
       :key="hypothesis.uuid"
       :class="cardShow(hypothesis) ? '' : 'd-none'"
-      :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
+      :style="$vuetify.breakpoint.smAndUp ? 'padding:8px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
       <!-- ToDo一覧 -->
@@ -121,7 +121,7 @@
   </v-list>
     <DeletingConfirmationDialog 
       :deletingConfirmationDialog="deletingConfirmationDialog"
-      :selectedDeletingItem="selectedDeletingHypothesis"
+      :selectedDeletingItemName="selectedDeletingHypothesis.name"
       :loading="false"
       @deleteItem="deleteHypothesis"
       @onClickCancel="onClickCancel"
@@ -194,7 +194,7 @@ export default {
         if (this.hypothesisStatus.name === "完了") 
           return hypothesis.accomplish ? this.showHypothesis() : false; 
 
-        if (this.hypothesisStatus.name === "目標") 
+        if (this.hypothesisStatus.name === "ToDo") 
           return this.selectHypothesis.uuid === hypothesis.parentUuid ? this.showHypothesis() : false;
 
         return false;

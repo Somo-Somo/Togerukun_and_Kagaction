@@ -11,7 +11,7 @@
             <v-text-field
                 class="d-flex align-self-center ma-0 pt-5"
                 v-model="hypothesis.date"
-                prepend-icon="mdi-calendar"
+                :prepend-icon="$vuetify.breakpoint.smAndUp ? 'mdi-calendar' : null"
                 readonly
                 v-bind="attrs"
                 v-on="on"

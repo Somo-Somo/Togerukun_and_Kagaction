@@ -2,18 +2,15 @@
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\HypothesisController;
 use App\Http\Controllers\AccomplishController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\DateController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Initialize;
 
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,11 +50,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/goal', [GoalController::class, 'store']);
     Route::delete('/goal/:hypothesisId', [GoalController::class, 'destroy']);
 
-    // 仮説のステータス
+    // 完了
     Route::put('/hypothesis/{hypothesisId}/accomplish', [AccomplishController::class, 'update']);
     Route::delete('/hypothesis/{hypothesisId}/accomplish', [AccomplishController::class, 'destroy']);
 
-    // 今日の目標
+    // 日付
     Route::put('/hypothesis/{hypothesisId}/date', [DateController::class, 'update']);
     Route::delete('/hypothesis/{hypothesisId}/date', [DateController::class, 'destroy']);
+
+    // コメント
+    Route::post('/hypothesis/{hypothesisId}/comment', [CommentController::class, 'store']);
+    Route::put('/comment/{commentId}/', [CommentController::class, 'update']);
+    Route::delete('/comment/{commentId}', [CommentController::class, 'destroy']);
 });

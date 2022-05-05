@@ -48,7 +48,10 @@ class UserRepository implements UserRepositoryInterface
                 OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
                 OPTIONAL MATCH (:User)-[date:DATE]->(parent)
                 OPTIONAL MATCH (:User)-[accomplish:ACCOMPLISHED]->(parent)
-                RETURN project,parent,r,collect(child),length(len),date,accomplish
+                OPTIONAL MATCH (parent)<-[:TO]-(comment:Comment)
+                OPTIONAL MATCH comments = (:User)-[:CREATED]->(comment:Comment)
+                WITH project,parent,r,child,len,date,accomplish,comments ORDER BY comment
+                RETURN project,parent,r,collect(child),length(len),date,accomplish,collect(DISTINCT comments) AS comments
                 ORDER BY r
                 CYPHER,
                 [

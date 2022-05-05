@@ -61,7 +61,7 @@
     </form>
     <DeletingConfirmationDialog 
       :deletingConfirmationDialog="deletingConfirmationDialog"
-      :selectedDeletingItem="selectedDeletingProject"
+      :selectedDeletingItemName="selectedDeletingProject.name"
       :loading="submitLoading"
       @deleteItem="deleteProject"
       @onClickCancel="onClickCancel"
