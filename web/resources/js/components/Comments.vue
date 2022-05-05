@@ -45,7 +45,7 @@
                         class="d-flex align-self-center font-weight-bold caption ma-0"
                         style="color: #424242; font-size: 0.9rem !important"
                     >
-                        私の名前は涙そうそう
+                        {{ comment.text }}
                     </p>
                 </div>
             </div>
