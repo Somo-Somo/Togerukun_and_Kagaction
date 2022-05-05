@@ -9,17 +9,13 @@
                 <v-avatar
                     class="ma-1"
                     color="brown"
-                    :size="$vuetify.breakpoint.smAndUp ? '30' : '24'"
+                    :size="$vuetify.breakpoint.smAndUp ? '30' : '28'"
                 >
                     <span
                         class="white--text 'text-h6"
-                        :style="
-                            $vuetify.breakpoint.smAndUp
-                                ? 'font-size: 1rem !important;'
-                                : 'font-size:0.8rem !important;'
-                        "
+                        :style="'font-size: 0.8rem !important;'"
                     >
-                        A
+                        {{ getInitial(comment) }}
                     </span>
                 </v-avatar>
             </v-list-item-avatar>
@@ -68,6 +64,10 @@ export default {
     computed: {
 
     },
-    methods: {},
+    methods: {
+        getInitial(comment){
+            return comment.user_name.charAt(0);
+        }
+    },
 };
 </script>
