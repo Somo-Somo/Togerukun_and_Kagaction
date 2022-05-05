@@ -35,7 +35,7 @@
                                 class="d-flex align-self-center font-weight-bold caption ma-0"
                                 style="font-size: 0.5rem !important"
                             >
-                                4月30日 10:00
+                                {{ getDateAndTime(comment) }}
                             </p>
                         </v-subheader>
                     </div>
@@ -67,6 +67,14 @@ export default {
     methods: {
         getInitial(comment){
             return comment.user_name.charAt(0);
+        },
+        getDateAndTime(comment) {
+            const dateAndTime = new Date(comment.created_at);
+            const month = dateAndTime.getMonth();
+            const date = dateAndTime.getDate();
+            const hours = dateAndTime.getHours();
+            const minutes = dateAndTime.getMinutes();
+            return month + '月' + date + '日 ' + hours + ':' + minutes;
         }
     },
 };
