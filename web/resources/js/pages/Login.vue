@@ -193,7 +193,6 @@ export default {
       if (this.apiStatus) {
         const data = await this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
         this.loading = false;
-        console.info(Object.entries(data.project)[0]);
         if (Object.keys(data.schedule).length) {
           this.$router.push("/schedule");
         } else if (Object.keys(data.project).length) {
