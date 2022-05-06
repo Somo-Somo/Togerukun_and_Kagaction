@@ -5,7 +5,7 @@ import auth from './auth';
 import form from './form';
 import error from './error';
 import project from './project';
-import hypothesis from './hypothesis';
+import todo from './todo';
 import initialize from './initialize';
 import navigation from './navigation';
 import schedule from './schedule';
@@ -18,7 +18,7 @@ const store = new Vuex.Store ({
     form,
     error,
     project,
-    hypothesis,
+    todo,
     initialize,
     navigation,
     schedule,
