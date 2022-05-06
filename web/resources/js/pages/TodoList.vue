@@ -35,7 +35,7 @@
             >mdi-plus-circle</v-icon
           >
         </div>
-        <v-divider style="position:relative; top:92px;"></v-divider>
+        <v-divider v-if="!$vuetify.breakpoint.mdAndUp" style="position:relative; top:92px;"></v-divider>
         <!-- PC版 -->
         <div
           class="d-flex flex-column px-2 px-md-0"
