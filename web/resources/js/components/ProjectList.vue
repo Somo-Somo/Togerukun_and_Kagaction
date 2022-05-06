@@ -33,7 +33,7 @@
                 <v-icon color="teal lighten-5">mdi-folder-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="align-self-center">
-                <v-list-item-title>{{ project.name }}</v-list-item-title>
+                <v-list-item-title style="font-size: 0.9em;">{{ project.name }}</v-list-item-title>
             </v-list-item-content>
             <v-list-item-icon class="align-self-center mx-0" v-show="showMenu === index">
                 <Menu :menus="cardMenus" :selectCard="project" @selectedMenu="selectedMenu"/>
