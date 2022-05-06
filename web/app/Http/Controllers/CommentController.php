@@ -24,15 +24,15 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  string  $hypothesisUuid
+     * @param  string  $todoUuid
      * @param  App\Http\Requests\CommentRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(string $hypothesisUuid, CommentRequest $request, StoreAction $storeAction)
+    public function store(string $todoUuid, CommentRequest $request, StoreAction $storeAction)
     {
         $comment = [
             'user_email' => $request->user()->email,
-            'hypothesis_uuid' => $hypothesisUuid,
+            'todo_uuid' => $todoUuid,
             'comment_uuid' => $request->uuid,
             'text' => $request->text
         ];
