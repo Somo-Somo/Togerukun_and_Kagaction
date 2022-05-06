@@ -41,7 +41,7 @@
       </v-list>
       <v-divider class="mx-6" color="#80CBC4"></v-divider>
       <ProjectList />
-      <v-footer color="#80CBC4" absolute>
+      <v-footer color="#80CBC4" class="py-0" absolute>
         <v-divider color="#80CBC4"></v-divider>
         <v-sheet
           class="d-flex flex-row justify-space-around"

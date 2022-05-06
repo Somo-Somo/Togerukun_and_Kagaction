@@ -25,7 +25,6 @@ export default {
     ...mapGetters({
       check: 'auth/check',
       user: 'auth/user',
-      apiStatus: 'auth/apiStatus',
       errorCode: 'error/code',
     }),
     checkPath(){
@@ -43,7 +42,7 @@ export default {
           this.$router.push('/not-found');
         }
     },
-    $route(to, from) {
+    $route() {
       this.$store.commit("error/setCode", null);
     },
   },
