@@ -87,8 +87,8 @@ const mutations = {
     addComment (state, {todo, comment}){
         const todoList = state.todoList;
         let todoKey;
-        for (const [key, todo] of Object.entries(todoList)) {
-            if (todo.uuid === todo.uuid) todoKey = key;
+        for (const [key, value] of Object.entries(todoList)) {
+            if (value.uuid === todo.uuid) todoKey = key;
         }
         todoList[todoKey]['comments'].push(comment);
         state.todoList = todoList;
