@@ -3,9 +3,9 @@
   <v-list class="py-0" width="100%">
     <v-col 
       class="px-md-0"
-      v-for="hypothesis in scheduleList"
-      v-show="showCard(hypothesis)"
-      :key="hypothesis.uuid"
+      v-for="todo in scheduleList"
+      v-show="showCard(todo)"
+      :key="todo.uuid"
       :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
@@ -16,18 +16,18 @@
         >
           <v-list-item
             style="width: 100%" 
-            @click="toHypothesisDetail(hypothesis)" 
+            @click="toTodoDetail(todo)" 
             link>
             <v-list-item-content class="pa-0 d-flex">
               <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
-                  <div class="d-flex pr-1" :style="subTitle(hypothesis).backgroundColor">
+                  <div class="d-flex pr-1" :style="subTitle(todo).backgroundColor">
                     <v-icon size="8" color="#212121">mdi-clock-outline</v-icon>
                     <p
                       class="ma-0 px-2 #212121--text font-weight-bold align-self-center"
                       :style="$vuetify.breakpoint.smAndUp ? 'font-size:12px' : 'font-size:8px'"
                     >
-                         {{ subTitle(hypothesis).title }}
+                         {{ subTitle(todo).title }}
                     </p>
                   </div>
                   <div class="d-flex" style="max-width:66%"> 
@@ -35,7 +35,7 @@
                       class="ma-0 grey--text font-weight-bold align-self-center"
                       style="font-size: 8px; max-width:100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                     >
-                      {{ parentName(hypothesis) }}
+                      {{ parentName(todo) }}
                     </p>
                     <p
                         class="ma-0 grey--text font-weight-bold align-self-center"
@@ -51,7 +51,7 @@
                     style="max-width:calc(100% - 36px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                     :style="$vuetify.breakpoint.smAndUp ? 'font-size:1rem' : 'font-size:0.8rem'"
                     >
-                    {{ hypothesis.name }}
+                    {{ todo.name }}
                   </p></v-list-item-title
                 >
                 <v-menu class="rounded-lg elevation-0" offset-y>
@@ -75,7 +75,7 @@
                     </v-list-item-action>
                   </template>
                   <v-list>
-                    <v-list-item v-for="menu in cardMenu" :key="menu.title" @click="selectMenu(menu.title, hypothesis)" link>
+                    <v-list-item v-for="menu in cardMenu" :key="menu.title" @click="selectMenu(menu.title, todo)" link>
                       <v-list-item-title :style="menu.color">{{ menu.title }}</v-list-item-title>
                     </v-list-item>
                   </v-list>
@@ -101,9 +101,9 @@
   </v-list>
     <DeletingConfirmationDialog 
       :deletingConfirmationDialog="deletingConfirmationDialog"
-      :selectedDeletingItem="selectedDeletingHypothesis"
+      :selectedDeletingItem="selectedDeletingTodo"
       :loading="false"
-      @deleteItem="deleteHypothesis"
+      @deleteItem="deleteTodo"
       @onClickCancel="onClickCancel"
     />
 </div>  
@@ -118,7 +118,7 @@ export default {
   },
   data: () => ({
     deletingConfirmationDialog: false,
-    selectedDeletingHypothesis: null,
+    selectedDeletingTodo: null,
     cardMenu: [
       {title: "削除", color:"color: red"},
     ],
@@ -148,20 +148,20 @@ export default {
   },
   computed : {
     subTitle() {
-        return (hypothesis) => {
-            return this.calcDate(hypothesis);
+        return (todo) => {
+            return this.calcDate(todo);
         }
     },
     parentName() {
-      return (hypothesis) => {
-        return ' 「' + this.projectList[hypothesis.projectUuid].name;
+      return (todo) => {
+        return ' 「' + this.projectList[todo.projectUuid].name;
       }
     },
     showCard() {
-        return (hypothesis) => {
-            if (!hypothesis.accomplish) {
+        return (todo) => {
+            if (!todo.accomplish) {
                 const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
-                const diff = (new Date(hypothesis.date) - new Date(today)) / (60*60*1000*24);
+                const diff = (new Date(todo.date) - new Date(today)) / (60*60*1000*24);
                 let showCard = false;
                 if (this.period.name === "今日") {
                     showCard = diff === 0 ? true : false;
@@ -201,29 +201,29 @@ export default {
     }
   },
   methods: {
-    async toHypothesisDetail (hypothesis) {
-      this.$store.dispatch("project/selectProject", this.projectList[hypothesis.projectUuid]);
-      await this.$store.dispatch("hypothesis/selectHypothesis", hypothesis);
-      return this.$router.push({ path: "/hypothesis/" + hypothesis.uuid });
+    async toTodoDetail (todo) {
+      this.$store.dispatch("project/selectProject", this.projectList[todo.projectUuid]);
+      await this.$store.dispatch("todo/selectTodo", todo);
+      return this.$router.push({ path: "/todo/" + todo.uuid });
     },
-    selectMenu(menuTitle, hypothesis){
+    selectMenu(menuTitle, todo){
     if (menuTitle === "削除") {
         this.deletingConfirmationDialog = true;
-        this.selectedDeletingHypothesis = hypothesis;
+        this.selectedDeletingTodo = todo;
       }
     },
-    async deleteHypothesis(){
+    async deleteTodo(){
       this.deletingConfirmationDialog = false;
-      await this.$store.dispatch("hypothesis/deleteHypothesis", this.selectedDeletingHypothesis);
-      this.selectedDeletingHypothesis = null;
+      await this.$store.dispatch("todo/deleteTodo", this.selectedDeletingTodo);
+      this.selectedDeletingTodo = null;
     },
     onClickCancel(){
       this.deletingConfirmationDialog = false;
-      this.selectedDeletingHypothesis = null;
+      this.selectedDeletingTodo = null;
     },
-    calcDate(hypothesis){
+    calcDate(todo){
         const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
-        const diff = (new Date(hypothesis.date) - new Date(today)) / (60*60*1000*24);
+        const diff = (new Date(todo.date) - new Date(today)) / (60*60*1000*24);
         if (diff > 0) {
           this.subtitle.date.title = '残り' + diff + '日';
           this.subtitle.date.backgroundColor = diff < 4 ? 'background-color: yellow' : null;

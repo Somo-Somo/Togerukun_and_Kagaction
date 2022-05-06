@@ -5,8 +5,8 @@ import store from './store';
 // ページコンポーネントをインポートする
 import Setting from './pages/Setting.vue';
 import Login from './pages/Login.vue';
-import HypothesisList from './pages/HypothesisList.vue';
-import HypothesisDetail from './pages/HypothesisDetail.vue';
+import TodoList from './pages/TodoList.vue';
+import TodoDetail from './pages/TodoDetail.vue';
 import Schedule from './pages/Schedule.vue';
 import SystemError from './pages/errors/System.vue';
 import NotFound from './pages/errors/NotFound.vue';
@@ -36,13 +36,13 @@ const routes = [
   },
   {
     path: '/project/:id',
-    component: HypothesisList,
-    name: "hypothesisList"
+    component: TodoList,
+    name: "todoList"
   },
   {
-    path: '/hypothesis/:id',
-    component: HypothesisDetail,
-    name: "hypothesisDetail"
+    path: '/todo/:id',
+    component: TodoDetail,
+    name: "todoDetail"
   },
   {
     path: '/schedule',
@@ -62,7 +62,7 @@ const routes = [
     component: NotFound,
   },
   {
-    path: '/hypothesis/*',
+    path: '/todo/*',
     component: NotFound,
   },
 ];
