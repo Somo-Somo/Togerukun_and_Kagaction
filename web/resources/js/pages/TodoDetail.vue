@@ -82,7 +82,7 @@
             </div>
           </div>
           <div class="">
-            <div class="d-flex justify-space-between flex-column pb-1">    
+            <div class="d-flex justify-space-between flex-column">    
               <v-tabs 
                 v-model="tab" 
                 class="px-0" 
@@ -101,7 +101,7 @@
               </v-tabs>
               <v-subheader
                 v-if="tab === 0"
-                class="px-md-0 mt-3 todoSubTitle"
+                class="px-md-0 mt-2 todoSubTitle"
                 v-show="$vuetify.breakpoint.smAndUp"
               >
                 <p 

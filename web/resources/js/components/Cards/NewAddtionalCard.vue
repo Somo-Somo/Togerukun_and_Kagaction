@@ -1,7 +1,7 @@
 <template>
 <div>
   <v-list class="py-0" width="100%">
-    <v-col :style="$vuetify.breakpoint.smAndUp ? 'padding:12px 0px' : 'padding:8px'">
+    <v-col :style="$vuetify.breakpoint.smAndUp ? 'padding:8px 0px' : 'padding:8px'">
       <v-card class="rounded" @click="$emit('clickAditional')" outlined>
         <v-list 
         class="py-0"

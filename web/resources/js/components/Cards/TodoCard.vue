@@ -109,11 +109,11 @@
     </v-col>
     <div
       class="my-4" 
-      v-show="!todoStatus.show && todoStatus.name !== 'ゴール' && todoStatus.name !== '目標'"
+      v-show="!todoStatus.show && todoStatus.name !== 'ゴール' && todoStatus.name !== 'ToDo'"
     >
       <p
-        class="grey--text font-weight-bold ma-0 pa-md-2 px-4 py-2"
-        :style="$vuetify.breakpoint.smAndUp ? 'font-size:18px;' : 'font-size:14px;'"
+        class="grey--text font-weight-bold ma-0 px-4 py-2"
+        :style="$vuetify.breakpoint.smAndUp ? 'font-size:16px;' : 'font-size:14px;'"
       >
           {{todoStatus.name}}はありません
       </p>
