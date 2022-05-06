@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4">
+  <div class="mt-2">
     <div class="d-flex justify-space-between px-2">
         <v-subheader class="d-flex align-self-center" style="font-size: 0.825em; height: 32px;"
             >プロジェクト
@@ -18,7 +18,7 @@
         color="grey darken-1"
         indeterminate
     ></v-progress-circular>
-    <v-list class="overflow-y-auto py-0" height="calc(100% - 304px)">
+    <v-list class="overflow-y-auto py-0" style="height: calc(100vh - 304px);">
         <v-list-item
             v-for="(project, index) in projectList"
             :key="index"
