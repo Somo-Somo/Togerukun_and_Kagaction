@@ -23,7 +23,10 @@ class DateRepository implements DateRepositoryInterface
                 OPTIONAL MATCH (user) - [accomplished:ACCOMPLISHED] -> (todo)
                 OPTIONAL MATCH (todo) - [:TO_ACHIEVE] -> (parent:Todo)
                 OPTIONAL MATCH (todo) <- [:TO_ACHIEVE] - (child:Todo)
-                RETURN project, todo, accomplished, date, parent, length(len), collect(child)
+                OPTIONAL MATCH (parent)<-[:TO]-(comment:Comment)
+                OPTIONAL MATCH comments = (:User)-[:CREATED]->(comment:Comment)
+                WITH project,todo,parent,child,len,date,accomplished,comments ORDER BY comment
+                RETURN project, todo, accomplished, date, parent, length(len), collect(child), collect(DISTINCT comments) AS comments
                 ORDER BY date.on ASC
                 CYPHER,
                 [

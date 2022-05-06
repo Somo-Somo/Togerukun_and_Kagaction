@@ -15,9 +15,9 @@ const mutations = {
         const newScheduleList = [];
 
         //該当のtodoは保存、削除かかわらず新しい予定リストに入れない
-        for (const [key, todo] of Object.entries(scheduleList)) {
-            if (todo.uuid !== todo.uuid) {
-                newScheduleList.push(todo);
+        for (const [key, value] of Object.entries(scheduleList)) {
+            if (value.uuid !== todo.uuid) {
+                newScheduleList.push(value);
             }
         }
 
