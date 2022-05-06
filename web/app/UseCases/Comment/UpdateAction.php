@@ -13,10 +13,10 @@ class UpdateAction
         $this->comment_repository = $commentRepositoryInterface;
     }
 
-    public function invoke(array $hypothesis)
+    public function invoke(array $todo)
     {
 
-        $this->comment_repository->updateComment($hypothesis);
+        $this->comment_repository->updateComment($todo);
         
         return; 
     }

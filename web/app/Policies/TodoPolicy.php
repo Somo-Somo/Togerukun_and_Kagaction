@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Hypothesis;
+use App\Models\Todo;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class HypothesisPolicy
+class TodoPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class HypothesisPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Hypothesis  $hypothesis
+     * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Hypothesis $hypothesis)
+    public function view(User $user, Todo $todo)
     {
         //
     }
@@ -48,10 +48,10 @@ class HypothesisPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Hypothesis  $hypothesis
+     * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Hypothesis $hypothesis)
+    public function update(User $user, Todo $todo)
     {
         //
     }
@@ -60,10 +60,10 @@ class HypothesisPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Hypothesis  $hypothesis
+     * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Hypothesis $hypothesis)
+    public function delete(User $user, Todo $todo)
     {
         //
     }
@@ -72,10 +72,10 @@ class HypothesisPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Hypothesis  $hypothesis
+     * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Hypothesis $hypothesis)
+    public function restore(User $user, Todo $todo)
     {
         //
     }
@@ -84,10 +84,10 @@ class HypothesisPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Hypothesis  $hypothesis
+     * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Hypothesis $hypothesis)
+    public function forceDelete(User $user, Todo $todo)
     {
         //
     }

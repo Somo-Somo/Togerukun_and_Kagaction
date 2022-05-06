@@ -31,7 +31,7 @@ const mutations = {
 const actions = {
     selectProject (context, project){
         context.commit ('setProject', project);
-        context.commit ('hypothesis/selectHypothesisList', project.uuid, { root: true });
+        context.commit ('todo/selectTodoList', project.uuid, { root: true });
     },
     async createProject (context, data) {
         await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
@@ -46,7 +46,7 @@ const actions = {
             context.commit ('auth/setApiStatus', true, {root: true});
             context.commit ('setProject', response.data.project);
             context.commit ('addProjectList', response.data.project);
-            context.commit ('hypothesis/selectHypothesisList', response.data.project.uuid, {root: true});
+            context.commit ('todo/selectTodoList', response.data.project.uuid, {root: true});
             return response.data;
         }
         else {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\UseCases\Hypothesis\Converter;
+namespace App\UseCases\Todo\Converter;
 
 use App\UseCases\Comment\Converter\CommentConverter;
 
-class HypothesisListConverter
+class TodoListConverter
 {
     protected $commentConverter;
 
@@ -13,21 +13,21 @@ class HypothesisListConverter
         $this->commentConverter = $commentConverter;
     }
 
-    public function invoke($fetchProjectAndHypothesisFromNeo4j)
+    public function invoke($fetchProjectAndTodoFromNeo4j)
     {
-        $arrayHypotheses= $fetchProjectAndHypothesisFromNeo4j->toArray();
+        $arrayTodoes= $fetchProjectAndTodoFromNeo4j->toArray();
 
         // 仮説の一覧を全部ぶち込む配列
-        $hypothesisList = [];
+        $todoList = [];
 
         // 仮説を親と紐付けてデータとして保管する配列
-        $hypothesisData = [];
+        $todoData = [];
 
-        // 親仮説それに紐づく子仮説の順番になるように配列$hypothesisListに追加
+        // 親仮説それに紐づく子仮説の順番になるように配列$todoListに追加
         // depth = 1 の場合「ゴール」。parentUuid = projectUuidで保存
-        // childはparentUuid = goal にして$hypothesisDataに保存
-        // depth = y > 1　の場合「仮説」。 hypothesisisDataから情報を持ってきてhypothesisListの配列に入れる。
-        foreach ($arrayHypotheses as $value) {
+        // childはparentUuid = goal にして$todoDataに保存
+        // depth = y > 1　の場合「仮説」。 todoisDataから情報を持ってきてtodoListの配列に入れる。
+        foreach ($arrayTodoes as $value) {
             $value = $value->toArray();
 
             // 親プロジェクト, 親仮説, 子仮説の値を取得
@@ -41,8 +41,8 @@ class HypothesisListConverter
             $comments = $fetchComments ? $this->commentConverter->invoke($fetchComments) : null;
 
             if ($childs) {
-                // 子どもに親のデータを持たせて$hypothesisDataに格納。
-                // 親になった時にこのhypothesisDataからhypothesisList仮説一覧配列に格納する
+                // 子どもに親のデータを持たせて$todoDataに格納。
+                // 親になった時にこのtodoDataからtodoList仮説一覧配列に格納する
                 foreach ($childs as $childValue) {
                     $child = $childValue->getProperties()->toArray();
 
@@ -55,17 +55,17 @@ class HypothesisListConverter
                     // 仮説一覧のトグルの状態
                     $child['toggle'] = 'mdi-menu-right';
                     
-                    $hypothesisData[$child['uuid']] = $child;
+                    $todoData[$child['uuid']] = $child;
                 }
                 // 子仮説がある場合
                 // 仮説にchild: true を持たせる
                 $len === 1 ? $parent['child'] = true 
-                    : $hypothesisData[$parent['uuid']]['child'] = true;
+                    : $todoData[$parent['uuid']]['child'] = true;
             } else {
                 // 子仮説がない場合
                 // 仮説にchild: false を持たせる
                 $len === 1 ? 
-                $parent['child'] = false : $hypothesisData[$parent['uuid']]['child'] = false;
+                $parent['child'] = false : $todoData[$parent['uuid']]['child'] = false;
             }
 
             
@@ -90,20 +90,20 @@ class HypothesisListConverter
                 $parent['comments'] = $comments ? $comments : [];
 
                 // ゴールは常に配列のケツに追加
-                $hypothesisList[$projectUuid][] = $parent;
+                $todoList[$projectUuid][] = $parent;
 
             } else {
                 // 日付
-                $hypothesisData[$parent['uuid']]['date'] =  $date ? $date['on'] : null;
+                $todoData[$parent['uuid']]['date'] =  $date ? $date['on'] : null;
                 // 完了
-                if ($value['accomplish']) $hypothesisData[$parent['uuid']]['accomplish'] = true;
+                if ($value['accomplish']) $todoData[$parent['uuid']]['accomplish'] = true;
                 //コメント
-                $hypothesisData[$parent['uuid']]['comments'] = $comments ? $comments : [];
-                // $hypothesisDataから
-                $hypothesisList[$projectUuid][] = $hypothesisData[$parent['uuid']];
+                $todoData[$parent['uuid']]['comments'] = $comments ? $comments : [];
+                // $todoDataから
+                $todoList[$projectUuid][] = $todoData[$parent['uuid']];
             }
         }
 
-        return $hypothesisList;
+        return $todoList;
     }
 }

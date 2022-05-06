@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\HypothesisController;
+use App\Http\Controllers\TodoController;
 use App\Http\Controllers\AccomplishController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\DateController;
@@ -39,27 +39,27 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/project/{projectId}', [ProjectController::class, 'destroy']);
 
     // 仮説
-    Route::get('/project', [HypothesisController::class, 'index']);
-    Route::get('/hypothesis/:hypothesisId', [HypothesisController::class, 'show']);
-    Route::post('/hypothesis', [HypothesisController::class, 'store']);
-    Route::put('/hypothesis/{hypothesisId}', [HypothesisController::class, 'update']);
-    Route::delete('/hypothesis/{hypothesisId}', [HypothesisController::class, 'destroy']);
+    Route::get('/project', [TodoController::class, 'index']);
+    Route::get('/todo/:todoId', [TodoController::class, 'show']);
+    Route::post('/todo', [TodoController::class, 'store']);
+    Route::put('/todo/{todoId}', [TodoController::class, 'update']);
+    Route::delete('/todo/{todoId}', [TodoController::class, 'destroy']);
 
     // ゴール
     Route::get('/goal', [GoalController::class, 'index']);
     Route::post('/goal', [GoalController::class, 'store']);
-    Route::delete('/goal/:hypothesisId', [GoalController::class, 'destroy']);
+    Route::delete('/goal/:todoId', [GoalController::class, 'destroy']);
 
     // 完了
-    Route::put('/hypothesis/{hypothesisId}/accomplish', [AccomplishController::class, 'update']);
-    Route::delete('/hypothesis/{hypothesisId}/accomplish', [AccomplishController::class, 'destroy']);
+    Route::put('/todo/{todoId}/accomplish', [AccomplishController::class, 'update']);
+    Route::delete('/todo/{todoId}/accomplish', [AccomplishController::class, 'destroy']);
 
     // 日付
-    Route::put('/hypothesis/{hypothesisId}/date', [DateController::class, 'update']);
-    Route::delete('/hypothesis/{hypothesisId}/date', [DateController::class, 'destroy']);
+    Route::put('/todo/{todoId}/date', [DateController::class, 'update']);
+    Route::delete('/todo/{todoId}/date', [DateController::class, 'destroy']);
 
     // コメント
-    Route::post('/hypothesis/{hypothesisId}/comment', [CommentController::class, 'store']);
+    Route::post('/todo/{todoId}/comment', [CommentController::class, 'store']);
     Route::put('/comment/{commentId}/', [CommentController::class, 'update']);
     Route::delete('/comment/{commentId}', [CommentController::class, 'destroy']);
 });

@@ -4,9 +4,9 @@ namespace App\UseCases\Project\Converter;
 
 class ProjectListConverter
 {
-    public function invoke($fetchProjectAndHypothesisFromNeo4j)
+    public function invoke($fetchProjectAndTodoFromNeo4j)
     {
-        $arrayProjectAndHypotheses= $fetchProjectAndHypothesisFromNeo4j->toArray();
+        $arrayProjectAndHypotheses= $fetchProjectAndTodoFromNeo4j->toArray();
 
         // プロジェクトの一覧を全部ぶち込む配列
         $projectList = [];

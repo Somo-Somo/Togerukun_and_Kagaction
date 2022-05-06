@@ -13,7 +13,7 @@
     ></v-app-bar-nav-icon>
     <v-toolbar-title class="d-flex justify-start mt-3 px-0 ml-md-2">
       <div 
-        v-if="!project && !hypothesis && !parentHypothesis"
+        v-if="!project && !todo && !parentTodo"
         class="d-flex align-self-center px-1"
       >
         <h1 :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 1rem'">
@@ -27,48 +27,48 @@
           text
         >
           <h1
-            :class="hypothesis ? 'omitHeaderTitle' : ''" 
+            :class="todo ? 'omitHeaderTitle' : ''" 
             :style="$vuetify.breakpoint.mdAndUp ? 
               'font-size: 18px' : 'font-size: 16px'"
             >{{ project.name }}</h1>
         </v-btn>
       </div>
-      <div v-if="hypothesis" class="d-flex align-self-center">
+      <div v-if="todo" class="d-flex align-self-center">
         <h1 
-          v-if="hypothesis.depth > 1" 
+          v-if="todo.depth > 1" 
           :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'"
          >/</h1>
         <h1 
-          v-if="hypothesis.depth > 1" 
+          v-if="todo.depth > 1" 
           :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'" 
           class="px-2"
          >...</h1>
       </div>
-      <div v-if="parentHypothesis" class="d-flex align-self-center"> 
+      <div v-if="parentTodo" class="d-flex align-self-center"> 
         <h1 :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'" class="d-flex align-self-center"> / </h1>
         <v-btn 
           class="px-2" 
-          @click="onClickHeaderTitle('hypothesis', parentHypothesis)" 
+          @click="onClickHeaderTitle('todo', parentTodo)" 
           text
         >
           <h1 
             class="omitHeaderTitle" 
             :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'
-            " >{{ parentHypothesis.name }}</h1>
+            " >{{ parentTodo.name }}</h1>
         </v-btn>
       </div>
-      <div v-if="hypothesis" class="d-flex align-self-center" >
+      <div v-if="todo" class="d-flex align-self-center" >
         <h1 :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'" class="d-flex align-self-center"> / </h1>
         <v-btn 
           class="px-2" 
-          @click="onClickHeaderTitle('hypothesis', hypothesis)" 
+          @click="onClickHeaderTitle('todo', todo)" 
           text
         >
           <h1 
             class="omitHeaderTitle" 
             :style="$vuetify.breakpoint.mdAndUp ? 'font-size: 18px' : 'font-size: 16px'" 
           > 
-            {{ hypothesis.name }} 
+            {{ todo.name }} 
           </h1>
         </v-btn>
       </div>
@@ -85,10 +85,10 @@ export default {
     project: {
       type: Object,
     },
-    hypothesis: {
+    todo: {
       type: Object,
     },
-    parentHypothesis: {
+    parentTodo: {
       type: Object,
     },
   },
@@ -106,9 +106,9 @@ export default {
         if (key === 'project') {
           await this.$store.dispatch("project/selectProject", value);
           this.$router.push({ path: "/project/" + value.uuid });
-        } else if (key === 'hypothesis') {
-          await this.$store.dispatch("hypothesis/selectHypothesis", value);
-          this.$router.push({ path: "/hypothesis/" + value.uuid });
+        } else if (key === 'todo') {
+          await this.$store.dispatch("todo/selectTodo", value);
+          this.$router.push({ path: "/todo/" + value.uuid });
         }        
       }
     }

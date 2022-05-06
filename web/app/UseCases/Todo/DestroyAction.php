@@ -1,10 +1,10 @@
 <?php
 
-namespace App\UseCases\Accomplish;
+namespace App\UseCases\Todo;
 
 use App\Repositories\Todo\TodoRepositoryInterface;
 
-class UpdateAction
+class DestroyAction
 {
     protected $todo_repository;
 
@@ -15,8 +15,8 @@ class UpdateAction
 
     public function invoke(array $todo)
     {
-
-        $this->todo_repository->updateAccomplish($todo);
-        return; 
+        $deletedDataFromDB = $this->todo_repository->destroy($todo);
+        
+        return $deletedDataFromDB;
     }
 }

@@ -12,18 +12,18 @@ class AccomplishController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  string  $hypothesisUuid
+     * @param  string  $todoUuid
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(string $hypothesisUuid, Request $request, UpdateAction $updateAction)
+    public function update(string $todoUuid, Request $request, UpdateAction $updateAction)
     {
-        $hypothesis = [
-            'uuid' => $hypothesisUuid,
+        $todo = [
+            'uuid' => $todoUuid,
             'user_email' => $request->user()->email,
         ];
 
-        $updateAction->invoke($hypothesis);
+        $updateAction->invoke($todo);
 
         $json = [
             'message' => '仮説の評価を更新しました',
@@ -36,18 +36,18 @@ class AccomplishController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $hypothesisUuid
+     * @param  string  $todoUuid
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $hypothesisUuid, Request $request, DestroyAction $destroyAction)
+    public function destroy(string $todoUuid, Request $request, DestroyAction $destroyAction)
     {
-        $hypothesis = [
-            'uuid' => $hypothesisUuid,
+        $todo = [
+            'uuid' => $todoUuid,
             'user_email' => $request->user()->email,
         ];
 
-        $destroyAction->invoke($hypothesis);
+        $destroyAction->invoke($todo);
 
         $json = [
             'message' => '仮説の評価を取り消しました',

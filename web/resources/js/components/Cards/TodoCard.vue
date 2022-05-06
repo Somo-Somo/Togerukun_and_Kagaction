@@ -3,30 +3,30 @@
   <v-list class="py-0" width="100%">
     <v-col 
       class="px-md-0"
-      v-for="hypothesis in selectHypothesisList" 
-      v-model="hypothesis.showHypothesisList"
-      :key="hypothesis.uuid"
-      :class="cardShow(hypothesis) ? '' : 'd-none'"
+      v-for="todo in selectTodoList" 
+      v-model="todo.showTodoList"
+      :key="todo.uuid"
+      :class="cardShow(todo) ? '' : 'd-none'"
       :style="$vuetify.breakpoint.smAndUp ? 'padding:8px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
       <!-- ToDo一覧 -->
       <div 
-        v-if="hypothesisStatus.name === 'ToDo一覧'"
+        v-if="todoStatus.name === 'ToDo一覧'"
         class="d-flex">
-        <div :style="depth(hypothesis)"></div>
-        <div v-if="hypothesis.child" class="d-flex align-content-center"> 
+        <div :style="depth(todo)"></div>
+        <div v-if="todo.child" class="d-flex align-content-center"> 
           <v-icon
-            v-if="hypothesis.toggle"
-            @click="onClickShowAndHideHypothesis(hypothesis)"
+            v-if="todo.toggle"
+            @click="onClickShowAndHideTodo(todo)"
             style="background-color: none;"
-            >{{ hypothesis.toggle }}
+            >{{ todo.toggle }}
           </v-icon>
         </div>
-        <div v-if="!hypothesis.child" style="width: 24px"></div>
+        <div v-if="!todo.child" style="width: 24px"></div>
       </div>
       <!-- 予定 -->
-      <div v-if="hypothesisStatus.name === 'ToDo一覧'" class="d-flex">
+      <div v-if="todoStatus.name === 'ToDo一覧'" class="d-flex">
       </div>
       <v-card class="rounded" style="width: 100%;" outlined>
         <v-list 
@@ -35,19 +35,19 @@
         >
           <v-list-item 
             style="width: 100%" 
-            @click="toHypothesisDetail(hypothesis)" 
+            @click="toTodoDetail(todo)" 
             link>
             <v-list-item-content class="pa-0 d-flex">
               <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
-                  <div class="d-flex pr-1" :style="subTitle(hypothesis).backgroundColor" v-if="subTitle(hypothesis)">
-                    <v-icon :size="subTitle(hypothesis).iconSize" :color="subTitle(hypothesis).iconColor">{{ subTitle(hypothesis).icon }}</v-icon>
+                  <div class="d-flex pr-1" :style="subTitle(todo).backgroundColor" v-if="subTitle(todo)">
+                    <v-icon :size="subTitle(todo).iconSize" :color="subTitle(todo).iconColor">{{ subTitle(todo).icon }}</v-icon>
                     <p
                       class="ma-0 px-2 font-weight-bold align-self-center"
-                      :class="subTitle(hypothesis).fontColor"
+                      :class="subTitle(todo).fontColor"
                       :style="$vuetify.breakpoint.smAndUp ? 'font-size:12px' : 'font-size:8px'"
                     >
-                       {{ subTitle(hypothesis).title }}
+                       {{ subTitle(todo).title }}
                     </p>
                   </div>
                   <div class="d-flex" style="max-width:66%"> 
@@ -55,13 +55,13 @@
                       class="ma-0 grey--text font-weight-bold align-self-center"
                       style="font-size: 8px; max-width:100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                     >
-                      {{ parentName(hypothesis) }}
+                      {{ parentName(todo) }}
                     </p>
                     <p
                         class="ma-0 grey--text font-weight-bold align-self-center"
                         style="font-size: 8px;"
                     >
-                     {{ parentType(hypothesis) }}
+                     {{ parentType(todo) }}
                     </p>
                   </div>
                 </v-list-item-subtitle>
@@ -71,7 +71,7 @@
                     style="max-width:calc(100% - 36px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                     :style="$vuetify.breakpoint.smAndUp ? 'font-size:1rem' : 'font-size:0.8rem'"
                   >
-                    {{ hypothesis.name }}
+                    {{ todo.name }}
                   </p></v-list-item-title
                 >
                 <v-menu class="rounded-lg elevation-0" offset-y>
@@ -95,7 +95,7 @@
                     </v-list-item-action>
                   </template>
                   <v-list>
-                    <v-list-item v-for="menu in cardMenu" :key="menu.title" @click="selectMenu(menu.title, hypothesis)" link>
+                    <v-list-item v-for="menu in cardMenu" :key="menu.title" @click="selectMenu(menu.title, todo)" link>
                       <v-list-item-title :style="menu.color">{{ menu.title }}</v-list-item-title>
                     </v-list-item>
                   </v-list>
@@ -109,21 +109,21 @@
     </v-col>
     <div
       class="my-4" 
-      v-show="!hypothesisStatus.show && hypothesisStatus.name !== 'ゴール' && hypothesisStatus.name !== '目標'"
+      v-show="!todoStatus.show && todoStatus.name !== 'ゴール' && todoStatus.name !== '目標'"
     >
       <p
         class="grey--text font-weight-bold ma-0 pa-md-2 px-4 py-2"
         :style="$vuetify.breakpoint.smAndUp ? 'font-size:18px;' : 'font-size:14px;'"
       >
-          {{hypothesisStatus.name}}はありません
+          {{todoStatus.name}}はありません
       </p>
     </div>
   </v-list>
     <DeletingConfirmationDialog 
       :deletingConfirmationDialog="deletingConfirmationDialog"
-      :selectedDeletingItemName="selectedDeletingHypothesis.name"
+      :selectedDeletingItemName="selectedDeletingTodo.name"
       :loading="false"
-      @deleteItem="deleteHypothesis"
+      @deleteItem="deleteTodo"
       @onClickCancel="onClickCancel"
     />
 </div>  
@@ -138,7 +138,7 @@ export default {
   },
   data: () => ({
     deletingConfirmationDialog: false,
-    selectedDeletingHypothesis: { name: null },
+    selectedDeletingTodo: { name: null },
     cardMenu: [
       {title: "削除", color:"color: red"},
     ],
@@ -163,138 +163,138 @@ export default {
     project : {
       type: Object,
     },
-    selectHypothesis : {
+    selectTodo : {
       type: Object,
     },
-    hypothesisList: {
+    todoList: {
       type: Array,
     },
-    hypothesisStatus: {
+    todoStatus: {
       type: Object,
     },
   },
   computed : {
-    selectHypothesisList(){
-      return this.hypothesisStatus.name === "予定" ? this.sortScheduleList() : this.hypothesisList;
+    selectTodoList(){
+      return this.todoStatus.name === "予定" ? this.sortScheduleList() : this.todoList;
     },
     cardShow() {
-      return function (hypothesis) {        
-        if (this.hypothesisStatus.name === "ゴール") 
-          return hypothesis.depth === 0 ? this.showHypothesis() : false;
+      return function (todo) {        
+        if (this.todoStatus.name === "ゴール") 
+          return todo.depth === 0 ? this.showTodo() : false;
         
-        if (this.hypothesisStatus.name === "ToDo一覧") {
-          if(hypothesis) this.hypothesisStatus.show = true;
-          if (hypothesis.depth === 0) hypothesis.showHypothesisList = true;
-          return hypothesis.showHypothesisList ? true : false;
+        if (this.todoStatus.name === "ToDo一覧") {
+          if(todo) this.todoStatus.show = true;
+          if (todo.depth === 0) todo.showTodoList = true;
+          return todo.showTodoList ? true : false;
         }
 
-        if (this.hypothesisStatus.name === "予定") 
-          return hypothesis.date && !hypothesis.accomplish ? this.showHypothesis() : false; 
+        if (this.todoStatus.name === "予定") 
+          return todo.date && !todo.accomplish ? this.showTodo() : false; 
 
-        if (this.hypothesisStatus.name === "完了") 
-          return hypothesis.accomplish ? this.showHypothesis() : false; 
+        if (this.todoStatus.name === "完了") 
+          return todo.accomplish ? this.showTodo() : false; 
 
-        if (this.hypothesisStatus.name === "ToDo") 
-          return this.selectHypothesis.uuid === hypothesis.parentUuid ? this.showHypothesis() : false;
+        if (this.todoStatus.name === "ToDo") 
+          return this.selectTodo.uuid === todo.parentUuid ? this.showTodo() : false;
 
         return false;
       }
     },
     subTitle() {
-      return (hypothesis) => {
-        if (hypothesis.accomplish) {
+      return (todo) => {
+        if (todo.accomplish) {
           return this.subtitle.accomplish; 
-        } else if (hypothesis.date) {
-          return this.calcDate(hypothesis);
+        } else if (todo.date) {
+          return this.calcDate(todo);
         } else {
           return false;
         }
       }  
     },
     parentName() {
-      return (hypothesis) => {
-        if (hypothesis.depth === 0) {
+      return (todo) => {
+        if (todo.depth === 0) {
            return '「' + this.project.name;
-        } else if (hypothesis.depth > 0)  {
+        } else if (todo.depth > 0)  {
           let parentName;
-          this.hypothesisList.map((value) => {
-            if (hypothesis.parentUuid === value.uuid) parentName =  value.name;
+          this.todoList.map((value) => {
+            if (todo.parentUuid === value.uuid) parentName =  value.name;
           })
           return '「' + parentName ;
         }
       }
     },
     parentType() {
-      return (hypothesis) => {
-        if (hypothesis.depth === 0)  return '」のゴール';
-        if (hypothesis.depth > 0) return '」のためのToDo';
+      return (todo) => {
+        if (todo.depth === 0)  return '」のゴール';
+        if (todo.depth > 0) return '」のためのToDo';
       }
     },
     depth() {
-      return (hypothesis) => {
-        return 'padding-left:'+(Number(hypothesis.depth) * 8) + 'px'; 
+      return (todo) => {
+        return 'padding-left:'+(Number(todo.depth) * 8) + 'px'; 
       }
     } 
   },
   methods: {
-    showHypothesis(){
-      this.hypothesisStatus.show = true;
+    showTodo(){
+      this.todoStatus.show = true;
       return true;
     },
-    async toHypothesisDetail (hypothesis) {
-      await this.$store.dispatch("hypothesis/selectHypothesis", hypothesis);
-      return this.$router.push({ path: "/hypothesis/" + hypothesis.uuid });
+    async toTodoDetail (todo) {
+      await this.$store.dispatch("todo/selectTodo", todo);
+      return this.$router.push({ path: "/todo/" + todo.uuid });
     },
-    selectMenu(menuTitle, hypothesis){
+    selectMenu(menuTitle, todo){
       if (menuTitle === "削除") {
         this.deletingConfirmationDialog = true;
-        this.selectedDeletingHypothesis = hypothesis;
+        this.selectedDeletingTodo = todo;
       }
     },
-    async deleteHypothesis(){
+    async deleteTodo(){
       this.deletingConfirmationDialog = false;
-      await this.$store.dispatch("hypothesis/deleteHypothesis", this.selectedDeletingHypothesis);
-      this.selectedDeletingHypothesis = { name: null };
+      await this.$store.dispatch("todo/deleteTodo", this.selectedDeletingTodo);
+      this.selectedDeletingTodo = { name: null };
     },
     onClickCancel(){
       this.deletingConfirmationDialog = false;
-      this.selectedDeletingHypothesis = { name: null };
+      this.selectedDeletingTodo = { name: null };
     },
-    onClickShowAndHideHypothesis(hypothesis){
-      for (const hypothesisKey in this.hypothesisList) {
-        let key = Number(hypothesisKey);
+    onClickShowAndHideTodo(todo){
+      for (const todoKey in this.todoList) {
+        let key = Number(todoKey);
        // クリックされた仮説と同じ仮説の時
-       if (hypothesis.uuid === this.hypothesisList[hypothesisKey].uuid) {
-         this.hypothesisList[hypothesisKey].toggle = 
-          hypothesis.toggle === "mdi-menu-right" ? "mdi-menu-down" : "mdi-menu-right"; 
+       if (todo.uuid === this.todoList[todoKey].uuid) {
+         this.todoList[todoKey].toggle = 
+          todo.toggle === "mdi-menu-right" ? "mdi-menu-down" : "mdi-menu-right"; 
        }
         // クリックされた仮説の子仮説の時
-       if (hypothesis.uuid === this.hypothesisList[hypothesisKey].parentUuid){  
+       if (todo.uuid === this.todoList[todoKey].parentUuid){  
           // onClickOpenの時   
-          if (hypothesis.toggle === "mdi-menu-down") {
-            this.hypothesisList[key].showHypothesisList = true;
+          if (todo.toggle === "mdi-menu-down") {
+            this.todoList[key].showTodoList = true;
           } 
           // onClickCloseの時
-          else if (hypothesis.toggle === "mdi-menu-right") {
-            this.hypothesisList[key].showHypothesisList = false;
-            while (key < Object.keys(this.hypothesisList).length) {
-              if(this.hypothesisList[Number(hypothesisKey)].depth > this.hypothesisList[key].depth) break;
-              this.hypothesisList[key].showHypothesisList = false;
-              if(this.hypothesisList[key].toggle === "mdi-menu-down") 
-                this.hypothesisList[key].toggle = "mdi-menu-right";
-              if(key + 1 === Object.keys(this.hypothesisList).length) break;
+          else if (todo.toggle === "mdi-menu-right") {
+            this.todoList[key].showTodoList = false;
+            while (key < Object.keys(this.todoList).length) {
+              if(this.todoList[Number(todoKey)].depth > this.todoList[key].depth) break;
+              this.todoList[key].showTodoList = false;
+              if(this.todoList[key].toggle === "mdi-menu-down") 
+                this.todoList[key].toggle = "mdi-menu-right";
+              if(key + 1 === Object.keys(this.todoList).length) break;
               key = key + 1;
             }
           } 
        }
-       this.$set(this.hypothesisList, key, this.hypothesisList[key]);
-       this.cardShow(this.hypothesisList[key]);
+       this.$set(this.todoList, key, this.todoList[key]);
+       this.cardShow(this.todoList[key]);
       }
-      return this.hypothesisList;
+      return this.todoList;
     },
-    calcDate (hypothesis){
+    calcDate (todo){
         const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
-        const diff = (new Date(hypothesis.date) - new Date(today)) / (60*60*1000*24);
+        const diff = (new Date(todo.date) - new Date(today)) / (60*60*1000*24);
         if (diff > 0) {
           this.subtitle.date.title = '残り' + diff + '日';
           this.subtitle.date.backgroundColor = diff < 4 ? 'background-color: yellow' : null;
@@ -309,7 +309,7 @@ export default {
     },
     sortScheduleList (){
         const scheduleList = [];
-        for (const [key, todo] of Object.entries(this.hypothesisList)) {
+        for (const [key, todo] of Object.entries(this.todoList)) {
           if (todo.date) scheduleList.push(todo);
         }
         let sortScheduleList = scheduleList.sort(function(a, b) {
@@ -319,7 +319,7 @@ export default {
     }
   },
   watch: {
-    hypothesisList (next,prev) {
+    todoList (next,prev) {
       return;
     }
   }

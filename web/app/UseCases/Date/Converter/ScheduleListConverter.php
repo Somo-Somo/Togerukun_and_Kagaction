@@ -14,7 +14,7 @@ class ScheduleListConverter
             // プロジェクト, Todo, Dateを取得
             $value = $value->toArray();
             $project = $value['project']->getProperties()->toArray();
-            $todo = $value['hypothesis']->getProperties()->toArray();
+            $todo = $value['todo']->getProperties()->toArray();
             $date = $value['date']->getProperties()->toArray();
             $parent = $value['parent'] ? $value['parent']->getProperties()->toArray() : null;
             $len = $value['length(len)'];

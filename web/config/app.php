@@ -173,12 +173,8 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\GoalServiceProvider::class,
         App\Providers\Neo4jDBServiceProvider::class,
-        App\Providers\HypothesisServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\UserServiceProvider::class,
-
     ],
 
     /*

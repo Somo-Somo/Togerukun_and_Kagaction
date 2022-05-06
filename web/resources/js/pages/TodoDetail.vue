@@ -6,16 +6,16 @@
   >
      <Header 
       :project="project"
-      :hypothesis="hypothesis"
-      :parentHypothesis="parentHypothesis"
+      :todo="todo"
+      :parentTodo="parentTodo"
       />
       <template>
         <div
           class="d-flex flex-column"
           :class="
             $vuetify.breakpoint.mdAndUp
-              ? 'hypothesisDetailMain'
-              : 'spHypothesisDetailMain'
+              ? 'todoDetailMain'
+              : 'spTodoDetailMain'
           "
         >
           <div class="py-2 py-md-4 d-flex justify-start flex-column">
@@ -23,16 +23,16 @@
               class="pa-md-0 d-flex"
               :class="
                 $vuetify.breakpoint.mdAndUp
-                  ? 'hypothesisSubTitle'
-                  : 'spHypothesisSubTitle'
+                  ? 'todoSubTitle'
+                  : 'spTodoSubTitle'
               "
             >
               <p class="ma-0 font-weight-bold" color="grey darken-1">{{ subHeader }}</p>
             </v-subheader>
             <v-textarea
               label="名前を入力"
-              v-model="hypothesis.name"
-              @change="editHypothesisName"
+              v-model="todo.name"
+              @change="editTodoName"
               class="pa-0 "
               rows="1"
               :class="$vuetify.breakpoint.smAndUp ? 'text-h5' : 'text-h6'"
@@ -54,16 +54,16 @@
                 class="d-flex align-self-center pa-md-0"
                 :class="
                   $vuetify.breakpoint.mdAndUp
-                    ? 'hypothesisSubTitle'
-                    : 'spHypothesisSubTitle'
+                    ? 'todoSubTitle'
+                    : 'spTodoSubTitle'
                 "
               >
                 <p class="ma-0 font-weight-bold" style="min-width:36px;" color="grey darken-1">完了：</p>
               </v-subheader>
               <v-col class="px-4 py-0 d-flex align-self-center">
                 <v-checkbox
-                  v-model="hypothesis.accomplish"
-                  @click="onClickAccomplish(hypothesis.accomplish)"
+                  v-model="todo.accomplish"
+                  @click="onClickAccomplish(todo.accomplish)"
                 ></v-checkbox>
               </v-col>
             </div>
@@ -101,7 +101,7 @@
               </v-tabs>
               <v-subheader
                 v-if="tab === 0"
-                class="px-md-0 mt-3 hypothesisSubTitle"
+                class="px-md-0 mt-3 todoSubTitle"
                 v-show="$vuetify.breakpoint.smAndUp"
               >
                 <p 
@@ -110,7 +110,7 @@
                   style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                   :style="$vuetify.breakpoint.smAndUp ? 'max-width: 70%' : 'max-width: 40vw'"
                 >
-                  「{{hypothesis.name}}
+                  「{{todo.name}}
                 </p>
                 <p class="ma-0 font-weight-black caption align-self-center" color="grey lighten-1">
                   {{ assistSubHeaderText(tab) }}
@@ -121,15 +121,15 @@
               class="overflow-y-auto d-flex flex-column"
               :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
             >
-              <HypothesisCards 
+              <TodoCards 
                 v-if="tab === 0"
                :project="project" 
-               :selectHypothesis="hypothesis" 
-               :hypothesisList="hypothesisList" 
-               :hypothesisStatus="linkedToDo[0]" />
+               :selectTodo="todo" 
+               :todoList="todoList" 
+               :todoStatus="linkedToDo[0]" />
                <Comments 
-                v-if="tab === 1 && hypothesis.comments.length > 0"
-                :hypothesis="hypothesis"
+                v-if="tab === 1 && todo.comments.length > 0"
+                :todo="todo"
                />
               <!-- PC版追加カード -->
               <NewAdditionalCard 
@@ -157,7 +157,7 @@
 <script>
 import Header from "../components/Header.vue";
 import Calender from "../components/Calender.vue";
-import HypothesisCards from "../components/Cards/HypothesisCard.vue";
+import TodoCards from "../components/Cards/TodoCard.vue";
 import Comments from "../components/Comments.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
@@ -168,7 +168,7 @@ export default {
   components: {
     Header,
     Calender,
-    HypothesisCards,
+    TodoCards,
     Comments,
     NewAdditionalCard,
     SpBottomBtn,
@@ -193,16 +193,16 @@ export default {
       inputFormName: 'form/name',
       inputForm: 'form/inputForm',
       project: 'project/project',
-      hypothesis: 'hypothesis/hypothesis',
-      parentHypothesis: 'hypothesis/parentHypothesis',
-      hypothesisList: 'hypothesis/hypothesisList',
+      todo: 'todo/todo',
+      parentTodo: 'todo/parentTodo',
+      todoList: 'todo/todoList',
     }),
     subHeader() {
-      return this.hypothesis.depth === 0 ? 'ゴール' : '｢'+ this.parentHypothesis.name +'｣ ためのToDo';
+      return this.todo.depth === 0 ? 'ゴール' : '｢'+ this.parentTodo.name +'｣ ためのToDo';
     },
     additionalInputFormLabel(){
       if (this.tab === 0) {
-        return '「' +this.hypothesis.name + '」ためのToDo';
+        return '「' +this.todo.name + '」ためのToDo';
       } else {
         return 'コメント';
       }
@@ -218,8 +218,8 @@ export default {
   methods: {
     onClickAccomplish (accomplish){
       this.$store.dispatch(
-        "hypothesis/updateAccomplish",
-         { accomplish:accomplish, hypothesisUuid:this.hypothesis.uuid }
+        "todo/updateAccomplish",
+         { accomplish:accomplish, todoUuid:this.todo.uuid }
       );
     },
     onClickCreate () {
@@ -234,28 +234,28 @@ export default {
       this.$store.dispatch("form/closeForm");
       if (this.inputFormName && this.tab === 0) {
         this.$store.dispatch(
-          "hypothesis/createHypothesis", 
-          {parent: this.hypothesis, name: this.inputFormName}
+          "todo/createTodo", 
+          {parent: this.todo, name: this.inputFormName}
         );
       } else if (this.inputFormName && this.tab === 1) {
         this.$store.dispatch(
-          "hypothesis/createComment", 
-          {hypothesis: this.hypothesis, text: this.inputFormName, user: this.user}
+          "todo/createComment", 
+          {todo: this.todo, text: this.inputFormName, user: this.user}
         );
       }
       this.form = false;
     },
-    editHypothesisName(){
-      if (this.hypothesis.name) {
-        this.$store.dispatch("hypothesis/editHypothesis", this.hypothesis);
+    editTodoName(){
+      if (this.todo.name) {
+        this.$store.dispatch("todo/editTodo", this.todo);
       }
     },
   },
   watch: {
     $route (to, from) {
       //ブラウザバックで戻った先が再び仮説詳細ページだった場合
-      if (to.params.id === this.parentHypothesis.uuid) {
-        this.$store.dispatch("hypothesis/selectHypothesis", this.parentHypothesis);
+      if (to.params.id === this.parentTodo.uuid) {
+        this.$store.dispatch("todo/selectTodo", this.parentTodo);
       }
     },
     inputForm(inputForm) {
@@ -268,20 +268,20 @@ export default {
 </script>
 
 <style scoped lang='sass'>
-.hypothesisDetailMain
+.todoDetailMain
   width: 772px
   position: fixed
 
-.spHypothesisDetailMain
+.spTodoDetailMain
   width: calc(100vw - 24px)
   position: fixed
   top: 72px
 
-.hypothesisSubTitle
+.todoSubTitle
   font-size: 1rem
   height: 36px
 
-.spHypothesisSubTitle
+.spTodoSubTitle
   font-size: 12px
   height: 24px
   padding: 0 0 0 12px
