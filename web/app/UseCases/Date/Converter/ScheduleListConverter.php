@@ -2,8 +2,17 @@
 
 namespace App\UseCases\Date\Converter;
 
+use App\UseCases\Comment\Converter\CommentConverter;
+
 class ScheduleListConverter
 {
+    protected $commentConverter;
+
+    public function __construct(CommentConverter $commentConverter)
+    {
+        $this->commentConverter = $commentConverter;
+    }
+
     public function invoke($fetchTodoAndDate)
     {
         $arrayTodoAndDate = $fetchTodoAndDate->toArray();
@@ -19,6 +28,8 @@ class ScheduleListConverter
             $parent = $value['parent'] ? $value['parent']->getProperties()->toArray() : null;
             $len = $value['length(len)'];
             $child = $value['collect(child)'];
+            $fetchComments = $value['comments'] ? $value['comments']->toArray() : null;
+            $comments = $fetchComments ? $this->commentConverter->invoke($fetchComments) : null;
 
             // Todoにプロジェクトuuidとdateを合体させる
             $todo['projectUuid'] = $project['uuid'];
@@ -27,6 +38,7 @@ class ScheduleListConverter
             $todo['parentUuid'] = $parent ? $parent['uuid'] : $project['uuid'];
             $todo['depth'] = (int)$len - 1;
             $todo['child'] = $child ? true : false;
+            $todo['comments'] = $comments ? $comments : [];
             if($child) $todo['toggle'] = 'mdi-menu-right';
 
             array_push($scheduleList, $todo);
