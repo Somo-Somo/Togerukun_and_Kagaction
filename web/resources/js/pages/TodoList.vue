@@ -19,11 +19,11 @@
             <v-tabs-slider color="#80CBC4"></v-tabs-slider>
             <v-tab
               class="px-0"
-              v-for="hypothesisStatus in hypothesisStatuses"
-              :key="hypothesisStatus.name"
+              v-for="todoStatus in todoStatuses"
+              :key="todoStatus.name"
               :class="$vuetify.breakpoint.mdAndUp ? '' : 'spTabStyle'"
             >
-              <p class="ma-0 font-weight-bold">{{ hypothesisStatus.name }}</p>
+              <p class="ma-0 font-weight-bold">{{ todoStatus.name }}</p>
             </v-tab>
           </v-tabs>
           <v-icon
@@ -42,17 +42,17 @@
           :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
           <v-tabs-items class="overflow-y-auto" v-model="tab">
-            <v-tab-item v-for="hypothesisStatus in hypothesisStatuses" :key="hypothesisStatus.name">
-              <HypothesisCards
+            <v-tab-item v-for="todoStatus in todoStatuses" :key="todoStatus.name">
+              <TodoCards
               :project="project" 
-              :hypothesisList="hypothesisList" 
-              :hypothesisStatus="hypothesisStatuses[tab]" 
+              :todoList="todoList" 
+              :todoStatus="todoStatuses[tab]" 
               />
               <!-- PC版追加カード -->
               <NewAdditionalCard
                 v-if="tab === 0"
                 @clickAditional="onClickCreate"
-                :category="hypothesisStatus.name"
+                :category="todoStatus.name"
               />
                     
             </v-tab-item>
@@ -71,7 +71,7 @@
           v-if="form"
           @onClickCancel="onClickCancel"
           @submitForm="submitForm"
-          :category="hypothesisStatuses[0].name"
+          :category="todoStatuses[0].name"
           :inputForm="inputForm"
           :loading="submitLoading" 
         />
@@ -81,7 +81,7 @@
 
 <script>
 import Header from "../components/Header.vue";
-import HypothesisCards from "../components/Cards/HypothesisCard.vue";
+import TodoCards from "../components/Cards/TodoCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
 import InputForm from "../components/InputForm.vue";
@@ -90,14 +90,14 @@ import { mapGetters, mapState } from 'vuex';
 export default {
   components: {
     Header,
-    HypothesisCards,
+    TodoCards,
     NewAdditionalCard,
     SpBottomBtn,
     InputForm,
   },
   data: () => ({
     tab: null,
-    hypothesisStatuses: [
+    todoStatuses: [
       {name : "ゴール", show: false},
       {name : "ToDo一覧", show: false},
       {name : "予定", show: false}, 
@@ -115,7 +115,7 @@ export default {
       name: 'form/name',
       inputForm: 'form/inputForm',
       project: 'project/project',
-      hypothesisList: 'hypothesis/hypothesisList',
+      todoList: 'todo/todoList',
     })
   },
   methods: {
@@ -130,8 +130,8 @@ export default {
     submitForm(){      
       this.$store.dispatch("form/closeForm");
       this.$store.dispatch(
-        "hypothesis/createGoal", 
-        {project: this.project, hypothesisName: this.name}
+        "todo/createGoal", 
+        {project: this.project, todoName: this.name}
       );
       this.form = false;
     }
