@@ -13,10 +13,10 @@ class UpdateAction
         $this->date_repository = $dateRepositoryInterface;
     }
 
-    public function invoke(array $hypothesis)
+    public function invoke(array $todo)
     {
 
-        $this->date_repository->updateDate($hypothesis);
+        $this->date_repository->updateDate($todo);
         
         return; 
     }
