@@ -25,6 +25,18 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\Comment\CommentRepositoryInterface::class,
             \App\Repositories\Comment\CommentRepository::class,
         );
+        $this->app->bind( 
+            \App\Repositories\Todo\TodoRepositoryInterface::class,
+            \App\Repositories\Todo\TodoRepository::class,
+        );
+        $this->app->bind( 
+            \App\Repositories\Goal\GoalRepositoryInterface::class,
+            \App\Repositories\Goal\GoalRepository::class,
+        );
+        $this->app->bind( 
+            \App\Repositories\User\UserRepositoryInterface::class,
+            \App\Repositories\User\UserRepository::class,
+        );
     }
 
     /**
