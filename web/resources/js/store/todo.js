@@ -159,6 +159,7 @@ const actions = {
             uuid: uuidv4(),
             parentUuid: project.uuid,
             depth: 0,
+            comments: [],
             child: false,
         };
 
@@ -185,6 +186,7 @@ const actions = {
             uuid: uuidv4(),
             parentUuid: parent.uuid,
             depth: Number(parent.depth) + 1,
+            comments: [],
             child: false,
         };
 
