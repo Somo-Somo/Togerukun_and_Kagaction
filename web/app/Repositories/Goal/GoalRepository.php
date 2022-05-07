@@ -22,7 +22,7 @@ class GoalRepository implements GoalRepositoryInterface
                 CREATE (user)-[
                             :CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}
                         ]->(
-                           hypothesis:Hypothesis {
+                           todo:Todo {
                                 name: $name,
                                 uuid: $uuid,
                                 status: null,
@@ -30,7 +30,7 @@ class GoalRepository implements GoalRepositoryInterface
                         })-[
                             :IS_THE_GOAL_OF{at:localdatetime({timezone: 'Asia/Tokyo'})}  
                         ]->(project)
-                RETURN hypothesis, project
+                RETURN todo, project
                 CYPHER,
                 [
                     'name' => $goal['name'], 

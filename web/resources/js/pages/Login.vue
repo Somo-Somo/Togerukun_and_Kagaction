@@ -191,7 +191,7 @@ export default {
       await this.$store.dispatch("auth/login", this.loginForm);
 
       if (this.apiStatus) {
-        const data = await this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
+        const data = await this.$store.dispatch("initialize/getUserHasProjectAndTodo", this.$route);
         this.loading = false;
         if (Object.keys(data.schedule).length) {
           this.$router.push("/schedule");

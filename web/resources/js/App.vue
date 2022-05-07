@@ -48,7 +48,7 @@ export default {
   },
   created(){
     if(this.check){
-      this.$store.dispatch("initialize/getUserHasProjectAndHypothesis", this.$route);
+      this.$store.dispatch("initialize/getUserHasProjectAndTodo", this.$route);
     } else {
        this.$router.push('/login');
     }

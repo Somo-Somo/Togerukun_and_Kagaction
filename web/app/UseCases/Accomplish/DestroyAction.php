@@ -2,20 +2,20 @@
 
 namespace App\UseCases\Accomplish;
 
-use App\Repositories\Hypothesis\HypothesisRepositoryInterface;
+use App\Repositories\Todo\TodoRepositoryInterface;
 
 class DestroyAction
 {
-    protected $hypothesis_repository;
+    protected $todo_repository;
 
-    public function __construct(HypothesisRepositoryInterface $hypothesisRepositoryInterface)
+    public function __construct(TodoRepositoryInterface $todoRepositoryInterface)
     {
-        $this->hypothesis_repository = $hypothesisRepositoryInterface;
+        $this->todo_repository = $todoRepositoryInterface;
     }
 
-    public function invoke(array $hypothesis)
+    public function invoke(array $todo)
     {
-        $this->hypothesis_repository->destroyAccomplish($hypothesis);
+        $this->todo_repository->destroyAccomplish($todo);
         return; 
     }
 }

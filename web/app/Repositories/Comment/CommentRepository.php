@@ -18,19 +18,19 @@ class CommentRepository implements CommentRepositoryInterface
     {
         $comments = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }) - [:CREATED] -> (hypothesis:Hypothesis {uuid: $hypothesis_uuid})
+                MATCH (user:User { email : $user_email }) - [:CREATED] -> (todo:Todo {uuid: $todo_uuid})
                 CREATE (comment:Comment{
                     uuid: $comment_uuid,
                     text: $text
                 }) - [
                     to:TO{at:localdatetime({timezone: 'Asia/Tokyo'})}
-                ] -> (hypothesis)
+                ] -> (todo)
                 CREATE (user) - [created:CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (comment)
-                RETURN user, hypothesis, comment
+                RETURN user, todo, comment
                 CYPHER,
                 [
                     'user_email' => $comment['user_email'],
-                    'hypothesis_uuid' => $comment['hypothesis_uuid'],
+                    'todo_uuid' => $comment['todo_uuid'],
                     'comment_uuid' => $comment['comment_uuid'],
                     'text' => $comment['text']
                 ]
@@ -40,7 +40,7 @@ class CommentRepository implements CommentRepositoryInterface
 
     public function updateComment(array $comment)
     {
-        $updateHypothesisComment = $this->client->run(
+        $updateTodoComment = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (comment:Comment { uuid: $uuid })
                 SET comment.text = $text
@@ -67,7 +67,7 @@ class CommentRepository implements CommentRepositoryInterface
         $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - [created:CREATED] -> (comment:Comment { uuid : $comment_uuid }),
-                (comment) - [to: TO] -> (hypothesis:Hypothesis)
+                (comment) - [to: TO] -> (todo:Todo)
                 DELETE to, created
                 DELETE comment
                 RETURN user

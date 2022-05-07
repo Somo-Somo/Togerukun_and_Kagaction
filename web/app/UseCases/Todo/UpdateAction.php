@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UseCases\Accomplish;
+namespace App\UseCases\Todo;
 
 use App\Repositories\Todo\TodoRepositoryInterface;
 
@@ -16,7 +16,8 @@ class UpdateAction
     public function invoke(array $todo)
     {
 
-        $this->todo_repository->updateAccomplish($todo);
+        $this->todo_repository->update($todo);
+        
         return; 
     }
 }

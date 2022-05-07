@@ -3,7 +3,7 @@
     <v-list>
         <v-list-item
             class="d-flex px-1 py-2"
-            v-for="(comment, index) in hypothesis.comments"
+            v-for="(comment, index) in todo.comments"
             @mouseover="commentIndex = index"
             @mouseout="commentIndex = false"
             :key="index"
@@ -98,7 +98,7 @@ export default {
         selectedDeletingComment: { text: null },
     }),
     props: {
-        hypothesis: {
+        todo: {
             type: Object,
         },
     },
@@ -123,18 +123,18 @@ export default {
         },
         onClickCancel(){
             this.deletingConfirmationDialog = false;
-            this.selectedDeletingHypothesis = { text: null };
+            this.selectedDeletingTodo = { text: null };
         },
         async deleteComment(){
             this.deletingConfirmationDialog = false;
             await this.$store.dispatch(
-                "hypothesis/deleteComment", 
+                "todo/deleteComment", 
                 {
-                    hypothesis: this.hypothesis,
+                    todo: this.todo,
                     comment: this.selectedDeletingComment,
                 }
             );
-            this.selectedDeletingHypothesis = { text: null };
+            this.selectedDeletingTodo = { text: null };
         }
     },
 };

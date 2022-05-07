@@ -18,12 +18,15 @@ class DateRepository implements DateRepositoryInterface
     {
         $todoAndSchedule = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }) - [date:DATE] -> (hypothesis:Hypothesis),
-                len = (project:Project) <- [r*] - (hypothesis)
-                OPTIONAL MATCH (user) - [accomplished:ACCOMPLISHED] -> (hypothesis)
-                OPTIONAL MATCH (hypothesis) - [:TO_ACHIEVE] -> (parent:Hypothesis)
-                OPTIONAL MATCH (hypothesis) <- [:TO_ACHIEVE] - (child:Hypothesis)
-                RETURN project, hypothesis, accomplished, date, parent, length(len), collect(child)
+                MATCH (user:User { email : $user_email }) - [date:DATE] -> (todo:Todo),
+                len = (project:Project) <- [r*] - (todo)
+                OPTIONAL MATCH (user) - [accomplished:ACCOMPLISHED] -> (todo)
+                OPTIONAL MATCH (todo) - [:TO_ACHIEVE] -> (parent:Todo)
+                OPTIONAL MATCH (todo) <- [:TO_ACHIEVE] - (child:Todo)
+                OPTIONAL MATCH (parent)<-[:TO]-(comment:Comment)
+                OPTIONAL MATCH comments = (:User)-[:CREATED]->(comment:Comment)
+                WITH project,todo,parent,child,len,date,accomplished,comments ORDER BY comment
+                RETURN project, todo, accomplished, date, parent, length(len), collect(child), collect(DISTINCT comments) AS comments
                 ORDER BY date.on ASC
                 CYPHER,
                 [
@@ -33,43 +36,43 @@ class DateRepository implements DateRepositoryInterface
         return $todoAndSchedule;
     }
 
-    public function updateDate(array $hypothesis)
+    public function updateDate(array $todo)
     {
-        $updateHypothesisDate = $this->client->run(
+        $updateTodoDate = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }), (hypothesis:Hypothesis { uuid: $uuid })
-                OPTIONAL MATCH x = (user) - [date:DATE] -> (hypothesis)
+                MATCH (user:User { email : $user_email }), (todo:Todo { uuid: $uuid })
+                OPTIONAL MATCH x = (user) - [date:DATE] -> (todo)
                 WHERE x IS NOT NULL
                 SET date.on = $date
-                WITH user, hypothesis, x
+                WITH user, todo, x
                 WHERE x IS NULL
                 CREATE (user) - [
                     :DATE { on: $date }
-                ] -> (hypothesis)
-                RETURN hypothesis
+                ] -> (todo)
+                RETURN todo
                 CYPHER,
                 [
-                    'uuid' => $hypothesis['uuid'], 
-                    'user_email' => $hypothesis['user_email'], 
-                    'date' => $hypothesis['date']
+                    'uuid' => $todo['uuid'], 
+                    'user_email' => $todo['user_email'], 
+                    'date' => $todo['date']
                 ]
             );
         return;
     }
 
-    public function destroyDate(array $hypothesis)
+    public function destroyDate(array $todo)
     {
-        $deleteHypothesisDate = $this->client->run(
+        $deleteTodoDate = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - 
                 [date: DATE]
-                ->(hypothesis:Hypothesis { uuid: $uuid })
+                ->(todo:Todo { uuid: $uuid })
                 DELETE date
-                RETURN hypothesis
+                RETURN todo
                 CYPHER,
                 [
-                    'uuid' => $hypothesis['uuid'], 
-                    'user_email' => $hypothesis['user_email']
+                    'uuid' => $todo['uuid'], 
+                    'user_email' => $todo['user_email']
                 ]
             );
         return;

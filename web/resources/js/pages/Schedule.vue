@@ -41,7 +41,7 @@
           
         <ScheduleCards
             :projectList="projectList" 
-            :hypothesisList="hypothesisList" 
+            :todoList="todoList" 
             :scheduleList="scheduleList"
             :period="periods[tab]"
             :loading="loading" 
@@ -75,7 +75,7 @@ export default {
     ...mapGetters({
       loading: 'initialize/loading',
       projectList: 'project/projectList',
-      hypothesisList: 'hypothesis/hypothesisList',
+      todoList: 'todo/todoList',
       scheduleList: 'schedule/scheduleList',
     }),
   }

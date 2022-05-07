@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\UseCases\Hypothesis\StoreAction;
-use App\UseCases\Hypothesis\UpdateAction;
-use App\UseCases\Hypothesis\DestroyAction;
+use App\UseCases\Todo\StoreAction;
+use App\UseCases\Todo\UpdateAction;
+use App\UseCases\Todo\DestroyAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
 
-class HypothesisController extends Controller
+class TodoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,19 +25,19 @@ class HypothesisController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\UseCases\Hypothesis\StoreAction  $storeAction
+     * @param  \App\UseCases\Todo\StoreAction  $storeAction
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, StoreAction $storeAction)
     {
-        $hypothesis = [
+        $todo = [
             'name' => $request->name,
             'uuid' => $request->uuid,
             'parent_uuid' => $request->parentUuid,
             'created_by_user_email' => $request->user()->email,
         ];
 
-        $storeAction->invoke($hypothesis);
+        $storeAction->invoke($todo);
 
        $json = [
             'message' => '仮設が追加されました',
@@ -67,13 +67,13 @@ class HypothesisController extends Controller
      */
     public function update(Request $request, UpdateAction $updateAction)
     {
-        $hypothesis = [
+        $todo = [
             'name' => $request->name,
             'uuid' => $request->uuid,
             'user_email' => $request->user()->email,
         ];
 
-        $updateAction->invoke($hypothesis);
+        $updateAction->invoke($todo);
 
         $json = [
             'message' => '仮説名を更新しました',
@@ -86,21 +86,21 @@ class HypothesisController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $hypothesisUuid
+     * @param  string  $todoUuid
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $hypothesisUuid, Request $request, DestroyAction $destroyAction)
+    public function destroy(string $todoUuid, Request $request, DestroyAction $destroyAction)
     {
-        $hypothesis = [
-            'uuid' => $hypothesisUuid,
+        $todo = [
+            'uuid' => $todoUuid,
             'user_email' => $request->user()->email,
         ];
 
-        $deletingHypothesis = $destroyAction->invoke($hypothesis);
+        $deletingTodo = $destroyAction->invoke($todo);
 
         $json = [
-            'hypothesis' => $deletingHypothesis,
+            'todo' => $deletingTodo,
             'message' => 'プロジェクトを削除しました',
             'error' => '',
         ];

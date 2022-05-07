@@ -10,7 +10,7 @@
         <template class="d-flex" v-slot:activator="{ on, attrs }">
             <v-text-field
                 class="d-flex align-self-center ma-0 pt-5"
-                v-model="hypothesis.date"
+                v-model="todo.date"
                 :prepend-icon="$vuetify.breakpoint.smAndUp ? 'mdi-calendar' : null"
                 readonly
                 v-bind="attrs"
@@ -20,19 +20,19 @@
             <v-btn
                 class="d-flex align-self-center" 
                 style="position: relative; left: -20px;"
-                @click="removeDate(hypothesis.date)"
+                @click="removeDate(todo.date)"
                 small 
                 icon
             >
                 <v-icon :size="$vuetify.breakpoint.smAndUp ? '20' : '14'">mdi-close</v-icon>
             </v-btn> 
         </template>
-        <v-date-picker v-model="hypothesis.date" no-title scrollable>
+        <v-date-picker v-model="todo.date" no-title scrollable>
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="calenderMenu = false">
                 キャンセル
             </v-btn>
-            <v-btn text color="primary" @click="onClickSave(hypothesis.date)">
+            <v-btn text color="primary" @click="onClickSave(todo.date)">
                 保存
             </v-btn>
         </v-date-picker>
@@ -50,23 +50,23 @@ export default {
         },
     },
     computed: {
-      hypothesis() {
-            return this.$store.getters['hypothesis/hypothesis'];
+      todo() {
+            return this.$store.getters['todo/todo'];
         },
     },
     methods: {
         onClickSave(date) {
             this.calenderMenu = false;
             this.$store.dispatch(
-                "hypothesis/updateDate",
-                { date:date, hypothesis:this.hypothesis, project:this.project }
+                "todo/updateDate",
+                { date:date, todo:this.todo, project:this.project }
             );
         },
         removeDate(date) {
             if (date) {
                 this.$store.dispatch(
-                    "hypothesis/updateDate",
-                    { date:null, hypothesis:this.hypothesis }
+                    "todo/updateDate",
+                    { date:null, todo:this.todo }
                 );
             }
         },

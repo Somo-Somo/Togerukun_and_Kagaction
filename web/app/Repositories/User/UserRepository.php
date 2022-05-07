@@ -39,13 +39,13 @@ class UserRepository implements UserRepositoryInterface
         return $createUser;
     }
 
-    public function getUserHasProjetAndHypothesis(string $user_email)
+    public function getUserHasProjetAndTodo(string $user_email)
     {
-        $userHasProjetAndHypothesis = $this->client->run(
+        $userHasProjetAndTodo = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User{email:$user_email}) - [:HAS] -> (project:Project),
-                    len = (project) <- [r*] - (parent:Hypothesis)
-                OPTIONAL MATCH (parent)<-[]-(child:Hypothesis)
+                    len = (project) <- [r*] - (parent:Todo)
+                OPTIONAL MATCH (parent)<-[]-(child:Todo)
                 OPTIONAL MATCH (:User)-[date:DATE]->(parent)
                 OPTIONAL MATCH (:User)-[accomplish:ACCOMPLISHED]->(parent)
                 OPTIONAL MATCH (parent)<-[:TO]-(comment:Comment)
@@ -59,6 +59,6 @@ class UserRepository implements UserRepositoryInterface
                 ]
             );
 
-        return $userHasProjetAndHypothesis;
+        return $userHasProjetAndTodo;
     }
 }

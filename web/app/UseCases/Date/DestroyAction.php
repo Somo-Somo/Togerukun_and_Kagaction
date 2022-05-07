@@ -13,10 +13,10 @@ class DestroyAction
         $this->date_repository = $dateRepositoryInterface;
     }
 
-    public function invoke(array $hypothesis)
+    public function invoke(array $todo)
     {
 
-        $this->date_repository->destroyDate($hypothesis);
+        $this->date_repository->destroyDate($todo);
         
         return; 
     }
