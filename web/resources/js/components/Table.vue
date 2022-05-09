@@ -4,16 +4,16 @@
             <v-list-item-group color="primary">
                 <v-list-item v-for="(item, i) in items" :key="i" style="height:80px">
                     <span>
-                        <svg width="100" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M50.25 0V100" stroke="black" stroke-dasharray="6 6"/>
                         <path d="M100 50.25H52" stroke="black" stroke-dasharray="6 6"/>
                         </svg>
                     </span>
-                    <v-list-item-content>
-                        <v-list-item-title
-                            v-text="item.depth"
-                        ></v-list-item-title>
-                    </v-list-item-content>
+                    <div>
+                        <v-btn icon height="28">
+                            <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
+                        </v-btn>
+                    </div>
                     <v-list-item-content>
                         <v-list-item-title
                             v-text="item.text"
