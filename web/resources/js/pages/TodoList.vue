@@ -2,10 +2,7 @@
     <div>
         <Header :project="project" />
         <Tab :todoStatuses="todoStatuses" :tab="tab" @setTab="setTab" />
-        <v-container
-            class="d-flex flex-column pt-2 px-16"
-            fluid
-        >
+        <v-container class="d-flex flex-column pt-2 px-16" fluid>
             <template>
                 <!-- PC版 -->
                 <div
@@ -27,7 +24,11 @@
                                 :todoList="todoList"
                                 :todoStatus="todoStatuses[tab]"
                             />
-                            <Table v-if="tab === 4" />
+                            <Table
+                                v-if="tab === 4"
+                                :project="project"
+                                :todoList="todoList"
+                            />
                             <!-- PC版追加カード -->
                             <NewAdditionalCard
                                 v-if="tab === 0"

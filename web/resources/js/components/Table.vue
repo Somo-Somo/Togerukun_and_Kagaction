@@ -6,18 +6,27 @@
                 :style="
                     $vuetify.breakpoint.smAndUp ? 'height:88px' : 'height:64px'
                 "
-                v-for="(todo, i) in todos"
+                v-for="(todo, i) in todoList"
                 :key="i"
                 link
             >
                 <div class="d-flex">
                     <TDashedLine />
                 </div>
-                <div
-                    class="d-flex ma-auto"
-                    style="width: 24px; height: 80px"
-                >
-                    <div class="d-flex align-content-center ma-auto" style="height: 24px">
+                <div class="d-flex">
+                    <div
+                        class="d-flex align-content-center pa-2"
+                    >
+                        <svg style="width:28px;height:28px" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M14.4,6H20V16H13L12.6,14H7V21H5V4H14L14.4,6M14,14H16V12H18V10H16V8H14V10L13,8V6H11V8H9V6H7V8H9V10H7V12H9V10H11V12H13V10L14,12V14M11,10V8H13V10H11M14,10H16V12H14V10Z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="d-flex ma-auto" style="width: 24px; height: 80px">
+                    <div
+                        class="d-flex align-content-center ma-auto"
+                        style="height: 24px"
+                    >
                         <v-btn icon height="24" width="24">
                             <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
                         </v-btn>
@@ -30,24 +39,24 @@
                         >
                             <div
                                 class="d-flex"
-                                :style="subTitle.date.backgroundColor"
-                                v-if="subTitle"
+                                :style="subTitle(todo).backgroundColor"
+                                v-if="subTitle(todo)"
                             >
                                 <v-icon
-                                    :size="subTitle.date.iconSize"
-                                    :color="subTitle.date.iconColor"
-                                    >{{ subTitle.date.icon }}</v-icon
+                                    :size="subTitle(todo).iconSize"
+                                    :color="subTitle(todo).iconColor"
+                                    >{{ subTitle(todo).icon }}</v-icon
                                 >
                                 <p
                                     class="ma-0 px-2 font-weight-bold align-self-center"
-                                    :class="subTitle.date.fontColor"
+                                    :class="subTitle(todo).fontColor"
                                     :style="
                                         $vuetify.breakpoint.smAndUp
                                             ? 'font-size:12px'
                                             : 'font-size:8px'
                                     "
                                 >
-                                    {{ title(todo).title }}
+                                    {{ subTitle(todo).title }}
                                 </p>
                             </div>
                             <div class="d-flex" style="max-width: 66%">
@@ -61,13 +70,13 @@
                                         text-overflow: ellipsis;
                                     "
                                 >
-                                    「お腹すいた
+                                    {{ parentName(todo) }}
                                 </p>
                                 <p
                                     class="ma-0 grey--text font-weight-bold align-self-center"
                                     style="font-size: 8px"
                                 >
-                                    」のためのToDo
+                                    {{ parentType(todo) }}
                                 </p>
                             </div>
                         </v-list-item-subtitle>
@@ -153,16 +162,7 @@ export default {
         UpperOrLowerDashedLine,
     },
     data: () => ({
-        todos: [
-            { name: "テストで450点を取りたい", depth: "1" },
-            { name: "英語で90点をとる", depth: "2" },
-            { name: "英単語30個を勉強する", depth: "3" },
-            { name: "毎朝バスの中でやる", depth: "3" },
-            { name: "数学で90点をとる", depth: "1" },
-            { name: "数学ノートをやる", depth: "2" },
-            { name: "社会で90点を取る", depth: "1" },
-        ],
-        subTitle: {
+        todoStatus: {
             accomplish: {
                 icon: "mdi-circle",
                 iconSize: 8,
@@ -180,15 +180,46 @@ export default {
         },
         cardMenu: [{ title: "削除", color: "color: red" }],
     }),
-    props: {},
-    computed: {
-        title() {
-            return (todo) => {
-                this.subTitle.date.title = "残り" + todo.depth +"日";
-                return this.subTitle.date;
-            };
+    props: {
+        project: {
+            type: Object,
         },
-        memo(){
+        todoList: {
+            type: Array,
+        },
+    },
+    computed: {
+        subTitle() {
+            return (todo) => {
+                if (todo.accomplish) {
+                    return this.todoStatus.accomplish;
+                } else if (todo.date) {
+                    return this.calcDate(todo);
+                } else {
+                    return false;
+                }
+            }
+        },
+        parentName() {
+            return (todo) => {
+                if (todo.depth === 0) {
+                    return '「' + this.project.name;
+                } else if (todo.depth > 0)  {
+                    let parentName;
+                    this.todoList.map((value) => {
+                        if (todo.parentUuid === value.uuid) parentName =  value.name;
+                    })
+                    return '「' + parentName ;
+                }
+            }
+        },
+        parentType() {
+            return (todo) => {
+                if (todo.depth === 0)  return '」のゴール';
+                if (todo.depth > 0) return '」のためのToDo';
+            }
+        },
+        memo() {
             // max-depth
             // 1-1 ト＋下
             // 2-2  直+L+下
@@ -206,15 +237,34 @@ export default {
             // Lower
             // ある: 下にx < y がある
             // なし: 下にx < y がない
-
-            // for todo in todos 
+            // for todo in todos
             // for let x = 1 x < todos.max_depth+1 x++
             // トor直orLor下
-            
             // 下に同じdepthがあるかないか
             // 子todoがあるかないか
         },
     },
-    methods: {},
+    methods: {
+        calcDate(todo) {
+            const today = new Date(
+                Date.now() - new Date().getTimezoneOffset() * 60000
+            ).toISOString().substr(0, 10);
+            const diff =
+                (new Date(todo.date) - new Date(today)) / (60 * 60 * 1000 * 24);
+            if (diff > 0) {
+                this.todoStatus.date.title = "残り" + diff + "日";
+                this.todoStatus.date.backgroundColor =
+                    diff < 4 ? "background-color: yellow" : null;
+            } else if (diff === 0) {
+                this.todoStatus.date.title = "今日";
+                this.todoStatus.date.backgroundColor =
+                    "background-color: skyblue";
+            } else {
+                this.todoStatus.date.title = Math.abs(diff) + "日経過";
+                this.todoStatus.date.backgroundColor = "background-color: coral";
+            }
+            return this.todoStatus.date;
+        },
+    },
 };
 </script>
