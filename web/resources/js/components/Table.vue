@@ -11,11 +11,11 @@
                 link
             >
                 <div class="d-flex">
-                    <DashedLine />
+                    <TDashedLine />
                 </div>
                 <div
                     class="d-flex ma-auto"
-                    style="width: 36px; height: 80px"
+                    style="width: 24px; height: 80px"
                 >
                     <div class="d-flex align-content-center ma-auto" style="height: 24px">
                         <v-btn icon height="24" width="24">
@@ -30,24 +30,24 @@
                         >
                             <div
                                 class="d-flex"
-                                :style="subTitle().backgroundColor"
-                                v-if="subTitle()"
+                                :style="subTitle.date.backgroundColor"
+                                v-if="subTitle"
                             >
                                 <v-icon
-                                    :size="subTitle().iconSize"
-                                    :color="subTitle().iconColor"
-                                    >{{ subTitle().icon }}</v-icon
+                                    :size="subTitle.date.iconSize"
+                                    :color="subTitle.date.iconColor"
+                                    >{{ subTitle.date.icon }}</v-icon
                                 >
                                 <p
                                     class="ma-0 px-2 font-weight-bold align-self-center"
-                                    :class="subTitle().fontColor"
+                                    :class="subTitle.date.fontColor"
                                     :style="
                                         $vuetify.breakpoint.smAndUp
                                             ? 'font-size:12px'
                                             : 'font-size:8px'
                                     "
                                 >
-                                    {{ subTitle().title }}
+                                    {{ title(todo).title }}
                                 </p>
                             </div>
                             <div class="d-flex" style="max-width: 66%">
@@ -154,15 +154,15 @@ export default {
     },
     data: () => ({
         todos: [
-            { name: "テストで450点を取りたい", depth: "0" },
-            { name: "英語で90点をとる", depth: "1" },
-            { name: "英単語30個を勉強する", depth: "2" },
+            { name: "テストで450点を取りたい", depth: "1" },
+            { name: "英語で90点をとる", depth: "2" },
+            { name: "英単語30個を勉強する", depth: "3" },
             { name: "毎朝バスの中でやる", depth: "3" },
             { name: "数学で90点をとる", depth: "1" },
             { name: "数学ノートをやる", depth: "2" },
             { name: "社会で90点を取る", depth: "1" },
         ],
-        subtitle: {
+        subTitle: {
             accomplish: {
                 icon: "mdi-circle",
                 iconSize: 8,
@@ -182,11 +182,37 @@ export default {
     }),
     props: {},
     computed: {
-        subTitle() {
-            return () => {
-                this.subtitle.date.title = "残り10日";
-                return this.subtitle.date;
+        title() {
+            return (todo) => {
+                this.subTitle.date.title = "残り" + todo.depth +"日";
+                return this.subTitle.date;
             };
+        },
+        memo(){
+            // max-depth
+            // 1-1 ト＋下
+            // 2-2  直+L+下
+            // 3-3  直+1スペ+ト
+            // 4-3  直+１スペ+L
+            // 5-1  ト+下
+            // 6-2  直+L
+            // 7-1  L
+            // 項目 start, second, lower, スペース
+            // Dash
+            // トの場合: depth === x && 下にdepth === xがある
+            // Lの場合:　depth === x && 下にdepth === xがない
+            // 直の場合: depth !== x && 下にdepth === xがある
+            // スペの場合: depth !== x && 下にdepth === xがない
+            // Lower
+            // ある: 下にx < y がある
+            // なし: 下にx < y がない
+
+            // for todo in todos 
+            // for let x = 1 x < todos.max_depth+1 x++
+            // トor直orLor下
+            
+            // 下に同じdepthがあるかないか
+            // 子todoがあるかないか
         },
     },
     methods: {},
