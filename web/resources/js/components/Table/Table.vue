@@ -11,14 +11,12 @@
                 @click="toTodoDetail(todo)"
                 link
             >
-                <div class="d-flex">
+                <div class="d-flex" v-if="todo.depth !== 0">
                     <TDashedLine />
                 </div>
-                <div class="d-flex">
-                    <div
-                        class="d-flex align-content-center pa-2"
-                    >
-                        <svg style="width:28px;height:28px" viewBox="0 0 24 24">
+                <div class="d-flex" v-if="todo.depth === 0">
+                    <div class="d-flex" style="width:50px;">
+                        <svg class="ma-auto" style="width:28px;height:28px" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M14.4,6H20V16H13L12.6,14H7V21H5V4H14L14.4,6M14,14H16V12H18V10H16V8H14V10L13,8V6H11V8H9V6H7V8H9V10H7V12H9V10H11V12H13V10L14,12V14M11,10V8H13V10H11M14,10H16V12H14V10Z" />
                         </svg>
                     </div>
@@ -33,7 +31,7 @@
                         </v-btn>
                     </div>
                 </div>
-                <v-list-item-content class="px-2 py-0 ma-auto d-flex">
+                <v-list-item-content class="px-4 py-0 ma-auto d-flex">
                     <TodoTableItemContent :project="project" :todo="todo" :todoList="todoList"/>
                 </v-list-item-content>
             </v-list-item>
