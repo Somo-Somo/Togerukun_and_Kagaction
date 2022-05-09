@@ -63,7 +63,7 @@
 <script>
 import Header from "../components/Header.vue";
 import Tab from "../components/Tab.vue";
-import Table from "../components/Table.vue";
+import Table from "../components/Table/Table.vue";
 import TodoCards from "../components/Cards/TodoCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
