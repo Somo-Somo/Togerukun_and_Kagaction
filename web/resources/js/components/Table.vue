@@ -5,8 +5,8 @@
                 <v-list-item v-for="(item, i) in items" :key="i" style="height:80px">
                     <span>
                         <svg width="100" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M50.25 0V100" stroke="black" stroke-width="0.5" stroke-dasharray="3 3"/>
-                            <path d="M100 50.25H52" stroke="black" stroke-width="0.5" stroke-dasharray="3 3"/>
+                        <path d="M50.25 0V100" stroke="black" stroke-dasharray="6 6"/>
+                        <path d="M100 50.25H52" stroke="black" stroke-dasharray="6 6"/>
                         </svg>
                     </span>
                     <v-list-item-content>
