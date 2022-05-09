@@ -1,7 +1,7 @@
 <template>
   <v-app-bar
-    class="my-1 mt-md-1 mb-md-0"
-    :style="$vuetify.breakpoint.mdAndUp ? 'height: 72px' : 'height: 56px'"
+    class=""
+    :style="$vuetify.breakpoint.mdAndUp ? 'height: 64px' : 'height: 56px'"
     color="white"
     elevation="0"
     app
