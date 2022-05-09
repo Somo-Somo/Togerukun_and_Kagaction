@@ -8,6 +8,7 @@
                 "
                 v-for="(todo, i) in todoList"
                 :key="i"
+                @click="toTodoDetail(todo)"
                 link
             >
                 <div class="d-flex">
@@ -90,6 +91,11 @@ export default {
             // 子todoがあるかないか
         },
     },
-    methods: {},
+    methods: {
+        async toTodoDetail (todo) {
+            await this.$store.dispatch("todo/selectTodo", todo);
+            return this.$router.push({ path: "/todo/" + todo.uuid });
+        },
+    },
 };
 </script>
