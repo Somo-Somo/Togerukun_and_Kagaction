@@ -2,18 +2,35 @@
     <v-card class="ma-4" color="#26c6da">
         <v-list class="py-0">
             <v-list-item-group color="primary">
-                <v-list-item v-for="(item, i) in items" :key="i" style="height:80px">
+                <v-list-item
+                    v-for="(item, i) in items"
+                    :key="i"
+                    style="height: 88px"
+                >
                     <span>
-                        <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M50.25 0V100" stroke="black" stroke-dasharray="6 6"/>
-                        <path d="M100 50.25H52" stroke="black" stroke-dasharray="6 6"/>
-                        </svg>
+                        <DashedLine />
+                    </span>
+                    <span>
+                        <TDashedLine />
                     </span>
                     <div>
-                        <v-btn icon height="28">
-                            <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
-                        </v-btn>
+                        <div style="height: 28px">
+                            <UpperOrLowerDashedLine />
+                        </div>
+                        <div style="height: 24px">
+                            <v-btn icon height="24">
+                                <v-icon
+                                    >mdi-checkbox-marked-circle-outline</v-icon
+                                >
+                            </v-btn>
+                        </div>
+                        <div style="height: 28px">
+                            <UpperOrLowerDashedLine />
+                        </div>
                     </div>
+                    <span>
+                        <LDashedLine />
+                    </span>
                     <v-list-item-content>
                         <v-list-item-title
                             v-text="item.text"
@@ -26,7 +43,18 @@
 </template>
 
 <script>
+import DashedLine from "../components/DashedLine/DashedLine.vue";
+import LDashedLine from "../components/DashedLine/LDashedLine.vue";
+import TDashedLine from "../components/DashedLine/TDashedLine.vue";
+import UpperOrLowerDashedLine from "../components/DashedLine/UpperOrLowerDashedLine.vue";
+
 export default {
+    components: {
+        DashedLine,
+        LDashedLine,
+        TDashedLine,
+        UpperOrLowerDashedLine,
+    },
     data: () => ({
         items: [
             { text: "テストで450点を取りたい", depth: "0" },
