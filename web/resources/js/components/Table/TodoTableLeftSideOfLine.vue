@@ -17,11 +17,14 @@
         </div>
         <v-list-item-content
             class="d-flex py-0"
-            v-for="depth in todo.depth"
-            :key="depth"
+            v-for="num in todo.depth"
+            :key="num"
         >
             <div class="d-flex">
-                <TDashedLine />
+                <TDashedLine v-if="todo.depth === num && !todo.spaces[num]" />
+                <LDashedLine v-if="todo.depth === num && todo.spaces[num]"/>
+                <DashedLine v-if="todo.depth !== num && !todo.spaces[num]"/>
+                <v-spacer style="width: 50px" v-if="todo.depth !== num && todo.spaces[num]"></v-spacer>
             </div>
         </v-list-item-content>
         <div class="d-flex flex-column" style="width: 28px; height: 88px">
@@ -54,7 +57,7 @@ export default {
         TDashedLine,
         LowerDashedLine,
     },
-    data: () => ({}),
+    data: () => ({ }),
     props: {
         todo: {
             type: Object,
