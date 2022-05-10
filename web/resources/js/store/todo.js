@@ -5,6 +5,7 @@ const state = {
     todo: null,
     parentTodo: null,
     todoList: [],
+    maxDepth: null,
     allTodoList: null,
 };
 
@@ -35,8 +36,9 @@ const mutations = {
 
     selectTodoList (state, projectUuid) {
         const allTodoList = state.allTodoList;
-        state.todoList = allTodoList[projectUuid] ? 
-            allTodoList[projectUuid] : [];
+        if (allTodoList[projectUuid]) {
+            state.todoList = allTodoList[projectUuid];
+        }
     },
 
     setAllTodoList (state, data) {
