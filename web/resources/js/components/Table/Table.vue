@@ -6,7 +6,7 @@
         >
             <v-list-item-group color="primary">
                 <v-list-item
-                    class="px-0"
+                    class="px-2"
                     :style="
                         $vuetify.breakpoint.smAndUp
                             ? 'height:88px'
