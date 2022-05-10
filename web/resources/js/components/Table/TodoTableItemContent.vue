@@ -62,39 +62,6 @@
                 {{ todo.name }}
             </p></v-list-item-title
         >
-        <!-- <v-menu class="rounded-lg elevation-0" offset-y>
-            <template v-slot:activator="{ on, attrs }">
-                <v-list-item-action
-                    class="ma-0"
-                    style="position: absolute; right: 16px"
-                    :style="
-                        $vuetify.breakpoint.smAndUp
-                            ? 'top: 28px;'
-                            : 'top: 24px;'
-                    "
-                >
-                    <v-btn v-bind="attrs" v-on="on" small icon link>
-                        <v-icon
-                            :size="$vuetify.breakpoint.smAndUp ? '24' : '20'"
-                        >
-                            mdi-dots-vertical
-                        </v-icon>
-                    </v-btn>
-                </v-list-item-action>
-            </template>
-            <v-list>
-                <v-list-item
-                    v-for="menu in cardMenu"
-                    :key="menu.title"
-                    @click="selectMenu(menu.title, todo)"
-                    link
-                >
-                    <v-list-item-title :style="menu.color">{{
-                        menu.title
-                    }}</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-menu> -->
     </div>
 </template>
 
