@@ -1,5 +1,5 @@
 <template>
-    <v-card class="ma-4">
+    <v-card class="ma-4 overflow-y-auto" style="max-height: calc(100vh - 160px)">
         <v-list-item-group color="primary">
             <v-list-item
                 class="px-0"

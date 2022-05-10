@@ -2,7 +2,7 @@
     <div>
         <Header :project="project" />
         <Tab :todoStatuses="todoStatuses" :tab="tab" @setTab="setTab" />
-        <v-container class="d-flex flex-column pt-2 px-16" fluid>
+        <v-container class="d-flex flex-column py-2 px-16" fluid>
             <template>
                 <!-- PC版 -->
                 <div
@@ -143,7 +143,7 @@ export default {
   font-size: 0.75rem
 
 .cardStyle
-  height: calc(100vh - 152px)
+  height: calc(100vh - 120px)
   position: relative
 
 .spCardStyle
