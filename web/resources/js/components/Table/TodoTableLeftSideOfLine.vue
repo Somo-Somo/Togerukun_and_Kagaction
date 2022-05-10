@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex ml-2" style="max-height: 88px">
+    <div class="d-flex" style="max-height: 88px">
         <div class="d-flex">
             <div class="d-flex" style="width: 50px" v-if="todo.depth === 0">
                 <svg
