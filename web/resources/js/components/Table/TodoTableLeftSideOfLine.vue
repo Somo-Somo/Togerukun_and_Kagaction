@@ -1,9 +1,9 @@
 <template>
-    <div class="d-flex">
-        <div class="d-flex" v-if="todo.depth === 0"> 
-            <div class="d-flex" style="width: 50px">
+    <div class="d-flex ml-2" style="max-height: 88px">
+        <div class="d-flex">
+            <div class="d-flex" style="width: 50px" v-if="todo.depth === 0">
                 <svg
-                    class="ma-auto"
+                    class="my-auto ml-2"
                     style="width: 28px; height: 28px"
                     viewBox="0 0 24 24"
                 >
@@ -15,7 +15,7 @@
             </div>
         </div>
         <v-list-item-content
-            class="d-flex"
+            class="d-flex py-0"
             v-for="depth in todo.depth"
             :key="depth"
         >
@@ -23,14 +23,18 @@
                 <TDashedLine />
             </div>
         </v-list-item-content>
-        <div class="d-flex ma-auto" style="width: 24px; height: 80px">
+        <div class="d-flex flex-column" style="width: 28px; height: 88px">
             <div
-                class="d-flex align-content-center ma-auto"
+                class="d-flex mx-auto"
+                :class="todo.child ? 'mt-auto mb-1' : 'my-auto'"
                 style="height: 24px"
             >
                 <v-btn icon height="24" width="24">
                     <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
                 </v-btn>
+            </div>
+            <div class="d-flex mx-auto" v-if="todo.child" height="32">
+                <LowerDashedLine />
             </div>
         </div>
     </div>
