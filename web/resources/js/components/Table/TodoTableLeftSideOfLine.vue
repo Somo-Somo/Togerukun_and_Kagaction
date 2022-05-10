@@ -13,6 +13,7 @@
                     />
                 </svg>
             </div>
+            <v-spacer style="width: 50px" v-if="todo.depth !== 0"></v-spacer>
         </div>
         <v-list-item-content
             class="d-flex py-0"
