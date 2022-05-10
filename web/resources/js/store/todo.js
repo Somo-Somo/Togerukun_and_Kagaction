@@ -5,7 +5,6 @@ const state = {
     todo: null,
     parentTodo: null,
     todoList: [],
-    maxDepth: null,
     allTodoList: null,
 };
 
@@ -36,9 +35,7 @@ const mutations = {
 
     selectTodoList (state, projectUuid) {
         const allTodoList = state.allTodoList;
-        if (allTodoList[projectUuid]) {
-            state.todoList = allTodoList[projectUuid];
-        }
+        state.todoList = allTodoList[projectUuid] ? allTodoList[projectUuid] : [];
     },
 
     setAllTodoList (state, data) {
@@ -48,24 +45,34 @@ const mutations = {
     addTodoForTodoList (state, newTodo){
         const todoList = state.todoList
         const newTodoList = []
-        let todoParemtOrBrother = false;
+        let todoParentOrBrother = false;
+        let newTodoSpaces = []
         
         for (const [key, todo] of Object.entries(todoList)) {
             // 追加する親仮説の場合
             if (todo.uuid === newTodo.parentUuid ){
                 todo['toggle'] = "mdi-menu-right";
                 todo.child = true;
-                todoParemtOrBrother = true;
+                todoParentOrBrother = true;
+                newTodoSpaces = todo.spaces;
+                newTodoSpaces.push(true);
                 newTodoList.push(todo);
             } 
             // 追加する仮説と同じ階層にある仮説の場合
             else if (todo.parentUuid === newTodo.parentUuid) {
-                todoParemtOrBrother = true;
+                todoParentOrBrother = true;
+                if (todo.spaces[newTodo.depth]) todo.spaces[newTodo.depth] = false;
                 newTodoList.push(todo);
             } 
+            // 追加する仮説と同じ階層あるいは子の階層だった時
+            else if (todoParentOrBrother && newTodo.depth <= todo.depth) {
+                if (todo.spaces[newTodo.depth]) todo.spaces[newTodo.depth] = false;
+                newTodoList.push(todo);
+            }
             // 追加する仮説と同じ階層の仮説があるかつ親仮説以上の階層に仮説が戻った場合
-            else if (todoParemtOrBrother && newTodo.depth > todo.depth) {
-                todoParemtOrBrother = false;
+            else if (todoParentOrBrother && newTodo.depth > todo.depth) {
+                todoParentOrBrother = false;
+                newTodo['spaces'] = newTodoSpaces;
                 newTodoList.push(newTodo);
                 newTodoList.push(todo);
             } else {
@@ -73,7 +80,7 @@ const mutations = {
             }
         }
 
-        if(todoParemtOrBrother) newTodoList.push(newTodo);
+        if(todoParentOrBrother) newTodoList.push(newTodo);
 
         state.todoList = newTodoList;
     },
