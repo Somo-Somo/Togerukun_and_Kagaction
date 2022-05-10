@@ -2,14 +2,19 @@
 
 namespace App\UseCases\Todo\Converter;
 
+use App\UseCases\Todo\ChildRelateToParentTodo;
 use App\UseCases\Comment\Converter\CommentConverter;
 
 class TodoListConverter
 {
+    protected $childRelateToParentTodo;
     protected $commentConverter;
 
-    public function __construct(CommentConverter $commentConverter)
-    {
+    public function __construct(
+        CommentConverter $commentConverter, 
+        ChildRelateToParentTodo $childRelateToParentTodo
+    ){
+        $this->childRelateToParentTodo = $childRelateToParentTodo;
         $this->commentConverter = $commentConverter;
     }
 
@@ -43,20 +48,8 @@ class TodoListConverter
             if ($childs) {
                 // 子どもに親のデータを持たせて$todoDataに格納。
                 // 親になった時にこのtodoDataからtodoList仮説一覧配列に格納する
-                foreach ($childs as $childValue) {
-                    $child = $childValue->getProperties()->toArray();
-
-                    // 子仮説の親UUID
-                    $child['parentUuid'] = $parent['uuid'];
-
-                    // ゴールからの仮説の階層の深さ
-                    $child['depth'] = $len;
-
-                    // 仮説一覧のトグルの状態
-                    $child['toggle'] = 'mdi-menu-right';
-                    
-                    $todoData[$child['uuid']] = $child;
-                }
+                $todoData = $this->childRelateToParentTodo->invoke($todoData, $childs, $parent, $len);
+                
                 // 子仮説がある場合
                 // 仮説にchild: true を持たせる
                 $len === 1 ? $parent['child'] = true 
