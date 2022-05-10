@@ -62,7 +62,7 @@
                 {{ todo.name }}
             </p></v-list-item-title
         >
-        <v-menu class="rounded-lg elevation-0" offset-y>
+        <!-- <v-menu class="rounded-lg elevation-0" offset-y>
             <template v-slot:activator="{ on, attrs }">
                 <v-list-item-action
                     class="ma-0"
@@ -94,7 +94,7 @@
                     }}</v-list-item-title>
                 </v-list-item>
             </v-list>
-        </v-menu>
+        </v-menu> -->
     </div>
 </template>
 
