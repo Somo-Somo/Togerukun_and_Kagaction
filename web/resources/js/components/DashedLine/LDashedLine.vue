@@ -1,23 +1,30 @@
 <template>
     <svg
-        width="80"
-        height="80"
-        viewBox="0 0 100 100"
+        width="50"
+        height="88"
+        viewBox="0 0 50 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
     >
-        <path
-            d="M50.25 0V50.25"
-            stroke="black"
-            stroke-width="1.2"
-            stroke-dasharray="8 8"
-        />
-        <path
-            d="M98 50.25H50"
-            stroke="black"
-            stroke-width="1.2"
-            stroke-dasharray="8 8"
-        />
+        <g clip-path="url(#clip0_74_28)">
+            <path
+                d="M12.625 0V50"
+                stroke="black"
+                stroke-width="1.2"
+                stroke-dasharray="5 5"
+            />
+            <path
+                d="M50.5 50.25H12.5"
+                stroke="black"
+                stroke-width="1.2"
+                stroke-dasharray="5 5"
+            />
+        </g>
+        <defs>
+            <clipPath id="clip0_74_28">
+                <rect width="50" height="100" fill="white" />
+            </clipPath>
+        </defs>
     </svg>
 </template>
 
