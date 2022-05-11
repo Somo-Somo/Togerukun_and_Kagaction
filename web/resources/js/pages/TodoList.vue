@@ -32,6 +32,7 @@
                             />
                             <!-- PC版追加カード -->
                             <NewAdditionalCard
+                                class="px-4 py-1"
                                 v-if="tab === 0 && todoList.length === 0"
                                 @clickAditional="onClickCreate"
                                 :category="'ゴール'"
