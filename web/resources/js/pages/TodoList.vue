@@ -13,7 +13,7 @@
                             : 'spCardStyle'
                     "
                 >
-                    <v-tabs-items class="overflow-y-auto" v-model="tab">
+                    <v-tabs-items v-model="tab">
                         <v-tab-item
                             v-for="todoStatus in todoStatuses"
                             :key="todoStatus.name"
