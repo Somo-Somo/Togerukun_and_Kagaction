@@ -51,7 +51,6 @@ const mutations = {
         for (const [key, todo] of Object.entries(todoList)) {
             // 追加する親仮説の場合
             if (todo.uuid === newTodo.parentUuid ){
-                todo['toggle'] = "mdi-menu-right";
                 todo.child = true;
                 todoParentOrBrother = true;
                 newTodoSpaces = todo.leftSideOfLine;

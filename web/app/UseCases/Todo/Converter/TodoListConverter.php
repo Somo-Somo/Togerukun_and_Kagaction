@@ -72,9 +72,6 @@ class TodoListConverter
                 // ゴールからの仮説の階層の深さ
                 $parent['depth'] = 0;
 
-                // 仮説一覧のトグルの状態
-                $parent['toggle'] = 'mdi-menu-right';
-
                 // Todo一覧のテーブルの行の左側の状態
                 $leftSideOfLine = [];
                 $leftSideOfLine[] = ['lastChild' => false ];

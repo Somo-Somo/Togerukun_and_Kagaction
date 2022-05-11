@@ -19,9 +19,6 @@ class ChildRelateToParentTodo
 
             // ゴールからの仮説の階層の深さ
             $child['depth'] = $len;
-
-            // 仮説一覧のトグルの状態
-            $child['toggle'] = 'mdi-menu-right';
             
             $todoData[$child['uuid']] = $child;
         }
