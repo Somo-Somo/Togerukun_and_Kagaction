@@ -100,7 +100,7 @@ export default {
     computed: {
         subTitle() {
             return (todo) => {
-                return todo.date && !todo.accomplish ? this.calcDate(todo) : false;
+                return todo.date ? this.calcDate(todo) : false;
             };
         },
         parentName() {
@@ -133,6 +133,7 @@ export default {
                 .substr(0, 10);
             const diff =
                 (new Date(todo.date) - new Date(today)) / (60 * 60 * 1000 * 24);
+
             if (diff > 0) {
                 this.todoStatus.date.title = "残り" + diff + "日";
                 this.todoStatus.date.backgroundColor =
@@ -141,6 +142,14 @@ export default {
                 this.todoStatus.date.title = "今日";
                 this.todoStatus.date.backgroundColor =
                     "background-color: skyblue";
+            } else if (todo.accomplish) {
+                const year = new Date(todo.date).getFullYear();
+                const month = new Date(todo.date).getMonth();
+                const day = new Date(todo.date).getDay();
+                this.todoStatus.date.title  =
+                    new Date().getFullYear() === year
+                        ? month + "月" + day + "日"
+                        : year + "年" + month + "月" + day + "日";
             } else {
                 this.todoStatus.date.title = Math.abs(diff) + "日経過";
                 this.todoStatus.date.backgroundColor =
