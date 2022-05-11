@@ -31,20 +31,13 @@
                             />
                             <!-- PC版追加カード -->
                             <NewAdditionalCard
-                                v-if="tab === 0"
+                                v-if="tab === 0 || (tab === 1 && todoList.length === 0)"
                                 @clickAditional="onClickCreate"
-                                :category="todoStatus.name"
+                                :category="'ゴール'"
                             />
                         </v-tab-item>
                     </v-tabs-items>
                 </div>
-                <!-- スマホ版追加ボタン -->
-                <!-- <SpBottomBtn 
-          v-if="tab === 0"
-          @clickAditional="onClickCreate" 
-          :tab="tab" 
-          :headerTitle="'仮説一覧'" 
-        /> -->
             </template>
             <form class="form" @submit.prevent="submitForm()">
                 <InputForm
@@ -86,7 +79,6 @@ export default {
             { name: "ゴール", show: false },
             { name: "ToDo一覧", show: false },
             { name: "予定", show: false },
-            { name: "完了", show: false },
         ],
         show: false,
         submitLoading: false,

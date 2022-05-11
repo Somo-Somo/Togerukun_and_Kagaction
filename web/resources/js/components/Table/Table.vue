@@ -1,7 +1,8 @@
 <template>
     <div>
         <v-card
-            class="ma-4 overflow-y-auto"
+            class="overflow-y-auto"
+            :class="todoList.length > 0 ? 'ma-4' : ''"
             style="max-height: calc(100vh - 160px)"
         >
             <v-list-item-group color="primary">
