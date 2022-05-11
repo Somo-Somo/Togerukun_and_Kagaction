@@ -198,11 +198,11 @@ export default {
       todoList: 'todo/todoList',
     }),
     subHeader() {
-      return this.todo.depth === 0 ? 'ゴール' : '｢'+ this.parentTodo.name +'｣ ためのToDo';
+      return this.todo.depth === 0 ? 'ゴール' : '｢'+ this.parentTodo.name +'｣ のためのToDo';
     },
     additionalInputFormLabel(){
       if (this.tab === 0) {
-        return '「' +this.todo.name + '」ためのToDo';
+        return '「' +this.todo.name + '」のためのToDo';
       } else {
         return 'コメント';
       }
