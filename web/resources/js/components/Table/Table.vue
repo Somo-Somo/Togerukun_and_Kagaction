@@ -83,20 +83,19 @@ export default {
             await this.$store.dispatch("todo/selectTodo", todo);
             return this.$router.push({ path: "/todo/" + todo.uuid });
         },
-        selectedMenu(menuTitle, project) {
+        selectedMenu(menuTitle, todo) {
             if (menuTitle === "削除") {
                 this.deletingConfirmationDialog = true;
-                this.selectedDeletingProject.name = project.name;
-                this.selectedDeletingProject.uuid = project.uuid;
+                this.selectedDeletingTodo = todo;
             }
         },
         onClickCancel() {
             this.deletingConfirmationDialog = false;
             this.selectedDeletingTodo = { name: null };
         },
-        async deleteTodo() {
+        deleteTodo() {
             this.deletingConfirmationDialog = false;
-            await this.$store.dispatch(
+            this.$store.dispatch(
                 "todo/deleteTodo",
                 this.selectedDeletingTodo
             );

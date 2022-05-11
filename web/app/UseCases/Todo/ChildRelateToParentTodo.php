@@ -12,7 +12,7 @@ class ChildRelateToParentTodo
             $child = $childValue->getProperties()->toArray();
 
             // 同じゴールの子で同じ深さの中で一番最後の子Todoか
-            $child['lastChildInTheSameDepth'] = $key === 0 ? true : false;
+            $child['lastChildInTheSameDepth']['lastChild'] = $key === 0 ? true : false;
 
             // 子仮説の親UUID
             $child['parentUuid'] = $parent['uuid'];

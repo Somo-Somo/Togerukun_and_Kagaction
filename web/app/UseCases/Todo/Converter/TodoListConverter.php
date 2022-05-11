@@ -29,7 +29,7 @@ class TodoListConverter
         $todoData = [];
 
 
-        $spaces = [];
+        $leftSideOfLine = [];
 
         // 親仮説それに紐づく子仮説の順番になるように配列$todoListに追加
         // depth = 1 の場合「ゴール」。parentUuid = projectUuidで保存
@@ -76,9 +76,9 @@ class TodoListConverter
                 $parent['toggle'] = 'mdi-menu-right';
 
                 // Todo一覧のテーブルの行の左側の状態
-                $spaces = [];
-                $spaces[] = false;
-                $parent['spaces'] = $spaces;
+                $leftSideOfLine = [];
+                $leftSideOfLine[] = ['lastChild' => false ];
+                $parent['leftSideOfLine'] = $leftSideOfLine;
 
                 // 日付
                 $parent['date'] = $date ? $date['on'] : null;
@@ -94,12 +94,12 @@ class TodoListConverter
 
             } else {
                 // Todo一覧のテーブルの行の左側の状態
-                if (count($spaces) > $todoData[$parent['uuid']]['depth']){
-                    $spaces = array_slice($spaces, 0, $todoData[$parent['uuid']]['depth']);
+                if (count($leftSideOfLine) > $todoData[$parent['uuid']]['depth']){
+                    $leftSideOfLine = array_slice($leftSideOfLine, 0, $todoData[$parent['uuid']]['depth']);
                 } 
-                array_push($spaces, $todoData[$parent['uuid']]['lastChildInTheSameDepth']);
+                array_push($leftSideOfLine, $todoData[$parent['uuid']]['lastChildInTheSameDepth']);
                 unset($todoData[$parent['uuid']]['lastChildInTheSameDepth']);
-                $todoData[$parent['uuid']]['spaces'] = $spaces;
+                $todoData[$parent['uuid']]['leftSideOfLine'] = $leftSideOfLine;
 
                 // 日付
                 $todoData[$parent['uuid']]['date'] =  $date ? $date['on'] : null;

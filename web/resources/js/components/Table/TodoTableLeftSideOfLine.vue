@@ -21,10 +21,10 @@
             :key="num"
         >
             <div class="d-flex">
-                <TDashedLine v-if="todo.depth === num && !todo.spaces[num]" />
-                <LDashedLine v-if="todo.depth === num && todo.spaces[num]"/>
-                <DashedLine v-if="todo.depth !== num && !todo.spaces[num]"/>
-                <v-spacer style="width: 50px" v-if="todo.depth !== num && todo.spaces[num]"></v-spacer>
+                <TDashedLine v-if="todo.depth === num && !todo.leftSideOfLine[num].lastChild" />
+                <LDashedLine v-if="todo.depth === num && todo.leftSideOfLine[num].lastChild"/>
+                <DashedLine v-if="todo.depth !== num && !todo.leftSideOfLine[num].lastChild"/>
+                <v-spacer style="width: 50px" v-if="todo.depth !== num && todo.leftSideOfLine[num].lastChild"></v-spacer>
             </div>
         </v-list-item-content>
         <div class="d-flex flex-column" style="width: 28px; height: 88px">
