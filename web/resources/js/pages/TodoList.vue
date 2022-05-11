@@ -28,6 +28,7 @@
                                 v-if="tab === 0"
                                 :project="project"
                                 :todoList="todoList"
+                                @onClickCreate="onClickCreate"
                             />
                             <!-- PC版追加カード -->
                             <NewAdditionalCard
@@ -44,7 +45,7 @@
                     v-if="form"
                     @onClickCancel="onClickCancel"
                     @submitForm="submitForm"
-                    :category="todoStatuses[0].name"
+                    :category="'ゴール'"
                     :inputForm="inputForm"
                     :loading="submitLoading"
                 />

@@ -42,11 +42,8 @@
                 <v-list-item
                     class="d-flex justify-space-around px-3"
                     v-if="todoList.length > 0"
-                    :style="
-                        $vuetify.breakpoint.smAndUp
-                            ? 'height:56px'
-                            : 'height:64px'
-                    "
+                    style="height:64px"
+                    @click="$emit('onClickCreate')"
                     link
                 >
                     <v-icon class="pa-1">mdi-plus</v-icon>
