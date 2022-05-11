@@ -11,7 +11,7 @@
             :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'"
             link
           >
-            <v-icon class="pa-2">mdi-plus</v-icon>
+            <v-icon class="pa-1">mdi-plus</v-icon>
             <v-list-item-content>
               <v-list-item-title>
                 <p 
