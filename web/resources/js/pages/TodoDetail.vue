@@ -58,7 +58,7 @@
                     : 'spTodoSubTitle'
                 "
               >
-                <p class="ma-0 font-weight-bold" style="min-width:36px;" color="grey darken-1">完了：</p>
+                <p class="ma-0 font-weight-bold" style="min-width:36px;" color="grey darken-1">達成：</p>
               </v-subheader>
               <v-col class="px-4 py-0 d-flex align-self-center">
                 <v-checkbox
@@ -210,7 +210,7 @@ export default {
     assistSubHeaderText(){
       return (tab) => {
         if (tab === 0) {
-          return '」を完了するには？'; 
+          return '」を達成するには？'; 
         }
       }  
     },
