@@ -19,19 +19,19 @@
                             :key="todoStatus.name"
                         >
                             <TodoCards
-                                v-if="tab !== 1"
+                                v-if="tab !== 0"
                                 :project="project"
                                 :todoList="todoList"
                                 :todoStatus="todoStatuses[tab]"
                             />
                             <Table
-                                v-if="tab === 1"
+                                v-if="tab === 0"
                                 :project="project"
                                 :todoList="todoList"
                             />
                             <!-- PC版追加カード -->
                             <NewAdditionalCard
-                                v-if="tab === 0 || (tab === 1 && todoList.length === 0)"
+                                v-if="tab === 0 && todoList.length === 0"
                                 @clickAditional="onClickCreate"
                                 :category="'ゴール'"
                             />
@@ -76,7 +76,6 @@ export default {
     data: () => ({
         tab: null,
         todoStatuses: [
-            { name: "ゴール", show: false },
             { name: "ToDo一覧", show: false },
             { name: "予定", show: false },
         ],
