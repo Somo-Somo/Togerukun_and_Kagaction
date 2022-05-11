@@ -19,13 +19,13 @@
                             :key="todoStatus.name"
                         >
                             <TodoCards
-                                v-if="tab !== 4"
+                                v-if="tab !== 1"
                                 :project="project"
                                 :todoList="todoList"
                                 :todoStatus="todoStatuses[tab]"
                             />
                             <Table
-                                v-if="tab === 4"
+                                v-if="tab === 1"
                                 :project="project"
                                 :todoList="todoList"
                             />
@@ -87,7 +87,6 @@ export default {
             { name: "ToDo一覧", show: false },
             { name: "予定", show: false },
             { name: "完了", show: false },
-            { name: "テスト", show: false },
         ],
         show: false,
         submitLoading: false,
