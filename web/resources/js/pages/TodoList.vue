@@ -1,8 +1,8 @@
 <template>
     <div>
         <Header :project="project" />
-        <Tab :todoStatuses="todoStatuses" :tab="tab" @setTab="setTab" />
-        <v-container class="d-flex flex-column py-2 px-16" fluid>
+        <v-container class="d-flex flex-column py-0 px-16" fluid>
+            <Tab :todoStatuses="todoStatuses" :tab="tab" @setTab="setTab" />
             <template>
                 <!-- PC版 -->
                 <div
@@ -13,45 +13,40 @@
                             : 'spCardStyle'
                     "
                 >
-                    <v-tabs-items class="overflow-y-auto" v-model="tab">
+                    <v-tabs-items v-model="tab">
                         <v-tab-item
                             v-for="todoStatus in todoStatuses"
                             :key="todoStatus.name"
                         >
                             <TodoCards
-                                v-if="tab !== 1"
+                                v-if="tab !== 0"
                                 :project="project"
                                 :todoList="todoList"
                                 :todoStatus="todoStatuses[tab]"
                             />
                             <Table
-                                v-if="tab === 1"
+                                v-if="tab === 0"
                                 :project="project"
                                 :todoList="todoList"
+                                @onClickCreate="onClickCreate"
                             />
                             <!-- PC版追加カード -->
                             <NewAdditionalCard
-                                v-if="tab === 0"
+                                class="px-4 py-1"
+                                v-if="tab === 0 && todoList.length === 0"
                                 @clickAditional="onClickCreate"
-                                :category="todoStatus.name"
+                                :category="'ゴール'"
                             />
                         </v-tab-item>
                     </v-tabs-items>
                 </div>
-                <!-- スマホ版追加ボタン -->
-                <!-- <SpBottomBtn 
-          v-if="tab === 0"
-          @clickAditional="onClickCreate" 
-          :tab="tab" 
-          :headerTitle="'仮説一覧'" 
-        /> -->
             </template>
             <form class="form" @submit.prevent="submitForm()">
                 <InputForm
                     v-if="form"
                     @onClickCancel="onClickCancel"
                     @submitForm="submitForm"
-                    :category="todoStatuses[0].name"
+                    :category="'ゴール'"
                     :inputForm="inputForm"
                     :loading="submitLoading"
                 />
@@ -83,10 +78,8 @@ export default {
     data: () => ({
         tab: null,
         todoStatuses: [
-            { name: "ゴール", show: false },
-            { name: "ToDo一覧", show: false },
+            { name: "ToDoツリー", show: false },
             { name: "予定", show: false },
-            { name: "完了", show: false },
         ],
         show: false,
         submitLoading: false,

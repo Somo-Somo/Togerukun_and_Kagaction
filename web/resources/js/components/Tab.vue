@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="px-4 pt-2">
         <div
-            class="d-flex justify-space-between px-2"
+            class="d-flex justify-space-between"
             :class="$vuetify.breakpoint.mdAndUp ? 'tabsStyle' : 'spTabsStyle'"
         >
             <v-tabs
@@ -23,7 +23,6 @@
                 </v-tab>
             </v-tabs>
         </div>
-        <v-divider></v-divider>
     </div>
 </template>
 

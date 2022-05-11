@@ -1,7 +1,8 @@
 <template>
     <div>
         <v-card
-            class="ma-4 overflow-y-auto"
+            class="overflow-y-auto"
+            :class="todoList.length > 0 ? 'mx-4 my-2' : ''"
             style="max-height: calc(100vh - 160px)"
         >
             <v-list-item-group color="primary">
@@ -9,7 +10,7 @@
                     class="px-2"
                     :style="
                         $vuetify.breakpoint.smAndUp
-                            ? 'height:88px'
+                            ? 'height:80px'
                             : 'height:64px'
                     "
                     v-for="(todo, index) in todoList"
@@ -37,6 +38,29 @@
                             @selectedMenu="selectedMenu"
                         />
                     </v-list-item-icon>
+                </v-list-item>
+                <v-list-item
+                    class="d-flex justify-space-around px-3"
+                    v-if="todoList.length > 0"
+                    style="height:64px"
+                    @click="$emit('onClickCreate')"
+                    link
+                >
+                    <v-icon class="pa-1">mdi-plus</v-icon>
+                    <v-list-item-content class="px-2">
+                        <v-list-item-title>
+                            <p
+                                class="grey--text font-weight-bold ma-0 pa-1"
+                                :style="
+                                    $vuetify.breakpoint.smAndUp
+                                        ? 'font-size:0.9rem'
+                                        : 'font-size:0.75rem'
+                                "
+                            >
+                                ゴールを追加する
+                            </p>
+                        </v-list-item-title>
+                    </v-list-item-content>
                 </v-list-item>
             </v-list-item-group>
         </v-card>
@@ -95,10 +119,7 @@ export default {
         },
         deleteTodo() {
             this.deletingConfirmationDialog = false;
-            this.$store.dispatch(
-                "todo/deleteTodo",
-                this.selectedDeletingTodo
-            );
+            this.$store.dispatch("todo/deleteTodo", this.selectedDeletingTodo);
             this.selectedDeletingTodo = { name: null };
         },
     },
