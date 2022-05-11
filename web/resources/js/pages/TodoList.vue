@@ -1,97 +1,69 @@
 <template>
-    <v-container
-        class="d-flex flex-column px-0 px-md-16"
-        :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
-        fluid
-    >
+    <div>
         <Header :project="project" />
-        <template>
-            <div
-                class="d-flex justify-space-between"
-                :class="
-                    $vuetify.breakpoint.mdAndUp ? 'tabsStyle' : 'spTabsStyle'
-                "
-            >
-                <v-tabs
-                    v-model="tab"
-                    class="px-md-0"
-                    color="black"
-                    :height="$vuetify.breakpoint.mdAndUp ? '' : '40'"
+        <Tab :todoStatuses="todoStatuses" :tab="tab" @setTab="setTab" />
+        <v-container class="d-flex flex-column py-2 px-16" fluid>
+            <template>
+                <!-- PC版 -->
+                <div
+                    class="d-flex flex-column px-2 px-md-0"
+                    :class="
+                        $vuetify.breakpoint.mdAndUp
+                            ? 'cardStyle'
+                            : 'spCardStyle'
+                    "
                 >
-                    <v-tabs-slider color="#80CBC4"></v-tabs-slider>
-                    <v-tab
-                        class="px-0"
-                        v-for="todoStatus in todoStatuses"
-                        :key="todoStatus.name"
-                        :class="$vuetify.breakpoint.mdAndUp ? '' : 'spTabStyle'"
-                    >
-                        <p class="ma-0 font-weight-bold">
-                            {{ todoStatus.name }}
-                        </p>
-                    </v-tab>
-                </v-tabs>
-                <v-icon
-                    v-if="tab === 0"
-                    class="hidden-sm-and-down my-3"
-                    size="24"
-                    height="24"
-                    @click="onClickCreate()"
-                    >mdi-plus-circle</v-icon
-                >
-            </div>
-            <v-divider
-                v-if="!$vuetify.breakpoint.mdAndUp"
-                style="position: relative; top: 92px"
-            ></v-divider>
-            <!-- PC版 -->
-            <div
-                class="d-flex flex-column px-2 px-md-0"
-                :class="
-                    $vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'
-                "
-            >
-                <v-tabs-items class="overflow-y-auto" v-model="tab">
-                    <v-tab-item
-                        v-for="todoStatus in todoStatuses"
-                        :key="todoStatus.name"
-                    >
-                        <TodoCards
-                            :project="project"
-                            :todoList="todoList"
-                            :todoStatus="todoStatuses[tab]"
-                        />
-                        <!-- PC版追加カード -->
-                        <NewAdditionalCard
-                            v-if="tab === 0"
-                            @clickAditional="onClickCreate"
-                            :category="todoStatus.name"
-                        />
-                    </v-tab-item>
-                </v-tabs-items>
-            </div>
-            <!-- スマホ版追加ボタン -->
-            <!-- <SpBottomBtn 
+                    <v-tabs-items class="overflow-y-auto" v-model="tab">
+                        <v-tab-item
+                            v-for="todoStatus in todoStatuses"
+                            :key="todoStatus.name"
+                        >
+                            <TodoCards
+                                v-if="tab !== 1"
+                                :project="project"
+                                :todoList="todoList"
+                                :todoStatus="todoStatuses[tab]"
+                            />
+                            <Table
+                                v-if="tab === 1"
+                                :project="project"
+                                :todoList="todoList"
+                            />
+                            <!-- PC版追加カード -->
+                            <NewAdditionalCard
+                                v-if="tab === 0"
+                                @clickAditional="onClickCreate"
+                                :category="todoStatus.name"
+                            />
+                        </v-tab-item>
+                    </v-tabs-items>
+                </div>
+                <!-- スマホ版追加ボタン -->
+                <!-- <SpBottomBtn 
           v-if="tab === 0"
           @clickAditional="onClickCreate" 
           :tab="tab" 
           :headerTitle="'仮説一覧'" 
         /> -->
-        </template>
-        <form class="form" @submit.prevent="submitForm()">
-            <InputForm
-                v-if="form"
-                @onClickCancel="onClickCancel"
-                @submitForm="submitForm"
-                :category="todoStatuses[0].name"
-                :inputForm="inputForm"
-                :loading="submitLoading"
-            />
-        </form>
-    </v-container>
+            </template>
+            <form class="form" @submit.prevent="submitForm()">
+                <InputForm
+                    v-if="form"
+                    @onClickCancel="onClickCancel"
+                    @submitForm="submitForm"
+                    :category="todoStatuses[0].name"
+                    :inputForm="inputForm"
+                    :loading="submitLoading"
+                />
+            </form>
+        </v-container>
+    </div>
 </template>
 
 <script>
 import Header from "../components/Header.vue";
+import Tab from "../components/Tab.vue";
+import Table from "../components/Table/Table.vue";
 import TodoCards from "../components/Cards/TodoCard.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
@@ -101,6 +73,8 @@ import { mapGetters, mapState } from "vuex";
 export default {
     components: {
         Header,
+        Tab,
+        Table,
         TodoCards,
         NewAdditionalCard,
         SpBottomBtn,
@@ -130,6 +104,9 @@ export default {
         }),
     },
     methods: {
+        setTab(newVal) {
+            return (this.tab = newVal);
+        },
         onClickCreate() {
             this.$store.dispatch("form/onClickCreate");
             this.form = true;
@@ -159,31 +136,18 @@ export default {
 </script>
 
 <style scoped lang="sass">
-.tabsStyle
-  width: 772px
-  position: absolute
-
-
-.spTabsStyle
-  width: 100%
-  height: 40px
-  position: absolute
-  top: 64px
-
 .spTabStyle
   width: 25%
   height: 40px
   font-size: 0.75rem
 
 .cardStyle
-  height: calc(100vh - 152px)
+  height: calc(100vh - 120px)
   position: relative
-  top: 48px
 
 .spCardStyle
   height: calc(100vh - 192px)
   position: relative
-  top: 96px
 </style>
 
 <style lang="sass">

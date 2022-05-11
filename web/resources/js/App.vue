@@ -2,7 +2,6 @@
   <v-app id="inspire">
     <Navbar v-if="checkPath"/>
     <v-main 
-      class="my-md-2" 
       :class="$vuetify.breakpoint.mdAndUp ? '' : 'py-0'">
       <RouterView />
     </v-main>

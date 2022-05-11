@@ -2,14 +2,19 @@
 
 namespace App\UseCases\Todo\Converter;
 
+use App\UseCases\Todo\ChildRelateToParentTodo;
 use App\UseCases\Comment\Converter\CommentConverter;
 
 class TodoListConverter
 {
+    protected $childRelateToParentTodo;
     protected $commentConverter;
 
-    public function __construct(CommentConverter $commentConverter)
-    {
+    public function __construct(
+        CommentConverter $commentConverter, 
+        ChildRelateToParentTodo $childRelateToParentTodo
+    ){
+        $this->childRelateToParentTodo = $childRelateToParentTodo;
         $this->commentConverter = $commentConverter;
     }
 
@@ -22,6 +27,9 @@ class TodoListConverter
 
         // 仮説を親と紐付けてデータとして保管する配列
         $todoData = [];
+
+
+        $leftSideOfLine = [];
 
         // 親仮説それに紐づく子仮説の順番になるように配列$todoListに追加
         // depth = 1 の場合「ゴール」。parentUuid = projectUuidで保存
@@ -43,20 +51,8 @@ class TodoListConverter
             if ($childs) {
                 // 子どもに親のデータを持たせて$todoDataに格納。
                 // 親になった時にこのtodoDataからtodoList仮説一覧配列に格納する
-                foreach ($childs as $childValue) {
-                    $child = $childValue->getProperties()->toArray();
+                $todoData = $this->childRelateToParentTodo->invoke($todoData, $childs, $parent, $len);
 
-                    // 子仮説の親UUID
-                    $child['parentUuid'] = $parent['uuid'];
-
-                    // ゴールからの仮説の階層の深さ
-                    $child['depth'] = $len;
-
-                    // 仮説一覧のトグルの状態
-                    $child['toggle'] = 'mdi-menu-right';
-                    
-                    $todoData[$child['uuid']] = $child;
-                }
                 // 子仮説がある場合
                 // 仮説にchild: true を持たせる
                 $len === 1 ? $parent['child'] = true 
@@ -67,7 +63,6 @@ class TodoListConverter
                 $len === 1 ? 
                 $parent['child'] = false : $todoData[$parent['uuid']]['child'] = false;
             }
-
             
             // 仮説 = ゴールの場合
             if ($len === 1) {
@@ -77,8 +72,10 @@ class TodoListConverter
                 // ゴールからの仮説の階層の深さ
                 $parent['depth'] = 0;
 
-                // 仮説一覧のトグルの状態
-                $parent['toggle'] = 'mdi-menu-right';
+                // Todo一覧のテーブルの行の左側の状態
+                $leftSideOfLine = [];
+                $leftSideOfLine[] = ['lastChild' => false ];
+                $parent['leftSideOfLine'] = $leftSideOfLine;
 
                 // 日付
                 $parent['date'] = $date ? $date['on'] : null;
@@ -93,12 +90,23 @@ class TodoListConverter
                 $todoList[$projectUuid][] = $parent;
 
             } else {
+                // Todo一覧のテーブルの行の左側の状態
+                if (count($leftSideOfLine) > $todoData[$parent['uuid']]['depth']){
+                    $leftSideOfLine = array_slice($leftSideOfLine, 0, $todoData[$parent['uuid']]['depth']);
+                } 
+                array_push($leftSideOfLine, $todoData[$parent['uuid']]['lastChildInTheSameDepth']);
+                unset($todoData[$parent['uuid']]['lastChildInTheSameDepth']);
+                $todoData[$parent['uuid']]['leftSideOfLine'] = $leftSideOfLine;
+
                 // 日付
                 $todoData[$parent['uuid']]['date'] =  $date ? $date['on'] : null;
+
                 // 完了
                 if ($value['accomplish']) $todoData[$parent['uuid']]['accomplish'] = true;
+
                 //コメント
                 $todoData[$parent['uuid']]['comments'] = $comments ? $comments : [];
+                
                 // $todoDataから
                 $todoList[$projectUuid][] = $todoData[$parent['uuid']];
             }

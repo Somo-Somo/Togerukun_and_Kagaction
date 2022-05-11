@@ -35,8 +35,7 @@ const mutations = {
 
     selectTodoList (state, projectUuid) {
         const allTodoList = state.allTodoList;
-        state.todoList = allTodoList[projectUuid] ? 
-            allTodoList[projectUuid] : [];
+        state.todoList = allTodoList[projectUuid] ? allTodoList[projectUuid] : [];
     },
 
     setAllTodoList (state, data) {
@@ -46,24 +45,33 @@ const mutations = {
     addTodoForTodoList (state, newTodo){
         const todoList = state.todoList
         const newTodoList = []
-        let todoParemtOrBrother = false;
+        let todoParentOrBrother = false;
+        let newTodoSpaces = []
         
         for (const [key, todo] of Object.entries(todoList)) {
             // 追加する親仮説の場合
             if (todo.uuid === newTodo.parentUuid ){
-                todo['toggle'] = "mdi-menu-right";
                 todo.child = true;
-                todoParemtOrBrother = true;
+                todoParentOrBrother = true;
+                newTodoSpaces = todo.leftSideOfLine;
+                newTodoSpaces.push({'lastChild': true});
                 newTodoList.push(todo);
             } 
             // 追加する仮説と同じ階層にある仮説の場合
             else if (todo.parentUuid === newTodo.parentUuid) {
-                todoParemtOrBrother = true;
+                todoParentOrBrother = true;
+                if (todo.leftSideOfLine[newTodo.depth]) todo.leftSideOfLine[newTodo.depth] = {'lastChild': false};
                 newTodoList.push(todo);
             } 
+            // 追加する仮説と同じ階層あるいは子の階層だった時
+            else if (todoParentOrBrother && newTodo.depth <= todo.depth) {
+                if (todo.leftSideOfLine[newTodo.depth]) todo.leftSideOfLine[newTodo.depth] = {'lastChild': false};
+                newTodoList.push(todo);
+            }
             // 追加する仮説と同じ階層の仮説があるかつ親仮説以上の階層に仮説が戻った場合
-            else if (todoParemtOrBrother && newTodo.depth > todo.depth) {
-                todoParemtOrBrother = false;
+            else if (todoParentOrBrother && newTodo.depth > todo.depth) {
+                todoParentOrBrother = false;
+                newTodo['leftSideOfLine'] = newTodoSpaces;
                 newTodoList.push(newTodo);
                 newTodoList.push(todo);
             } else {
@@ -71,7 +79,7 @@ const mutations = {
             }
         }
 
-        if(todoParemtOrBrother) newTodoList.push(newTodo);
+        if(todoParentOrBrother) newTodoList.push(newTodo);
 
         state.todoList = newTodoList;
     },
@@ -112,24 +120,38 @@ const mutations = {
         const newTodoList = [];
         let deleteTodoChild = false;
         let parentKey = null;
-        const childList = [];
+        let lastChildKey = null;
+        let deleteTodoKey = null;
         for (const [key, value] of Object.entries(todoList)) {
-            // 削除する仮説の子以下の場合
+            // 削除する仮説の子以下の場合その子の仮説も削除していく
             deleteTodoChild = deleteTodoChild && todo.depth < value.depth ? true : false;
-
+            // 削除しないtodoの場合
             if (value.uuid !== todo.uuid && !deleteTodoChild) {
-                if(value.uuid === todo.parentUuid) parentKey = key;
+                // 削除する親のtodoの時
+                if(value.uuid === todo.parentUuid){
+                    console.info(key);
+                    parentKey = key;
+                }
+                // 同じ階層のtodoの時
                 if (value.parentUuid === todo.parentUuid) {
-                    childList.push(value);
+                    lastChildKey = key;
                 }
                 newTodoList.push(value);
             } else {
+                if (value.uuid === todo.uuid) deleteTodoKey = key;
                 deleteTodoChild = true;
             }
         }
 
+        // 削除するTodoと同じ階層の最後のTodoからその子どもたち全てlastChild=trueに
+        if (lastChildKey) {
+            for (let key = lastChildKey; key < deleteTodoKey; key++) {
+                newTodoList[key]['leftSideOfLine'].splice(todo.depth, 1 , {'lastChild': true});
+            }
+        }
+
         // 仮説を削除した結果、親仮説の子がいなくなった場合
-        if(newTodoList.length && !childList.length) newTodoList[parentKey]['child'] = false;
+        if(newTodoList.length && !lastChildKey) newTodoList[parentKey]['child'] = false;
         state.todoList = newTodoList;
         state.allTodoList[todoList[0]['parentUuid']] = newTodoList;
     },
