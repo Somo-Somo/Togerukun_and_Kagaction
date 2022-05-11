@@ -1,8 +1,8 @@
 <template>
     <div>
         <Header :project="project" />
-        <Tab :todoStatuses="todoStatuses" :tab="tab" @setTab="setTab" />
-        <v-container class="d-flex flex-column py-2 px-16" fluid>
+        <v-container class="d-flex flex-column py-0 px-16" fluid>
+            <Tab :todoStatuses="todoStatuses" :tab="tab" @setTab="setTab" />
             <template>
                 <!-- PC版 -->
                 <div

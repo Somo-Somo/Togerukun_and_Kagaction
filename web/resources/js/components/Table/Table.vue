@@ -2,7 +2,7 @@
     <div>
         <v-card
             class="overflow-y-auto"
-            :class="todoList.length > 0 ? 'ma-4' : ''"
+            :class="todoList.length > 0 ? 'mx-4 my-2' : ''"
             style="max-height: calc(100vh - 160px)"
         >
             <v-list-item-group color="primary">
