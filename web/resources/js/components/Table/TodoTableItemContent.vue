@@ -100,13 +100,7 @@ export default {
     computed: {
         subTitle() {
             return (todo) => {
-                if (todo.accomplish) {
-                    return this.todoStatus.accomplish;
-                } else if (todo.date) {
-                    return this.calcDate(todo);
-                } else {
-                    return false;
-                }
+                return todo.date && !todo.accomplish ? this.calcDate(todo) : false;
             };
         },
         parentName() {
