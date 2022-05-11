@@ -21,19 +21,45 @@
             :key="num"
         >
             <div class="d-flex">
-                <TDashedLine v-if="todo.depth === num && !todo.leftSideOfLine[num].lastChild" />
-                <LDashedLine v-if="todo.depth === num && todo.leftSideOfLine[num].lastChild"/>
-                <DashedLine v-if="todo.depth !== num && !todo.leftSideOfLine[num].lastChild"/>
-                <v-spacer style="width: 50px" v-if="todo.depth !== num && todo.leftSideOfLine[num].lastChild"></v-spacer>
+                <TDashedLine
+                    v-if="
+                        todo.depth === num &&
+                        !todo.leftSideOfLine[num].lastChild
+                    "
+                />
+                <LDashedLine
+                    v-if="
+                        todo.depth === num && todo.leftSideOfLine[num].lastChild
+                    "
+                />
+                <DashedLine
+                    v-if="
+                        todo.depth !== num &&
+                        !todo.leftSideOfLine[num].lastChild
+                    "
+                />
+                <v-spacer
+                    style="width: 50px"
+                    v-if="
+                        todo.depth !== num && todo.leftSideOfLine[num].lastChild
+                    "
+                ></v-spacer>
             </div>
         </v-list-item-content>
         <div class="d-flex flex-column" style="width: 28px; height: 88px">
             <v-list-item-action
                 class="d-flex mx-auto"
                 :class="todo.child ? 'mt-auto mb-1' : 'my-auto'"
-                style="height: 24px"
+                style="height: 24px; z-index: 10;"
+                v-model="todo.accomplish"
+                @click.stop="onClickAccomplish(todo)"
             >
-                <v-btn icon height="24" width="24" :color="todo.accomplish ? 'green' : ''">
+                <v-btn
+                    icon
+                    height="24"
+                    width="24"
+                    :color="todo.accomplish ? 'green' : ''"
+                >
                     <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
                 </v-btn>
             </v-list-item-action>
@@ -57,13 +83,23 @@ export default {
         TDashedLine,
         LowerDashedLine,
     },
-    data: () => ({ }),
+    data: () => ({}),
     props: {
         todo: {
             type: Object,
         },
     },
     computed: {},
-    methods: {},
+    methods: {
+        onClickAccomplish(todo) {
+            this.$set(todo,'accomplish', todo.accomplish ? false : true);
+            this.$store.dispatch("todo/updateAccomplish", todo);
+        },
+    },
+    watch: {
+        'todo.accomplish' (next,prev) {
+            return;
+        }
+    },
 };
 </script>

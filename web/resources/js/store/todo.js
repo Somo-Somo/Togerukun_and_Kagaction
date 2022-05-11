@@ -251,16 +251,16 @@ const actions = {
         return;
     },
 
-    async updateAccomplish (context, {accomplish, todoUuid}) {
-        context.commit('updateTodoAccomplish', accomplish);
-        if (accomplish) {
-            const response = await axios.put('/api/todo/'+todoUuid+'/accomplish')
+    async updateAccomplish (context, todo) {
+        context.commit('updateTodoAccomplish', todo.accomplish);
+        if (todo.accomplish) {
+            const response = await axios.put('/api/todo/'+todo.uuid+'/accomplish')
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
             }
         } else {
-            const response = await axios.delete('/api/todo/'+todoUuid+'/accomplish')
+            const response = await axios.delete('/api/todo/'+todo.uuid+'/accomplish')
             if (response.status !== OK) {
                 context.commit ('error/setCode', response.status, {root: true});
                 return false;
