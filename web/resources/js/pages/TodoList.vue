@@ -76,7 +76,7 @@ export default {
     data: () => ({
         tab: null,
         todoStatuses: [
-            { name: "ToDo一覧", show: false },
+            { name: "ToDoツリー", show: false },
             { name: "予定", show: false },
         ],
         show: false,
