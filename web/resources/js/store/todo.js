@@ -49,29 +49,23 @@ const mutations = {
         let newTodoSpaces = []
         
         for (const [key, todo] of Object.entries(todoList)) {
-            // 追加する親仮説の場合
+            // 追加する親Todoの場合
             if (todo.uuid === newTodo.parentUuid ){
                 todo.child = true;
                 todoParentOrBrother = true;
                 newTodoSpaces = todo.leftSideOfLine;
-                newTodoSpaces.push({'lastChild': true});
                 newTodoList.push(todo);
             } 
-            // 追加する仮説と同じ階層にある仮説の場合
-            else if (todo.parentUuid === newTodo.parentUuid) {
-                todoParentOrBrother = true;
-                if (todo.leftSideOfLine[newTodo.depth]) todo.leftSideOfLine[newTodo.depth] = {'lastChild': false};
-                newTodoList.push(todo);
-            } 
-            // 追加する仮説と同じ階層あるいは子の階層だった時
-            else if (todoParentOrBrother && newTodo.depth <= todo.depth) {
-                if (todo.leftSideOfLine[newTodo.depth]) todo.leftSideOfLine[newTodo.depth] = {'lastChild': false};
+            // 追加するTodoと親が同じのTodoの場合または同じ親で追加するTodoより階層が高いとき
+            else if (todoParentOrBrother && (todo.parentUuid === newTodo.parentUuid || newTodo.depth <= todo.depth)) {
+                if (todo.leftSideOfLine[newTodo.depth]) todo.leftSideOfLine.splice(newTodo.depth, 1 , {'lastChild': false});
                 newTodoList.push(todo);
             }
-            // 追加する仮説と同じ階層の仮説があるかつ親仮説以上の階層に仮説が戻った場合
+            // 追加するTodoと同じ階層のTodoがあるかつ親Todo以上の階層にTodoが戻った場合
             else if (todoParentOrBrother && newTodo.depth > todo.depth) {
                 todoParentOrBrother = false;
                 newTodo['leftSideOfLine'] = newTodoSpaces;
+                newTodo['leftSideOfLine'].push({'lastChild': true});
                 newTodoList.push(newTodo);
                 newTodoList.push(todo);
             } else {
@@ -123,7 +117,7 @@ const mutations = {
         let lastChildKey = null;
         let deleteTodoKey = null;
         for (const [key, value] of Object.entries(todoList)) {
-            // 削除する仮説の子以下の場合その子の仮説も削除していく
+            // 削除するTodoの子以下の場合その子のTodoも削除していく
             deleteTodoChild = deleteTodoChild && todo.depth < value.depth ? true : false;
             // 削除しないtodoの場合
             if (value.uuid !== todo.uuid && !deleteTodoChild) {
@@ -150,7 +144,7 @@ const mutations = {
             }
         }
 
-        // 仮説を削除した結果、親仮説の子がいなくなった場合
+        // Todoを削除した結果、親Todoの子がいなくなった場合
         if(newTodoList.length && !lastChildKey) newTodoList[parentKey]['child'] = false;
         state.todoList = newTodoList;
         state.allTodoList[todoList[0]['parentUuid']] = newTodoList;
