@@ -55,7 +55,6 @@ const mutations = {
                 todoParentOrBrother = true;
                 newTodoSpaces.push(...todo.leftSideOfLine);
                 newTodoList.push(todo);
-                console.info(newTodoList);
             } 
             // 追加するTodoと親が同じのTodoの場合または同じ親で追加するTodoより階層が高いとき
             else if (todoParentOrBrother && (todo.parentUuid === newTodo.parentUuid || newTodo.depth <= todo.depth)) {
@@ -79,9 +78,7 @@ const mutations = {
                 newTodo['leftSideOfLine'].push(...newTodoSpaces);
                 newTodo['leftSideOfLine'].splice(newTodo.depth, 0 , {'lastChild': true});
                 newTodoList.push(newTodo);
-                console.info(newTodoList);
             }
-            console.info(newTodoSpaces);
         }
 
         state.todoList = newTodoList;
