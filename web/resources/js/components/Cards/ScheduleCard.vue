@@ -32,28 +32,7 @@
                                         <v-list-item-subtitle
                                             class="d-flex align-content-start mt-3 mb-1"
                                         >
-                                            <div
-                                                class="d-flex pr-1"
-                                                :style="
-                                                    subTitle(todo)
-                                                        .backgroundColor
-                                                "
-                                            >
-                                                <v-icon size="8" color="#212121"
-                                                    >mdi-clock-outline</v-icon
-                                                >
-                                                <p
-                                                    class="ma-0 px-2 #212121--text font-weight-bold align-self-center"
-                                                    :style="
-                                                        $vuetify.breakpoint
-                                                            .smAndUp
-                                                            ? 'font-size:12px'
-                                                            : 'font-size:8px'
-                                                    "
-                                                >
-                                                    {{ subTitle(todo).title }}
-                                                </p>
-                                            </div>
+                                            <DateSubTitle :todo="todo"/>
                                             <div
                                                 class="d-flex"
                                                 style="max-width: 66%"
@@ -192,24 +171,18 @@
 </template>
 
 <script>
+import DateSubTitle from "../Date/DateSubTitle.vue";
 import DeletingConfirmationDialog from "../Dialog/DeletingConfirmationDialog.vue";
 
 export default {
     components: {
+        DateSubTitle,
         DeletingConfirmationDialog,
     },
     data: () => ({
         deletingConfirmationDialog: false,
         selectedDeletingTodo: null,
         cardMenu: [{ title: "削除", color: "color: red" }],
-        subtitle: {
-            date: {
-                icon: "mdi-clock-outline",
-                iconSize: 14,
-                iconColor: "#212121",
-                fontColor: "#212121--text",
-            },
-        },
         existCard: false,
     }),
     props: {
@@ -227,11 +200,6 @@ export default {
         },
     },
     computed: {
-        subTitle() {
-            return (todo) => {
-                return this.calcDate(todo);
-            };
-        },
         parentName() {
             return (todo) => {
                 return " 「" + this.projectList[todo.projectUuid].name;
@@ -308,28 +276,6 @@ export default {
         onClickCancel() {
             this.deletingConfirmationDialog = false;
             this.selectedDeletingTodo = null;
-        },
-        calcDate(todo) {
-            const today = new Date(
-                Date.now() - new Date().getTimezoneOffset() * 60000
-            )
-                .toISOString()
-                .substr(0, 10);
-            const diff =
-                (new Date(todo.date) - new Date(today)) / (60 * 60 * 1000 * 24);
-            if (diff > 0) {
-                this.subtitle.date.title = "残り" + diff + "日";
-                this.subtitle.date.backgroundColor =
-                    diff < 4 ? "background-color: yellow" : null;
-            } else if (diff === 0) {
-                this.subtitle.date.title = "今日";
-                this.subtitle.date.backgroundColor =
-                    "background-color: skyblue";
-            } else {
-                this.subtitle.date.title = Math.abs(diff) + "日経過";
-                this.subtitle.date.backgroundColor = "background-color: coral";
-            }
-            return this.subtitle.date;
         },
     },
     watch: {

@@ -38,16 +38,7 @@
             <v-list-item-content class="pa-0 d-flex">
               <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
-                  <div class="d-flex pr-1" :style="subTitle(todo).backgroundColor" v-if="subTitle(todo)">
-                    <v-icon :size="subTitle(todo).iconSize" :color="subTitle(todo).iconColor">{{ subTitle(todo).icon }}</v-icon>
-                    <p
-                      class="ma-0 px-2 font-weight-bold align-self-center"
-                      :class="subTitle(todo).fontColor"
-                      :style="$vuetify.breakpoint.smAndUp ? 'font-size:12px' : 'font-size:8px'"
-                    >
-                       {{ subTitle(todo).title }}
-                    </p>
-                  </div>
+                  <DateSubTitle :todo="todo"/>
                   <div class="d-flex" style="max-width:66%"> 
                     <p
                       class="ma-0 grey--text font-weight-bold align-self-center"
@@ -128,10 +119,12 @@
 </template>
 
 <script>
+import DateSubTitle from "../Date/DateSubTitle.vue";
 import DeletingConfirmationDialog from "../Dialog/DeletingConfirmationDialog.vue";
 
 export default {
   components: {
+    DateSubTitle,
     DeletingConfirmationDialog,
   },
   data: () => ({
@@ -140,14 +133,6 @@ export default {
     cardMenu: [
       {title: "削除", color:"color: red"},
     ],
-    subtitle: {
-      date : {
-            icon: 'mdi-clock-outline',
-            iconSize: 14, 
-            iconColor: '#212121',
-            fontColor : '#212121--text'
-      }
-    }
   }),
   props: {
     project : {
@@ -174,17 +159,11 @@ export default {
           const diff = (new Date(todo.date) - new Date(today)) / (60*60*1000*24);
           return todo.date && !(todo.accomplish && diff < 0) ? this.showTodo() : false; 
         }
-
         if (this.todoStatus.name === "ToDo") 
           return this.selectTodo.uuid === todo.parentUuid ? this.showTodo() : false;
 
         return false;
       }
-    },
-    subTitle() {
-      return (todo) => {
-        return todo.date ? this.calcDate(todo) : false;
-      }  
     },
     parentName() {
       return (todo) => {
@@ -233,21 +212,6 @@ export default {
     onClickAccomplish(todo) {
         this.$set(todo,'accomplish', todo.accomplish ? false : true);
         this.$store.dispatch("todo/updateAccomplish", todo);
-    },
-    calcDate (todo){
-        const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
-        const diff = (new Date(todo.date) - new Date(today)) / (60*60*1000*24);
-        if (diff > 0) {
-          this.subtitle.date.title = '残り' + diff + '日';
-          this.subtitle.date.backgroundColor = diff < 4 ? 'background-color: yellow' : null;
-        } else if (diff === 0) {
-          this.subtitle.date.title = '今日';
-          this.subtitle.date.backgroundColor = 'background-color: skyblue';
-        } else {
-          this.subtitle.date.title = Math.abs(diff) + '日経過';
-          this.subtitle.date.backgroundColor = 'background-color: coral'
-        }
-        return this.subtitle.date;
     },
     sortScheduleList (){
         const scheduleList = [];
