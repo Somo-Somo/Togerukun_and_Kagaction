@@ -53,8 +53,9 @@ const mutations = {
             if (todo.uuid === newTodo.parentUuid ){
                 todo.child = true;
                 todoParentOrBrother = true;
-                newTodoSpaces = todo.leftSideOfLine;
+                newTodoSpaces.push(...todo.leftSideOfLine);
                 newTodoList.push(todo);
+                console.info(newTodoList);
             } 
             // 追加するTodoと親が同じのTodoの場合または同じ親で追加するTodoより階層が高いとき
             else if (todoParentOrBrother && (todo.parentUuid === newTodo.parentUuid || newTodo.depth <= todo.depth)) {
@@ -64,28 +65,25 @@ const mutations = {
             // 追加するTodoと同じ階層のTodo(兄弟)があるかつ親Todo以上の階層にTodoが戻った場合
             else if (todoParentOrBrother && newTodo.depth > todo.depth) {
                 todoParentOrBrother = false;
-                newTodoSpaces.push({'lastChild': true})
-                console.info(newTodoSpaces);
-                newTodo['leftSideOfLine'] = newTodoSpaces;
+                newTodo['leftSideOfLine'].push(...newTodoSpaces);
+                newTodo['leftSideOfLine'].splice(newTodo.depth, 0 , {'lastChild': true});
                 newTodoList.push(newTodo);
                 newTodoList.push(todo);
-            } else {
+            } 
+            else {
                 newTodoList.push(todo);
             }
-        }
 
-        // テーブル上一番下のTodoの場合
-        if (todoParentOrBrother || newTodo.depth === 0) {
-            if (newTodo.depth > 0) {
-                newTodo['leftSideOfLine'] = newTodoSpaces;
-                if(newTodo.depth > 0) newTodo['leftSideOfLine'].push({'lastChild': true});
-            } else {
-                newTodo['leftSideOfLine'].push({'lastChild': false});
+            // 追加するTodoがテーブル上で一番下の時
+            if (Number(key) + 1 ===  todoList.length && todoList.length === newTodoList.length) {
+                newTodo['leftSideOfLine'].push(...newTodoSpaces);
+                newTodo['leftSideOfLine'].splice(newTodo.depth, 0 , {'lastChild': true});
+                newTodoList.push(newTodo);
+                console.info(newTodoList);
             }
-            newTodoList.push(newTodo);
+            console.info(newTodoSpaces);
         }
 
-        console.info(newTodoList);
         state.todoList = newTodoList;
     },
 
@@ -134,7 +132,6 @@ const mutations = {
             if (value.uuid !== todo.uuid && !deleteTodoChild) {
                 // 削除する親のtodoの時
                 if(value.uuid === todo.parentUuid){
-                    console.info(key);
                     parentKey = key;
                 }
                 // 同じ階層のtodoの時
@@ -188,6 +185,7 @@ const actions = {
             depth: 0,
             comments: [],
             child: false,
+            leftSideOfLine: [{'lastChild': false}],
         };
 
         await context.commit ('addGoal', goal);
@@ -215,6 +213,7 @@ const actions = {
             depth: Number(parent.depth) + 1,
             comments: [],
             child: false,
+            leftSideOfLine: [],
         };
 
         await context.commit ('addTodoForTodoList', todo);
