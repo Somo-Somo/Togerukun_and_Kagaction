@@ -69,19 +69,12 @@
 export default {
     data: () => ({
         todoStatus: {
-            accomplish: {
-                icon: "mdi-circle",
-                iconSize: 8,
-                title: "完了",
-                backgroundColor: "background-color: null",
-                iconColor: "green",
-                fontColor: "#212121--text",
-            },
             date: {
                 icon: "mdi-clock-outline",
                 iconSize: 14,
                 iconColor: "#212121",
                 fontColor: "#212121--text",
+                backgroundColor: "background-color: transparent",
             },
         },
         cardMenu: [{ title: "削除", color: "color: red" }],
@@ -144,12 +137,14 @@ export default {
                     "background-color: skyblue";
             } else if (todo.accomplish) {
                 const year = new Date(todo.date).getFullYear();
-                const month = new Date(todo.date).getMonth();
-                const day = new Date(todo.date).getDay();
+                const month = new Date(todo.date).getMonth() + 1;
+                const day = new Date(todo.date).getDay() + 1;
                 this.todoStatus.date.title  =
                     new Date().getFullYear() === year
                         ? month + "月" + day + "日"
                         : year + "年" + month + "月" + day + "日";
+                this.todoStatus.date.backgroundColor =
+                    "background-color: transparent;";
             } else {
                 this.todoStatus.date.title = Math.abs(diff) + "日経過";
                 this.todoStatus.date.backgroundColor =
