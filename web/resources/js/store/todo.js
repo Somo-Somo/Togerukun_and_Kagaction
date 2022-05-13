@@ -9,7 +9,7 @@ const state = {
 };
 
 const getters = {
-    todo: state => state.todo.uuid ? state.todo: null,
+    todo: state => state.todo ? state.todo: null,
     parentTodo: state => state.parentTodo ? state.parentTodo: null,
     todoList: state => state.todoList ? state.todoList : null,
 };
@@ -61,11 +61,12 @@ const mutations = {
                 if (todo.leftSideOfLine[newTodo.depth]) todo.leftSideOfLine.splice(newTodo.depth, 1 , {'lastChild': false});
                 newTodoList.push(todo);
             }
-            // 追加するTodoと同じ階層のTodoがあるかつ親Todo以上の階層にTodoが戻った場合
+            // 追加するTodoと同じ階層のTodo(兄弟)があるかつ親Todo以上の階層にTodoが戻った場合
             else if (todoParentOrBrother && newTodo.depth > todo.depth) {
                 todoParentOrBrother = false;
+                newTodoSpaces.push({'lastChild': true})
+                console.info(newTodoSpaces);
                 newTodo['leftSideOfLine'] = newTodoSpaces;
-                newTodo['leftSideOfLine'].push({'lastChild': true});
                 newTodoList.push(newTodo);
                 newTodoList.push(todo);
             } else {
@@ -73,8 +74,18 @@ const mutations = {
             }
         }
 
-        if(todoParentOrBrother) newTodoList.push(newTodo);
+        // テーブル上一番下のTodoの場合
+        if (todoParentOrBrother || newTodo.depth === 0) {
+            if (newTodo.depth > 0) {
+                newTodo['leftSideOfLine'] = newTodoSpaces;
+                if(newTodo.depth > 0) newTodo['leftSideOfLine'].push({'lastChild': true});
+            } else {
+                newTodo['leftSideOfLine'].push({'lastChild': false});
+            }
+            newTodoList.push(newTodo);
+        }
 
+        console.info(newTodoList);
         state.todoList = newTodoList;
     },
 
