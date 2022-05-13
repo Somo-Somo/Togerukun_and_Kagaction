@@ -110,10 +110,6 @@ const mutations = {
         state.allTodoList[projectUuid] = state.todoList;
     },
 
-    updateTodoAccomplish (state, accomplish){
-        state.todo.accomplish = accomplish;
-    },
-
     updateDate (state, date){
         state.todo.date = date;
     },
@@ -256,7 +252,6 @@ const actions = {
     },
 
     async updateAccomplish (context, todo) {
-        context.commit('updateTodoAccomplish', todo.accomplish);
         if (todo.accomplish) {
             const response = await axios.put('/api/todo/'+todo.uuid+'/accomplish')
             if (response.status !== OK) {
