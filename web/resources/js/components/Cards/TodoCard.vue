@@ -188,8 +188,11 @@ export default {
           return todo.showTodoList ? true : false;
         }
 
-        if (this.todoStatus.name === "予定") 
-          return todo.date && !todo.accomplish ? this.showTodo() : false; 
+        if (this.todoStatus.name === "予定") {
+          const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+          const diff = (new Date(todo.date) - new Date(today)) / (60*60*1000*24);
+          return todo.date && !(todo.accomplish && diff < 0) ? this.showTodo() : false; 
+        }
 
         if (this.todoStatus.name === "完了") 
           return todo.accomplish ? this.showTodo() : false; 
