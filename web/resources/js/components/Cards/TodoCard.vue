@@ -10,24 +10,7 @@
       :style="$vuetify.breakpoint.smAndUp ? 'padding:8px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
-      <!-- ToDo一覧 -->
-      <div 
-        v-if="todoStatus.name === 'ToDo一覧'"
-        class="d-flex">
-        <div :style="depth(todo)"></div>
-        <div v-if="todo.child" class="d-flex align-content-center"> 
-          <v-icon
-            v-if="todo.toggle"
-            @click="onClickShowAndHideTodo(todo)"
-            style="background-color: none;"
-            >{{ todo.toggle }}
-          </v-icon>
-        </div>
-        <div v-if="!todo.child" style="width: 24px"></div>
-      </div>
       <!-- 予定 -->
-      <div v-if="todoStatus.name === 'ToDo一覧'" class="d-flex">
-      </div>
       <v-card class="rounded" style="width: 100%;" outlined>
         <v-list 
           class="py-0 d-flex align-content-center" 
