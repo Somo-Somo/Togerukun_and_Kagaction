@@ -179,23 +179,11 @@ export default {
     },
     cardShow() {
       return function (todo) {        
-        if (this.todoStatus.name === "ゴール") 
-          return todo.depth === 0 ? this.showTodo() : false;
-        
-        if (this.todoStatus.name === "ToDo一覧") {
-          if(todo) this.todoStatus.show = true;
-          if (todo.depth === 0) todo.showTodoList = true;
-          return todo.showTodoList ? true : false;
-        }
-
         if (this.todoStatus.name === "予定") {
           const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
           const diff = (new Date(todo.date) - new Date(today)) / (60*60*1000*24);
           return todo.date && !(todo.accomplish && diff < 0) ? this.showTodo() : false; 
         }
-
-        if (this.todoStatus.name === "完了") 
-          return todo.accomplish ? this.showTodo() : false; 
 
         if (this.todoStatus.name === "ToDo") 
           return this.selectTodo.uuid === todo.parentUuid ? this.showTodo() : false;
@@ -233,11 +221,6 @@ export default {
         if (todo.depth > 0) return '」のためのToDo';
       }
     },
-    depth() {
-      return (todo) => {
-        return 'padding-left:'+(Number(todo.depth) * 8) + 'px'; 
-      }
-    } 
   },
   methods: {
     showTodo(){
@@ -262,38 +245,6 @@ export default {
     onClickCancel(){
       this.deletingConfirmationDialog = false;
       this.selectedDeletingTodo = { name: null };
-    },
-    onClickShowAndHideTodo(todo){
-      for (const todoKey in this.todoList) {
-        let key = Number(todoKey);
-       // クリックされた仮説と同じ仮説の時
-       if (todo.uuid === this.todoList[todoKey].uuid) {
-         this.todoList[todoKey].toggle = 
-          todo.toggle === "mdi-menu-right" ? "mdi-menu-down" : "mdi-menu-right"; 
-       }
-        // クリックされた仮説の子仮説の時
-       if (todo.uuid === this.todoList[todoKey].parentUuid){  
-          // onClickOpenの時   
-          if (todo.toggle === "mdi-menu-down") {
-            this.todoList[key].showTodoList = true;
-          } 
-          // onClickCloseの時
-          else if (todo.toggle === "mdi-menu-right") {
-            this.todoList[key].showTodoList = false;
-            while (key < Object.keys(this.todoList).length) {
-              if(this.todoList[Number(todoKey)].depth > this.todoList[key].depth) break;
-              this.todoList[key].showTodoList = false;
-              if(this.todoList[key].toggle === "mdi-menu-down") 
-                this.todoList[key].toggle = "mdi-menu-right";
-              if(key + 1 === Object.keys(this.todoList).length) break;
-              key = key + 1;
-            }
-          } 
-       }
-       this.$set(this.todoList, key, this.todoList[key]);
-       this.cardShow(this.todoList[key]);
-      }
-      return this.todoList;
     },
     calcDate (todo){
         const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
