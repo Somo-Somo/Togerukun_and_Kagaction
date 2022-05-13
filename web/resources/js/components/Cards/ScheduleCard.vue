@@ -209,12 +209,8 @@ export default {
             return (todo) => {
                 const today = new Date(
                     Date.now() - new Date().getTimezoneOffset() * 60000
-                )
-                    .toISOString()
-                    .substr(0, 10);
-                const diff =
-                    (new Date(todo.date) - new Date(today)) /
-                    (60 * 60 * 1000 * 24);
+                ).toISOString().substr(0, 10);
+                const diff = (new Date(todo.date) - new Date(today)) / (60 * 60 * 1000 * 24);
                 let showCard = false;
                 if (this.period.name === "今日") {
                     showCard = diff === 0 ? true : false;
@@ -223,7 +219,7 @@ export default {
                     showCard = 0 <= diff && diff < 8 ? true : false;
                 }
                 if (this.period.name === "全期間") {
-                    showCard = true;
+                    showCard = todo.date && !(todo.accomplish && diff < 0) ? true : false;
                 }
                 if (this.period.name === "期限切れ") {
                     showCard = !todo.accomplish && diff < 0 ? true : false;
