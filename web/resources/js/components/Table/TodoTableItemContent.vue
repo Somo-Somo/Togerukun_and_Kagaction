@@ -1,28 +1,7 @@
 <template>
     <div>
         <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
-            <div
-                class="d-flex"
-                :style="subTitle(todo).backgroundColor"
-                v-if="subTitle(todo)"
-            >
-                <v-icon
-                    :size="subTitle(todo).iconSize"
-                    :color="subTitle(todo).iconColor"
-                    >{{ subTitle(todo).icon }}</v-icon
-                >
-                <p
-                    class="ma-0 px-2 font-weight-bold align-self-center"
-                    :class="subTitle(todo).fontColor"
-                    :style="
-                        $vuetify.breakpoint.smAndUp
-                            ? 'font-size:12px'
-                            : 'font-size:8px'
-                    "
-                >
-                    {{ subTitle(todo).title }}
-                </p>
-            </div>
+            <DateSubTitle :todo="todo"/>
             <div class="d-flex" style="max-width: 66%">
                 <p
                     class="ma-0 grey--text font-weight-bold align-self-center"
@@ -66,24 +45,12 @@
 </template>
 
 <script>
+import DateSubTitle from "../Date/DateSubTitle.vue";
 export default {
+    components: {
+        DateSubTitle,
+    },
     data: () => ({
-        todoStatus: {
-            accomplish: {
-                icon: "mdi-circle",
-                iconSize: 8,
-                title: "完了",
-                backgroundColor: "background-color: null",
-                iconColor: "green",
-                fontColor: "#212121--text",
-            },
-            date: {
-                icon: "mdi-clock-outline",
-                iconSize: 14,
-                iconColor: "#212121",
-                fontColor: "#212121--text",
-            },
-        },
         cardMenu: [{ title: "削除", color: "color: red" }],
     }),
     props: {
@@ -98,11 +65,6 @@ export default {
         },
     },
     computed: {
-        subTitle() {
-            return (todo) => {
-                return todo.date ? this.calcDate(todo) : false;
-            };
-        },
         parentName() {
             return (todo) => {
                 if (todo.depth === 0) {
@@ -124,39 +86,6 @@ export default {
             };
         },
     },
-    methods: {
-        calcDate(todo) {
-            const today = new Date(
-                Date.now() - new Date().getTimezoneOffset() * 60000
-            )
-                .toISOString()
-                .substr(0, 10);
-            const diff =
-                (new Date(todo.date) - new Date(today)) / (60 * 60 * 1000 * 24);
-
-            if (diff > 0) {
-                this.todoStatus.date.title = "残り" + diff + "日";
-                this.todoStatus.date.backgroundColor =
-                    diff < 4 ? "background-color: yellow" : null;
-            } else if (diff === 0) {
-                this.todoStatus.date.title = "今日";
-                this.todoStatus.date.backgroundColor =
-                    "background-color: skyblue";
-            } else if (todo.accomplish) {
-                const year = new Date(todo.date).getFullYear();
-                const month = new Date(todo.date).getMonth();
-                const day = new Date(todo.date).getDay();
-                this.todoStatus.date.title  =
-                    new Date().getFullYear() === year
-                        ? month + "月" + day + "日"
-                        : year + "年" + month + "月" + day + "日";
-            } else {
-                this.todoStatus.date.title = Math.abs(diff) + "日経過";
-                this.todoStatus.date.backgroundColor =
-                    "background-color: coral";
-            }
-            return this.todoStatus.date;
-        },
-    },
+    methods: {},
 };
 </script>

@@ -10,46 +10,35 @@
       :style="$vuetify.breakpoint.smAndUp ? 'padding:8px 0px' : 'padding:8px'"
       >
       <div class="d-flex">
-      <!-- ToDo一覧 -->
-      <div 
-        v-if="todoStatus.name === 'ToDo一覧'"
-        class="d-flex">
-        <div :style="depth(todo)"></div>
-        <div v-if="todo.child" class="d-flex align-content-center"> 
-          <v-icon
-            v-if="todo.toggle"
-            @click="onClickShowAndHideTodo(todo)"
-            style="background-color: none;"
-            >{{ todo.toggle }}
-          </v-icon>
-        </div>
-        <div v-if="!todo.child" style="width: 24px"></div>
-      </div>
       <!-- 予定 -->
-      <div v-if="todoStatus.name === 'ToDo一覧'" class="d-flex">
-      </div>
       <v-card class="rounded" style="width: 100%;" outlined>
         <v-list 
           class="py-0 d-flex align-content-center" 
           :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'"
         >
           <v-list-item 
+            class="px-0"
             style="width: 100%" 
             @click="toTodoDetail(todo)" 
             link>
+            <v-list-item-action
+                class="d-flex px-4 ma-auto"
+                style="height: 24px;"
+                @click.stop="onClickAccomplish(todo)"
+            >
+              <v-btn
+                  icon
+                  height="24"
+                  width="24"
+                  :color="todo.accomplish ? 'green' : ''"
+              >
+                  <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
+              </v-btn>
+            </v-list-item-action>
             <v-list-item-content class="pa-0 d-flex">
               <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
-                  <div class="d-flex pr-1" :style="subTitle(todo).backgroundColor" v-if="subTitle(todo)">
-                    <v-icon :size="subTitle(todo).iconSize" :color="subTitle(todo).iconColor">{{ subTitle(todo).icon }}</v-icon>
-                    <p
-                      class="ma-0 px-2 font-weight-bold align-self-center"
-                      :class="subTitle(todo).fontColor"
-                      :style="$vuetify.breakpoint.smAndUp ? 'font-size:12px' : 'font-size:8px'"
-                    >
-                       {{ subTitle(todo).title }}
-                    </p>
-                  </div>
+                  <DateSubTitle :todo="todo"/>
                   <div class="d-flex" style="max-width:66%"> 
                     <p
                       class="ma-0 grey--text font-weight-bold align-self-center"
@@ -130,10 +119,12 @@
 </template>
 
 <script>
+import DateSubTitle from "../Date/DateSubTitle.vue";
 import DeletingConfirmationDialog from "../Dialog/DeletingConfirmationDialog.vue";
 
 export default {
   components: {
+    DateSubTitle,
     DeletingConfirmationDialog,
   },
   data: () => ({
@@ -142,22 +133,6 @@ export default {
     cardMenu: [
       {title: "削除", color:"color: red"},
     ],
-    subtitle: {
-      accomplish : {
-            icon: 'mdi-circle', 
-            iconSize: 8, 
-            title: '完了', 
-            backgroundColor: 'background-color: null', 
-            iconColor: 'green',
-            fontColor : '#212121--text'
-      },
-      date : {
-            icon: 'mdi-clock-outline',
-            iconSize: 14, 
-            iconColor: '#212121',
-            fontColor : '#212121--text'
-      }
-    }
   }),
   props: {
     project : {
@@ -179,37 +154,16 @@ export default {
     },
     cardShow() {
       return function (todo) {        
-        if (this.todoStatus.name === "ゴール") 
-          return todo.depth === 0 ? this.showTodo() : false;
-        
-        if (this.todoStatus.name === "ToDo一覧") {
-          if(todo) this.todoStatus.show = true;
-          if (todo.depth === 0) todo.showTodoList = true;
-          return todo.showTodoList ? true : false;
+        if (this.todoStatus.name === "予定") {
+          const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+          const diff = (new Date(todo.date) - new Date(today)) / (60*60*1000*24);
+          return todo.date && !(todo.accomplish && diff < 0) ? this.showTodo() : false; 
         }
-
-        if (this.todoStatus.name === "予定") 
-          return todo.date && !todo.accomplish ? this.showTodo() : false; 
-
-        if (this.todoStatus.name === "完了") 
-          return todo.accomplish ? this.showTodo() : false; 
-
         if (this.todoStatus.name === "ToDo") 
           return this.selectTodo.uuid === todo.parentUuid ? this.showTodo() : false;
 
         return false;
       }
-    },
-    subTitle() {
-      return (todo) => {
-        if (todo.accomplish) {
-          return this.subtitle.accomplish; 
-        } else if (todo.date) {
-          return this.calcDate(todo);
-        } else {
-          return false;
-        }
-      }  
     },
     parentName() {
       return (todo) => {
@@ -230,11 +184,6 @@ export default {
         if (todo.depth > 0) return '」のためのToDo';
       }
     },
-    depth() {
-      return (todo) => {
-        return 'padding-left:'+(Number(todo.depth) * 8) + 'px'; 
-      }
-    } 
   },
   methods: {
     showTodo(){
@@ -260,52 +209,9 @@ export default {
       this.deletingConfirmationDialog = false;
       this.selectedDeletingTodo = { name: null };
     },
-    onClickShowAndHideTodo(todo){
-      for (const todoKey in this.todoList) {
-        let key = Number(todoKey);
-       // クリックされた仮説と同じ仮説の時
-       if (todo.uuid === this.todoList[todoKey].uuid) {
-         this.todoList[todoKey].toggle = 
-          todo.toggle === "mdi-menu-right" ? "mdi-menu-down" : "mdi-menu-right"; 
-       }
-        // クリックされた仮説の子仮説の時
-       if (todo.uuid === this.todoList[todoKey].parentUuid){  
-          // onClickOpenの時   
-          if (todo.toggle === "mdi-menu-down") {
-            this.todoList[key].showTodoList = true;
-          } 
-          // onClickCloseの時
-          else if (todo.toggle === "mdi-menu-right") {
-            this.todoList[key].showTodoList = false;
-            while (key < Object.keys(this.todoList).length) {
-              if(this.todoList[Number(todoKey)].depth > this.todoList[key].depth) break;
-              this.todoList[key].showTodoList = false;
-              if(this.todoList[key].toggle === "mdi-menu-down") 
-                this.todoList[key].toggle = "mdi-menu-right";
-              if(key + 1 === Object.keys(this.todoList).length) break;
-              key = key + 1;
-            }
-          } 
-       }
-       this.$set(this.todoList, key, this.todoList[key]);
-       this.cardShow(this.todoList[key]);
-      }
-      return this.todoList;
-    },
-    calcDate (todo){
-        const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
-        const diff = (new Date(todo.date) - new Date(today)) / (60*60*1000*24);
-        if (diff > 0) {
-          this.subtitle.date.title = '残り' + diff + '日';
-          this.subtitle.date.backgroundColor = diff < 4 ? 'background-color: yellow' : null;
-        } else if (diff === 0) {
-          this.subtitle.date.title = '今日';
-          this.subtitle.date.backgroundColor = 'background-color: skyblue';
-        } else {
-          this.subtitle.date.title = Math.abs(diff) + '日経過';
-          this.subtitle.date.backgroundColor = 'background-color: coral'
-        }
-        return this.subtitle.date;
+    onClickAccomplish(todo) {
+        this.$set(todo,'accomplish', todo.accomplish ? false : true);
+        this.$store.dispatch("todo/updateAccomplish", todo);
     },
     sortScheduleList (){
         const scheduleList = [];
@@ -316,7 +222,7 @@ export default {
           return (a.date < b.date) ? -1 : 1;  //オブジェクトの昇順ソート
         });
         return sortScheduleList;
-    }
+    },
   },
   watch: {
     todoList (next,prev) {
