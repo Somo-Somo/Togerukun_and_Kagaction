@@ -17,9 +17,24 @@
           :style="$vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'"
         >
           <v-list-item 
+            class="px-0"
             style="width: 100%" 
             @click="toTodoDetail(todo)" 
             link>
+            <v-list-item-action
+                class="d-flex px-4 ma-auto"
+                style="height: 24px;"
+                @click.stop="onClickAccomplish(todo)"
+            >
+              <v-btn
+                  icon
+                  height="24"
+                  width="24"
+                  :color="todo.accomplish ? 'green' : ''"
+              >
+                  <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
+              </v-btn>
+            </v-list-item-action>
             <v-list-item-content class="pa-0 d-flex">
               <div style="width: 100%;">
                 <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
@@ -126,14 +141,6 @@ export default {
       {title: "削除", color:"color: red"},
     ],
     subtitle: {
-      accomplish : {
-            icon: 'mdi-circle', 
-            iconSize: 8, 
-            title: '完了', 
-            backgroundColor: 'background-color: null', 
-            iconColor: 'green',
-            fontColor : '#212121--text'
-      },
       date : {
             icon: 'mdi-clock-outline',
             iconSize: 14, 
@@ -176,13 +183,7 @@ export default {
     },
     subTitle() {
       return (todo) => {
-        if (todo.accomplish) {
-          return this.subtitle.accomplish; 
-        } else if (todo.date) {
-          return this.calcDate(todo);
-        } else {
-          return false;
-        }
+        return todo.date ? this.calcDate(todo) : false;
       }  
     },
     parentName() {
@@ -229,6 +230,10 @@ export default {
       this.deletingConfirmationDialog = false;
       this.selectedDeletingTodo = { name: null };
     },
+    onClickAccomplish(todo) {
+        this.$set(todo,'accomplish', todo.accomplish ? false : true);
+        this.$store.dispatch("todo/updateAccomplish", todo);
+    },
     calcDate (todo){
         const today = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
         const diff = (new Date(todo.date) - new Date(today)) / (60*60*1000*24);
@@ -253,7 +258,7 @@ export default {
           return (a.date < b.date) ? -1 : 1;  //オブジェクトの昇順ソート
         });
         return sortScheduleList;
-    }
+    },
   },
   watch: {
     todoList (next,prev) {
