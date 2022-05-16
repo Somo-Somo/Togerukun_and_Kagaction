@@ -2,7 +2,7 @@
   <div class="pa-16" style="height: 100%;">
     <v-card
       :tile="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-      class="mx-auto fill-width py-6 px-12"
+      class="mx-auto fill-width py-4 px-12"
       flat
       max-width="480"
       min-height="640"
@@ -17,11 +17,17 @@
       >
       会員登録が完了しました。<br>先ほどご登録いただいたメールアドレスとパスワードをこちらでご入力ください。
     </v-alert>
-      <v-card-title class="text-center pa-8">
-        <!-- <h4 class="fill-width">
-          Kagaction(トライアル版)&nbsp;{{ isLoginForm ? "ログイン" : "会員登録" }}
-        </h4> -->
-        <img src="/img/Kagaction_Login.svg">
+      <v-card-title class="d-flex text-center pa-4">
+        <div class="mx-auto">
+          <img src="/img/Kagaction_Login.svg">
+        </div>
+        <div class="mx-auto my-0">
+          <p 
+            class="ma-0 fill-width font-weight-bold"
+            style="font-size: 14px;">
+            {{ isLoginForm ? "ログイン画面" : "会員登録画面" }}
+          </p>
+        </div>
       </v-card-title>
       <v-divider> </v-divider>
       <form class="form" @submit.prevent="submitForm()">
