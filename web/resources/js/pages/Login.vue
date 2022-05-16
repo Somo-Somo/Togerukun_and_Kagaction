@@ -85,37 +85,23 @@
               </v-btn>
             </div>
             <v-divider></v-divider>
-
-            <div class="my-4" v-if="!isLoginForm">
-              <span>すでにアカウントをお持ちですか？</span>
+            <div class="my-4 d-flex">
+              <p class="ma-0 align-self-center" style="font-size: 14px;">
+                {{ getTextOfWhetherYouHaveAnAccount(isLoginForm).confirmHasAccount }}
+              </p>
               <v-btn
-                class="my-2"
+                class="align-self-center font-weight-bold"
+                color="primary"
                 @click="
-                  isLoginForm = true;
+                  isLoginForm = isLoginForm ? false : true;
                   email = '';
                   password = '';
                   clearError()
-                  text
-                  small
                 "
+                text
+                small
               >
-                ログインに移動
-              </v-btn>
-            </div>
-            <div class="my-4" v-if="isLoginForm">
-              <span>アカウントをお持ちでない方はこちらへ</span>
-              <v-btn
-                class="my-2"
-                @click="
-                  isLoginForm = false;
-                  email = '';
-                  password = '';
-                  clearError()
-                  text
-                  small
-                "
-              >
-                会員登録に移動
+                {{ getTextOfWhetherYouHaveAnAccount(isLoginForm).transition }}
               </v-btn>
             </div>
           </div>
@@ -133,6 +119,14 @@ export default {
     isLoginForm: true,
     email: "",
     password: "",
+    registerText: {
+      transition: "ログイン",
+      confirmHasAccount: "すでにアカウントをお持ちですか？"
+    },
+    loginText: {
+      transition: "会員登録",
+      confirmHasAccount: "アカウントをお持ちでない方"
+    },
     loginForm: {
       email: "",
       password: "",
@@ -162,6 +156,11 @@ export default {
       const errorMessages = this.isLoginForm ? this.loginErrorMessages : this.registerErrorMessages;
       return errorMessages.password ? errorMessages.password[0] : null;
     },
+    getTextOfWhetherYouHaveAnAccount() {
+      return (isLoginForm) => {
+        return isLoginForm ? this.loginText : this.registerText;
+      }
+    }
   },
   methods: {
     submitForm() {
