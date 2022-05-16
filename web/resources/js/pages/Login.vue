@@ -1,11 +1,11 @@
 <template>
-  <div class="pa-16">
+  <div class="pa-16" style="height: 100%;">
     <v-card
       :tile="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
       class="mx-auto fill-width py-6 px-12"
       flat
       max-width="480"
-      height="640"
+      min-height="640"
       elevation="2"
     >   
       <v-alert
@@ -73,13 +73,13 @@
             <div class="login-btn mt-2 mb-8">
               <v-btn
                 type="submit"
-                class="fill-width caption"
-                color="#FFCB00"
+                class="font-weight-bold fill-width caption"
+                color="info"
                 height="48px"
+                style="width: 100%;"
                 :loading="loading"
                 :disabled="loading"
                 depressed
-                tile
               >
                 {{ isLoginForm ? "ログイン" : "会員登録" }}
               </v-btn>
