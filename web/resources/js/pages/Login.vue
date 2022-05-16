@@ -99,7 +99,7 @@
             </div>
             <div class="my-4 d-flex">
               <p class="ma-0 align-self-center" style="font-size: 14px;">
-                {{ isLoginForm ? "ログイン" : "会員登録" }}
+                {{ isLoginForm ? "アカウントをお持ちでない方" : "すでにアカウントをお持ちですか？" }}
               </p>
               <v-btn
                 class="align-self-center font-weight-bold"
@@ -113,7 +113,7 @@
                 text
                 small
               >
-                {{ getTextOfWhetherYouHaveAnAccount(isLoginForm).transition }}
+                {{ isLoginForm ? "会員登録" : "ログイン" }}
               </v-btn>
             </div>
           </div>
@@ -131,14 +131,6 @@ export default {
     isLoginForm: true,
     email: "",
     password: "",
-    registerText: {
-      transition: "ログイン",
-      confirmHasAccount: "すでにアカウントをお持ちですか？"
-    },
-    loginText: {
-      transition: "会員登録",
-      confirmHasAccount: "アカウントをお持ちでない方"
-    },
     loginForm: {
       email: "",
       password: "",
@@ -168,11 +160,6 @@ export default {
       const errorMessages = this.isLoginForm ? this.loginErrorMessages : this.registerErrorMessages;
       return errorMessages.password ? errorMessages.password[0] : null;
     },
-    getTextOfWhetherYouHaveAnAccount() {
-      return (isLoginForm) => {
-        return isLoginForm ? this.loginText : this.registerText;
-      }
-    }
   },
   methods: {
     submitForm() {
