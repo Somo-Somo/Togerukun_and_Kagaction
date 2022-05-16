@@ -5,7 +5,7 @@
       class="mx-auto fill-width py-4 px-12"
       flat
       max-width="480"
-      min-height="640"
+      min-height="560"
       elevation="2"
     >   
       <v-alert
@@ -94,7 +94,12 @@
             <v-divider></v-divider>
             <div class="my-4 d-flex">
               <p class="ma-0 align-self-center" style="font-size: 14px;">
-                {{ getTextOfWhetherYouHaveAnAccount(isLoginForm).confirmHasAccount }}
+                ※ 現在こちらのサービスはテスト版として運用させていただいています。
+              </p>
+            </div>
+            <div class="my-4 d-flex">
+              <p class="ma-0 align-self-center" style="font-size: 14px;">
+                {{ isLoginForm ? "ログイン" : "会員登録" }}
               </p>
               <v-btn
                 class="align-self-center font-weight-bold"
