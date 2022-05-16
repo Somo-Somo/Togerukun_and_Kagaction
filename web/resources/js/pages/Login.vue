@@ -1,10 +1,12 @@
 <template>
-  <div>
+  <div class="pa-16">
     <v-card
       :tile="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-      class="mx-auto fill-width"
+      class="mx-auto fill-width py-6 px-12"
       flat
-      max-width="720"
+      max-width="480"
+      height="640"
+      elevation="2"
     >   
       <v-alert
         v-if="completedRegister"
