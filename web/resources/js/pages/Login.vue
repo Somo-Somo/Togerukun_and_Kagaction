@@ -26,7 +26,7 @@
       <form class="form" @submit.prevent="submitForm()">
         <div class="px-6 py-8">
           <div style="max-width: 344px" class="mx-auto">
-            <div class="pt-6">
+            <div>
               <v-text-field
                 v-model="registerForm.name"
                 v-if="!isLoginForm"
