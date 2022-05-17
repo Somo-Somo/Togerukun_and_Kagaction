@@ -18,6 +18,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $createUser = $this->client->run(
             <<<'CYPHER'
+                MATCH ( onboarding:Onboarding { name : 'onboarding' } )
                 CREATE (
                     user:User {
                         user_id: $user_id,
@@ -26,7 +27,7 @@ class UserRepository implements UserRepositoryInterface
                         email: $email,
                         password: $password,
                         created_at: localdatetime({timezone: 'Asia/Tokyo'})
-                    })
+                    }) - [:NOT_EXECUTE] -> (onboarding)
                 RETURN user
                 CYPHER,
                 [
