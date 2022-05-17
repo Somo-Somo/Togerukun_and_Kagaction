@@ -10,20 +10,21 @@
         />
         <div>
             <v-stepper v-model="step">
-                <v-stepper-header>
-                    <v-stepper-step :complete="step > 1" step="1">
-                        Name of step 1
-                    </v-stepper-step>
-
-                    <v-divider></v-divider>
-
-                    <v-stepper-step :complete="step > 2" step="2">
-                        Name of step 2
-                    </v-stepper-step>
-
-                    <v-divider></v-divider>
-
-                    <v-stepper-step step="3"> Name of step 3 </v-stepper-step>
+                <v-stepper-header style="width: 100%">
+                    <template class="" v-for="(stepTitle, i) in stepTitles">
+                        <v-stepper-step
+                            class="caption font-weight-bold"
+                            :key="i"
+                            :complete="i + 1 < step"
+                            :step="i + 1"
+                        >
+                            {{ stepTitle.title }}
+                        </v-stepper-step>
+                        <v-divider
+                            :key="i"
+                            v-if="i + 1 !== 3"
+                        ></v-divider>
+                    </template>
                 </v-stepper-header>
 
                 <v-stepper-items>
@@ -83,7 +84,12 @@ export default {
         Header,
     },
     data: () => ({
-        step : 1,
+        step: 1,
+        stepTitles: [
+            { title: "プロジェクト作成" },
+            { title: "ゴール作成" },
+            { title: "日付の設定" },
+        ],
     }),
     computed: {
         ...mapGetters({
