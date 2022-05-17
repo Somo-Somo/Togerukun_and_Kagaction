@@ -33,31 +33,38 @@
                 <v-stepper-items>
                     <template
                         v-for="(
-                            stepQuestion, stepQuestionIndex
-                        ) in stepQuestions"
+                            stepQuestionAndAnswer, stepQuestionAndAnswerIndex
+                        ) in stepQuestionsAndAnswers"
                     >
                         <v-stepper-content
-                            :step="stepQuestionIndex + 1"
-                            :key="stepQuestionIndex"
+                            :step="stepQuestionAndAnswerIndex + 1"
+                            :key="stepQuestionAndAnswerIndex"
                         >
                             <div>
                                 <p
                                     class="font-weight-black"
                                     style="font-size: 1.75rem"
                                 >
-                                    {{ getQuestionTitle(stepQuestion) }}
+                                    {{ getQuestion(stepQuestionAndAnswer) }}
                                 </p>
                                 <p
-                                    class="subtitle-2 #757575--text"
+                                    class="subtitle-2 #757575--text ma-0"
                                     style="font-weight: 600 !important"
                                 >
-                                    {{ getQuestionSubTitle(stepQuestion) }}
+                                    {{ getAddition(stepQuestionAndAnswer) }}
                                 </p>
+                                <v-text-field
+                                    class="py-4"
+                                    v-if="step !== 3"
+                                    v-model="stepQuestionAndAnswer.answer"
+                                    counter="64"
+                                    :hint="stepQuestionAndAnswer.hint"
+                                ></v-text-field>
                             </div>
 
                             <v-btn
                                 color="primary"
-                                @click="nextStep(stepQuestionIndex + 1)"
+                                @click="nextStep(stepQuestionAndAnswerIndex + 1)"
                             >
                                 次へ
                             </v-btn>
@@ -65,7 +72,7 @@
                             <v-btn
                                 text
                                 v-if="step !== 1"
-                                @click="prevStep(stepQuestionIndex + 1)"
+                                @click="prevStep(stepQuestionAndAnswerIndex + 1)"
                             >
                                 戻る
                             </v-btn>
@@ -93,21 +100,27 @@ export default {
             { title: "ゴール作成" },
             { title: "日付の設定" },
         ],
-        stepQuestions: [
+        stepQuestionsAndAnswers: [
             {
-                title: "さんが現在取り組んでいることまたはこれから取り組みたいことは何ですか？",
-                subTitle:
+                question: "さんが現在取り組んでいることまたはこれから取り組みたいことは何ですか？",
+                addition:
                     "仕事や普段の生活などで頑張りたいことや習慣にしたいこと、改善したいことでも大丈夫です。",
+                answer: null,
+                hint: "例: WEB開発, 試験勉強 etc",
             },
             {
-                title: "で達成したいゴールまたは目標は何ですか？",
-                subTitle1:
+                question: "で達成したいゴールまたは目標は何ですか？",
+                addition1:
                     "ゴールは後で変更や追加したりすることができます。気軽に",
-                subTitle2: "の理想を思い浮かべて書いてみましょう。",
+                addition2: "の理想を思い浮かべて書いてみましょう。",
+                answer: null,
+                hint: null,
             },
             {
-                title: "をいつまでに達成したいですか？",
-                subTitle: "の期限を設けてみましょう。",
+                question: "をいつまでに達成したいですか？",
+                addition: "の期限を設けてみましょう。",
+                answer: null,
+                label: null,
             },
         ],
     }),
@@ -115,47 +128,47 @@ export default {
         ...mapGetters({
             user: "auth/user",
         }),
-        getQuestionTitle() {
-            return (stepQuestion) => {
+        getQuestion() {
+            return (stepQuestionAndAnswer) => {
                 if (this.step === 1) {
-                    return this.user.name + stepQuestion.title;
+                    return this.user.name + stepQuestionAndAnswer.question;
                 } else if (this.step === 2) {
-                    return "「" + this.user.name + "」" + stepQuestion.title;
+                    return "「" + this.user.name + "」" + stepQuestionAndAnswer.question;
                 } else if (this.step === 3) {
-                    return "「" + this.user.name + "」" + stepQuestion.title;
+                    return "「" + this.user.name + "」" + stepQuestionAndAnswer.question;
                 }
             };
         },
-        getQuestionSubTitle() {
-            return (stepQuestion) => {
+        getAddition() {
+            return (stepQuestionAndAnswer) => {
                 if (this.step === 1) {
-                    return stepQuestion.subTitle;
+                    return stepQuestionAndAnswer.addition;
                 } else if (this.step === 2) {
                     return (
-                        stepQuestion.subTitle1 +
+                        stepQuestionAndAnswer.addition1 +
                         "「" +
                         this.user.name +
                         "」" +
-                        stepQuestion.subTitle2
+                        stepQuestionAndAnswer.addition2
                     );
                 } else if (this.step === 3) {
-                    return "「" + this.user.name + "」" + stepQuestion.subTitle;
+                    return "「" + this.user.name + "」" + stepQuestionAndAnswer.addition;
                 }
             };
         },
     },
     methods: {
-        nextStep(stepQuestionNum) {
+        nextStep(stepQuestionAndAnswerNum) {
             return (this.step =
-                stepQuestionNum === this.steps ? 1 : stepQuestionNum + 1);
+                stepQuestionAndAnswerNum === this.steps ? 1 : stepQuestionAndAnswerNum + 1);
         },
-        prevStep(stepQuestionNum) {
-            return (this.step = stepQuestionNum - 1);
+        prevStep(stepQuestionAndAnswerNum) {
+            return (this.step = stepQuestionAndAnswerNum - 1);
         },
     },
 };
 </script>
-<style scoped lang='sass'>
+<style scoped lang="sass">
 .v-stepper__header
   box-shadow: none !important
 </style>
