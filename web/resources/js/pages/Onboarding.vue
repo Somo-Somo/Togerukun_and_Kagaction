@@ -241,6 +241,11 @@ export default {
                     : stepQuestionAndAnswerNum + 1);
         },
         prevStep(stepQuestionAndAnswerNum) {
+            if (stepQuestionAndAnswerNum === 2) {
+                this.stepQuestionsAndAnswers[stepQuestionAndAnswerNum - 1].answer = null;
+            } else if (stepQuestionAndAnswerNum === 3) {
+                this.stepQuestionsAndAnswers[stepQuestionAndAnswerNum - 1].answer = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+            }
             return (this.step = stepQuestionAndAnswerNum - 1);
         },
         onClickDateSave() {
