@@ -5,6 +5,7 @@ import store from './store';
 // ページコンポーネントをインポートする
 import Setting from './pages/Setting.vue';
 import Login from './pages/Login.vue';
+import Onboarding from './pages/Onboarding.vue';
 import TodoList from './pages/TodoList.vue';
 import TodoDetail from './pages/TodoDetail.vue';
 import Schedule from './pages/Schedule.vue';
@@ -29,6 +30,10 @@ const routes = [
         next ();
       }
     },
+  },
+  {
+    path: '/onboarding',
+    component: Onboarding,
   },
   {
     path: '/setting',
