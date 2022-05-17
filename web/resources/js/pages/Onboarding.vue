@@ -9,15 +9,15 @@
             v-if="$vuetify.breakpoint.mdAndUp"
         />
         <div>
-            <v-stepper v-model="e1">
+            <v-stepper v-model="step">
                 <v-stepper-header>
-                    <v-stepper-step :complete="e1 > 1" step="1">
+                    <v-stepper-step :complete="step > 1" step="1">
                         Name of step 1
                     </v-stepper-step>
 
                     <v-divider></v-divider>
 
-                    <v-stepper-step :complete="e1 > 2" step="2">
+                    <v-stepper-step :complete="step > 2" step="2">
                         Name of step 2
                     </v-stepper-step>
 
@@ -34,7 +34,7 @@
                             height="200px"
                         ></v-card>
 
-                        <v-btn color="primary" @click="e1 = 2">
+                        <v-btn color="primary" @click="step = 2">
                             Continue
                         </v-btn>
 
@@ -48,7 +48,7 @@
                             height="200px"
                         ></v-card>
 
-                        <v-btn color="primary" @click="e1 = 3">
+                        <v-btn color="primary" @click="step = 3">
                             Continue
                         </v-btn>
 
@@ -62,7 +62,7 @@
                             height="200px"
                         ></v-card>
 
-                        <v-btn color="primary" @click="e1 = 1">
+                        <v-btn color="primary" @click="step = 1">
                             Continue
                         </v-btn>
 
