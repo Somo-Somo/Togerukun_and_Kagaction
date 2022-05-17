@@ -29,7 +29,7 @@
                         ></v-divider>
                     </template>
                 </v-stepper-header>
-
+                <v-divider></v-divider>
                 <v-stepper-items>
                     <template
                         v-for="(
@@ -155,3 +155,7 @@ export default {
     },
 };
 </script>
+<style scoped lang='sass'>
+.v-stepper__header
+  box-shadow: none !important
+</style>
