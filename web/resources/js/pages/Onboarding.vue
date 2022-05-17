@@ -42,23 +42,26 @@
                         >
                             <div>
                                 <p
-                                    class="font-weight-black"
+                                    class="font-weight-black px-4"
                                     style="font-size: 1.75rem"
                                 >
                                     {{ getQuestion(stepQuestionAndAnswer) }}
                                 </p>
                                 <p
-                                    class="subtitle-2 #757575--text ma-0"
+                                    class="subtitle-2 #757575--text ma-0 px-4"
                                     style="font-weight: 600 !important"
                                 >
                                     {{ getAddition(stepQuestionAndAnswer) }}
                                 </p>
                                 <v-text-field
-                                    class="py-4"
+                                    class="pa-4"
                                     v-if="step !== 3"
                                     v-model="stepQuestionAndAnswer.answer"
+                                    maxlength="64"
                                     counter="64"
                                     :hint="stepQuestionAndAnswer.hint"
+                                    :label="stepQuestionAndAnswer.label"
+                                    clearable
                                 ></v-text-field>
                                 <v-menu
                                     v-if="stepQuestionAndAnswerIndex + 1 === 3"
@@ -74,7 +77,7 @@
                                         v-slot:activator="{ on, attrs }"
                                     >
                                         <v-text-field
-                                            class="d-flex align-self-center ma-0 pt-5"
+                                            class="d-flex align-self-center ma-0 pt-5 px-4"
                                             v-model="date"
                                             :prepend-icon="'mdi-calendar'"
                                             readonly
@@ -107,24 +110,29 @@
                                     </v-date-picker>
                                 </v-menu>
                             </div>
-                            <v-btn
-                                color="primary"
-                                @click="
-                                    nextStep(stepQuestionAndAnswerIndex + 1)
-                                "
-                            >
-                                次へ
-                            </v-btn>
-
-                            <v-btn
-                                text
-                                v-if="step !== 1"
-                                @click="
-                                    prevStep(stepQuestionAndAnswerIndex + 1)
-                                "
-                            >
-                                戻る
-                            </v-btn>
+                            <div class="d-flex">
+                                <v-btn
+                                    text
+                                    v-if="step !== 1"
+                                    @click="
+                                        prevStep(stepQuestionAndAnswerIndex + 1)
+                                    "
+                                >
+                                    戻る
+                                </v-btn>
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    class="d-flex flex-end"
+                                    color="primary"
+                                    @click="
+                                        nextStep(stepQuestionAndAnswerIndex + 1)
+                                    "
+                                    :disabled="!stepQuestionAndAnswer.answer"
+                                    text
+                                >
+                                    次へ
+                                </v-btn>
+                            </div>
                         </v-stepper-content>
                     </template>
                 </v-stepper-items>
@@ -157,6 +165,7 @@ export default {
                     "仕事や普段の生活などで頑張りたいことや習慣にしたいこと、改善したいことでも大丈夫です。",
                 answer: null,
                 hint: "例: WEB開発, 試験勉強 etc",
+                label: null,
             },
             {
                 question: "で達成したいゴールまたは目標は何ですか？",
@@ -164,7 +173,8 @@ export default {
                     "ゴールは後で変更や追加したりすることができます。気軽に",
                 additionNext: "の理想を思い浮かべて書いてみましょう。",
                 answer: null,
-                hint: null,
+                hint: "例: DAUxx人, 試験に合格する etc",
+                label: "ゴール",
             },
             {
                 question: "をいつまでに達成したいですか？",
