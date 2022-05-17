@@ -17,14 +17,14 @@
                     >
                         <v-stepper-step
                             class="caption font-weight-bold"
-                            :key="stepHeaderIndex"
+                            :key="`${stepHeaderIndex + 1}-title`"
                             :complete="stepHeaderIndex + 1 < step"
                             :step="stepHeaderIndex + 1"
                         >
                             {{ stepHeader.title }}
                         </v-stepper-step>
                         <v-divider
-                            :key="stepHeaderIndex"
+                            :key="`${stepHeaderIndex + 1}-divider`"
                             v-if="stepHeaderIndex + 1 !== 3"
                         ></v-divider>
                     </template>
@@ -38,7 +38,7 @@
                     >
                         <v-stepper-content
                             :step="stepQuestionAndAnswerIndex + 1"
-                            :key="stepQuestionAndAnswerIndex"
+                            :key="`${stepQuestionAndAnswerIndex + 1}-content`"
                         >
                             <div>
                                 <p
@@ -60,11 +60,58 @@
                                     counter="64"
                                     :hint="stepQuestionAndAnswer.hint"
                                 ></v-text-field>
+                                <v-menu
+                                    v-if="stepQuestionAndAnswerIndex + 1 === 3"
+                                    ref="calenderMenu"
+                                    v-model="calenderMenu"
+                                    :close-on-content-click="false"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="auto"
+                                >
+                                    <template
+                                        class="d-flex"
+                                        v-slot:activator="{ on, attrs }"
+                                    >
+                                        <v-text-field
+                                            class="d-flex align-self-center ma-0 pt-5"
+                                            v-model="date"
+                                            :prepend-icon="'mdi-calendar'"
+                                            readonly
+                                            v-bind="attrs"
+                                            v-on="on"
+                                        >
+                                        </v-text-field>
+                                    </template>
+                                    <v-date-picker
+                                        v-if="stepQuestionAndAnswerIndex + 1  === 3"
+                                        v-model="date"
+                                        no-title
+                                        scrollable
+                                    >
+                                        <v-spacer></v-spacer>
+                                        <v-btn
+                                            text
+                                            color="primary"
+                                            @click="calenderMenu = false"
+                                        >
+                                            キャンセル
+                                        </v-btn>
+                                        <v-btn
+                                            text
+                                            color="primary"
+                                            @click="onClickDateSave()"
+                                        >
+                                            保存
+                                        </v-btn>
+                                    </v-date-picker>
+                                </v-menu>
                             </div>
-
                             <v-btn
                                 color="primary"
-                                @click="nextStep(stepQuestionAndAnswerIndex + 1)"
+                                @click="
+                                    nextStep(stepQuestionAndAnswerIndex + 1)
+                                "
                             >
                                 次へ
                             </v-btn>
@@ -72,7 +119,9 @@
                             <v-btn
                                 text
                                 v-if="step !== 1"
-                                @click="prevStep(stepQuestionAndAnswerIndex + 1)"
+                                @click="
+                                    prevStep(stepQuestionAndAnswerIndex + 1)
+                                "
                             >
                                 戻る
                             </v-btn>
@@ -102,7 +151,8 @@ export default {
         ],
         stepQuestionsAndAnswers: [
             {
-                question: "さんが現在取り組んでいることまたはこれから取り組みたいことは何ですか？",
+                question:
+                    "さんが現在取り組んでいることまたはこれから取り組みたいことは何ですか？",
                 addition:
                     "仕事や普段の生活などで頑張りたいことや習慣にしたいこと、改善したいことでも大丈夫です。",
                 answer: null,
@@ -110,19 +160,20 @@ export default {
             },
             {
                 question: "で達成したいゴールまたは目標は何ですか？",
-                addition1:
+                additionPrev:
                     "ゴールは後で変更や追加したりすることができます。気軽に",
-                addition2: "の理想を思い浮かべて書いてみましょう。",
+                additionNext: "の理想を思い浮かべて書いてみましょう。",
                 answer: null,
                 hint: null,
             },
             {
                 question: "をいつまでに達成したいですか？",
                 addition: "の期限を設けてみましょう。",
-                answer: null,
-                label: null,
+                answer: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
             },
         ],
+        calenderMenu: false,
+        date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     }),
     computed: {
         ...mapGetters({
@@ -133,9 +184,19 @@ export default {
                 if (this.step === 1) {
                     return this.user.name + stepQuestionAndAnswer.question;
                 } else if (this.step === 2) {
-                    return "「" + this.user.name + "」" + stepQuestionAndAnswer.question;
+                    return (
+                        "「" +
+                        this.user.name +
+                        "」" +
+                        stepQuestionAndAnswer.question
+                    );
                 } else if (this.step === 3) {
-                    return "「" + this.user.name + "」" + stepQuestionAndAnswer.question;
+                    return (
+                        "「" +
+                        this.user.name +
+                        "」" +
+                        stepQuestionAndAnswer.question
+                    );
                 }
             };
         },
@@ -145,14 +206,19 @@ export default {
                     return stepQuestionAndAnswer.addition;
                 } else if (this.step === 2) {
                     return (
-                        stepQuestionAndAnswer.addition1 +
+                        stepQuestionAndAnswer.additionPrev +
                         "「" +
                         this.user.name +
                         "」" +
-                        stepQuestionAndAnswer.addition2
+                        stepQuestionAndAnswer.additionNext
                     );
                 } else if (this.step === 3) {
-                    return "「" + this.user.name + "」" + stepQuestionAndAnswer.addition;
+                    return (
+                        "「" +
+                        this.user.name +
+                        "」" +
+                        stepQuestionAndAnswer.addition
+                    );
                 }
             };
         },
@@ -160,10 +226,17 @@ export default {
     methods: {
         nextStep(stepQuestionAndAnswerNum) {
             return (this.step =
-                stepQuestionAndAnswerNum === this.steps ? 1 : stepQuestionAndAnswerNum + 1);
+                stepQuestionAndAnswerNum === this.steps
+                    ? 1
+                    : stepQuestionAndAnswerNum + 1);
         },
         prevStep(stepQuestionAndAnswerNum) {
             return (this.step = stepQuestionAndAnswerNum - 1);
+        },
+        onClickDateSave() {
+            this.calenderMenu = false;
+            // カレンダーの値をリセット
+            this.stepQuestionsAndAnswers[2].answer = this.date;
         },
     },
 };
