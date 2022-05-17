@@ -164,7 +164,7 @@ export default {
                 addition:
                     "仕事や普段の生活などで頑張りたいことや習慣にしたいこと、改善したいことでも大丈夫です。",
                 answer: null,
-                hint: "例: WEB開発, 試験勉強 etc",
+                hint: "例: アプリ開発, 試験勉強 etc",
                 label: null,
             },
             {
@@ -173,7 +173,7 @@ export default {
                     "ゴールは後で変更や追加したりすることができます。気軽に",
                 additionNext: "の理想を思い浮かべて書いてみましょう。",
                 answer: null,
-                hint: "例: DAUxx人, 試験に合格する etc",
+                hint: "例: DAU〇〇人, 試験に合格する etc",
                 label: "ゴール",
             },
             {
