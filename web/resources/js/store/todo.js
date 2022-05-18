@@ -196,6 +196,7 @@ const actions = {
             context.commit ('error/setCode', response.status, {root: true});
             return false;
         }
+        return goal;
     },
 
     async createTodo (context, {parent, name}){
@@ -281,7 +282,7 @@ const actions = {
                 return false;
             }
         }
-        return; 
+        return response.status; 
     },
 
     async createComment (context, {todo, text, user}){

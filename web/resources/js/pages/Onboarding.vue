@@ -122,6 +122,7 @@
                                 </v-btn>
                                 <v-spacer></v-spacer>
                                 <v-btn
+                                    v-if="step !== 3"
                                     class="d-flex flex-end"
                                     color="primary"
                                     @click="
@@ -131,6 +132,16 @@
                                     text
                                 >
                                     次へ
+                                </v-btn>
+                                <v-btn
+                                    v-if="step === 3"
+                                    class="d-flex flex-end"
+                                    color="primary"
+                                    @click="finishedOnboarding()"
+                                    :disabled="!stepQuestionAndAnswer.answer"
+                                    text
+                                >
+                                    完了
                                 </v-btn>
                             </div>
                         </v-stepper-content>
@@ -253,6 +264,21 @@ export default {
             this.calenderMenu = false;
             // カレンダーの値をリセット
             this.stepQuestionsAndAnswers[2].answer = this.date;
+        },
+        async finishedOnboarding() {
+            const projectName = {name: this.stepQuestionsAndAnswers[0].answer};
+            const project = await this.$store.dispatch("project/createProject", projectName);
+            const goal = await this.$store.dispatch("todo/createGoal", {
+                project: project,
+                todoName: this.stepQuestionsAndAnswers[1].answer,
+            });
+            const response = await this.$store.dispatch("todo/updateDate",{ 
+                date:this.stepQuestionsAndAnswers[2].answer,
+                todo:goal, 
+                project:project,
+            });
+            await this.$store.dispatch("onboarding/finishedOnboarding", response);
+            this.$router.push("/project/" + project.uuid);
         },
     },
   watch: {

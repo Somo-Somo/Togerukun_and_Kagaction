@@ -1,4 +1,5 @@
-const state = {
+ import {OK} from '../util';
+  const state = {
     onboarding: null,
   };
   
@@ -11,11 +12,22 @@ const state = {
       state.onboarding = data;
     },
   };
+
+  const actions = {
+      finishedOnboarding (context, response){
+        if (response === OK) {
+            context.commit ('setOnboarding', false);
+        } else {
+            context.commit ('error/setCode', response, {root: true});
+        }
+      }
+  }
   
   export default {
     namespaced: true,
     state,
     getters,
     mutations,
+    actions,
   };
   
