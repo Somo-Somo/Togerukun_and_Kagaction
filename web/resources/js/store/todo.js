@@ -188,7 +188,7 @@ const actions = {
         const response = await axios.post('/api/goal', goal);
 
         if (response.status === UNPROCESSABLE_ENTITY) {
-            console.info('エラー')
+            // console.info('エラー')
             // context.commit ('setRegisterErrorMessages', response.data.errors);
         }
 
