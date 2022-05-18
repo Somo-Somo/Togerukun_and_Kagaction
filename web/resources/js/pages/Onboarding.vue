@@ -103,7 +103,7 @@
                                         <v-btn
                                             text
                                             color="primary"
-                                            @click="onClickDateSave()"
+                                            @click="calenderMenu = false;"
                                         >
                                             保存
                                         </v-btn>
@@ -262,25 +262,22 @@ export default {
             }
             return (this.step = stepQuestionAndAnswerNum - 1);
         },
-        onClickDateSave() {
-            this.calenderMenu = false;
-            // カレンダーの値をリセット
-            this.stepQuestionsAndAnswers[2].answer = this.date;
-            console.info(this.stepQuestionsAndAnswers);
-        },
         async finishedOnboarding() {
+            this.stepQuestionsAndAnswers[2].answer = this.date;
             this.loading = true;
             await this.$store.dispatch("onboarding/finishedOnboarding", this.stepQuestionsAndAnswers);
             const initialize = await this.$store.dispatch("initialize/getUserHasProjectAndTodo", this.$route);
-            this.loading = false;
-            const firstProject = Object.entries(initialize)[0][1];
-            this.$store.dispatch("project/selectProject", firstProject);
+            const firstProject = Object.entries(initialize.project)[0][1];
+            await this.$store.dispatch("project/selectProject", firstProject);
             this.$router.push("/project/" + firstProject.uuid );
+            this.loading = false;
         },
     },
   watch: {
     onboarding(val, old) {
-      if (!val) {
+      // オンボーディング完了後のプロジェクト移動前にこのwatchが発動してしまうので
+      // ローディング中は予定に遷移しないようにする
+      if (!val && !this.loading) {
         this.$router.push('/schedule');
       }
     },
