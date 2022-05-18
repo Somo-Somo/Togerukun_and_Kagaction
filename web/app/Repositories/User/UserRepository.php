@@ -55,16 +55,40 @@ class UserRepository implements UserRepositoryInterface
         return $onboarding->toArray()[0]['onboarding'];
     }
 
-    public function finishedOnboarding(string $user_email)
+    public function finishedOnboarding(array $onboarding)
     {
         $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User{email:$user_email}) - [not_execute:NOT_EXECUTE] -> (:Onboarding)
+                CREATE (user)-[
+                    :HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                ]->(
+                project:Project {
+                    name: $project_name, 
+                    uuid: $project_uuid
+                })
+                CREATE (user)-[
+                    :CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                ]->(
+                   todo:Todo {
+                        name: $goal_name,
+                        uuid: $goal_uuid
+                })-[
+                    :IS_THE_GOAL_OF{at:localdatetime({timezone: 'Asia/Tokyo'})}  
+                ]->(project)
+                CREATE (user) - [
+                    :DATE { on: $goal_date }
+                ] -> (todo)
                 DELETE not_execute
-                RETURN onboarding
+                RETURN user
                 CYPHER,
                 [
-                    'user_email' => $user_email,
+                    'project_name' => $onboarding['project']['name'],
+                    'project_uuid' => $onboarding['project']['uuid'],
+                    'goal_name' => $onboarding['goal']['name'],
+                    'goal_uuid' => $onboarding['goal']['uuid'],
+                    'goal_date' => $onboarding['goal']['date'],
+                    'user_email' => $onboarding['created_by_user_email']
                 ]
         );
         return;

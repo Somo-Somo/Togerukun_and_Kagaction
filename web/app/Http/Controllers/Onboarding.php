@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
 
 class Onboarding extends Controller
@@ -23,9 +24,21 @@ class Onboarding extends Controller
      */
     public function __invoke(Request $request)
     {
-        $this->user_repository->finishedOnboarding($request->user()->email);
+        $onboarding = [
+            'project' => [
+                'name' => $request->projectName,
+                'uuid' => (string) Str::uuid()
+            ],
+            'goal' => [
+                'name' => $request->goalName,
+                'uuid' => (string) Str::uuid(),
+                'date' => $request->goalDate
+            ],
+            'created_by_user_email' => $request->user()->email
+        ];
+        $this->user_repository->finishedOnboarding($onboarding);
         $json = [
-            'message' => 'オンボーディングを終了しました',
+            'message' => 'オンボーディングを完了しました',
             'error' => '',
         ];
         return response()->json($json, Response::HTTP_OK);

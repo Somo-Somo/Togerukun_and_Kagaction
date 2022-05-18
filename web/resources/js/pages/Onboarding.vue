@@ -190,7 +190,7 @@ export default {
             },
             {
                 question: "をいつまでに達成したいですか？",
-                addition: "の期限を設けてみましょう。",
+                addition: "に期限を設けてみましょう。",
                 answer: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
             },
         ],
@@ -210,14 +210,14 @@ export default {
                 } else if (this.step === 2) {
                     return (
                         "「" +
-                        this.user.name +
+                        this.stepQuestionsAndAnswers[0].answer +
                         "」" +
                         stepQuestionAndAnswer.question
                     );
                 } else if (this.step === 3) {
                     return (
                         "「" +
-                        this.user.name +
+                        this.stepQuestionsAndAnswers[1].answer +
                         "」" +
                         stepQuestionAndAnswer.question
                     );
@@ -232,14 +232,14 @@ export default {
                     return (
                         stepQuestionAndAnswer.additionPrev +
                         "「" +
-                        this.user.name +
+                        this.stepQuestionsAndAnswers[0].answer +
                         "」" +
                         stepQuestionAndAnswer.additionNext
                     );
                 } else if (this.step === 3) {
                     return (
                         "「" +
-                        this.user.name +
+                        this.stepQuestionsAndAnswers[1].answer +
                         "」" +
                         stepQuestionAndAnswer.addition
                     );
@@ -266,23 +266,16 @@ export default {
             this.calenderMenu = false;
             // カレンダーの値をリセット
             this.stepQuestionsAndAnswers[2].answer = this.date;
+            console.info(this.stepQuestionsAndAnswers);
         },
         async finishedOnboarding() {
             this.loading = true;
-            const projectName = {name: this.stepQuestionsAndAnswers[0].answer};
-            const project = await this.$store.dispatch("project/createProject", projectName);
-            const goal = await this.$store.dispatch("todo/createGoal", {
-                project: project,
-                todoName: this.stepQuestionsAndAnswers[1].answer,
-            });
-            await this.$store.dispatch("todo/updateDate",{ 
-                date:this.stepQuestionsAndAnswers[2].answer,
-                todo:goal, 
-                project:project,
-            });
-            await this.$store.dispatch("onboarding/finishedOnboarding");
+            await this.$store.dispatch("onboarding/finishedOnboarding", this.stepQuestionsAndAnswers);
+            const initialize = await this.$store.dispatch("initialize/getUserHasProjectAndTodo", this.$route);
             this.loading = false;
-            this.$router.push("/project/" + project.uuid);
+            const firstProject = Object.entries(initialize)[0][1];
+            this.$store.dispatch("project/selectProject", firstProject);
+            this.$router.push("/project/" + firstProject.uuid );
         },
     },
   watch: {
