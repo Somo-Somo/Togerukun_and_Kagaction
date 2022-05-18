@@ -216,6 +216,7 @@ const actions = {
         const response = await axios.post('/api/todo', todo);
 
         if (response.status === UNPROCESSABLE_ENTITY) {
+            // console.info('エラー')
             // context.commit ('setRegisterErrorMessages', response.data.errors);
         } 
 
