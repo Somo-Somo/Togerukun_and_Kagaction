@@ -138,6 +138,7 @@
                                     class="d-flex flex-end"
                                     color="primary"
                                     @click="finishedOnboarding()"
+                                    :loading="loading"
                                     :disabled="!stepQuestionAndAnswer.answer"
                                     text
                                 >
@@ -195,6 +196,7 @@ export default {
         ],
         calenderMenu: false,
         date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+        loading: false,
     }),
     computed: {
         ...mapGetters({
@@ -266,6 +268,7 @@ export default {
             this.stepQuestionsAndAnswers[2].answer = this.date;
         },
         async finishedOnboarding() {
+            this.loading = true;
             const projectName = {name: this.stepQuestionsAndAnswers[0].answer};
             const project = await this.$store.dispatch("project/createProject", projectName);
             const goal = await this.$store.dispatch("todo/createGoal", {
@@ -278,6 +281,7 @@ export default {
                 project:project,
             });
             await this.$store.dispatch("onboarding/finishedOnboarding", response);
+            this.loading = false;
             this.$router.push("/project/" + project.uuid);
         },
     },
