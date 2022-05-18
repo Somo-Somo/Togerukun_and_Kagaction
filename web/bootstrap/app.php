@@ -19,7 +19,7 @@ switch ($_SERVER['HTTP_HOST'] ?? 'localhost:8080') {
     case 'localhost:8080':
         $app->loadEnvironmentFrom('.env.dev');
         break;
-    case 'kagaction.herokuapp.com':
+    case 'kagaction-test.herokuapp.com':
         $app->loadEnvironmentFrom('.env.prod');
         break;
 }
