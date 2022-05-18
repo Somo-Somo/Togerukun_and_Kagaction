@@ -1,14 +1,14 @@
 <template>
     <v-container
-        class="d-flex flex-column my-6 my-md-2 px-md-16"
-        style="max-width: 900px"
+        class="d-flex flex-column ma-auto px-md-16"
+        style="max-width: 960px; height:100%;"
         fluid
     >
         <Header
             :headerTitle="'Kagactionへようこそ'"
             v-if="$vuetify.breakpoint.mdAndUp"
         />
-        <div>
+        <div class="my-16">
             <v-stepper v-model="step">
                 <v-stepper-header style="width: 100%">
                     <template
