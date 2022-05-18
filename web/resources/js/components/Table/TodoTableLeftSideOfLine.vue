@@ -50,7 +50,7 @@
             <v-list-item-action
                 class="d-flex mx-auto"
                 :class="todo.child ? 'mt-auto mb-1' : 'my-auto'"
-                style="height: 24px; z-index: 10;"
+                style="height: 24px;"
                 v-model="todo.accomplish"
                 @click.stop="onClickAccomplish(todo)"
             >

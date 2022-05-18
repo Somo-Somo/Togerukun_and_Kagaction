@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 import auth from './auth';
 import form from './form';
 import error from './error';
+import onboarding from './onboarding';
 import project from './project';
 import todo from './todo';
 import initialize from './initialize';
@@ -17,6 +18,7 @@ const store = new Vuex.Store ({
     auth,
     form,
     error,
+    onboarding,
     project,
     todo,
     initialize,
