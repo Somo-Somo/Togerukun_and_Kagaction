@@ -14,12 +14,15 @@
   };
 
   const actions = {
-      finishedOnboarding (context, response){
-        if (response === OK) {
+      async finishedOnboarding (context){
+        await axios.get ('/sanctum/csrf-cookie', {withCredentials: true});
+        const response = await axios.post ('/api/onboarding');
+        if (response.status === OK) {
             context.commit ('setOnboarding', false);
         } else {
             context.commit ('error/setCode', response, {root: true});
         }
+        return;
       }
   }
   

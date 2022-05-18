@@ -275,12 +275,12 @@ export default {
                 project: project,
                 todoName: this.stepQuestionsAndAnswers[1].answer,
             });
-            const response = await this.$store.dispatch("todo/updateDate",{ 
+            await this.$store.dispatch("todo/updateDate",{ 
                 date:this.stepQuestionsAndAnswers[2].answer,
                 todo:goal, 
                 project:project,
             });
-            await this.$store.dispatch("onboarding/finishedOnboarding", response);
+            await this.$store.dispatch("onboarding/finishedOnboarding");
             this.loading = false;
             this.$router.push("/project/" + project.uuid);
         },

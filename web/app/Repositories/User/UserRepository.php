@@ -55,6 +55,21 @@ class UserRepository implements UserRepositoryInterface
         return $onboarding->toArray()[0]['onboarding'];
     }
 
+    public function finishedOnboarding(string $user_email)
+    {
+        $this->client->run(
+            <<<'CYPHER'
+                MATCH (user:User{email:$user_email}) - [not_execute:NOT_EXECUTE] -> (:Onboarding)
+                DELETE not_execute
+                RETURN onboarding
+                CYPHER,
+                [
+                    'user_email' => $user_email,
+                ]
+        );
+        return;
+    }
+
     public function getUserHasProjetAndTodo(string $user_email)
     {
         $userHasProjetAndTodo = $this->client->run(
