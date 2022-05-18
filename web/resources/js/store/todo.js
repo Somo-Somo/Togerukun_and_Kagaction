@@ -196,6 +196,7 @@ const actions = {
             context.commit ('error/setCode', response.status, {root: true});
             return false;
         }
+        return goal;
     },
 
     async createTodo (context, {parent, name}){
@@ -266,6 +267,7 @@ const actions = {
     },
 
     async updateDate (context, {date, todo, project}) {
+        context.commit('setTodo', todo);
         context.commit('updateDate', date);
         context.commit ('schedule/updateScheduleList', {date:date, todo:todo, project:project}, {root: true});
         if (date) {
