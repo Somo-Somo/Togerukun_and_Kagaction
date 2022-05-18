@@ -188,6 +188,7 @@ export default {
     computed: {
         ...mapGetters({
             user: "auth/user",
+            onboarding: "onboarding/onboarding",
         }),
         getQuestion() {
             return (stepQuestionAndAnswer) => {
@@ -254,6 +255,13 @@ export default {
             this.stepQuestionsAndAnswers[2].answer = this.date;
         },
     },
+  watch: {
+    onboarding(val, old) {
+      if (!val) {
+        this.$router.push('/schedule');
+      }
+    },
+  },
 };
 </script>
 <style scoped lang="sass">

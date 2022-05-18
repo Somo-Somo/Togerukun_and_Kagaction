@@ -28,7 +28,7 @@ class LoginController extends Controller
         return response()->json(['message' => 'ログインしていません。'], Response::HTTP_UNAUTHORIZED);
     }
 
-    public function login(LoginRequest $request, UserRepositoryInterface $userRepositoryInterface)
+    public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
 

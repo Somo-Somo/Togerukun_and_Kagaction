@@ -26,6 +26,7 @@ const actions = {
             context.commit ('project/setProjectList', response.data.project, { root: true });
             await context.commit ('todo/setAllTodoList', response.data.todo, { root: true });
             context.commit ('schedule/setScheduleList', response.data.schedule, { root: true });
+            context.commit ('onboarding/setOnboarding', response.data.onboarding, { root: true });
             context.commit ('finishedLoading');
             if (route.name === "todoList") {
                 const projectUuid = route.params.id
