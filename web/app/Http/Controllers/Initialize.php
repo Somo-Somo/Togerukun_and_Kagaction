@@ -25,13 +25,11 @@ class Initialize extends Controller
         \App\UseCases\Date\IndexAction $dateIndexAction,
     )
     {
-        $onboarding = $this->user_repository->whetherExecuteOnboarding($request->user()->email);
         $todoList= $getUserHasProjectAndTodoAction->invoke($request->user()->email);
         $projectList= $projectIndexAction->invoke($request->user()->email);
         $scheduleList= $dateIndexAction->invoke($request->user()->email);
 
         $userHasProjectAndTodo = [
-            'onboarding' => $onboarding,
             'project' => $projectList,
             'todo' => $todoList,
             'schedule' => $scheduleList,

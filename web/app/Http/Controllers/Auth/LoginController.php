@@ -13,6 +13,12 @@ use \Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends Controller
 {
+    protected $user_repository;
+
+    public function __construct(UserRepositoryInterface $userRepositoryInterface)
+    {
+        $this->user_repository = $userRepositoryInterface;
+    }
 
     public function authStatus(Request $request)
     {
@@ -28,10 +34,13 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            $onboarding = $userRepositoryInterface->whetherExecuteOnboarding($request->user()->email);
+            $onboarding = $this->user_repository->whetherExecuteOnboarding($request->user()->email);
             $user = new UserResource($request->user());
-            $user['onboarding'] = $onboarding;
-            return response()->json($user, Response::HTTP_OK);
+            $response = [
+                'user' => $user,
+                'onboarding' => $onboarding ? true : false
+            ];
+            return response()->json($response, Response::HTTP_OK);
         }
 
         return response()->json(['errors' => 'ユーザーが見つかりませんでした。'], Response::HTTP_UNAUTHORIZED);

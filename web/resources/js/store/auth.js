@@ -57,7 +57,8 @@ const actions = {
 
     if (response.status === OK) {
       context.commit ('setApiStatus', true);
-      context.commit ('setUser', response.data);
+      context.commit ('setUser', response.data.user);
+      context.commit ('onboarding/setOnboarding', response.data.onboarding, {root: true});
       return false;
     }
 
