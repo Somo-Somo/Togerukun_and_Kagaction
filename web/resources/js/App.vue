@@ -47,7 +47,8 @@ export default {
   },
   created(){
     if(this.check){
-      this.$store.dispatch("initialize/getUserHasProjectAndTodo", this.$route);
+      const data = this.$store.dispatch("initialize/getUserHasProjectAndTodo", this.$route);
+      if (data.onboarding) this.$router.push('/onboarding');
     } else {
        this.$router.push('/login');
     }

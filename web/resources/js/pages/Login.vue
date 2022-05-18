@@ -193,13 +193,18 @@ export default {
       if (this.apiStatus) {
         const data = await this.$store.dispatch("initialize/getUserHasProjectAndTodo", this.$route);
         this.loading = false;
-        if (Object.keys(data.schedule).length) {
+        if (data.onboarding) {
+          this.$router.push("/onboarding");
+        }
+        else if (Object.keys(data.schedule).length) {
           this.$router.push("/schedule");
-        } else if (Object.keys(data.project).length) {
+        } 
+        else if (Object.keys(data.project).length) {
           const firstProject = Object.entries(data.project)[0][1];
           this.$store.dispatch("project/selectProject", firstProject);
           this.$router.push("/project/" + firstProject.uuid );
-        } else {
+        } 
+        else {
           this.$router.push("/schedule");
         }
       }

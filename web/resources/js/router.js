@@ -23,10 +23,8 @@ const routes = [
     component: Login,
     beforeEnter (to, from, next) {
       if (store.getters['auth/check']) {
-        console.info('ログインしてます')
         next ('/setting');
       } else {
-        console.info('ログインしてません')
         next ();
       }
     },
