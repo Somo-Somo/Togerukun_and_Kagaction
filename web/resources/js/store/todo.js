@@ -12,6 +12,7 @@ const getters = {
     todo: (state) => (state.todo ? state.todo : null),
     parentTodo: (state) => (state.parentTodo ? state.parentTodo : null),
     todoList: (state) => (state.todoList ? state.todoList : null),
+    allTodoList: (state) => (state.allTodoList ? state.allTodoList : null),
 };
 
 const mutations = {

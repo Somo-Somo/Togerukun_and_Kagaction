@@ -129,7 +129,6 @@ export default {
   width: 772px
   position: absolute
 
-
 .spTabsStyle
   width: 100%
   height: 40px
