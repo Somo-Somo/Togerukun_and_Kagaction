@@ -8,7 +8,7 @@
                 :key="todo.uuid"
                 :style="
                     $vuetify.breakpoint.smAndUp
-                        ? 'padding:12px 0px'
+                        ? 'padding:8px 0px'
                         : 'padding:8px'
                 "
             >
@@ -23,16 +23,33 @@
                             "
                         >
                             <v-list-item
+                                class="px-0"
                                 style="width: 100%"
                                 @click="toTodoDetail(todo)"
                                 link
                             >
+                                <v-list-item-action
+                                    class="d-flex px-4 ma-auto"
+                                    style="height: 24px"
+                                    @click.stop="onClickAccomplish(todo)"
+                                >
+                                    <v-btn
+                                        icon
+                                        height="24"
+                                        width="24"
+                                        :color="todo.accomplish ? 'green' : ''"
+                                    >
+                                        <v-icon
+                                            >mdi-checkbox-marked-circle-outline</v-icon
+                                        >
+                                    </v-btn>
+                                </v-list-item-action>
                                 <v-list-item-content class="pa-0 d-flex">
                                     <div style="width: 100%">
                                         <v-list-item-subtitle
                                             class="d-flex align-content-start mt-3 mb-1"
                                         >
-                                            <DateSubTitle :todo="todo"/>
+                                            <DateSubTitle :todo="todo" />
                                             <div
                                                 class="d-flex"
                                                 style="max-width: 66%"
@@ -209,8 +226,12 @@ export default {
             return (todo) => {
                 const today = new Date(
                     Date.now() - new Date().getTimezoneOffset() * 60000
-                ).toISOString().substr(0, 10);
-                const diff = (new Date(todo.date) - new Date(today)) / (60 * 60 * 1000 * 24);
+                )
+                    .toISOString()
+                    .substr(0, 10);
+                const diff =
+                    (new Date(todo.date) - new Date(today)) /
+                    (60 * 60 * 1000 * 24);
                 let showCard = false;
                 if (this.period.name === "今日") {
                     showCard = diff === 0 ? true : false;
@@ -219,7 +240,10 @@ export default {
                     showCard = 0 <= diff && diff < 8 ? true : false;
                 }
                 if (this.period.name === "全期間") {
-                    showCard = todo.date && !(todo.accomplish && diff < 0) ? true : false;
+                    showCard =
+                        todo.date && !(todo.accomplish && diff < 0)
+                            ? true
+                            : false;
                 }
                 if (this.period.name === "期限切れ") {
                     showCard = !todo.accomplish && diff < 0 ? true : false;
@@ -272,6 +296,10 @@ export default {
         onClickCancel() {
             this.deletingConfirmationDialog = false;
             this.selectedDeletingTodo = null;
+        },
+        onClickAccomplish(todo) {
+            this.$set(todo, "accomplish", todo.accomplish ? false : true);
+            this.$store.dispatch("todo/updateAccomplish", todo);
         },
     },
     watch: {
