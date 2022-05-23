@@ -48,7 +48,6 @@
 
                 <ScheduleCards
                     :projectList="projectList"
-                    :todoList="scheduleLists"
                     :scheduleList="scheduleList"
                     :period="periods[tab]"
                     :loading="loading"
@@ -91,33 +90,40 @@ export default {
     },
     methods: {
         convertSchduleList() {
-            const allTodo = this.expandProjectList();
-            const todoListWithDates = this.checkIfThereIsADate(allTodo);
-            const scheduleList = this.sortTodoListByDate(todoListWithDates);
+            const todosHasDate = this.expandProjectList();
+            const scheduleList = this.sortTodoListByDate(todosHasDate);
             return scheduleList;
         },
         expandProjectList() {
             const todoListByProject = this.allTodoList;
-            let allTodo = [];
-            for (const [key, values] of Object.entries(todoListByProject)) {
-                allTodo = allTodo.concat(values);
-            }
-            return allTodo;
-        },
-        checkIfThereIsADate(allTodo) {
-            let checkedTodos = [];
-            for (const [key, todo] of Object.entries(allTodo)) {
-                if (todo.date) {
-                    checkedTodos.push(todo);
+            let todosHasDate = [];
+            for (const [projectUuid, todos] of Object.entries(
+                todoListByProject
+            )) {
+                if (todos) {
+                    const projectTodos = this.checkIfThereIsADate(
+                        projectUuid,
+                        todos
+                    );
+                    todosHasDate = todosHasDate.concat(projectTodos);
                 }
             }
-            return checkedTodos;
+            return todosHasDate;
+        },
+        checkIfThereIsADate(projectUuid, todos) {
+            const todosHasDate = [];
+            for (const todo of todos) {
+                if (todo.date) {
+                    todo.projectUuid = projectUuid;
+                    todosHasDate.push(todo);
+                }
+            }
+            return todosHasDate;
         },
         sortTodoListByDate(todoListWithDates) {
             let scheduleList = todoListWithDates.sort(function (a, b) {
                 return a.date < b.date ? -1 : 1; //オブジェクトの昇順ソート
             });
-            console.info(scheduleList);
             return scheduleList;
         },
     },
