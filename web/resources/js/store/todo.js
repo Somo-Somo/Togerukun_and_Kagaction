@@ -298,13 +298,8 @@ const actions = {
         return;
     },
 
-    async updateDate(context, { date, todo, project }) {
+    async updateDate(context, { date, todo }) {
         context.commit("updateDate", date);
-        context.commit(
-            "schedule/updateScheduleList",
-            { date: date, todo: todo, project: project },
-            { root: true }
-        );
         if (date) {
             const response = await axios.put(
                 "/api/todo/" + todo.uuid + "/date",
