@@ -224,48 +224,52 @@ export default {
         },
         showCard() {
             return (todo) => {
-                const today = new Date(
-                    Date.now() - new Date().getTimezoneOffset() * 60000
-                )
-                    .toISOString()
-                    .substr(0, 10);
-                const diff =
-                    (new Date(todo.date) - new Date(today)) /
-                    (60 * 60 * 1000 * 24);
                 let showCard = false;
-                if (this.period.name === "今日") {
-                    showCard = diff === 0 ? true : false;
+                if (this.period) {
+                    const today = new Date(
+                        Date.now() - new Date().getTimezoneOffset() * 60000
+                    )
+                        .toISOString()
+                        .substr(0, 10);
+                    const diff =
+                        (new Date(todo.date) - new Date(today)) /
+                        (60 * 60 * 1000 * 24);
+                    if (this.period.name === "今日") {
+                        showCard = diff === 0 ? true : false;
+                    }
+                    if (this.period.name === "7日以内") {
+                        showCard = 0 <= diff && diff < 8 ? true : false;
+                    }
+                    if (this.period.name === "全期間") {
+                        showCard =
+                            todo.date && !(todo.accomplish && diff < 0)
+                                ? true
+                                : false;
+                    }
+                    if (this.period.name === "期限切れ") {
+                        showCard = !todo.accomplish && diff < 0 ? true : false;
+                    }
+                    // 選択されたタブに表示できるカードがあるかのチェック
+                    if (showCard) this.existCard = true;
                 }
-                if (this.period.name === "7日以内") {
-                    showCard = 0 <= diff && diff < 8 ? true : false;
-                }
-                if (this.period.name === "全期間") {
-                    showCard =
-                        todo.date && !(todo.accomplish && diff < 0)
-                            ? true
-                            : false;
-                }
-                if (this.period.name === "期限切れ") {
-                    showCard = !todo.accomplish && diff < 0 ? true : false;
-                }
-                // 選択されたタブに表示できるカードがあるかのチェック
-                if (showCard) this.existCard = true;
                 return showCard;
             };
         },
         noCard() {
             return (period) => {
-                if (period.name === "今日") {
-                    return "今日予定しているToDoはありません";
-                }
-                if (period.name === "7日以内") {
-                    return "7日以内に予定しているToDoはありません";
-                }
-                if (period.name === "全期間") {
-                    return "予定しているToDoはありません";
-                }
-                if (period.name === "期限切れ") {
-                    return "期限切れのToDoはありません";
+                if (period) {
+                    if (period.name === "今日") {
+                        return "今日予定しているToDoはありません";
+                    }
+                    if (period.name === "7日以内") {
+                        return "7日以内に予定しているToDoはありません";
+                    }
+                    if (period.name === "全期間") {
+                        return "予定しているToDoはありません";
+                    }
+                    if (period.name === "期限切れ") {
+                        return "期限切れのToDoはありません";
+                    }
                 }
             };
         },

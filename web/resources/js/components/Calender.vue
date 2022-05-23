@@ -11,21 +11,25 @@
             <v-text-field
                 class="d-flex align-self-center ma-0 pt-5"
                 v-model="todo.date"
-                :prepend-icon="$vuetify.breakpoint.smAndUp ? 'mdi-calendar' : null"
+                :prepend-icon="
+                    $vuetify.breakpoint.smAndUp ? 'mdi-calendar' : null
+                "
                 readonly
                 v-bind="attrs"
                 v-on="on"
-            > 
+            >
             </v-text-field>
             <v-btn
-                class="d-flex align-self-center" 
-                style="position: relative; left: -20px;"
+                class="d-flex align-self-center"
+                style="position: relative; left: -20px"
                 @click="removeDate(todo.date)"
-                small 
+                small
                 icon
             >
-                <v-icon :size="$vuetify.breakpoint.smAndUp ? '20' : '14'">mdi-close</v-icon>
-            </v-btn> 
+                <v-icon :size="$vuetify.breakpoint.smAndUp ? '20' : '14'"
+                    >mdi-close</v-icon
+                >
+            </v-btn>
         </template>
         <v-date-picker v-model="todo.date" no-title scrollable>
             <v-spacer></v-spacer>
@@ -45,29 +49,29 @@ export default {
         calenderMenu: false,
     }),
     props: {
-        project : {
+        project: {
             type: Object,
         },
     },
     computed: {
-      todo() {
-            return this.$store.getters['todo/todo'];
+        todo() {
+            return this.$store.getters["todo/todo"];
         },
     },
     methods: {
         onClickSave(date) {
             this.calenderMenu = false;
-            this.$store.dispatch(
-                "todo/updateDate",
-                { date:date, todo:this.todo, project:this.project }
-            );
+            this.$store.dispatch("todo/updateDate", {
+                date: date,
+                todo: this.todo,
+            });
         },
         removeDate(date) {
             if (date) {
-                this.$store.dispatch(
-                    "todo/updateDate",
-                    { date:null, todo:this.todo }
-                );
+                this.$store.dispatch("todo/updateDate", {
+                    date: null,
+                    todo: this.todo,
+                });
             }
         },
     },

@@ -12,6 +12,7 @@ const getters = {
     todo: (state) => (state.todo ? state.todo : null),
     parentTodo: (state) => (state.parentTodo ? state.parentTodo : null),
     todoList: (state) => (state.todoList ? state.todoList : null),
+    allTodoList: (state) => (state.allTodoList ? state.allTodoList : null),
 };
 
 const mutations = {
@@ -297,13 +298,8 @@ const actions = {
         return;
     },
 
-    async updateDate(context, { date, todo, project }) {
+    async updateDate(context, { date, todo }) {
         context.commit("updateDate", date);
-        context.commit(
-            "schedule/updateScheduleList",
-            { date: date, todo: todo, project: project },
-            { root: true }
-        );
         if (date) {
             const response = await axios.put(
                 "/api/todo/" + todo.uuid + "/date",
