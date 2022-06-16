@@ -121,7 +121,7 @@
                             </v-tab>
                         </v-tabs>
                         <v-subheader
-                            v-if="tab === 0"
+                            v-if="tab !== 2"
                             class="px-md-0 mt-2 todoSubTitle"
                             v-show="$vuetify.breakpoint.smAndUp"
                         >
@@ -165,7 +165,7 @@
                             :todoStatus="linkedToDo[0]"
                         />
                         <Comments
-                            v-if="tab === 1 && todo.comments.length > 0"
+                            v-if="tab === 2 && todo.comments.length > 0"
                             :todo="todo"
                         />
                         <!-- PC版追加カード -->
@@ -216,6 +216,7 @@ export default {
         tab: 0,
         linkedToDo: [
             { name: "ToDo", show: false },
+            { name: "原因", show: false },
             { name: "コメント", show: false },
         ],
         submitLoading: false,
@@ -243,6 +244,8 @@ export default {
         additionalInputFormLabel() {
             if (this.tab === 0) {
                 return "「" + this.todo.name + "」のためのToDo";
+            } else if (this.tab === 1) {
+                return "「" + this.todo.name + "」が達成できない原因";
             } else {
                 return "コメント";
             }
@@ -251,6 +254,8 @@ export default {
             return (tab) => {
                 if (tab === 0) {
                     return "」を達成するには？";
+                } else if (tab === 1) {
+                    return "」が達成できない原因は？";
                 }
             };
         },
@@ -269,17 +274,25 @@ export default {
         },
         submitForm() {
             this.$store.dispatch("form/closeForm");
-            if (this.inputFormName && this.tab === 0) {
-                this.$store.dispatch("todo/createTodo", {
-                    parent: this.todo,
-                    name: this.inputFormName,
-                });
-            } else if (this.inputFormName && this.tab === 1) {
-                this.$store.dispatch("todo/createComment", {
-                    todo: this.todo,
-                    text: this.inputFormName,
-                    user: this.user,
-                });
+            if (this.inputFormName) {
+                if (this.tab === 0) {
+                    this.$store.dispatch("todo/createTodo", {
+                        parent: this.todo,
+                        name: this.inputFormName,
+                    });
+                } else if (this.tab === 1) {
+                    // this.$store.dispatch("todo/createComment", {
+                    //     todo: this.todo,
+                    //     text: this.inputFormName,
+                    //     user: this.user,
+                    // });
+                } else if (this.tab === 2) {
+                    this.$store.dispatch("todo/createComment", {
+                        todo: this.todo,
+                        text: this.inputFormName,
+                        user: this.user,
+                    });
+                }
             }
             this.form = false;
         },
