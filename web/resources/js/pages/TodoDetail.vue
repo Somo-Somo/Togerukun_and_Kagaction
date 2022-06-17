@@ -164,6 +164,7 @@
                             :todoList="todoList"
                             :todoStatus="linkedToDo[0]"
                         />
+                        <Cause v-if="tab === 1" />
                         <Comments
                             v-if="tab === 2 && todo.comments.length > 0"
                             :todo="todo"
@@ -197,6 +198,7 @@ import Header from "../components/Header.vue";
 import Calender from "../components/Calender.vue";
 import TodoCards from "../components/Cards/TodoCard.vue";
 import Comments from "../components/Comments.vue";
+import Cause from "../components/Cause.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
 import InputForm from "../components/InputForm.vue";
@@ -208,6 +210,7 @@ export default {
         Calender,
         TodoCards,
         Comments,
+        Cause,
         NewAdditionalCard,
         SpBottomBtn,
         InputForm,
