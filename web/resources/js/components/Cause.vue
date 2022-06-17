@@ -4,17 +4,21 @@
             <v-col class="px-md-0">
                 <div class="d-flex">
                     <!-- 予定 -->
-                    <v-list class="py-0 d-flex align-content-center">
+                    <v-list
+                        class="py-0 align-content-center"
+                        style="width: 100%"
+                        link
+                    >
                         <v-list-item class="px-0" style="width: 100%">
                             <v-list-item-action
-                                class="d-flex px-4 ma-auto"
+                                class="px-4 ma-auto"
                                 style="height: 24px"
                             >
                                 <v-icon>mdi-help-circle-outline</v-icon>
                             </v-list-item-action>
-                            <v-list-item-content class="pa-0 d-flex">
-                                <div style="width: 100%">
-                                    <v-list-item-title class="py-2 pb-4">
+                            <v-list-item-content class="pa-0">
+                                <div class="d-flex" style="width: 100%">
+                                    <v-list-item-title class="py-auto">
                                         <p
                                             class="font-weight-black ma-0"
                                             style="
@@ -35,18 +39,7 @@
                                         <template
                                             v-slot:activator="{ on, attrs }"
                                         >
-                                            <v-list-item-action
-                                                class="ma-0"
-                                                style="
-                                                    position: absolute;
-                                                    right: 16px;
-                                                "
-                                                :style="
-                                                    $vuetify.breakpoint.smAndUp
-                                                        ? 'top: 28px;'
-                                                        : 'top: 24px;'
-                                                "
-                                            >
+                                            <v-list-item-action class="ma-auto">
                                                 <v-btn
                                                     v-bind="attrs"
                                                     v-on="on"
