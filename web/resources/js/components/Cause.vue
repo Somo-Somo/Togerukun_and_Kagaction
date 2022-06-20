@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-list class="py-0" width="100%">
-            <v-col class="px-md-0">
+            <v-col class="px-0 py-1">
                 <div class="d-flex">
                     <!-- 予定 -->
                     <v-list
