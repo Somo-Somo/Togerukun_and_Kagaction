@@ -284,11 +284,11 @@ export default {
                         name: this.inputFormName,
                     });
                 } else if (this.tab === 1) {
-                    // this.$store.dispatch("todo/createComment", {
-                    //     todo: this.todo,
-                    //     text: this.inputFormName,
-                    //     user: this.user,
-                    // });
+                    this.$store.dispatch("todo/createCause", {
+                        todo: this.todo,
+                        text: this.inputFormName,
+                        user: this.user,
+                    });
                 } else if (this.tab === 2) {
                     this.$store.dispatch("todo/createComment", {
                         todo: this.todo,

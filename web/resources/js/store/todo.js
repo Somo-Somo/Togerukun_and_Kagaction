@@ -118,6 +118,16 @@ const mutations = {
         state.todoList = todoList;
     },
 
+    addCause(state, { todo, cause }) {
+        const todoList = state.todoList;
+        let todoKey;
+        for (const [key, value] of Object.entries(todoList)) {
+            if (value.uuid === todo.uuid) todoKey = key;
+        }
+        todoList[todoKey]["causes"].push(cause);
+        state.todoList = todoList;
+    },
+
     updateAllTodoList(state) {
         const projectUuid = state.todoList[0].parentUuid;
         state.allTodoList[projectUuid] = state.todoList;
@@ -181,6 +191,14 @@ const mutations = {
             if (value.uuid !== comment.uuid) comments.push(value);
         }
         state.todo.comments = comments;
+    },
+
+    deleteCause(state, { todo, cause }) {
+        const causes = [];
+        for (const [key, value] of Object.entries(todo.causes)) {
+            if (value.uuid !== cause.uuid) causes.push(value);
+        }
+        state.todo.causes = causes;
     },
 };
 
@@ -353,6 +371,37 @@ const actions = {
     async deleteComment(context, { todo, comment }) {
         context.commit("deleteComment", { todo: todo, comment: comment });
         const response = await axios.delete("/api/comment/" + comment.uuid);
+        if (response.status !== OK) {
+            context.commit("error/setCode", response.status, { root: true });
+            return false;
+        }
+        return;
+    },
+
+    async createCause(context, { todo, text, user }) {
+        const cause = {
+            user_name: user.name,
+            user_uuid: user.uuid,
+            text: text,
+            uuid: uuidv4(),
+        };
+
+        context.commit("addCause", { todo: todo, cause: cause });
+        await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
+        const response = await axios.post(
+            "/api/todo/" + todo.uuid + "/cause",
+            cause
+        );
+
+        if (response.status !== CREATED) {
+            context.commit("error/setCode", response.status, { root: true });
+            return;
+        }
+    },
+
+    async deleteCause(context, { todo, cause }) {
+        context.commit("deleteCause", { todo: todo, cause: cause });
+        const response = await axios.delete("/api/cause/" + cause.uuid);
         if (response.status !== OK) {
             context.commit("error/setCode", response.status, { root: true });
             return false;
