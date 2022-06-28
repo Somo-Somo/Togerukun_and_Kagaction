@@ -164,7 +164,7 @@
                             :todoList="todoList"
                             :todoStatus="linkedToDo[0]"
                         />
-                        <Cause v-if="tab === 1" />
+                        <Cause v-if="tab === 1" :todo="todo" />
                         <Comments
                             v-if="tab === 2 && todo.comments.length > 0"
                             :todo="todo"

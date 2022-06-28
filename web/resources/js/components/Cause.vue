@@ -5,11 +5,17 @@
                 <div class="d-flex">
                     <!-- 予定 -->
                     <v-list
+                        v-if="todo.causes.length > 0"
                         class="py-0 align-content-center"
                         style="width: 100%"
                         link
                     >
-                        <v-list-item class="px-0" style="width: 100%">
+                        <v-list-item
+                            class="px-0"
+                            style="width: 100%"
+                            v-for="(cause, index) in todo.causes"
+                            :key="index"
+                        >
                             <v-list-item-action
                                 class="px-4 ma-auto"
                                 style="height: 24px"
@@ -100,7 +106,11 @@ export default {
         selectedDeletingTodo: { name: null },
         cardMenu: [{ title: "削除", color: "color: red" }],
     }),
-    props: {},
+    props: {
+        todo: {
+            type: Object,
+        },
+    },
     computed: {},
     methods: {
         selectMenu(menuTitle, todo) {
