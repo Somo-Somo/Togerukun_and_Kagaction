@@ -48,7 +48,7 @@ class TodoListConverter
             $fetchComments = $value['comments'] ? $value['comments']->toArray() : null;
             $comments = $fetchComments ? $this->commentConverter->invoke($fetchComments) : null;
             $fetchCauses = $value['causes'] ? $value['causes']->toArray() : null;
-            $causes = $fetchCauses ? false : null;
+            $causes = $fetchCauses ? $this->causeConverter->invoke($fetchCauses) : null;
 
             if ($childs) {
                 // 子どもに親のデータを持たせて$todoDataに格納。
