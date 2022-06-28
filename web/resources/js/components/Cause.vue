@@ -8,13 +8,15 @@
                         v-if="todo.causes.length > 0"
                         class="py-0 align-content-center"
                         style="width: 100%"
-                        link
                     >
                         <v-list-item
                             class="px-0"
                             style="width: 100%"
                             v-for="(cause, index) in todo.causes"
+                            @mouseover="causeIndex = index"
+                            @mouseout="causeIndex = false"
                             :key="index"
+                            link
                         >
                             <v-list-item-action
                                 class="px-4 ma-auto"
@@ -102,6 +104,7 @@ export default {
         DeletingConfirmationDialog,
     },
     data: () => ({
+        causeIndex: false,
         deletingConfirmationDialog: false,
         selectedDeletingTodo: { name: null },
         cardMenu: [{ title: "削除", color: "color: red" }],
