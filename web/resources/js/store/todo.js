@@ -399,6 +399,7 @@ const actions = {
     },
 
     async deleteCause(context, { todo, cause }) {
+        console.info(cause);
         context.commit("deleteCause", { todo: todo, cause: cause });
         const response = await axios.delete("/api/cause/" + cause.uuid);
         if (response.status !== OK) {

@@ -40,45 +40,17 @@
                                             {{ cause.text }}
                                         </p></v-list-item-title
                                     >
-                                    <v-menu
-                                        class="rounded-lg elevation-0"
-                                        offset-y
-                                    >
-                                        <template
-                                            v-slot:activator="{ on, attrs }"
+                                    <div v-show="causeIndex === index">
+                                        <v-list-item-icon
+                                            class="d-flex align-self-center ma-0"
                                         >
-                                            <v-list-item-action class="ma-auto">
-                                                <v-btn
-                                                    v-bind="attrs"
-                                                    v-on="on"
-                                                    small
-                                                    icon
-                                                    link
-                                                >
-                                                    <v-icon size="24">
-                                                        mdi-dots-vertical
-                                                    </v-icon>
-                                                </v-btn>
-                                            </v-list-item-action>
-                                        </template>
-                                        <v-list>
-                                            <v-list-item
-                                                v-for="menu in cardMenu"
-                                                :key="menu.title"
-                                                @click="
-                                                    selectMenu(menu.title, todo)
-                                                "
-                                                link
-                                            >
-                                                <v-list-item-title
-                                                    :style="menu.color"
-                                                    >{{
-                                                        menu.title
-                                                    }}</v-list-item-title
-                                                >
-                                            </v-list-item>
-                                        </v-list>
-                                    </v-menu>
+                                            <Menu
+                                                :menus="menus"
+                                                :selectCard="cause"
+                                                @selectedMenu="selectedMenu"
+                                            />
+                                        </v-list-item-icon>
+                                    </div>
                                 </div>
                             </v-list-item-content>
                         </v-list-item>
@@ -88,9 +60,9 @@
         </v-list>
         <DeletingConfirmationDialog
             :deletingConfirmationDialog="deletingConfirmationDialog"
-            :selectedDeletingItemName="selectedDeletingTodo.name"
+            :selectedDeletingItemName="selectedDeletingCause.text"
             :loading="false"
-            @deleteItem="deleteTodo"
+            @deleteItem="deleteCause"
             @onClickCancel="onClickCancel"
         />
     </div>
@@ -98,16 +70,17 @@
 
 <script>
 import DeletingConfirmationDialog from "../components/Dialog/DeletingConfirmationDialog.vue";
-
+import Menu from "../components/Buttons/Menu.vue";
 export default {
     components: {
         DeletingConfirmationDialog,
+        Menu,
     },
     data: () => ({
         causeIndex: false,
         deletingConfirmationDialog: false,
-        selectedDeletingTodo: { name: null },
-        cardMenu: [{ title: "削除", color: "color: red" }],
+        selectedDeletingCause: { text: null },
+        menus: [{ title: "削除", color: "color: red" }],
     }),
     props: {
         todo: {
@@ -116,23 +89,23 @@ export default {
     },
     computed: {},
     methods: {
-        selectMenu(menuTitle, todo) {
+        selectedMenu(menuTitle, cause) {
             if (menuTitle === "削除") {
                 this.deletingConfirmationDialog = true;
-                this.selectedDeletingTodo = todo;
+                this.selectedDeletingCause = cause;
             }
         },
-        async deleteTodo() {
+        async deleteCause() {
             this.deletingConfirmationDialog = false;
-            await this.$store.dispatch(
-                "todo/deleteTodo",
-                this.selectedDeletingTodo
-            );
-            this.selectedDeletingTodo = { name: null };
+            await this.$store.dispatch("todo/deleteCause", {
+                todo: this.todo,
+                cause: this.selectedDeletingCause,
+            });
+            this.selectedDeletingCause = { text: null };
         },
         onClickCancel() {
             this.deletingConfirmationDialog = false;
-            this.selectedDeletingTodo = { name: null };
+            this.selectedDeletingCause = { text: null };
         },
     },
 };
