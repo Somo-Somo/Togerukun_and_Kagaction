@@ -385,7 +385,6 @@ const actions = {
             text: text,
             uuid: uuidv4(),
         };
-
         context.commit("addCause", { todo: todo, cause: cause });
         await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
         const response = await axios.post(

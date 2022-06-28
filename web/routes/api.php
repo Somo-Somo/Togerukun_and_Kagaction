@@ -67,7 +67,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // 原因
     Route::post('/todo/{todoId}/cause', [CauseController::class, 'store']);
-    Route::put('/cause/{causeId}/', [CauseController::class, 'update']);
     Route::delete('/cause/{causeId}', [CauseController::class, 'destroy']);
 
     // オンボーディング
