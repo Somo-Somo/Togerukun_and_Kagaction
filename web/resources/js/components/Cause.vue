@@ -35,7 +35,7 @@
                                                 text-overflow: ellipsis;
                                             "
                                         >
-                                            テストです
+                                            {{ cause.text }}
                                         </p></v-list-item-title
                                     >
                                     <v-menu
