@@ -44,7 +44,7 @@ class CauseRepository implements CauseRepositoryInterface
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - [created:CREATED] -> (cause:Cause { uuid : $cause_uuid }),
                 (cause) <- [unavailable_cause:UNAVAILABLE_CAUSE] - (todo:Todo)
-                DELETE to, created
+                DELETE unavailable_cause, created
                 DELETE cause
                 RETURN user
                 CYPHER,
