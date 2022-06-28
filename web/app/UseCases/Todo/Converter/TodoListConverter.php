@@ -4,6 +4,7 @@ namespace App\UseCases\Todo\Converter;
 
 use App\UseCases\Todo\ChildRelateToParentTodo;
 use App\UseCases\Comment\Converter\CommentConverter;
+use App\UseCases\Cause\Converter\CauseConverter;
 
 class TodoListConverter
 {
@@ -12,10 +13,12 @@ class TodoListConverter
 
     public function __construct(
         CommentConverter $commentConverter,
+        CauseConverter $causeConverter,
         ChildRelateToParentTodo $childRelateToParentTodo
     ) {
         $this->childRelateToParentTodo = $childRelateToParentTodo;
         $this->commentConverter = $commentConverter;
+        $this->causeConverter = $causeConverter;
     }
 
     public function invoke($fetchProjectAndTodoFromNeo4j)
@@ -37,7 +40,6 @@ class TodoListConverter
         // depth = y > 1　の場合「仮説」。 todoisDataから情報を持ってきてtodoListの配列に入れる。
         foreach ($arrayTodoes as $value) {
             $value = $value->toArray();
-
             // 親プロジェクト, 親仮説, 子仮説の値を取得
             $project = $value['project']->getProperties()->toArray();
             $projectUuid = $project['uuid'];
