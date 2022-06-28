@@ -107,7 +107,7 @@ class UserRepository implements UserRepositoryInterface
                 OPTIONAL MATCH (parent)<-[:TO]-(comment:Comment)
                 OPTIONAL MATCH comments = (user)-[:CREATED]->(comment:Comment)
                 OPTIONAL MATCH causes = (user)-[:CREATED]->(cause:Cause)
-                WITH project,parent,r,child,len,date,accomplish,comments,causes ORDER BY comment
+                WITH project,parent,r,child,len,date,accomplish,comments,causes ORDER BY comment, cause
                 RETURN project,parent,r,collect(child),length(len),date,accomplish,collect(DISTINCT comments) AS comments, collect(DISTINCT causes) AS causes
                 ORDER BY r
                 CYPHER,
