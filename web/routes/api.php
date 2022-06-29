@@ -8,6 +8,7 @@ use App\Http\Controllers\AccomplishController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\DateController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CauseController;
 use App\Http\Controllers\Initialize;
 use App\Http\Controllers\Onboarding;
 
@@ -63,6 +64,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/todo/{todoId}/comment', [CommentController::class, 'store']);
     Route::put('/comment/{commentId}/', [CommentController::class, 'update']);
     Route::delete('/comment/{commentId}', [CommentController::class, 'destroy']);
+
+    // 原因
+    Route::post('/todo/{todoId}/cause', [CauseController::class, 'store']);
+    Route::delete('/cause/{causeId}', [CauseController::class, 'destroy']);
 
     // オンボーディング
     Route::post('/onboarding', Onboarding::class);
