@@ -17,32 +17,30 @@
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-                <v-btn v-if="cancel" @click="$emit('onClickCancel')" text>
+                <v-btn v-if="step === 1" @click="$emit('onClickCancel')" text>
                     キャンセル
                 </v-btn>
-                <v-btn v-if="!cancel" @click="$emit('onClickCancel')" text>
+                <v-btn v-if="step === 2" @click="onClickBack()" text>
                     戻る
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
                 <v-btn
-                    v-if="done"
+                    v-if="!dateForm || step === 2"
                     type="submit"
                     :loading="loading"
                     :disabled="!formName || loading"
                     color="primary"
-                    @click="$emit('submitForm')"
+                    @click="onClickDone"
                     text
                 >
                     完了
                 </v-btn>
                 <v-btn
-                    v-if="!done"
-                    type="submit"
-                    :loading="loading"
+                    v-if="dateForm && step === 1"
                     :disabled="!formName || loading"
                     color="primary"
-                    @click="$emit('submitForm')"
+                    @click="onClickNext()"
                     text
                 >
                     次へ
@@ -55,9 +53,9 @@
 <script>
 export default {
     data: () => ({
+        step: 1,
         text: null,
         date: null,
-        dateForm: false,
         cancel: true,
         done: true,
     }),
@@ -84,8 +82,23 @@ export default {
                 this.$store.dispatch("form/setName", value);
             },
         },
+        dateForm() {
+            return () => {
+                return this.category !== "プロジェクト" ? true : false;
+            };
+        },
     },
-    methods: {},
+    methods: {
+        onClickBack() {
+            this.step = 1;
+        },
+        onClickNext() {
+            this.step = 2;
+        },
+        onClickDone() {
+            this.$emit("submitForm", this.text);
+        },
+    },
     watch: {
         // ダイアログが閉じた後フォームの値を全て空にする * computedに移行したい
         inputForm(inputForm) {
