@@ -93,7 +93,7 @@
                         </v-subheader>
                         <v-col class="px-md-4 pa-0 d-flex align-self-center">
                             <Calender
-                                :project="project"
+                                :todo="todo"
                                 @onClickSave="updateDate"
                                 @onClickRemove="removeDate"
                             />
@@ -309,7 +309,6 @@ export default {
             }
         },
         updateDate(date) {
-            console.info(date);
             this.$store.dispatch("todo/updateDate", {
                 date: date,
                 todo: this.todo,

@@ -49,15 +49,11 @@ export default {
         calenderMenu: false,
     }),
     props: {
-        project: {
+        todo: {
             type: Object,
         },
     },
-    computed: {
-        todo() {
-            return this.$store.getters["todo/todo"];
-        },
-    },
+    computed: {},
     methods: {
         onClickSave(date) {
             this.calenderMenu = false;
