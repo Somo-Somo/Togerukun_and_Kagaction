@@ -22,7 +22,7 @@
             <v-btn
                 class="d-flex align-self-center"
                 style="position: relative; left: -20px"
-                @click="removeDate(todo.date)"
+                @click="onClickRemove(todo.date)"
                 small
                 icon
             >
@@ -61,18 +61,10 @@ export default {
     methods: {
         onClickSave(date) {
             this.calenderMenu = false;
-            this.$store.dispatch("todo/updateDate", {
-                date: date,
-                todo: this.todo,
-            });
+            this.$emit("onClickSave", date);
         },
-        removeDate(date) {
-            if (date) {
-                this.$store.dispatch("todo/updateDate", {
-                    date: null,
-                    todo: this.todo,
-                });
-            }
+        onClickRemove(date) {
+            if (date) this.$emit("onClickRemove");
         },
     },
 };

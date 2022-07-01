@@ -30,7 +30,7 @@
                     <v-textarea
                         label="名前を入力"
                         v-model="todo.name"
-                        @change="editTodoName"
+                        @change="updateTodoName"
                         class="pa-0"
                         rows="1"
                         :class="
@@ -92,7 +92,11 @@
                             </p>
                         </v-subheader>
                         <v-col class="px-md-4 pa-0 d-flex align-self-center">
-                            <Calender :project="project" />
+                            <Calender
+                                :project="project"
+                                @onClickSave="updateDate"
+                                @onClickRemove="removeDate"
+                            />
                         </v-col>
                     </div>
                 </div>
@@ -299,10 +303,23 @@ export default {
             }
             this.form = false;
         },
-        editTodoName() {
+        updateTodoName() {
             if (this.todo.name) {
                 this.$store.dispatch("todo/editTodo", this.todo);
             }
+        },
+        updateDate(date) {
+            console.info(date);
+            this.$store.dispatch("todo/updateDate", {
+                date: date,
+                todo: this.todo,
+            });
+        },
+        removeDate() {
+            this.$store.dispatch("todo/updateDate", {
+                date: null,
+                todo: this.todo,
+            });
         },
     },
     watch: {
