@@ -2,6 +2,7 @@
     <v-menu
         ref="calenderMenu"
         v-model="calenderMenu"
+        v-click-outside="onClickSave(todo.date)"
         :close-on-content-click="false"
         transition="scale-transition"
         offset-y
