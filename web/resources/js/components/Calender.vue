@@ -1,5 +1,6 @@
 <template>
     <v-menu
+        style="width: 100%"
         ref="calenderMenu"
         v-model="calenderMenu"
         v-click-outside="onClickSave(todo.date)"
@@ -12,25 +13,26 @@
             <v-text-field
                 class="d-flex align-self-center ma-0 pt-5"
                 v-model="todo.date"
-                :prepend-icon="
-                    $vuetify.breakpoint.smAndUp ? 'mdi-calendar' : null
-                "
+                prepend-icon="mdi-calendar"
                 readonly
                 v-bind="attrs"
                 v-on="on"
             >
             </v-text-field>
-            <v-btn
+            <div
                 class="d-flex align-self-center"
-                style="position: relative; left: -20px"
-                @click="onClickRemove(todo.date)"
-                small
-                icon
+                :style="
+                    todo.name
+                        ? 'position: relative; right: 20px'
+                        : 'position: absolute; right: 32px'
+                "
             >
-                <v-icon :size="$vuetify.breakpoint.smAndUp ? '20' : '14'"
-                    >mdi-close</v-icon
-                >
-            </v-btn>
+                <v-btn @click="onClickRemove(todo.date)" small icon>
+                    <v-icon :size="$vuetify.breakpoint.smAndUp ? '20' : '14'"
+                        >mdi-close</v-icon
+                    >
+                </v-btn>
+            </div>
         </template>
         <v-date-picker v-model="todo.date" no-title scrollable>
             <v-spacer></v-spacer>
