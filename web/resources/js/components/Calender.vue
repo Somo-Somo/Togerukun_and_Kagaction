@@ -13,6 +13,7 @@
             <v-text-field
                 class="d-flex align-self-center ma-0 pt-5"
                 v-model="todo.date"
+                :label="dateLabel"
                 prepend-icon="mdi-calendar"
                 readonly
                 v-bind="attrs"
@@ -24,7 +25,7 @@
                 :style="
                     todo.name
                         ? 'position: relative; right: 20px'
-                        : 'position: absolute; right: 32px'
+                        : 'position: absolute; right: 24px'
                 "
             >
                 <v-btn @click="onClickRemove(todo.date)" small icon>
@@ -54,6 +55,9 @@ export default {
     props: {
         todo: {
             type: Object,
+        },
+        dateLabel: {
+            type: String,
         },
     },
     computed: {},

@@ -5,15 +5,26 @@
         width="500"
     >
         <v-card ref="form">
-            <v-card-text class="d-flex align-content-center px-9 pt-9 pb-0">
+            <v-card-text
+                class="d-flex align-content-center pb-0"
+                :class="step === 1 ? 'px-9 pt-9' : 'px-6 pt-4'"
+            >
                 <v-text-field
+                    v-if="step === 1"
                     class="pa-0 ma-0"
-                    v-model="formName"
+                    v-model="text"
                     counter="64"
                     :label="category"
                     @keypress.enter.prevent="$emit('submitForm')"
                     clearable
                 ></v-text-field>
+                <Calender
+                    :todo="(todo = { name: name, date: date })"
+                    :dateLabel="text + 'の日付'"
+                    v-if="step === 2"
+                    @onClickSave="updateDate"
+                    @onClickRemove="removeDate"
+                />
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
@@ -29,16 +40,16 @@
                     v-if="!dateForm || step === 2"
                     type="submit"
                     :loading="loading"
-                    :disabled="!formName || loading"
+                    :disabled="!text || loading"
                     color="primary"
-                    @click="onClickDone"
+                    @click="onClickDone()"
                     text
                 >
                     完了
                 </v-btn>
                 <v-btn
                     v-if="dateForm && step === 1"
-                    :disabled="!formName || loading"
+                    :disabled="!text || loading"
                     color="primary"
                     @click="onClickNext()"
                     text
@@ -51,7 +62,9 @@
 </template>
 
 <script>
+import Calender from "./Calender.vue";
 export default {
+    components: { Calender },
     data: () => ({
         step: 1,
         text: null,
@@ -87,6 +100,12 @@ export default {
                 return this.category !== "プロジェクト" ? true : false;
             };
         },
+        dateLabel() {
+            return () => {
+                console.info(this.text);
+                return this.text ? this.text + "の日付" : null;
+            };
+        },
     },
     methods: {
         onClickBack() {
@@ -96,7 +115,13 @@ export default {
             this.step = 2;
         },
         onClickDone() {
-            this.$emit("submitForm", this.text);
+            this.$emit("submitForm", (this.text, this.date));
+        },
+        updateDate(date) {
+            this.date = date;
+        },
+        removeDate() {
+            this.date = null;
         },
     },
     watch: {

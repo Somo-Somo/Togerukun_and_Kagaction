@@ -94,6 +94,7 @@
                         <v-col class="px-md-4 pa-0 d-flex align-self-center">
                             <Calender
                                 :todo="todo"
+                                :dateLabel="null"
                                 @onClickSave="updateDate"
                                 @onClickRemove="removeDate"
                             />
@@ -279,24 +280,25 @@ export default {
             this.$store.dispatch("form/closeForm");
             this.form = false;
         },
-        submitForm() {
+        submitForm(text, date) {
             this.$store.dispatch("form/closeForm");
             if (this.inputFormName) {
                 if (this.tab === 0) {
                     this.$store.dispatch("todo/createTodo", {
                         parent: this.todo,
-                        name: this.inputFormName,
+                        name: text,
+                        date: date,
                     });
                 } else if (this.tab === 1) {
                     this.$store.dispatch("todo/createCause", {
                         todo: this.todo,
-                        text: this.inputFormName,
+                        text: text,
                         user: this.user,
                     });
                 } else if (this.tab === 2) {
                     this.$store.dispatch("todo/createComment", {
                         todo: this.todo,
-                        text: this.inputFormName,
+                        text: text,
                         user: this.user,
                     });
                 }
