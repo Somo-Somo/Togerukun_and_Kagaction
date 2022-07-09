@@ -108,11 +108,12 @@ export default {
             this.$store.dispatch("form/closeForm");
             this.form = false;
         },
-        submitForm() {
+        submitForm(form) {
             this.$store.dispatch("form/closeForm");
             this.$store.dispatch("todo/createGoal", {
                 project: this.project,
-                todoName: this.name,
+                name: form.text,
+                date: form.date,
             });
             this.form = false;
         },

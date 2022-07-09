@@ -28,17 +28,17 @@ class GoalRepository implements GoalRepositoryInterface
                                 status: null,
                                 limited: null
                         })-[
-                            :IS_THE_GOAL_OF{at:localdatetime({timezone: 'Asia/Tokyo'})}  
+                            :IS_THE_GOAL_OF{at:localdatetime({timezone: 'Asia/Tokyo'})}
                         ]->(project)
                 RETURN todo, project
                 CYPHER,
-                [
-                    'name' => $goal['name'], 
-                    'uuid' => $goal['uuid'], 
-                    'parent_uuid' => $goal['parent_uuid'], 
-                    'user_email' => $goal['created_by_user_email'], 
-                ]
-            );
+            [
+                'name' => $goal['name'],
+                'uuid' => $goal['uuid'],
+                'parent_uuid' => $goal['parent_uuid'],
+                'user_email' => $goal['user_email'],
+            ]
+        );
 
         return $createdGoal;
     }
