@@ -36,7 +36,7 @@
                 <v-spacer></v-spacer>
                 <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
                 <v-btn
-                    v-if="!dateForm || step === 2"
+                    v-if="category === 'プロジェクト' || step === 2"
                     type="submit"
                     :loading="loading"
                     :disabled="!text || loading"
@@ -47,7 +47,7 @@
                     完了
                 </v-btn>
                 <v-btn
-                    v-if="dateForm && step === 1"
+                    v-if="category !== 'プロジェクト' && step === 1"
                     :disabled="!text || loading"
                     color="primary"
                     @click="onClickNext(text)"
@@ -94,11 +94,6 @@ export default {
                 this.$store.dispatch("form/setName", value);
             },
         },
-        dateForm() {
-            return () => {
-                return this.category !== "プロジェクト" ? true : false;
-            };
-        },
         dateLabel() {
             return () => {
                 return this.text ? this.text + "の日付" : null;
@@ -114,7 +109,7 @@ export default {
             this.step = 2;
         },
         onClickDone() {
-            const form = this.$emit("submitForm", {
+            this.$emit("submitForm", {
                 text: this.text,
                 date: this.date,
             });

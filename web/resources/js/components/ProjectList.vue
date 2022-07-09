@@ -1,72 +1,94 @@
 <template>
-  <div class="mt-2">
-    <div class="d-flex justify-space-between px-2">
-        <v-subheader class="d-flex align-self-center" style="font-size: 0.825em; height: 32px;"
-            >プロジェクト
-        </v-subheader>
-        <v-icon
-            class="hidden-sm-and-down pr-2"
-            size="18"
-            height="18"
-            @click="onClickCreate"
-            >mdi-plus-circle</v-icon
+    <div class="mt-2">
+        <div class="d-flex justify-space-between px-2">
+            <v-subheader
+                class="d-flex align-self-center"
+                style="font-size: 0.825em; height: 32px"
+                >プロジェクト
+            </v-subheader>
+            <v-icon
+                class="hidden-sm-and-down pr-2"
+                size="18"
+                height="18"
+                @click="onClickCreate"
+                >mdi-plus-circle</v-icon
+            >
+        </div>
+        <v-progress-circular
+            class="d-flex mx-auto my-8"
+            v-if="loading"
+            color="grey darken-1"
+            indeterminate
+        ></v-progress-circular>
+        <v-list
+            class="overflow-y-auto py-0"
+            style="height: calc(100vh - 304px)"
         >
-    </div>
-    <v-progress-circular
-        class="d-flex mx-auto my-8"
-        v-if="loading"
-        color="grey darken-1"
-        indeterminate
-    ></v-progress-circular>
-    <v-list class="overflow-y-auto py-0" style="height: calc(100vh - 304px);">
-        <v-list-item
-            v-for="(project, index) in projectList"
-            :key="index"
-            @click="selectProject(project)"
-            @mouseover="showMenu = index;"
-            @mouseout="showMenu = false;"
-            class="d-flex px-8"
-            style="height: 48px"
-            link
-        >
-            <v-list-item-icon class="align-self-center mr-6">
-                <v-icon color="teal lighten-5">mdi-folder-outline</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content class="align-self-center">
-                <v-list-item-title style="font-size: 0.9em;">{{ project.name }}</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-icon class="align-self-center mx-0" v-show="showMenu === index">
-                <Menu :menus="cardMenus" :selectCard="project" @selectedMenu="selectedMenu"/>
-            </v-list-item-icon>
-        </v-list-item>
-        <v-list-item v-if="!loading" @click="onClickCreate" class="d-flex px-8" style="height: 48px" link>
-            <v-list-item-icon class="align-self-center mr-6">
-                <v-icon color="teal lighten-5">mdi-plus</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content class="align-self-center">
-                <v-list-item-title style="font-size: 0.9em;">プロジェクト追加</v-list-item-title>
-            </v-list-item-content>
-        </v-list-item>
-    </v-list>
-    <!-- 追加のフォーム -->
-    <form class="form" @submit.prevent="submitForm()">
-        <InputForm
-            v-if="inputFormCard"
-            @onClickCancel="onClickCancel"
-            @submitForm="submitForm"
-            :inputForm="inputForm"
-            :category="category"
+            <v-list-item
+                v-for="(project, index) in projectList"
+                :key="index"
+                @click="selectProject(project)"
+                @mouseover="showMenu = index"
+                @mouseout="showMenu = false"
+                class="d-flex px-8"
+                style="height: 48px"
+                link
+            >
+                <v-list-item-icon class="align-self-center mr-6">
+                    <v-icon color="teal lighten-5">mdi-folder-outline</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content class="align-self-center">
+                    <v-list-item-title style="font-size: 0.9em">{{
+                        project.name
+                    }}</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-icon
+                    class="align-self-center mx-0"
+                    v-show="showMenu === index"
+                >
+                    <Menu
+                        :menus="cardMenus"
+                        :selectCard="project"
+                        @selectedMenu="selectedMenu"
+                    />
+                </v-list-item-icon>
+            </v-list-item>
+            <v-list-item
+                v-if="!loading"
+                @click="onClickCreate"
+                class="d-flex px-8"
+                style="height: 48px"
+                link
+            >
+                <v-list-item-icon class="align-self-center mr-6">
+                    <v-icon color="teal lighten-5">mdi-plus</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content class="align-self-center">
+                    <v-list-item-title style="font-size: 0.9em"
+                        >プロジェクト追加</v-list-item-title
+                    >
+                </v-list-item-content>
+            </v-list-item>
+        </v-list>
+        <!-- 追加のフォーム -->
+        <form class="form" @submit.prevent="submitForm()">
+            <InputForm
+                v-if="inputFormCard"
+                @onClickCancel="onClickCancel"
+                @submitForm="submitForm"
+                :inputForm="inputForm"
+                :category="category"
+                :loading="submitLoading"
+            />
+        </form>
+        <DeletingConfirmationDialog
+            :deletingConfirmationDialog="deletingConfirmationDialog"
+            :selectedDeletingItemName="selectedDeletingProject.name"
             :loading="submitLoading"
+            @deleteItem="deleteProject"
+            @onClickCancel="onClickCancel"
         />
-    </form>
-    <DeletingConfirmationDialog 
-      :deletingConfirmationDialog="deletingConfirmationDialog"
-      :selectedDeletingItemName="selectedDeletingProject.name"
-      :loading="submitLoading"
-      @deleteItem="deleteProject"
-      @onClickCancel="onClickCancel"
-    />
-  </div>
+    </div>
 </template>
 
 <script>
@@ -91,8 +113,8 @@ export default {
         },
         showMenu: false,
         cardMenus: [
-            {title: "編集", color:"color: black"},
-            {title: "削除", color:"color: red"},
+            { title: "編集", color: "color: black" },
+            { title: "削除", color: "color: red" },
         ],
         submitLoading: false,
     }),
@@ -131,7 +153,7 @@ export default {
             this.$store.dispatch("project/selectProject", project);
             return this.$router.push({ path: "/project/" + project.uuid });
         },
-        selectedMenu(menuTitle, project){
+        selectedMenu(menuTitle, project) {
             if (menuTitle === "編集") {
                 this.onClickEdit(project);
             } else if (menuTitle === "削除") {
@@ -140,20 +162,23 @@ export default {
                 this.selectedDeletingProject.uuid = project.uuid;
             }
         },
-        async deleteProject(){
+        async deleteProject() {
             this.submitLoading = true;
-            await this.$store.dispatch("project/deleteProject", this.selectedDeletingProject);
+            await this.$store.dispatch(
+                "project/deleteProject",
+                this.selectedDeletingProject
+            );
             this.submitLoading = false;
             this.deletingConfirmationDialog = false;
             this.selectedDeletingProject.name = null;
             this.selectedDeletingProject.uuid = null;
         },
-        async submitForm() {
+        async submitForm(form) {
             if (this.submitType === "create") {
                 this.submitLoading = true;
                 const response = await this.$store.dispatch(
                     "project/createProject",
-                    { name: this.name }
+                    { name: form.text }
                 );
                 this.submitLoading = false;
                 this.$store.dispatch("form/closeForm");
@@ -161,7 +186,7 @@ export default {
                 this.$router.push("/project/" + response.project.uuid);
             } else if (this.submitType === "edit") {
                 // 名前を更新
-                this.editObject.name = this.name;
+                this.editObject.name = form.text;
                 this.$store.dispatch("project/editProject", this.editObject);
                 this.$store.dispatch("form/closeForm");
                 this.inputFormCard = false;
