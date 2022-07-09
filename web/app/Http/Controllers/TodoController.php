@@ -13,12 +13,11 @@ class TodoController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-
     }
 
     /**
@@ -34,12 +33,13 @@ class TodoController extends Controller
             'name' => $request->name,
             'uuid' => $request->uuid,
             'parent_uuid' => $request->parentUuid,
-            'created_by_user_email' => $request->user()->email,
+            'date' => $request->date,
+            'user_email' => $request->user()->email,
         ];
 
         $storeAction->invoke($todo);
 
-       $json = [
+        $json = [
             'message' => '仮設が追加されました',
             'error' => '',
         ];
