@@ -15,7 +15,6 @@
                     v-model="text"
                     counter="64"
                     :label="category"
-                    @keypress.enter.prevent="$emit('submitForm')"
                     clearable
                 ></v-text-field>
                 <Calender
@@ -51,7 +50,7 @@
                     v-if="dateForm && step === 1"
                     :disabled="!text || loading"
                     color="primary"
-                    @click="onClickNext()"
+                    @click="onClickNext(text)"
                     text
                 >
                     次へ
@@ -102,7 +101,6 @@ export default {
         },
         dateLabel() {
             return () => {
-                console.info(this.text);
                 return this.text ? this.text + "の日付" : null;
             };
         },
@@ -111,11 +109,15 @@ export default {
         onClickBack() {
             this.step = 1;
         },
-        onClickNext() {
+        onClickNext(text) {
+            this.text = text;
             this.step = 2;
         },
         onClickDone() {
-            this.$emit("submitForm", (this.text, this.date));
+            const form = this.$emit("submitForm", {
+                text: this.text,
+                date: this.date,
+            });
         },
         updateDate(date) {
             this.date = date;

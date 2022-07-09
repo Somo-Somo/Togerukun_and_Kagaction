@@ -280,25 +280,25 @@ export default {
             this.$store.dispatch("form/closeForm");
             this.form = false;
         },
-        submitForm(text, date) {
+        submitForm(form) {
             this.$store.dispatch("form/closeForm");
-            if (this.inputFormName) {
+            if (form.text) {
                 if (this.tab === 0) {
                     this.$store.dispatch("todo/createTodo", {
                         parent: this.todo,
-                        name: text,
-                        date: date,
+                        name: form.text,
+                        date: form.date,
                     });
                 } else if (this.tab === 1) {
                     this.$store.dispatch("todo/createCause", {
                         todo: this.todo,
-                        text: text,
+                        text: form.text,
                         user: this.user,
                     });
                 } else if (this.tab === 2) {
                     this.$store.dispatch("todo/createComment", {
                         todo: this.todo,
-                        text: text,
+                        text: form.text,
                         user: this.user,
                     });
                 }
