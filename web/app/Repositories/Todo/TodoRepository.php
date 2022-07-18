@@ -18,17 +18,17 @@ class TodoRepository implements TodoRepositoryInterface
      * 選択されたプロジェクトの親仮説と子仮説と子仮説のゴールからの深さ（距離）を取得
      */
     public function getTodoList(string $projectUuid)
-    {   
+    {
         $todoList = $this->client->run(
             <<<'CYPHER'
                 MATCH len = (project:Project{uuid: $project_uuid})<- [*] - (parent:Todo)
                 OPTIONAL MATCH (parent)<-[]-(child:Todo)
                 RETURN project.uuid,parent,collect(child),length(len)
                 CYPHER,
-                [
-                    'project_uuid' => $projectUuid,
-                ]
-            );
+            [
+                'project_uuid' => $projectUuid,
+            ]
+        );
 
         return $todoList;
     }
@@ -37,7 +37,7 @@ class TodoRepository implements TodoRepositoryInterface
     {
         $createdTodo = $this->client->run(
             <<<'CYPHER'
-                MATCH   (user:User { email : $user_email }), 
+                MATCH   (user:User { email : $user_email }),
                         (parent:Todo { uuid: $parent_uuid }) - [*] -> (project:Project)
                 CREATE (user)-[
                             :CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}
@@ -46,7 +46,7 @@ class TodoRepository implements TodoRepositoryInterface
                                 name: $name,
                                 uuid: $uuid
                         })-[
-                            :TO_ACHIEVE{at:localdatetime({timezone: 'Asia/Tokyo'})}  
+                            :TO_ACHIEVE{at:localdatetime({timezone: 'Asia/Tokyo'})}
                         ]->(parent)
                 WITH project
                 MATCH  len = (project:Project) <- [r*] - (parent:Todo)
@@ -55,38 +55,38 @@ class TodoRepository implements TodoRepositoryInterface
                 RETURN project,parent,r,collect(child),length(len),currentGoal
                 ORDER BY r
                 CYPHER,
-                [
-                    'name' => $todo['name'], 
-                    'uuid' => $todo['uuid'], 
-                    'parent_uuid' => $todo['parent_uuid'], 
-                    'user_email' => $todo['created_by_user_email'], 
-                ]
-            );
+            [
+                'name' => $todo['name'],
+                'uuid' => $todo['uuid'],
+                'parent_uuid' => $todo['parent_uuid'],
+                'user_email' => $todo['user_email'],
+            ]
+        );
 
         return $createdTodo;
     }
 
     public function update($todo)
-    {        
+    {
         $updatedTodo = $this->client->run(
-                <<<'CYPHER'
+            <<<'CYPHER'
                     MATCH (user:User { email : $user_email }), (todo:Todo { uuid: $uuid })
                     SET todo.name = $name
                     WITH user,todo
                     OPTIONAL MATCH x = (user)-[updated:UPDATED]->(todo)
-                    WHERE x IS NOT NULL 
-                    SET updated.at = localdatetime({timezone: 'Asia/Tokyo'}) 
+                    WHERE x IS NOT NULL
+                    SET updated.at = localdatetime({timezone: 'Asia/Tokyo'})
                     WITH user,todo,x
                     WHERE x IS NULL
                     CREATE (user)-[:UPDATED{at:localdatetime({timezone: 'Asia/Tokyo'})}]->(todo)
                     RETURN todo
                     CYPHER,
-                    [
-                        'name' => $todo['name'], 
-                        'uuid' => $todo['uuid'], 
-                        'user_email' => $todo['user_email'], 
-                    ]
-                );
+            [
+                'name' => $todo['name'],
+                'uuid' => $todo['uuid'],
+                'user_email' => $todo['user_email'],
+            ]
+        );
 
         return $updatedTodo;
     }
@@ -102,11 +102,11 @@ class TodoRepository implements TodoRepositoryInterface
                 DELETE r
                 RETURN todo
                 CYPHER,
-                [
-                    'uuid' => $todo['uuid'], 
-                    'user_email' => $todo['user_email'], 
-                ]
-            );
+            [
+                'uuid' => $todo['uuid'],
+                'user_email' => $todo['user_email'],
+            ]
+        );
         return $deletingTodo;
     }
 
@@ -120,11 +120,11 @@ class TodoRepository implements TodoRepositoryInterface
                 ] -> (todo)
                 RETURN todo
                 CYPHER,
-                [
-                    'uuid' => $todo['uuid'], 
-                    'user_email' => $todo['user_email'], 
-                ]
-            );
+            [
+                'uuid' => $todo['uuid'],
+                'user_email' => $todo['user_email'],
+            ]
+        );
         return $updateTodoAccomplish;
     }
 
@@ -136,11 +136,11 @@ class TodoRepository implements TodoRepositoryInterface
                 DELETE accomplish
                 RETURN todo
                 CYPHER,
-                [
-                    'uuid' => $todo['uuid'], 
-                    'user_email' => $todo['user_email'], 
-                ]
-            );
+            [
+                'uuid' => $todo['uuid'],
+                'user_email' => $todo['user_email'],
+            ]
+        );
         return $deleteTodoAccomplish;
     }
 }

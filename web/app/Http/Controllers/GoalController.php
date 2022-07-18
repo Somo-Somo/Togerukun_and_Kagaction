@@ -30,13 +30,14 @@ class GoalController extends Controller
             'name' => $request->name,
             'uuid' => $request->uuid,
             'parent_uuid' => $request->parentUuid,
-            'created_by_user_email' => $request->user()->email,
+            'date' => $request->date,
+            'user_email' => $request->user()->email,
         ];
 
         $storeAction->invoke($goal);
 
-       // 本当はResourcesにかきたいけど
-       $json = [
+        // 本当はResourcesにかきたいけど
+        $json = [
             'message' => 'ゴールが追加されました',
             'error' => '',
         ];

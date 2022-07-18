@@ -30,7 +30,7 @@
                     <v-textarea
                         label="名前を入力"
                         v-model="todo.name"
-                        @change="editTodoName"
+                        @change="updateTodoName"
                         class="pa-0"
                         rows="1"
                         :class="
@@ -92,7 +92,12 @@
                             </p>
                         </v-subheader>
                         <v-col class="px-md-4 pa-0 d-flex align-self-center">
-                            <Calender :project="project" />
+                            <Calender
+                                :todo="todo"
+                                :dateLabel="null"
+                                @onClickSave="updateDate"
+                                @onClickRemove="removeDate"
+                            />
                         </v-col>
                     </div>
                 </div>
@@ -275,34 +280,47 @@ export default {
             this.$store.dispatch("form/closeForm");
             this.form = false;
         },
-        submitForm() {
+        submitForm(form) {
             this.$store.dispatch("form/closeForm");
-            if (this.inputFormName) {
+            if (form.text) {
                 if (this.tab === 0) {
                     this.$store.dispatch("todo/createTodo", {
                         parent: this.todo,
-                        name: this.inputFormName,
+                        name: form.text,
+                        date: form.date,
                     });
                 } else if (this.tab === 1) {
                     this.$store.dispatch("todo/createCause", {
                         todo: this.todo,
-                        text: this.inputFormName,
+                        text: form.text,
                         user: this.user,
                     });
                 } else if (this.tab === 2) {
                     this.$store.dispatch("todo/createComment", {
                         todo: this.todo,
-                        text: this.inputFormName,
+                        text: form.text,
                         user: this.user,
                     });
                 }
             }
             this.form = false;
         },
-        editTodoName() {
+        updateTodoName() {
             if (this.todo.name) {
                 this.$store.dispatch("todo/editTodo", this.todo);
             }
+        },
+        updateDate(date) {
+            this.$store.dispatch("todo/updateDate", {
+                date: date,
+                todo: this.todo,
+            });
+        },
+        removeDate() {
+            this.$store.dispatch("todo/updateDate", {
+                date: null,
+                todo: this.todo,
+            });
         },
     },
     watch: {

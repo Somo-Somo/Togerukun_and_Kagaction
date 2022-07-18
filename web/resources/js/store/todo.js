@@ -212,12 +212,13 @@ const actions = {
         context.commit("setParentTodo", todo);
     },
 
-    async createGoal(context, { project, todoName }) {
+    async createGoal(context, { project, name, date }) {
         const goal = {
-            name: todoName,
+            name: name,
             uuid: uuidv4(),
             parentUuid: project.uuid,
             depth: 0,
+            date: date,
             comments: [],
             child: false,
             leftSideOfLine: [{ lastChild: false }],
@@ -239,12 +240,13 @@ const actions = {
         }
     },
 
-    async createTodo(context, { parent, name }) {
+    async createTodo(context, { parent, name, date }) {
         const todo = {
             name: name,
             uuid: uuidv4(),
             parentUuid: parent.uuid,
             depth: Number(parent.depth) + 1,
+            date: date,
             comments: [],
             child: false,
             leftSideOfLine: [],

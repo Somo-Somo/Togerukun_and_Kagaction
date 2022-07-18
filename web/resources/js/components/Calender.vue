@@ -1,5 +1,6 @@
 <template>
     <v-menu
+        style="width: 100%"
         ref="calenderMenu"
         v-model="calenderMenu"
         :close-on-content-click="false"
@@ -11,25 +12,27 @@
             <v-text-field
                 class="d-flex align-self-center ma-0 pt-5"
                 v-model="todo.date"
-                :prepend-icon="
-                    $vuetify.breakpoint.smAndUp ? 'mdi-calendar' : null
-                "
+                :label="dateLabel"
+                prepend-icon="mdi-calendar"
                 readonly
                 v-bind="attrs"
                 v-on="on"
             >
             </v-text-field>
-            <v-btn
+            <div
                 class="d-flex align-self-center"
-                style="position: relative; left: -20px"
-                @click="removeDate(todo.date)"
-                small
-                icon
+                :style="
+                    todo.name
+                        ? 'position: relative; right: 20px'
+                        : 'position: absolute; right: 24px'
+                "
             >
-                <v-icon :size="$vuetify.breakpoint.smAndUp ? '20' : '14'"
-                    >mdi-close</v-icon
-                >
-            </v-btn>
+                <v-btn @click="onClickRemove(todo.date)" small icon>
+                    <v-icon :size="$vuetify.breakpoint.smAndUp ? '20' : '14'"
+                        >mdi-close</v-icon
+                    >
+                </v-btn>
+            </div>
         </template>
         <v-date-picker v-model="todo.date" no-title scrollable>
             <v-spacer></v-spacer>
@@ -49,30 +52,21 @@ export default {
         calenderMenu: false,
     }),
     props: {
-        project: {
+        todo: {
             type: Object,
         },
-    },
-    computed: {
-        todo() {
-            return this.$store.getters["todo/todo"];
+        dateLabel: {
+            type: String,
         },
     },
+    computed: {},
     methods: {
         onClickSave(date) {
             this.calenderMenu = false;
-            this.$store.dispatch("todo/updateDate", {
-                date: date,
-                todo: this.todo,
-            });
+            this.$emit("onClickSave", date);
         },
-        removeDate(date) {
-            if (date) {
-                this.$store.dispatch("todo/updateDate", {
-                    date: null,
-                    todo: this.todo,
-                });
-            }
+        onClickRemove(date) {
+            if (date) this.$emit("onClickRemove");
         },
     },
 };
