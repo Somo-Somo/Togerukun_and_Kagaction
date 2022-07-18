@@ -15,11 +15,20 @@ class LoginController extends Controller
 {
     protected $user_repository;
 
+    /**
+     * @param App\Repositories\User\UserRepositoryInterface $userRepositoryInterface
+     */
     public function __construct(UserRepositoryInterface $userRepositoryInterface)
     {
         $this->user_repository = $userRepositoryInterface;
     }
 
+    /**
+     * ログインしているか否か
+     *
+     * @param Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function authStatus(Request $request)
     {
         if ($request->user()) {
@@ -28,6 +37,12 @@ class LoginController extends Controller
         return response()->json(['message' => 'ログインしていません。'], Response::HTTP_UNAUTHORIZED);
     }
 
+    /**
+     * ユーザーのログイン
+     *
+     * @param App\Http\Requests\LoginRequest $request
+     * @return \Illuminate\Http\Response
+     */
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
@@ -46,6 +61,12 @@ class LoginController extends Controller
         return response()->json(['errors' => 'ユーザーが見つかりませんでした。'], Response::HTTP_UNAUTHORIZED);
     }
 
+    /**
+     * ユーザーのログアウト
+     *
+     * @param Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function logout(Request $request)
     {
         Auth::logout();

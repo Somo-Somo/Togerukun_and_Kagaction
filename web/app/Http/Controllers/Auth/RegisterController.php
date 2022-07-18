@@ -21,6 +21,13 @@ class RegisterController extends Controller
         $this->user_repository = $userRepositoryInterface;
     }
 
+    /**
+     * ユーザーの会員登録
+     *
+     * @param App\Http\Requests\RegisterRequest $request 会員登録のバリデーション
+     * @param App\UseCases\Initialize\Template\GenerateAction $generateAction 会員登録後プロジェクトのテンプレートを生成
+     * @return \Illuminate\Http\Response
+     */
     public function register(RegisterRequest $request, GenerateAction $generateAction)
     {
         //バリエーションで問題がなかった場合にはユーザを作成する。
@@ -38,7 +45,7 @@ class RegisterController extends Controller
             $generateAction->invoke($user->email);
         }
 
- 
-        return response()->json( new UserResource($user), Response::HTTP_CREATED);
+
+        return response()->json(new UserResource($user), Response::HTTP_CREATED);
     }
 }
