@@ -35,7 +35,7 @@ class CauseController extends Controller
      *
      * @param  string $todoUuid TodoのユニークID
      * @param  App\Http\Requests\CauseRequest $request 原因のバリデーション
-     * @param  StoreAction $storeAction UseCaseで原因コメントの登録処理を行う
+     * @param  App\UseCases\Cause\StoreAction $storeAction UseCaseで原因コメントの登録処理を行う
      * @return \Illuminate\Http\Response
      */
     public function store(string $todoUuid, CauseRequest $request, StoreAction $storeAction)
@@ -96,7 +96,7 @@ class CauseController extends Controller
      *
      * @param  string $causeUuid 原因コメントのユニークID
      * @param  \Illuminate\Http\Request  $request
-     * @param  DestoryAction $destroyAction UseCaseで原因コメントの削除処理を行う
+     * @param  App\UseCases\Cause\DestoryAction $destroyAction UseCaseで原因コメントの削除処理を行う
      * @return \Illuminate\Http\Response
      */
     public function destroy(string $causeUuid, Request $request, DestroyAction $destroyAction)

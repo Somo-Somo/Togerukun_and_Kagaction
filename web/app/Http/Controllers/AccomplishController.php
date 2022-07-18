@@ -14,7 +14,7 @@ class AccomplishController extends Controller
      *
      * @param  string  $todoUuid TodoのユニークID
      * @param  \Illuminate\Http\Request  $request
-     * @param  UpdateAction $updateAction UseCaseで完了の更新処理を行う
+     * @param  App\UseCases\Accomplish\UpdateAction $updateAction UseCaseで完了の更新処理を行う
      * @return \Illuminate\Http\Response
      */
     public function update(string $todoUuid, Request $request, UpdateAction $updateAction)
@@ -39,7 +39,7 @@ class AccomplishController extends Controller
      *
      * @param  string  $todoUuid
      * @param  \Illuminate\Http\Request $request
-     * @param  DestoryAction $destoryAction UseCaseで完了の削除処理を行う
+     * @param  App\UseCases\Accomplish\DestoryAction $destoryAction UseCaseで完了の削除処理を行う
      * @return \Illuminate\Http\Response
      */
     public function destroy(string $todoUuid, Request $request, DestroyAction $destroyAction)
