@@ -6,7 +6,6 @@ use App\UseCases\Project\IndexAction;
 use App\UseCases\Project\StoreAction;
 use App\UseCases\Project\UpdateAction;
 use App\UseCases\Project\DestroyAction;
-use App\Http\Resources\Project\CreatedProjectResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
@@ -16,6 +15,8 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  App\UseCases\Project\IndexAction $indexAction UseCaseでプロジェクトの取得処理を行う
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, IndexAction $indexAction)
@@ -31,7 +32,8 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param   $request
+     * @param  \Illuminate\Http\Request $request
+     * @param  App\UseCases\Project\StoreAction $storeeAction UseCaseでプロジェクトの登録処理を行う
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, StoreAction $storeAction)
@@ -71,7 +73,7 @@ class ProjectController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string  $uuid
+     * @param  App\UseCases\Project\UpdateAction $updateAction UseCaseでプロジェクトの更新処理を行う
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, UpdateAction $updateAction)
@@ -96,14 +98,15 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $ProjectUuid
+     * @param  string $projectUuid プロジェクトのユニークID
      * @param  \Illuminate\Http\Request $request
+     * @param  App\UseCases\Project\DestoryAction $destoryAction UseCaseでプロジェクトの削除処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $ProjectUuid, Request $request, DestroyAction $destroyAction)
+    public function destroy(string $projectUuid, Request $request, DestroyAction $destroyAction)
     {
         $project = [
-            'uuid' => $ProjectUuid,
+            'uuid' => $projectUuid,
             'user_email' => $request->user()->email,
         ];
 
