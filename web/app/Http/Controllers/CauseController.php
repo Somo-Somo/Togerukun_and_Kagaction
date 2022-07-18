@@ -33,8 +33,9 @@ class CauseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  string  $todoUuid
-     * @param  App\Http\Requests\CauseRequest  $request
+     * @param  string $todoUuid TodoのユニークID
+     * @param  App\Http\Requests\CauseRequest $request 原因のバリデーション
+     * @param  StoreAction $storeAction UseCaseで原因コメントの登録処理を行う
      * @return \Illuminate\Http\Response
      */
     public function store(string $todoUuid, CauseRequest $request, StoreAction $storeAction)
@@ -93,8 +94,9 @@ class CauseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $causeUuid
+     * @param  string $causeUuid 原因コメントのユニークID
      * @param  \Illuminate\Http\Request  $request
+     * @param  DestoryAction $destroyAction UseCaseで原因コメントの削除処理を行う
      * @return \Illuminate\Http\Response
      */
     public function destroy(string $causeUuid, Request $request, DestroyAction $destroyAction)
