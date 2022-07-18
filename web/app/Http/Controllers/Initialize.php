@@ -12,6 +12,9 @@ class Initialize extends Controller
 {
     protected $user_repository;
 
+    /**
+     * @param App\Repositories\User\UserRepositoryInterface $userRepositoryInterface
+     */
     public function __construct(UserRepositoryInterface $userRepositoryInterface)
     {
         $this->user_repository = $userRepositoryInterface;
