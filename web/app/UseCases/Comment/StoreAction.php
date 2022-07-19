@@ -16,8 +16,8 @@ class StoreAction
     public function invoke(array $comment)
     {
 
-        $comments = $this->comment_repository->storeComment($comment);
-        
+        $this->comment_repository->storeComment($comment);
+
         return;
     }
 }

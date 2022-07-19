@@ -15,8 +15,7 @@ class UpdateAction
 
     public function invoke(array $todo)
     {
-
         $this->todo_repository->updateAccomplish($todo);
-        return; 
+        return;
     }
 }

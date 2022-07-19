@@ -16,8 +16,8 @@ class UpdateAction
     public function invoke(array $project)
     {
 
-        $updatedProject = $this->project_repository->update($project);
-        
-        return; 
+        $this->project_repository->update($project);
+
+        return;
     }
 }

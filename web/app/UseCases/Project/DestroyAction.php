@@ -15,8 +15,8 @@ class DestroyAction
 
     public function invoke(array $project)
     {
-        $deletedDataFromDB = $this->project_repository->destroy($project);
-        
-        return $deletedDataFromDB;
+        $this->project_repository->destroy($project);
+
+        return;
     }
 }

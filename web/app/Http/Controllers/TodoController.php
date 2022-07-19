@@ -98,10 +98,9 @@ class TodoController extends Controller
             'user_email' => $request->user()->email,
         ];
 
-        $deletingTodo = $destroyAction->invoke($todo);
+        $destroyAction->invoke($todo);
 
         $json = [
-            'todo' => $deletingTodo,
             'message' => 'プロジェクトを削除しました',
             'error' => '',
         ];

@@ -110,11 +110,10 @@ class ProjectController extends Controller
             'user_email' => $request->user()->email,
         ];
 
-        $deletingProject = $destroyAction->invoke($project);
+        $destroyAction->invoke($project);
 
         // 本当はResourcesにかきたいけど
         $json = [
-            'project' => $deletingProject,
             'message' => 'プロジェクトを削除しました',
             'error' => '',
         ];

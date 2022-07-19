@@ -15,8 +15,8 @@ class DestroyAction
 
     public function invoke(array $todo)
     {
-        $deletedDataFromDB = $this->todo_repository->destroy($todo);
-        
-        return $deletedDataFromDB;
+        $this->todo_repository->destroy($todo);
+
+        return;
     }
 }

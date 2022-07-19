@@ -14,9 +14,14 @@ class CommentRepository implements CommentRepositoryInterface
         $this->client = Neo4jDB::call();
     }
 
+    /**
+     * コメントをDBに保存する
+     *
+     * @param array $comment
+     */
     public function storeComment(array $comment)
     {
-        $comments = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - [:CREATED] -> (todo:Todo {uuid: $todo_uuid})
                 CREATE (comment:Comment{
@@ -28,40 +33,48 @@ class CommentRepository implements CommentRepositoryInterface
                 CREATE (user) - [created:CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (comment)
                 RETURN user, todo, comment
                 CYPHER,
-                [
-                    'user_email' => $comment['user_email'],
-                    'todo_uuid' => $comment['todo_uuid'],
-                    'comment_uuid' => $comment['comment_uuid'],
-                    'text' => $comment['text']
-                ]
+            [
+                'user_email' => $comment['user_email'],
+                'todo_uuid' => $comment['todo_uuid'],
+                'comment_uuid' => $comment['comment_uuid'],
+                'text' => $comment['text']
+            ]
         );
-        return $comments;
     }
 
+    /**
+     * DBにあるコメントを更新する
+     *
+     * @param array $comment
+     */
     public function updateComment(array $comment)
     {
-        $updateTodoComment = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (comment:Comment { uuid: $uuid })
                 SET comment.text = $text
                 WITH user,comment
                 OPTIONAL MATCH x = (user)-[updated:UPDATED]->(comment)
                 WHERE x IS NOT NULL
-                SET updated.at = localdatetime({timezone: 'Asia/Tokyo'}) 
+                SET updated.at = localdatetime({timezone: 'Asia/Tokyo'})
                 WITH user, comment, x
                 WHERE x IS NULL
                 CREATE (user)-[:UPDATED{at:localdatetime({timezone: 'Asia/Tokyo'})}]->(comment)
                 RETURN comment
                 CYPHER,
-                [
-                    'user_email' => $comment['user_email'],
-                    'uuid' => $comment['uuid'],
-                    'text' => $comment['text']
-                ]
-            );
-        return;
+            [
+                'user_email' => $comment['user_email'],
+                'uuid' => $comment['uuid'],
+                'text' => $comment['text']
+            ]
+        );
     }
 
+    /**
+     * コメントをDBから削除する
+     *
+     * @param array $comment
+     */
     public function destroyComment(array $comment)
     {
         $this->client->run(
@@ -72,11 +85,10 @@ class CommentRepository implements CommentRepositoryInterface
                 DELETE comment
                 RETURN user
                 CYPHER,
-                [
-                    'user_email' => $comment['user_email'],
-                    'comment_uuid' => $comment['comment_uuid']
-                ]
-            );
-        return;
+            [
+                'user_email' => $comment['user_email'],
+                'comment_uuid' => $comment['comment_uuid']
+            ]
+        );
     }
 }

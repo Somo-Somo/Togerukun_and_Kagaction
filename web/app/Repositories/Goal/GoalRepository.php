@@ -14,9 +14,14 @@ class GoalRepository implements GoalRepositoryInterface
         $this->client = Neo4jDB::call();
     }
 
-    public function create($goal)
+    /**
+     * ゴールをDB上で作成
+     *
+     * @param array $goal
+     */
+    public function create(array $goal)
     {
-        $createdGoal = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (project:Project { uuid: $parent_uuid })
                 CREATE (user)-[
@@ -39,7 +44,5 @@ class GoalRepository implements GoalRepositoryInterface
                 'user_email' => $goal['user_email'],
             ]
         );
-
-        return $createdGoal;
     }
 }
