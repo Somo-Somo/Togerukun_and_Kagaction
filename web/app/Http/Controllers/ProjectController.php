@@ -16,27 +16,27 @@ class ProjectController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\UseCases\Project\IndexAction $indexAction UseCaseでプロジェクトの取得処理を行う
+     * @param  App\UseCases\Project\IndexAction $index_action UseCaseでプロジェクトの取得処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, IndexAction $indexAction)
+    public function index(Request $request, IndexAction $index_action)
     {
         $user_email = $request->user()->email;
 
         // ユースケースを実行し、レスポンスの元になるデータを受け取る
-        $projectList = $indexAction->invoke($user_email);
+        $project_list = $index_action->invoke($user_email);
 
-        return response()->json($projectList, Response::HTTP_OK);
+        return response()->json($project_list, Response::HTTP_OK);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  App\UseCases\Project\StoreAction $storeeAction UseCaseでプロジェクトの登録処理を行う
+     * @param  App\UseCases\Project\StoreAction $store_action UseCaseでプロジェクトの登録処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, StoreAction $storeAction)
+    public function store(Request $request, StoreAction $store_action)
     {
         // 後でRequestsに移行する
         $project = [
@@ -46,11 +46,11 @@ class ProjectController extends Controller
         ];
 
         // ユースケースを実行し、レスポンスの元になるデータを受け取る
-        $createdProject = $storeAction->invoke($project);
+        $created_project = $store_action->invoke($project);
 
         // 本当はResourcesにかきたいけど
         $json = [
-            'project' => $createdProject,
+            'project' => $created_project,
             'message' => 'プロジェクトが追加されました',
             'error' => '',
         ];
@@ -73,10 +73,10 @@ class ProjectController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\UseCases\Project\UpdateAction $updateAction UseCaseでプロジェクトの更新処理を行う
+     * @param  App\UseCases\Project\UpdateAction $update_action UseCaseでプロジェクトの更新処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UpdateAction $updateAction)
+    public function update(Request $request, UpdateAction $update_action)
     {
         $project = [
             'name' => $request->name,
@@ -84,7 +84,7 @@ class ProjectController extends Controller
             'user_email' => $request->user()->email,
         ];
 
-        $updateAction->invoke($project);
+        $update_action->invoke($project);
 
         // 本当はResourcesにかきたいけど
         $json = [
@@ -98,19 +98,19 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string $projectUuid プロジェクトのユニークID
+     * @param  string $project_uuid プロジェクトのユニークID
      * @param  \Illuminate\Http\Request $request
-     * @param  App\UseCases\Project\DestoryAction $destoryAction UseCaseでプロジェクトの削除処理を行う
+     * @param  App\UseCases\Project\DestoryAction $destroy_action UseCaseでプロジェクトの削除処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $projectUuid, Request $request, DestroyAction $destroyAction)
+    public function destroy(string $project_uuid, Request $request, DestroyAction $destroy_action)
     {
         $project = [
-            'uuid' => $projectUuid,
+            'uuid' => $project_uuid,
             'user_email' => $request->user()->email,
         ];
 
-        $destroyAction->invoke($project);
+        $destroy_action->invoke($project);
 
         // 本当はResourcesにかきたいけど
         $json = [

@@ -16,11 +16,11 @@ class LoginController extends Controller
     protected $user_repository;
 
     /**
-     * @param App\Repositories\User\UserRepositoryInterface $userRepositoryInterface
+     * @param App\Repositories\User\UserRepositoryInterface $user_repository_interface
      */
-    public function __construct(UserRepositoryInterface $userRepositoryInterface)
+    public function __construct(UserRepositoryInterface $user_repository_interface)
     {
-        $this->user_repository = $userRepositoryInterface;
+        $this->user_repository = $user_repository_interface;
     }
 
     /**

@@ -44,20 +44,20 @@ class DateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  string $todoUuid TodoのユニークID
+     * @param  string $todo_uuid TodoのユニークID
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\UseCases\Date\UpdateAction $updateAction UseCaseで日付の更新処理を行う
+     * @param  App\UseCases\Date\UpdateAction $update_action UseCaseで日付の更新処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function update(string $todoUuid, Request $request, UpdateAction $updateAction)
+    public function update(string $todo_uuid, Request $request, UpdateAction $update_action)
     {
         $todo = [
-            'uuid' => $todoUuid,
+            'uuid' => $todo_uuid,
             'date' => $request->date,
             'user_email' => $request->user()->email,
         ];
 
-        $updateAction->invoke($todo);
+        $update_action->invoke($todo);
 
         $json = [
             'message' => '日付を設定しました',
@@ -70,19 +70,19 @@ class DateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string $todoUuid TodoのユニークID
+     * @param  string $todo_uuid TodoのユニークID
      * @param  \Illuminate\Http\Request $request
-     * @param  App\UseCases\Date\DestroyAction $destroyAction UseCaseで日付の削除処理を行う
+     * @param  App\UseCases\Date\DestroyAction $destroy_action UseCaseで日付の削除処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $todoUuid, Request $request, DestroyAction $destroyAction)
+    public function destroy(string $todo_uuid, Request $request, DestroyAction $destroy_action)
     {
         $todo = [
-            'uuid' => $todoUuid,
+            'uuid' => $todo_uuid,
             'user_email' => $request->user()->email,
         ];
 
-        $destroyAction->invoke($todo);
+        $destroy_action->invoke($todo);
 
         $json = [
             'message' => '日付を取り消しました',

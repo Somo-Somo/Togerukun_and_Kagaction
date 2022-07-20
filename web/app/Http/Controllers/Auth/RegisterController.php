@@ -16,9 +16,9 @@ class RegisterController extends Controller
 {
     protected $user_repository;
 
-    public function __construct(UserRepositoryInterface $userRepositoryInterface)
+    public function __construct(UserRepositoryInterface $user_repository_interface)
     {
-        $this->user_repository = $userRepositoryInterface;
+        $this->user_repository = $user_repository_interface;
     }
 
     /**
@@ -39,12 +39,11 @@ class RegisterController extends Controller
         ]);
 
         // ユーザー作成後UserRepositoryを通してNeo4jに保存
-        $createUser = $this->user_repository->register($user);
+        $create_user = $this->user_repository->register($user);
 
-        if ($createUser) {
+        if ($create_user) {
             $generateAction->invoke($user->email);
         }
-
 
         return response()->json(new UserResource($user), Response::HTTP_CREATED);
     }
