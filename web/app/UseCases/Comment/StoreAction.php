@@ -9,11 +9,11 @@ class StoreAction
     protected $comment_repository;
 
     /**
-     * @param App\Repositories\Comment\CommentRepositoryInterface $commentRepositoryInterface
+     * @param App\Repositories\Comment\CommentRepositoryInterface $comment_repository_interface
      */
-    public function __construct(CommentRepositoryInterface $commentRepositoryInterface)
+    public function __construct(CommentRepositoryInterface $comment_repository_interface)
     {
-        $this->comment_repository = $commentRepositoryInterface;
+        $this->comment_repository = $comment_repository_interface;
     }
 
     /**

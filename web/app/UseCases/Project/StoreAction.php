@@ -9,11 +9,11 @@ class StoreAction
     protected $project_repository;
 
     /**
-     * @param App\Repositories\Project\ProjectRepositoryInterface $projectRepositoryInterface
+     * @param App\Repositories\Project\ProjectRepositoryInterface $project_repository_interface
      */
-    public function __construct(ProjectRepositoryInterface $projectRepositoryInterface)
+    public function __construct(ProjectRepositoryInterface $project_repository_interface)
     {
-        $this->project_repository = $projectRepositoryInterface;
+        $this->project_repository = $project_repository_interface;
     }
 
     /**
@@ -24,17 +24,17 @@ class StoreAction
      * →後にGraphQLとか使いたい
      *
      * @param array $project
-     * @return array $formatedProject
+     * @return array $formated_project
      */
     public function invoke(array $project)
     {
 
-        $createdProject = $this->project_repository->create($project);
+        $created_project = $this->project_repository->create($project);
 
         //本当はCreatedProjectResource.phpで処理したかったけど出来なくてこちらで
-        $formatedProject = $createdProject->getAsCypherMap(0)->getAsNode('project')->getProperties()->toArray();
+        $formated_project = $created_project->getAsCypherMap(0)->getAsNode('project')->getProperties()->toArray();
 
         // 他にも処理がある場合はここに色々書く
-        return $formatedProject;
+        return $formated_project;
     }
 }

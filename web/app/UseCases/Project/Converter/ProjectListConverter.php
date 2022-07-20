@@ -8,26 +8,26 @@ class ProjectListConverter
      * プロジェクトとTodoが入ったオブジェクトを配列に変換
      * プロジェクト一覧の配列にプロジェクトをpush
      *
-     * @param object $fetchProjectAndTodoFromNeo4j
-     * @return array $projectList
+     * @param object $fetch_project_and_todo_from_neo4j
+     * @return array $project_list
      */
-    public function invoke(object $fetchProjectAndTodoFromNeo4j)
+    public function invoke(object $fetch_project_and_todo_from_neo4j)
     {
-        $arrayProjectAndTodo = $fetchProjectAndTodoFromNeo4j->toArray();
+        $array_project_and_todo = $fetch_project_and_todo_from_neo4j->toArray();
 
         // プロジェクトの一覧を全部ぶち込む配列
-        $projectList = [];
+        $project_list = [];
 
-        foreach ($arrayProjectAndTodo as $value) {
+        foreach ($array_project_and_todo as $value) {
             $value = $value->toArray();
 
             $project = $value['project']->getProperties()->toArray();
 
-            // $projectListにプロジェクトの情報がない場合は情報を配列に入れる。
-            array_key_exists($project['uuid'], $projectList) ?
-                null : $projectList[$project['uuid']] = $project;
+            // $project_listにプロジェクトの情報がない場合は情報を配列に入れる。
+            array_key_exists($project['uuid'], $project_list) ?
+                null : $project_list[$project['uuid']] = $project;
         }
 
-        return $projectList;
+        return $project_list;
     }
 }

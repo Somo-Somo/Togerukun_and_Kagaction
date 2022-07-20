@@ -9,11 +9,11 @@ class UpdateAction
     protected $date_repository;
 
     /**
-     * @param App\Repositories\Date\DateRepositoryInterface $dateRepositoryInterface
+     * @param App\Repositories\Date\DateRepositoryInterface $date_repository_interface
      */
-    public function __construct(DateRepositoryInterface $dateRepositoryInterface)
+    public function __construct(DateRepositoryInterface $date_repository_interface)
     {
-        $this->date_repository = $dateRepositoryInterface;
+        $this->date_repository = $date_repository_interface;
     }
 
     /**

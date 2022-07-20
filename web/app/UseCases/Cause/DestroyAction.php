@@ -9,11 +9,11 @@ class DestroyAction
     protected $cause_repository;
 
     /**
-     * @param App\Repositories\Cause\CauseRepositoryInterface $causeRepositoryInterface
+     * @param App\Repositories\Cause\CauseRepositoryInterface $cause_repository_interface
      */
-    public function __construct(CauseRepositoryInterface $causeRepositoryInterface)
+    public function __construct(CauseRepositoryInterface $cause_repository_interface)
     {
-        $this->cause_repository = $causeRepositoryInterface;
+        $this->cause_repository = $cause_repository_interface;
     }
 
     /**
