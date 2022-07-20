@@ -19,11 +19,11 @@ class ProjectRepository implements ProjectRepositoryInterface
      * プロジェクト一覧をDBから取得
      *
      * @param string $user_email
-     * @return $projectList
+     * @return $project_list
      */
     public function getProjectList(string $user_email)
     {
-        $projectList = $this->client->run(
+        $project_list = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email })-[:HAS]->(project:Project)
                 RETURN project
@@ -34,18 +34,18 @@ class ProjectRepository implements ProjectRepositoryInterface
             ]
         );
 
-        return $projectList;
+        return $project_list;
     }
 
     /**
      * プロジェクトをDB上で作成
      *
      * @param array $project
-     * @return $createdProject
+     * @return $created_project
      */
     public function create(array $project)
     {
-        $createdProject = $this->client->run(
+        $created_project = $this->client->run(
             <<<'CYPHER'
                     MATCH (user:User { email : $user_email })
                     CREATE (user)-[
@@ -64,7 +64,7 @@ class ProjectRepository implements ProjectRepositoryInterface
             ]
         );
 
-        return $createdProject;
+        return $created_project;
     }
 
     /**
