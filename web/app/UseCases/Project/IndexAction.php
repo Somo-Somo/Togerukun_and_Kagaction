@@ -9,11 +9,11 @@ class IndexAction
     protected $project_repository;
 
     /**
-     * @param App\Repositories\Project\ProjectRepositoryInterface $projectRepositoryInterface
+     * @param App\Repositories\Project\ProjectRepositoryInterface $project_repository_interface
      */
-    public function __construct(ProjectRepositoryInterface $projectRepositoryInterface)
+    public function __construct(ProjectRepositoryInterface $project_repository_interface)
     {
-        $this->project_repository = $projectRepositoryInterface;
+        $this->project_repository = $project_repository_interface;
     }
 
     /**
@@ -21,20 +21,20 @@ class IndexAction
      * 配列化して、uuidをKEYに連想配列で一覧を作る
      *
      * @param string $user_email
-     * @return array $projectList
+     * @return array $project_list
      */
     public function invoke(string $user_email)
     {
-        $projectCypherMap = $this->project_repository->getProjectList($user_email);
+        $project_cypher_map = $this->project_repository->getProjectList($user_email);
 
-        $projcetsCypherList = $projectCypherMap->toArray();
-        $projectList = [];
-        foreach ($projcetsCypherList as $projectData) {
-            $project = $projectData->getAsNode('project')->getProperties()->toArray();
-            $projectList[$project['uuid']] = $project;
+        $projcets_cypher_list = $project_cypher_map->toArray();
+        $project_list = [];
+        foreach ($projcets_cypher_list as $project_data) {
+            $project = $project_data->getAsNode('project')->getProperties()->toArray();
+            $project_list[$project['uuid']] = $project;
         }
 
         // 他にも処理がある場合はここに色々書く
-        return $projectList;
+        return $project_list;
     }
 }

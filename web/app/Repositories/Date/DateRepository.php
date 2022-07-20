@@ -18,11 +18,11 @@ class DateRepository implements DateRepositoryInterface
      * 日付が設定してあるTodoをDBから取得
      *
      * @param string $user_email
-     * @return $todoAndSchedule
+     * @return $todo_and_schedule
      */
     public function getDate(string $user_email)
     {
-        $todoAndSchedule = $this->client->run(
+        $todo_and_schedule = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - [date:DATE] -> (todo:Todo),
                 len = (project:Project) <- [r*] - (todo)
@@ -39,7 +39,7 @@ class DateRepository implements DateRepositoryInterface
                 'user_email' => $user_email,
             ]
         );
-        return $todoAndSchedule;
+        return $todo_and_schedule;
     }
 
     /**

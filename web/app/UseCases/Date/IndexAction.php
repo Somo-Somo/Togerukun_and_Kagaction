@@ -8,28 +8,28 @@ use App\UseCases\Date\Converter\ScheduleListConverter;
 class IndexAction
 {
     protected $date_repository;
-    protected $scheduleListConverter;
+    protected $schedule_list_converter;
 
     /**
-     * @param App\Repositories\Date\DateRepositoryInterface $dateRepositoryInterface
-     * @param App\UseCases\Date\Converter\ScheduleListConverter $scheduleListConverter
+     * @param App\Repositories\Date\DateRepositoryInterface $date_repository_interface
+     * @param App\UseCases\Date\Converter\ScheduleListConverter $schedule_list_converter
      */
-    public function __construct(DateRepositoryInterface $dateRepositoryInterface, ScheduleListConverter $scheduleListConverter)
+    public function __construct(DateRepositoryInterface $date_repository_interface, ScheduleListConverter $schedule_list_converter)
     {
-        $this->date_repository = $dateRepositoryInterface;
-        $this->scheduleListConverter = $scheduleListConverter;
+        $this->date_repository = $date_repository_interface;
+        $this->schedule_list_converter = $schedule_list_converter;
     }
 
     /**
      * 日付が付随しているTodoを取得して日付があるTodo一覧に展開する
      *
      * @param string $user_email
-     * @return array $scheduleList 日付があるTodo一覧
+     * @return array $schedule_list 日付があるTodo一覧
      */
     public function invoke(string $user_email)
     {
-        $fetchTodoAndDate = $this->date_repository->getDate($user_email);
-        $scheduleList = $this->scheduleListConverter->invoke($fetchTodoAndDate);
-        return $scheduleList;
+        $fetch_todo_and_date = $this->date_repository->getDate($user_email);
+        $schedule_list = $this->schedule_list_converter->invoke($fetch_todo_and_date);
+        return $schedule_list;
     }
 }

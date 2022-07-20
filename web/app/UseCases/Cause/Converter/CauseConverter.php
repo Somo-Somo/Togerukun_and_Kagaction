@@ -7,14 +7,14 @@ class CauseConverter
     /**
      * Cypherで引っ張ってきたものをuserとcauseの連想配列の形変換にする
      *
-     * @param array $fetchCauses
+     * @param array $fetch_causes
      * @return array $causes
      */
-    public function invoke(array $fetchCauses)
+    public function invoke(array $fetch_causes)
     {
         $causes = [];
 
-        foreach ($fetchCauses as $key => $value) {
+        foreach ($fetch_causes as $key => $value) {
             $user = $value->getNodes()[0]->getProperties()->toArray();
             $cause = $value->getNodes()[1]->getProperties()->toArray();
 

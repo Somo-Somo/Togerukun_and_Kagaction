@@ -9,11 +9,11 @@ class UpdateAction
     protected $todo_repository;
 
     /**
-     * @param App\Repositories\Todo\TodoRepositoryInterface
+     * @param App\Repositories\Todo\TodoRepositoryInterface $todo_repository_interface
      */
-    public function __construct(TodoRepositoryInterface $todoRepositoryInterface)
+    public function __construct(TodoRepositoryInterface $todo_repository_interface)
     {
-        $this->todo_repository = $todoRepositoryInterface;
+        $this->todo_repository = $todo_repository_interface;
     }
 
     /**

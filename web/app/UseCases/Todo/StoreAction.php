@@ -11,15 +11,15 @@ class StoreAction
     protected $date_repository;
 
     /**
-     * @param App\Repositories\Todo\TodoRepositoryInterface $todoRepositoryInterface
-     * @param App\Repositories\Date\DateRepositoryInterface $dateRepositoryInterface
+     * @param App\Repositories\Todo\TodoRepositoryInterface $todo_repository_interface
+     * @param App\Repositories\Date\DateRepositoryInterface $date_repository_interface
      */
     public function __construct(
-        TodoRepositoryInterface $todoRepositoryInterface,
-        DateRepositoryInterface $dateRepositoryInterface
+        TodoRepositoryInterface $todo_repository_interface,
+        DateRepositoryInterface $date_repository_interface
     ) {
-        $this->todo_repository = $todoRepositoryInterface;
-        $this->date_repository = $dateRepositoryInterface;
+        $this->todo_repository = $todo_repository_interface;
+        $this->date_repository = $date_repository_interface;
     }
 
     /**

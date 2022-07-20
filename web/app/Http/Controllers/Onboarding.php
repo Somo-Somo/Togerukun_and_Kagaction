@@ -11,9 +11,12 @@ class Onboarding extends Controller
 {
     protected $user_repository;
 
-    public function __construct(UserRepositoryInterface $userRepositoryInterface)
+    /**
+     * @param App\Repositories\User\UserRepositoryInterface $user_repository_interface
+     */
+    public function __construct(UserRepositoryInterface $user_repository_interface)
     {
-        $this->user_repository = $userRepositoryInterface;
+        $this->user_repository = $user_repository_interface;
     }
 
     /**

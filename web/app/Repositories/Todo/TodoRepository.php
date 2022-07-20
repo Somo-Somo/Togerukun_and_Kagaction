@@ -18,30 +18,29 @@ class TodoRepository implements TodoRepositoryInterface
      * 選択されたプロジェクトのTodo一覧を取得
      * 選択されたプロジェクトの親仮説と子仮説と子仮説のゴールからの深さ（距離）を取得
      *
-     * @param string $projectUuid
-     * @return $todoList
+     * @param string $project_uuid
+     * @return $todo_list
      */
-    public function getTodoList(string $projectUuid)
+    public function getTodoList(string $project_uuid)
     {
-        $todoList = $this->client->run(
+        $todo_list = $this->client->run(
             <<<'CYPHER'
                 MATCH len = (project:Project{uuid: $project_uuid})<- [*] - (parent:Todo)
                 OPTIONAL MATCH (parent)<-[]-(child:Todo)
                 RETURN project.uuid,parent,collect(child),length(len)
                 CYPHER,
             [
-                'project_uuid' => $projectUuid,
+                'project_uuid' => $project_uuid,
             ]
         );
 
-        return $todoList;
+        return $todo_list;
     }
 
     /**
      * TodoをDB上に生成
      *
      * @param array $todo
-     * @return $createTodo
      */
     public function create(array $todo)
     {

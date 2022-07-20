@@ -33,21 +33,21 @@ class CauseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  string $todoUuid TodoのユニークID
+     * @param  string $todo_uuid TodoのユニークID
      * @param  App\Http\Requests\CauseRequest $request 原因のバリデーション
-     * @param  App\UseCases\Cause\StoreAction $storeAction UseCaseで原因コメントの登録処理を行う
+     * @param  App\UseCases\Cause\StoreAction $store_action UseCaseで原因コメントの登録処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function store(string $todoUuid, CauseRequest $request, StoreAction $storeAction)
+    public function store(string $todo_uuid, CauseRequest $request, StoreAction $store_action)
     {
         $cause = [
             'user_email' => $request->user()->email,
-            'todo_uuid' => $todoUuid,
+            'todo_uuid' => $todo_uuid,
             'cause_uuid' => $request->uuid,
             'text' => $request->text
         ];
 
-        $storeAction->invoke($cause);
+        $store_action->invoke($cause);
 
         $json = [
             'message' => '原因を追加しました',
@@ -94,19 +94,19 @@ class CauseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string $causeUuid 原因コメントのユニークID
+     * @param  string $cause_uuid 原因コメントのユニークID
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\UseCases\Cause\DestoryAction $destroyAction UseCaseで原因コメントの削除処理を行う
+     * @param  App\UseCases\Cause\DestoryAction $destroy_action UseCaseで原因コメントの削除処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $causeUuid, Request $request, DestroyAction $destroyAction)
+    public function destroy(string $cause_uuid, Request $request, DestroyAction $destroy_action)
     {
         $cause = [
             'user_email' => $request->user()->email,
-            'cause_uuid' => $causeUuid,
+            'cause_uuid' => $cause_uuid,
         ];
 
-        $destroyAction->invoke($cause);
+        $destroy_action->invoke($cause);
 
         $json = [
             'message' => '原因を削除しました',

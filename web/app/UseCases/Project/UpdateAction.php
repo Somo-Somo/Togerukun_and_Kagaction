@@ -9,11 +9,11 @@ class UpdateAction
     protected $project_repository;
 
     /**
-     * @param App\Repositories\Project\ProjectRepositoryInterface $projectRepositoryInterface
+     * @param App\Repositories\Project\ProjectRepositoryInterface $project_repository_interface
      */
-    public function __construct(ProjectRepositoryInterface $projectRepositoryInterface)
+    public function __construct(ProjectRepositoryInterface $project_repository_interface)
     {
-        $this->project_repository = $projectRepositoryInterface;
+        $this->project_repository = $project_repository_interface;
     }
 
     /**

@@ -6,29 +6,29 @@ use App\UseCases\Comment\Converter\CommentConverter;
 
 class ScheduleListConverter
 {
-    protected $commentConverter;
+    protected $comment_converter;
 
     /**
-     * @param App\UseCases\Comment\Converter\CommentConverter $commentConverter
+     * @param App\UseCases\Comment\Converter\CommentConverter $comment_converter
      */
-    public function __construct(CommentConverter $commentConverter)
+    public function __construct(CommentConverter $comment_converter)
     {
-        $this->commentConverter = $commentConverter;
+        $this->comment_converter = $comment_converter;
     }
 
     /**
      * 取得した日付が付随するTodoたちを展開して一つの配列に収納
      *
-     * @param object $fetchTodoAndDate
-     * @return array $scheduleList
+     * @param object $fetch_todo_and_date
+     * @return array $schedule_list
      */
-    public function invoke(object $fetchTodoAndDate)
+    public function invoke(object $fetch_todo_and_date)
     {
-        $arrayTodoAndDate = $fetchTodoAndDate->toArray();
+        $array_todo_and_date = $fetch_todo_and_date->toArray();
 
-        $scheduleList = [];
+        $schedule_list = [];
 
-        foreach ($arrayTodoAndDate as $value) {
+        foreach ($array_todo_and_date as $value) {
             // プロジェクト, Todo, Dateを取得
             $value = $value->toArray();
             $project = $value['project']->getProperties()->toArray();
@@ -37,8 +37,8 @@ class ScheduleListConverter
             $parent = $value['parent'] ? $value['parent']->getProperties()->toArray() : null;
             $len = $value['length(len)'];
             $child = $value['collect(child)'];
-            $fetchComments = $value['comments'] ? $value['comments']->toArray() : null;
-            $comments = $fetchComments ? $this->commentConverter->invoke($fetchComments) : null;
+            $fetch_comments = $value['comments'] ? $value['comments']->toArray() : null;
+            $comments = $fetch_comments ? $this->comment_converter->invoke($fetch_comments) : null;
 
             // Todoにプロジェクトuuidとdateを合体させる
             $todo['projectUuid'] = $project['uuid'];
@@ -50,9 +50,9 @@ class ScheduleListConverter
             $todo['comments'] = $comments ? $comments : [];
             if ($child) $todo['toggle'] = 'mdi-menu-right';
 
-            array_push($scheduleList, $todo);
+            array_push($schedule_list, $todo);
         }
 
-        return $scheduleList;
+        return $schedule_list;
     }
 }

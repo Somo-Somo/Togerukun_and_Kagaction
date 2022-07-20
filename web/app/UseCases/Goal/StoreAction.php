@@ -10,15 +10,15 @@ class StoreAction
     protected $goal_repository;
 
     /**
-     * @param App\Repositories\Goal\GoalRepositoryInterface $goalRepositoryInterface
-     * @param App\Repositories\Date\DateRepositoryInterface $dateRepositoryInterface
+     * @param App\Repositories\Goal\GoalRepositoryInterface $goal_repository_interface
+     * @param App\Repositories\Date\DateRepositoryInterface $date_repository_interface
      */
     public function __construct(
-        GoalRepositoryInterface $goalRepositoryInterface,
-        DateRepositoryInterface $dateRepositoryInterface
+        GoalRepositoryInterface $goal_repository_interface,
+        DateRepositoryInterface $date_repository_interface
     ) {
-        $this->goal_repository = $goalRepositoryInterface;
-        $this->date_repository = $dateRepositoryInterface;
+        $this->goal_repository = $goal_repository_interface;
+        $this->date_repository = $date_repository_interface;
     }
 
     /**

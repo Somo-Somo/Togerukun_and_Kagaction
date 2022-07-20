@@ -24,10 +24,10 @@ class TodoController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\UseCases\Todo\StoreAction $storeAction Todoの登録処理
+     * @param  \App\UseCases\Todo\StoreAction $store_action Todoの登録処理
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, StoreAction $storeAction)
+    public function store(Request $request, StoreAction $store_action)
     {
         $todo = [
             'name' => $request->name,
@@ -37,7 +37,7 @@ class TodoController extends Controller
             'user_email' => $request->user()->email,
         ];
 
-        $storeAction->invoke($todo);
+        $store_action->invoke($todo);
 
         $json = [
             'message' => '仮設が追加されました',
@@ -62,10 +62,10 @@ class TodoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\UseCases\Todo\UpdateAction $updateAction Todoの更新処理
+     * @param  \App\UseCases\Todo\UpdateAction $update_action Todoの更新処理
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UpdateAction $updateAction)
+    public function update(Request $request, UpdateAction $update_action)
     {
         $todo = [
             'name' => $request->name,
@@ -73,7 +73,7 @@ class TodoController extends Controller
             'user_email' => $request->user()->email,
         ];
 
-        $updateAction->invoke($todo);
+        $update_action->invoke($todo);
 
         $json = [
             'message' => '仮説名を更新しました',
@@ -88,17 +88,17 @@ class TodoController extends Controller
      *
      * @param  string $todoUuid TodoのユニークID
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\UseCases\Todo\DestroyAction $destroyAction Todoの削除処理
+     * @param  \App\UseCases\Todo\DestroyAction $destroy_action Todoの削除処理
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $todoUuid, Request $request, DestroyAction $destroyAction)
+    public function destroy(string $todoUuid, Request $request, DestroyAction $destroy_action)
     {
         $todo = [
             'uuid' => $todoUuid,
             'user_email' => $request->user()->email,
         ];
 
-        $destroyAction->invoke($todo);
+        $destroy_action->invoke($todo);
 
         $json = [
             'message' => 'プロジェクトを削除しました',

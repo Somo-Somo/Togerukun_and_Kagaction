@@ -22,10 +22,10 @@ class GoalController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  App\UseCases\Goal\StoreAction $storeAction UseCaseでゴールの登録処理を行う
+     * @param  App\UseCases\Goal\StoreAction $store_action UseCaseでゴールの登録処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, StoreAction $storeAction)
+    public function store(Request $request, StoreAction $store_action)
     {
         $goal = [
             'name' => $request->name,
@@ -35,7 +35,7 @@ class GoalController extends Controller
             'user_email' => $request->user()->email,
         ];
 
-        $storeAction->invoke($goal);
+        $store_action->invoke($goal);
 
         // 本当はResourcesにかきたいけど
         $json = [

@@ -18,11 +18,11 @@ class UserRepository implements UserRepositoryInterface
      * ユーザーの情報をDBに登録
      *
      * @param array $user
-     * @return $createUser
+     * @return $create_user
      */
     public function register(array $user)
     {
-        $createUser = $this->client->run(
+        $create_user = $this->client->run(
             <<<'CYPHER'
                 MATCH ( onboarding:Onboarding { name : 'onboarding' } )
                 CREATE (
@@ -44,7 +44,7 @@ class UserRepository implements UserRepositoryInterface
                 'password' => $user['password']
             ]
         );
-        return $createUser;
+        return $create_user;
     }
 
     /**
@@ -115,11 +115,11 @@ class UserRepository implements UserRepositoryInterface
      * ユーザーが持っているプロジェクトとTodoを取得
      *
      * @param string $user_email
-     * @return $userHasProjectAndTodo
+     * @return $user_has_project_and_todo
      */
     public function getUserHasProjetAndTodo(string $user_email)
     {
-        $userHasProjetAndTodo = $this->client->run(
+        $user_has_project_and_todo = $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User{email:$user_email}) - [:HAS] -> (project:Project),
                     len = (project) <- [r*] - (parent:Todo)
@@ -138,6 +138,6 @@ class UserRepository implements UserRepositoryInterface
             ]
         );
 
-        return $userHasProjetAndTodo;
+        return $user_has_project_and_todo;
     }
 }
