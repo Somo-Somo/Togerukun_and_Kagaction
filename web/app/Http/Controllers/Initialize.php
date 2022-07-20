@@ -12,6 +12,9 @@ class Initialize extends Controller
 {
     protected $user_repository;
 
+    /**
+     * @param App\Repositories\User\UserRepositoryInterface $userRepositoryInterface
+     */
     public function __construct(UserRepositoryInterface $userRepositoryInterface)
     {
         $this->user_repository = $userRepositoryInterface;
@@ -21,21 +24,21 @@ class Initialize extends Controller
      * Handle the incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\UseCases\Initialize\GetUserHasProjectAndTodoAction  $getUserHasProjectAndTodoAction
-     * @param \App\UseCases\Project\IndexAction $projectIndexAction
-     * @param \App\UseCases\Date\IndexAction $dateIndexAction
+     * // ↓別のPRで関数名変える
+     * @param  \App\UseCases\Initialize\GetUserHasProjectAndTodoAction $getUserHasProjectAndTodoAction ユーザーのTodoを全てを取得する処理
+     * @param \App\UseCases\Project\IndexAction $projectIndexAction ユーザーのプロジェクトを全て取得する
+     * @param \App\UseCases\Date\IndexAction $dateIndexAction ユーザーの日付がついているTodo全てを取得する
      * @return \Illuminate\Http\Response
      */
     public function __invoke(
-        Request $request, 
+        Request $request,
         GetUserHasProjectAndTodoAction $getUserHasProjectAndTodoAction,
         \App\UseCases\Project\IndexAction $projectIndexAction,
         \App\UseCases\Date\IndexAction $dateIndexAction,
-    )
-    {
-        $todoList= $getUserHasProjectAndTodoAction->invoke($request->user()->email);
-        $projectList= $projectIndexAction->invoke($request->user()->email);
-        $scheduleList= $dateIndexAction->invoke($request->user()->email);
+    ) {
+        $todoList = $getUserHasProjectAndTodoAction->invoke($request->user()->email);
+        $projectList = $projectIndexAction->invoke($request->user()->email);
+        $scheduleList = $dateIndexAction->invoke($request->user()->email);
         $onboarding = $this->user_repository->whetherExecuteOnboarding($request->user()->email);
 
         $userHasProjectAndTodo = [

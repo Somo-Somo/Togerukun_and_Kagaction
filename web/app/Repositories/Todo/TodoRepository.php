@@ -15,7 +15,11 @@ class TodoRepository implements TodoRepositoryInterface
     }
 
     /**
+     * 選択されたプロジェクトのTodo一覧を取得
      * 選択されたプロジェクトの親仮説と子仮説と子仮説のゴールからの深さ（距離）を取得
+     *
+     * @param string $projectUuid
+     * @return $todoList
      */
     public function getTodoList(string $projectUuid)
     {
@@ -33,9 +37,15 @@ class TodoRepository implements TodoRepositoryInterface
         return $todoList;
     }
 
-    public function create($todo)
+    /**
+     * TodoをDB上に生成
+     *
+     * @param array $todo
+     * @return $createTodo
+     */
+    public function create(array $todo)
     {
-        $createdTodo = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
                 MATCH   (user:User { email : $user_email }),
                         (parent:Todo { uuid: $parent_uuid }) - [*] -> (project:Project)
@@ -62,13 +72,16 @@ class TodoRepository implements TodoRepositoryInterface
                 'user_email' => $todo['user_email'],
             ]
         );
-
-        return $createdTodo;
     }
 
-    public function update($todo)
+    /**
+     * Todoのテキストを更新
+     *
+     * @param array $todo
+     */
+    public function update(array $todo)
     {
-        $updatedTodo = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
                     MATCH (user:User { email : $user_email }), (todo:Todo { uuid: $uuid })
                     SET todo.name = $name
@@ -87,13 +100,16 @@ class TodoRepository implements TodoRepositoryInterface
                 'user_email' => $todo['user_email'],
             ]
         );
-
-        return $updatedTodo;
     }
 
+    /**
+     * Todoとユーザーを結ぶリレーションを削除
+     *
+     * @param array $todo
+     */
     public function destroy(array $todo)
     {
-        $deletingTodo = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (todo:Todo{ uuid :$uuid }) - [r] -> (parent)
                 CREATE (user)-[
@@ -107,12 +123,16 @@ class TodoRepository implements TodoRepositoryInterface
                 'user_email' => $todo['user_email'],
             ]
         );
-        return $deletingTodo;
     }
 
+    /**
+     * 選択されたTodoの完了を更新する
+     *
+     * @param array $todo
+     */
     public function updateAccomplish(array $todo)
     {
-        $updateTodoAccomplish = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (todo:Todo { uuid: $uuid })
                 CREATE (user) - [
@@ -125,12 +145,16 @@ class TodoRepository implements TodoRepositoryInterface
                 'user_email' => $todo['user_email'],
             ]
         );
-        return $updateTodoAccomplish;
     }
 
+    /**
+     * 選択されたTodoの完了を取り消し
+     *
+     * @param array $todo
+     */
     public function destroyAccomplish(array $todo)
     {
-        $deleteTodoAccomplish = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email })-[accomplish:ACCOMPLISHED]->(todo:Todo { uuid: $uuid })
                 DELETE accomplish
@@ -141,6 +165,5 @@ class TodoRepository implements TodoRepositoryInterface
                 'user_email' => $todo['user_email'],
             ]
         );
-        return $deleteTodoAccomplish;
     }
 }

@@ -22,6 +22,7 @@ class GoalController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  App\UseCases\Goal\StoreAction $storeAction UseCaseでゴールの登録処理を行う
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, StoreAction $storeAction)

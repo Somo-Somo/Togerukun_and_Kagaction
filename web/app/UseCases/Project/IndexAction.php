@@ -8,12 +8,22 @@ class IndexAction
 {
     protected $project_repository;
 
+    /**
+     * @param App\Repositories\Project\ProjectRepositoryInterface $projectRepositoryInterface
+     */
     public function __construct(ProjectRepositoryInterface $projectRepositoryInterface)
     {
         $this->project_repository = $projectRepositoryInterface;
     }
 
-    public function invoke($user_email)
+    /**
+     * ユーザーが保持しているプロジェクトをDBから取得
+     * 配列化して、uuidをKEYに連想配列で一覧を作る
+     *
+     * @param string $user_email
+     * @return array $projectList
+     */
+    public function invoke(string $user_email)
     {
         $projectCypherMap = $this->project_repository->getProjectList($user_email);
 
@@ -23,7 +33,7 @@ class IndexAction
             $project = $projectData->getAsNode('project')->getProperties()->toArray();
             $projectList[$project['uuid']] = $project;
         }
-        
+
         // 他にも処理がある場合はここに色々書く
         return $projectList;
     }

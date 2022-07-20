@@ -44,8 +44,9 @@ class DateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  object  $todo
+     * @param  string $todoUuid TodoのユニークID
      * @param  \Illuminate\Http\Request  $request
+     * @param  App\UseCases\Date\UpdateAction $updateAction UseCaseで日付の更新処理を行う
      * @return \Illuminate\Http\Response
      */
     public function update(string $todoUuid, Request $request, UpdateAction $updateAction)
@@ -69,8 +70,9 @@ class DateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $todoUuid
+     * @param  string $todoUuid TodoのユニークID
      * @param  \Illuminate\Http\Request $request
+     * @param  App\UseCases\Date\DestroyAction $destroyAction UseCaseで日付の削除処理を行う
      * @return \Illuminate\Http\Response
      */
     public function destroy(string $todoUuid, Request $request, DestroyAction $destroyAction)

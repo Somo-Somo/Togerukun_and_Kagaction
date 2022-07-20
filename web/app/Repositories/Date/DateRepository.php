@@ -14,6 +14,12 @@ class DateRepository implements DateRepositoryInterface
         $this->client = Neo4jDB::call();
     }
 
+    /**
+     * 日付が設定してあるTodoをDBから取得
+     *
+     * @param string $user_email
+     * @return $todoAndSchedule
+     */
     public function getDate(string $user_email)
     {
         $todoAndSchedule = $this->client->run(
@@ -29,16 +35,21 @@ class DateRepository implements DateRepositoryInterface
                 RETURN project, todo, accomplished, date, parent, length(len), collect(child), collect(DISTINCT comments) AS comments
                 ORDER BY date.on ASC
                 CYPHER,
-                [
-                    'user_email' => $user_email, 
-                ]
+            [
+                'user_email' => $user_email,
+            ]
         );
         return $todoAndSchedule;
     }
 
+    /**
+     * 日付をDB上で更新
+     *
+     * @param array $todo
+     */
     public function updateDate(array $todo)
     {
-        $updateTodoDate = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }), (todo:Todo { uuid: $uuid })
                 OPTIONAL MATCH x = (user) - [date:DATE] -> (todo)
@@ -51,30 +62,33 @@ class DateRepository implements DateRepositoryInterface
                 ] -> (todo)
                 RETURN todo
                 CYPHER,
-                [
-                    'uuid' => $todo['uuid'], 
-                    'user_email' => $todo['user_email'], 
-                    'date' => $todo['date']
-                ]
-            );
-        return;
+            [
+                'uuid' => $todo['uuid'],
+                'user_email' => $todo['user_email'],
+                'date' => $todo['date']
+            ]
+        );
     }
 
+    /**
+     * 選択されたTodoの日付の値からDB上で削除
+     *
+     * @param array $todo
+     */
     public function destroyDate(array $todo)
     {
-        $deleteTodoDate = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }) - 
+                MATCH (user:User { email : $user_email }) -
                 [date: DATE]
                 ->(todo:Todo { uuid: $uuid })
                 DELETE date
                 RETURN todo
                 CYPHER,
-                [
-                    'uuid' => $todo['uuid'], 
-                    'user_email' => $todo['user_email']
-                ]
-            );
-        return;
+            [
+                'uuid' => $todo['uuid'],
+                'user_email' => $todo['user_email']
+            ]
+        );
     }
 }

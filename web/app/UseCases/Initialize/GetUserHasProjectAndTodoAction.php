@@ -12,6 +12,11 @@ class GetUserHasProjectAndTodoAction
     protected $todoListConverter;
     protected $projectListConverter;
 
+    /**
+     * @param App\Repositories\User\UserRepositoryInterface $userRepositoryInterface
+     * @param App\UseCases\Todo\Converter\TodoListConverter $todoListConverter
+     * @param App\UseCases\Project\Converter\ProjectListConverter $projectListConverter
+     */
     public function __construct(UserRepositoryInterface $userRepositoryInterface, TodoListConverter $todoListConverter, ProjectListConverter $projectListConverter)
     {
         $this->user_repository = $userRepositoryInterface;
@@ -19,10 +24,17 @@ class GetUserHasProjectAndTodoAction
         $this->projectListConverter = $projectListConverter;
     }
 
-    public function invoke($userEmail)
+    /**
+     * ユーザーのプロジェクトとTodoをDBからfetch
+     * Todo一覧に形を変換
+     *
+     * @param string $user_email
+     * @return array $todoList
+     */
+    public function invoke(string $userEmail)
     {
-        $fetchProjectAndTodoFromNeo4j = $this->user_repository->getUserHasProjetAndTodo($userEmail);
-        $todoList = $this->todoListConverter->invoke($fetchProjectAndTodoFromNeo4j);
+        $fetchProjectAndTodoFromDB = $this->user_repository->getUserHasProjetAndTodo($userEmail);
+        $todoList = $this->todoListConverter->invoke($fetchProjectAndTodoFromDB);
         return $todoList;
     }
 }

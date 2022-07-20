@@ -14,9 +14,14 @@ class CauseRepository implements CauseRepositoryInterface
         $this->client = Neo4jDB::call();
     }
 
+    /**
+     * 原因コメントをneo4jのDBに保存
+     *
+     * @param array $cause Todoの原因コメント
+     */
     public function storeCause(array $cause)
     {
-        $causes = $this->client->run(
+        $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - [:CREATED] -> (todo:Todo {uuid: $todo_uuid})
                 CREATE (cause:Cause{
@@ -35,9 +40,13 @@ class CauseRepository implements CauseRepositoryInterface
                 'text' => $cause['text']
             ]
         );
-        return $causes;
     }
 
+    /**
+     * 原因コメントをneo4jのDBから削除
+     *
+     * @param array $cause
+     */
     public function destroyCause(array $cause)
     {
         $this->client->run(
@@ -53,6 +62,5 @@ class CauseRepository implements CauseRepositoryInterface
                 'cause_uuid' => $cause['cause_uuid']
             ]
         );
-        return;
     }
 }

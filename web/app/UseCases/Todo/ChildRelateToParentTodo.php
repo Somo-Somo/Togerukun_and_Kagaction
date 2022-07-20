@@ -4,6 +4,14 @@ namespace App\UseCases\Todo;
 
 class ChildRelateToParentTodo
 {
+    /**
+     * 子のTodoをここで親と紐付けて整形する
+     *
+     * @param array $todoData Todo一覧のデータ
+     * @param array $childs 子のTodo
+     * @param array $parent 親のTodo
+     * @param int $len Todoの深さ
+     */
     public function invoke(array $todoData, array $childs, array $parent, int $len)
     {
         // 子どもに親のデータを持たせて$todoDataに格納。
@@ -19,7 +27,7 @@ class ChildRelateToParentTodo
 
             // ゴールからの仮説の階層の深さ
             $child['depth'] = $len;
-            
+
             $todoData[$child['uuid']] = $child;
         }
         return $todoData;

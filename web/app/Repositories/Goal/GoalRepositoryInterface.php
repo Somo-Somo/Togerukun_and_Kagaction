@@ -4,5 +4,5 @@ namespace App\Repositories\Goal;
 
 interface GoalRepositoryInterface
 {
-    public function create($goal);
+    public function create(array $goal);
 }

@@ -23,8 +23,8 @@ class TodoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\UseCases\Todo\StoreAction  $storeAction
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\UseCases\Todo\StoreAction $storeAction Todoの登録処理
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, StoreAction $storeAction)
@@ -62,7 +62,7 @@ class TodoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\UseCases\Todo\UpdateAction $updateAction Todoの更新処理
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, UpdateAction $updateAction)
@@ -86,8 +86,9 @@ class TodoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $todoUuid
+     * @param  string $todoUuid TodoのユニークID
      * @param  \Illuminate\Http\Request $request
+     * @param  \App\UseCases\Todo\DestroyAction $destroyAction Todoの削除処理
      * @return \Illuminate\Http\Response
      */
     public function destroy(string $todoUuid, Request $request, DestroyAction $destroyAction)
@@ -97,10 +98,9 @@ class TodoController extends Controller
             'user_email' => $request->user()->email,
         ];
 
-        $deletingTodo = $destroyAction->invoke($todo);
+        $destroyAction->invoke($todo);
 
         $json = [
-            'todo' => $deletingTodo,
             'message' => 'プロジェクトを削除しました',
             'error' => '',
         ];

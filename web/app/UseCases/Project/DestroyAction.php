@@ -8,15 +8,21 @@ class DestroyAction
 {
     protected $project_repository;
 
+    /**
+     * @param App\Repositories\Project\ProjectRepositoryInterface $projectRepositoryInterface
+     */
     public function __construct(ProjectRepositoryInterface $projectRepositoryInterface)
     {
         $this->project_repository = $projectRepositoryInterface;
     }
 
+    /**
+     * Repostiroy介してDBからプロジェクトを削除
+     *
+     * @param array $project
+     */
     public function invoke(array $project)
     {
-        $deletedDataFromDB = $this->project_repository->destroy($project);
-        
-        return $deletedDataFromDB;
+        $this->project_repository->destroy($project);
     }
 }

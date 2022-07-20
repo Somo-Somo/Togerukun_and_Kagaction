@@ -14,7 +14,13 @@ class UserRepository implements UserRepositoryInterface
         $this->client = Neo4jDB::call();
     }
 
-    public function register($user)
+    /**
+     * ユーザーの情報をDBに登録
+     *
+     * @param array $user
+     * @return $createUser
+     */
+    public function register(array $user)
     {
         $createUser = $this->client->run(
             <<<'CYPHER'
@@ -41,6 +47,12 @@ class UserRepository implements UserRepositoryInterface
         return $createUser;
     }
 
+    /**
+     * すでにオンボーディングを終えているかDB上で確認
+     *
+     * @param string $user_email
+     * @return $onboarding_done_in_array オンボーディングモデルを配列上にしたもの
+     */
     public function whetherExecuteOnboarding(string $user_email)
     {
         $onboarding = $this->client->run(
@@ -52,10 +64,15 @@ class UserRepository implements UserRepositoryInterface
                 'user_email' => $user_email,
             ]
         );
-
-        return $onboarding->toArray()[0]['onboarding'];
+        $onboarding_done_in_array = $onboarding->toArray()[0]['onboarding'];
+        return $onboarding_done_in_array;
     }
 
+    /**
+     * オンボーディングを終了したことをDBに
+     *
+     * @param array $onboarding
+     */
     public function finishedOnboarding(array $onboarding)
     {
         $this->client->run(
@@ -92,9 +109,14 @@ class UserRepository implements UserRepositoryInterface
                 'user_email' => $onboarding['created_by_user_email']
             ]
         );
-        return;
     }
 
+    /**
+     * ユーザーが持っているプロジェクトとTodoを取得
+     *
+     * @param string $user_email
+     * @return $userHasProjectAndTodo
+     */
     public function getUserHasProjetAndTodo(string $user_email)
     {
         $userHasProjetAndTodo = $this->client->run(

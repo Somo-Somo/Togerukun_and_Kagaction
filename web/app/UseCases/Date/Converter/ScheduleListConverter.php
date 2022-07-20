@@ -8,12 +8,21 @@ class ScheduleListConverter
 {
     protected $commentConverter;
 
+    /**
+     * @param App\UseCases\Comment\Converter\CommentConverter $commentConverter
+     */
     public function __construct(CommentConverter $commentConverter)
     {
         $this->commentConverter = $commentConverter;
     }
 
-    public function invoke($fetchTodoAndDate)
+    /**
+     * 取得した日付が付随するTodoたちを展開して一つの配列に収納
+     *
+     * @param object $fetchTodoAndDate
+     * @return array $scheduleList
+     */
+    public function invoke(object $fetchTodoAndDate)
     {
         $arrayTodoAndDate = $fetchTodoAndDate->toArray();
 
@@ -39,7 +48,7 @@ class ScheduleListConverter
             $todo['depth'] = (int)$len - 1;
             $todo['child'] = $child ? true : false;
             $todo['comments'] = $comments ? $comments : [];
-            if($child) $todo['toggle'] = 'mdi-menu-right';
+            if ($child) $todo['toggle'] = 'mdi-menu-right';
 
             array_push($scheduleList, $todo);
         }
