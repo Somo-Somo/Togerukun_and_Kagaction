@@ -11,17 +11,28 @@ class TodoListConverter
     protected $childRelateToParentTodo;
     protected $commentConverter;
 
+    /**
+     * @param App\UseCases\Todo\ChildRelateToParentTodo $childRelateToParentTodo
+     * @param App\UseCases\Comment\Converter\CommentConverter $commentConverter
+     * @param App\UseCases\Cause\Converter\CauseConverter $causeConverter
+     */
     public function __construct(
+        ChildRelateToParentTodo $childRelateToParentTodo,
         CommentConverter $commentConverter,
-        CauseConverter $causeConverter,
-        ChildRelateToParentTodo $childRelateToParentTodo
+        CauseConverter $causeConverter
     ) {
         $this->childRelateToParentTodo = $childRelateToParentTodo;
         $this->commentConverter = $commentConverter;
         $this->causeConverter = $causeConverter;
     }
 
-    public function invoke($fetchProjectAndTodoFromNeo4j)
+    /**
+     * 後で分解する
+     *
+     * @param object $fetchProjectAndTodoFromNeo4j
+     * @return array $todoList
+     */
+    public function invoke(object $fetchProjectAndTodoFromNeo4j)
     {
         $arrayTodoes = $fetchProjectAndTodoFromNeo4j->toArray();
 

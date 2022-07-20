@@ -4,7 +4,13 @@ namespace App\UseCases\Cause\Converter;
 
 class CauseConverter
 {
-    public function invoke($fetchCauses)
+    /**
+     * Cypherで引っ張ってきたものをuserとcauseの連想配列の形変換にする
+     *
+     * @param array $fetchCauses
+     * @return array $causes
+     */
+    public function invoke(array $fetchCauses)
     {
         $causes = [];
 
