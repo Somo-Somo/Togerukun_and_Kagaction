@@ -2,7 +2,7 @@
 
 namespace App\UseCases\Todo\Converter;
 
-use App\UseCases\Todo\ChildRelateToParentTodo;
+use App\UseCases\Todo\Converter\ChildRelateToParentTodoConverter;
 use App\UseCases\Comment\Converter\CommentConverter;
 use App\UseCases\Cause\Converter\CauseConverter;
 
@@ -13,12 +13,12 @@ class TodoListConverter
     protected $cause_converter;
 
     /**
-     * @param App\UseCases\Todo\ChildRelateToParentTodo $child_relate_to_parent_todo
+     * @param App\UseCases\Todo\ChildRelateToParentTodoConverter $child_relate_to_parent_todo
      * @param App\UseCases\Comment\Converter\CommentConverter $comment_converter
      * @param App\UseCases\Cause\Converter\CauseConverter $cause_converter
      */
     public function __construct(
-        ChildRelateToParentTodo $child_relate_to_parent_todo,
+        ChildRelateToParentTodoConverter $child_relate_to_parent_todo,
         CommentConverter $comment_converter,
         CauseConverter $cause_converter
     ) {
@@ -132,7 +132,6 @@ class TodoListConverter
                 $todo_list[$project_uuid][] = $todo_data[$parent['uuid']];
             }
         }
-
         return $todo_list;
     }
 }
