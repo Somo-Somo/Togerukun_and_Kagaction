@@ -1,0 +1,31 @@
+<?php
+
+namespace App\UseCases\Todo\Converter;
+
+class FromObjectToArrayConverter
+{
+    /**
+     * オブジェクトになっている一つのTodoに関連するものを配列化してTodoに連想配列にする
+     *
+     * @param object $one_column_fetched_from_db
+     * @return array $todo
+     */
+    public function invoke(object $one_column_fetched_from_db)
+    {
+        $array_of_fetched_column_from_db = $one_column_fetched_from_db->toArray();
+
+        $todo = [];
+
+        $todo['project'] = $array_of_fetched_column_from_db['project']->getProperties()->toArray();
+        $todo['parent_todo'] = $array_of_fetched_column_from_db['parent']->getProperties()->toArray();
+        $todo['child_todo'] = $array_of_fetched_column_from_db['collect(child)']->toArray();
+        $todo['depth'] = $array_of_fetched_column_from_db['length(len)'];
+        $todo['date'] = $array_of_fetched_column_from_db['date'] ? $array_of_fetched_column_from_db['date']->toArray()['properties']->toArray() : null;
+        $fetch_comments = $array_of_fetched_column_from_db['comments'] ? $array_of_fetched_column_from_db['comments']->toArray() : null;
+        $todo['comments'] = $fetch_comments ? $this->comment_converter->invoke($fetch_comments) : null;
+        $fetch_causes = $array_of_fetched_column_from_db['causes'] ? $array_of_fetched_column_from_db['causes']->toArray() : null;
+        $todo['causes'] = $fetch_causes ? $this->cause_converter->invoke($fetch_causes) : null;
+
+        return $todo;
+    }
+}
