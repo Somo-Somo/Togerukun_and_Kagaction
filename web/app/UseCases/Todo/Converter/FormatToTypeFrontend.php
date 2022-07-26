@@ -44,13 +44,6 @@ class FormatToTypeFrontend
 
             return $todo['parent_todo'];
         } else {
-            // 一覧として配列に格納されている$list_of_left_side_of_lineの個数 = Todoの深さ
-            // そのためTodoの深さが$list_of_left_side_of_lineの個数を超えることがないため、
-            // 超えている場合はTodoの深さ-1個分切り取る(配列は0から数えるため-1しなくて良い)
-            // もしかしたら>じゃなくて>=かもしれないから後で調べる
-            // if (count($list_of_left_side_of_line) > $box_storeing_todo[$todo['parent']['uuid']]['depth']) {
-
-            // }
             // TodoツリーのTodoの左側の破線の状態
             $box_storeing_todo[$todo['parent_todo']['uuid']]['leftSideOfLine'] = $left_side_of_line;
 

@@ -74,6 +74,10 @@ class TodoListConverter
 
             // Todo = ゴールではない場合
             if ($todo['depth'] !== 1) {
+                // 一覧として配列に格納されている$list_of_left_side_of_lineの個数 = Todoの深さ
+                // そのためTodoの深さが$list_of_left_side_of_lineの個数を超えることがないため、
+                // 超えている場合はTodoの深さ-1個分切り取る(配列は0から数えるため-1しなくて良い)
+                // もしかしたら>じゃなくて>=かもしれないから後で調べる
                 // Todo一覧のテーブルの行の左側の状態
                 if (count($left_side_of_line) > $todo_data[$todo['parent_todo']['uuid']]['depth']) {
                     $left_side_of_line = array_slice($left_side_of_line, 0, $todo_data[$todo['parent_todo']['uuid']]['depth']);
