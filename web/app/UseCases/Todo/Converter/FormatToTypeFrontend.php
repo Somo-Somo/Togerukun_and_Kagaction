@@ -40,7 +40,7 @@ class FormatToTypeFrontend
             $todo['parent_todo']['child'] = $todo['child_todo'] ? true : false;
 
             //Todo一覧のテーブルの行の左側の状態
-            $todo['parent_todo']['leftSideOfLine'][] = ['lastChild' => false];
+            $todo['parent_todo']['leftSideOfLine'] = $left_side_of_line;
 
             return $todo['parent_todo'];
         } else {

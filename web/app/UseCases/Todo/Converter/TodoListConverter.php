@@ -54,7 +54,9 @@ class TodoListConverter
         $todo_data = [];
 
 
-        $left_side_of_line = [];
+        $left_side_of_line = [
+            ['lastChild' => false]
+        ];
 
         // 親仮説それに紐づく子仮説の順番になるように配列$todo_listに追加
         // depth = 1 の場合「ゴール」。parentUuid = project_uuidで保存
