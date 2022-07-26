@@ -36,7 +36,7 @@ class FromObjectToArrayConverter
 
         $todo['project'] = $array_of_fetched_column_from_db['project']->getProperties()->toArray();
         $todo['parent_todo'] = $array_of_fetched_column_from_db['parent']->getProperties()->toArray();
-        $todo['child_todo'] = $array_of_fetched_column_from_db['collect(child)']->toArray();
+        $todo['child_todo'] = $array_of_fetched_column_from_db['childs']->toArray();
         $todo['depth'] = $array_of_fetched_column_from_db['length(len)'];
         $todo['date'] = $array_of_fetched_column_from_db['date'] ? $array_of_fetched_column_from_db['date']->toArray()['properties']->toArray() : null;
         $todo['accomplish'] = $array_of_fetched_column_from_db['accomplish'] ? true : false;
