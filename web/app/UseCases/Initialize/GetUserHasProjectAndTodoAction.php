@@ -27,9 +27,9 @@ class GetUserHasProjectAndTodoAction
      * @param string $user_email
      * @return array $todo_list
      */
-    public function invoke(string $userEmail)
+    public function invoke(string $user_email)
     {
-        $fetch_project_and_todo_from_db = $this->user_repository->getUserHasProjetAndTodo($userEmail);
+        $fetch_project_and_todo_from_db = $this->user_repository->getUserHasProjetAndTodo($user_email);
         $todo_list = $this->todo_list_converter->invoke($fetch_project_and_todo_from_db);
         return $todo_list;
     }
