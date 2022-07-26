@@ -88,11 +88,11 @@ class TodoController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  string $todoUuid TodoのユニークID
-     * @param  App\Http\Requests\TodoRequest  $request
+     * @param  Illuminate\Http\Requestt  $request
      * @param  \App\UseCases\Todo\DestroyAction $destroy_action Todoの削除処理
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $todoUuid, TodoRequest $request, DestroyAction $destroy_action)
+    public function destroy(string $todoUuid, Request $request, DestroyAction $destroy_action)
     {
         $todo = [
             'uuid' => $todoUuid,

@@ -27,7 +27,6 @@ class TodoRequest extends FormRequest
         return [
             'name'  => 'required|max:64',
             'uuid' => 'required',
-            'parentUuid' => 'required',
             'date'  => 'date_format:Y-m-d'
         ];
     }
@@ -41,7 +40,6 @@ class TodoRequest extends FormRequest
         return [
             'name' => 'Todo',
             'uuid' => 'uuid',
-            'parentUuid' => 'uuid',
             'date' => '日付'
         ];
     }

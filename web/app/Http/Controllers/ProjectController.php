@@ -7,6 +7,7 @@ use App\UseCases\Project\StoreAction;
 use App\UseCases\Project\UpdateAction;
 use App\UseCases\Project\DestroyAction;
 use App\Http\Requests\ProjectRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
 
@@ -99,11 +100,11 @@ class ProjectController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  string $project_uuid プロジェクトのユニークID
-     * @param  App\Http\Requests\ProjectRequest $request
+     * @param  Illuminate\Http\Request $request
      * @param  App\UseCases\Project\DestoryAction $destroy_action UseCaseでプロジェクトの削除処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $project_uuid, ProjectRequest $request, DestroyAction $destroy_action)
+    public function destroy(string $project_uuid, Request $request, DestroyAction $destroy_action)
     {
         $project = [
             'uuid' => $project_uuid,
