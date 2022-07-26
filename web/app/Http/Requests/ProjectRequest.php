@@ -25,28 +25,26 @@ class ProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'  => 'required|max:48',
+            'name'  => 'required|max:64',
+        ];
+    }
+
+    /**
+     * バリデーション項目名定義
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'name' => 'プロジェクト',
         ];
     }
 
     public function messages()
     {
         return [
-            'required'    => 'プロジェクト名を入力してください。',
-            'max'         => 'プロジェクト名は:max文字以内で入力してください。',
+            'required'    => ':attribute名を入力してください。',
+            'max'         => ':attribute名は:max文字以内で入力してください。',
         ];
-    }
-
-    protected function makeProject()
-    {
-        $data = [];
-        $data['uuid'] = (string) Str::uuid();
-        $data['created_by_user_id'] = $this->user()->id;
-
-        $this->merge($data);
-
-        $this->validated()
-
-        return $this;
     }
 }
