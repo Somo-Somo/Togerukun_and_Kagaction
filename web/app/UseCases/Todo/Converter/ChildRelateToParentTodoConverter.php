@@ -14,19 +14,22 @@ class ChildRelateToParentTodoConverter
     {
         // 子どもに親のデータを持たせて$todo_dataに格納。
         // 親になった時にこのtodo_dataからtodoList仮説一覧配列に格納する
+        // ここでは親のTodoの一つ下の階層のTodo達がForeachで回されている
         foreach ($todo['child_todo'] as $key => $child_todo) {
-            $child = $child_todo->getProperties()->toArray();
+            $array_child = $child_todo->getProperties()->toArray();
 
-            // 同じゴールの子で同じ深さの中で一番最後の子Todoか
-            $child['lastChildInTheSameDepth']['lastChild'] = $key === 0 ? true : false;
+            // $todo['child_todo']にある子Todoたちは降順である
+            // そのため同じ階層の子Todoの中で一番最後のTodo = lastChildになるTodoは
+            // Foreachで回した時の最初のTodoすなわちKey = 0　である
+            $array_child['lastChildInTheSameDepth']['lastChild'] = $key === 0 ? true : false;
 
             // 子仮説の親UUID
-            $child['parentUuid'] = $todo['parent_todo']['uuid'];
+            $array_child['parentUuid'] = $todo['parent_todo']['uuid'];
 
             // ゴールからの仮説の階層の深さ
-            $child['depth'] = $todo['depth'];
+            $array_child['depth'] = $todo['depth'];
 
-            $todo_data[$child['uuid']] = $child;
+            $todo_data[$array_child['uuid']] = $array_child;
         }
         return $todo_data;
     }
