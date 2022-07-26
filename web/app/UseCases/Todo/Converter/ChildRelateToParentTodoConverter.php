@@ -27,7 +27,8 @@ class ChildRelateToParentTodoConverter
             $array_child['parentUuid'] = $todo['parent_todo']['uuid'];
 
             // ゴールからの仮説の階層の深さ
-            $array_child['depth'] = $todo['depth'];
+            // この$todoは親のtodoだから+1
+            $array_child['depth'] = $todo['depth'] + 1;
 
             $todo_data[$array_child['uuid']] = $array_child;
         }

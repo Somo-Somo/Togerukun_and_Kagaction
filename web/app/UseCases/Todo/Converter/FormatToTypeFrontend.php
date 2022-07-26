@@ -15,7 +15,7 @@ class FormatToTypeFrontend
     public function invoke(array $todo, array $box_storeing_todo, array $left_side_of_line)
     {
         // Todo = ゴールの場合
-        if ($todo['depth'] === 1) {
+        if ($todo['depth'] === 0) {
             // ゴールは親TODOがないので親UUIDはプロジェクトUUID
             $todo['parent_todo']['parentUuid'] = $todo['project']['uuid'];
 
@@ -34,7 +34,7 @@ class FormatToTypeFrontend
             $todo['parent_todo']['comments'] = $todo['comments'] ? $todo['comments'] : [];
 
             // ゴールからのTODOの深層の深さ
-            $todo['parent_todo']['depth'] = 0;
+            $todo['parent_todo']['depth'] = $todo['depth'];
 
             //　子Todoがあるかないか
             $todo['parent_todo']['child'] = $todo['child_todo'] ? true : false;
@@ -44,9 +44,6 @@ class FormatToTypeFrontend
 
             return $todo['parent_todo'];
         } else {
-            // TodoツリーのTodoの左側の破線の状態
-            $box_storeing_todo[$todo['parent_todo']['uuid']]['leftSideOfLine'] = $left_side_of_line;
-
             // Todoの日付
             $box_storeing_todo[$todo['parent_todo']['uuid']]['date'] = $todo['date'] ? $todo['date']['on'] : null;
 
@@ -55,11 +52,17 @@ class FormatToTypeFrontend
                 $box_storeing_todo[$todo['parent_todo']['uuid']]['accomplish'] = true;
             }
 
+            // 原因
+            $box_storeing_todo[$todo['parent_todo']['uuid']]['causes'] = $todo['comments'] ? $todo['causes'] : [];
+
             // コメント
             $box_storeing_todo[$todo['parent_todo']['uuid']]['comments'] = $todo['comments'] ? $todo['comments'] : [];
 
-            // 原因
-            $box_storeing_todo[$todo['parent_todo']['uuid']]['causes'] = $todo['comments'] ? $todo['causes'] : [];
+            // 子Todoがあるかないか
+            $box_storeing_todo[$todo['parent_todo']['uuid']]['child'] = $todo['child_todo'] ? true : false;
+
+            // TodoツリーのTodoの左側の破線の状態
+            $box_storeing_todo[$todo['parent_todo']['uuid']]['leftSideOfLine'] = $left_side_of_line;
 
             return $box_storeing_todo[$todo['parent_todo']['uuid']];
         }

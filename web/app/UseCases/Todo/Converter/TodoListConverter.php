@@ -73,7 +73,7 @@ class TodoListConverter
             }
 
             // Todo = ゴールではない場合
-            if ($todo['depth'] !== 1) {
+            if ($todo['depth'] !== 0) {
                 // 自分のTodoの深さよりも一つ前のTodoの深さが同じ或いは深かった場合
                 // 自分の深さ個分まで$left_side_of_lineはスライスされて
                 // スライスしたものに対して自分がLastChildかどうかの配列を追加する
