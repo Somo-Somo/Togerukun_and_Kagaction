@@ -54,7 +54,9 @@ class TodoListConverter
         $todo_data = [];
 
 
-        $left_side_of_line = [];
+        $left_side_of_line = [
+            ['lastChild' => false]
+        ];
 
         // 親仮説それに紐づく子仮説の順番になるように配列$todo_listに追加
         // depth = 1 の場合「ゴール」。parentUuid = project_uuidで保存
@@ -71,8 +73,11 @@ class TodoListConverter
             }
 
             // Todo = ゴールではない場合
-            if ($todo['depth'] !== 1) {
-                // Todo一覧のテーブルの行の左側の状態
+            if ($todo['depth'] !== 0) {
+                // 自分のTodoの深さよりも一つ前のTodoの深さが同じ或いは深かった場合
+                // 自分の深さ個分まで$left_side_of_lineはスライスされて
+                // スライスしたものに対して自分がLastChildかどうかの配列を追加する
+                // format_to_type_frontendのUsecaseで$left_side_of_lineの状態は保存される
                 if (count($left_side_of_line) > $todo_data[$todo['parent_todo']['uuid']]['depth']) {
                     $left_side_of_line = array_slice($left_side_of_line, 0, $todo_data[$todo['parent_todo']['uuid']]['depth']);
                 }
@@ -80,6 +85,7 @@ class TodoListConverter
                 unset($todo_data[$todo['parent_todo']['uuid']]['lastChildInTheSameDepth']);
             }
 
+            // フロントエンドで必要とされている形に整える
             $format_todo = $this->format_to_type_frontend->invoke($todo, $todo_data, $left_side_of_line);
 
             $todo_list[$todo['project']['uuid']][] = $format_todo;

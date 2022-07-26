@@ -15,7 +15,7 @@ class FormatToTypeFrontend
     public function invoke(array $todo, array $box_storeing_todo, array $left_side_of_line)
     {
         // Todo = ゴールの場合
-        if ($todo['depth'] === 1) {
+        if ($todo['depth'] === 0) {
             // ゴールは親TODOがないので親UUIDはプロジェクトUUID
             $todo['parent_todo']['parentUuid'] = $todo['project']['uuid'];
 
@@ -34,26 +34,16 @@ class FormatToTypeFrontend
             $todo['parent_todo']['comments'] = $todo['comments'] ? $todo['comments'] : [];
 
             // ゴールからのTODOの深層の深さ
-            $todo['parent_todo']['depth'] = 0;
+            $todo['parent_todo']['depth'] = $todo['depth'];
 
             //　子Todoがあるかないか
             $todo['parent_todo']['child'] = $todo['child_todo'] ? true : false;
 
             //Todo一覧のテーブルの行の左側の状態
-            $todo['parent_todo']['leftSideOfLine'][] = ['lastChild' => false];
+            $todo['parent_todo']['leftSideOfLine'] = $left_side_of_line;
 
             return $todo['parent_todo'];
         } else {
-            // 一覧として配列に格納されている$list_of_left_side_of_lineの個数 = Todoの深さ
-            // そのためTodoの深さが$list_of_left_side_of_lineの個数を超えることがないため、
-            // 超えている場合はTodoの深さ-1個分切り取る(配列は0から数えるため-1しなくて良い)
-            // もしかしたら>じゃなくて>=かもしれないから後で調べる
-            // if (count($list_of_left_side_of_line) > $box_storeing_todo[$todo['parent']['uuid']]['depth']) {
-
-            // }
-            // TodoツリーのTodoの左側の破線の状態
-            $box_storeing_todo[$todo['parent_todo']['uuid']]['leftSideOfLine'] = $left_side_of_line;
-
             // Todoの日付
             $box_storeing_todo[$todo['parent_todo']['uuid']]['date'] = $todo['date'] ? $todo['date']['on'] : null;
 
@@ -62,11 +52,17 @@ class FormatToTypeFrontend
                 $box_storeing_todo[$todo['parent_todo']['uuid']]['accomplish'] = true;
             }
 
+            // 原因
+            $box_storeing_todo[$todo['parent_todo']['uuid']]['causes'] = $todo['comments'] ? $todo['causes'] : [];
+
             // コメント
             $box_storeing_todo[$todo['parent_todo']['uuid']]['comments'] = $todo['comments'] ? $todo['comments'] : [];
 
-            // 原因
-            $box_storeing_todo[$todo['parent_todo']['uuid']]['causes'] = $todo['comments'] ? $todo['causes'] : [];
+            // 子Todoがあるかないか
+            $box_storeing_todo[$todo['parent_todo']['uuid']]['child'] = $todo['child_todo'] ? true : false;
+
+            // TodoツリーのTodoの左側の破線の状態
+            $box_storeing_todo[$todo['parent_todo']['uuid']]['leftSideOfLine'] = $left_side_of_line;
 
             return $box_storeing_todo[$todo['parent_todo']['uuid']];
         }
