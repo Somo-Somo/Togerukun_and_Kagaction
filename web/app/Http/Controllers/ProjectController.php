@@ -6,6 +6,7 @@ use App\UseCases\Project\IndexAction;
 use App\UseCases\Project\StoreAction;
 use App\UseCases\Project\UpdateAction;
 use App\UseCases\Project\DestroyAction;
+use App\Http\Requests\ProjectRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
@@ -15,11 +16,11 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\ProjectRequest  $request
      * @param  App\UseCases\Project\IndexAction $index_action UseCaseでプロジェクトの取得処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, IndexAction $index_action)
+    public function index(ProjectRequest $request, IndexAction $index_action)
     {
         $user_email = $request->user()->email;
 
@@ -32,11 +33,11 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  App\Http\Requests\ProjectRequest $request
      * @param  App\UseCases\Project\StoreAction $store_action UseCaseでプロジェクトの登録処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, StoreAction $store_action)
+    public function store(ProjectRequest $request, StoreAction $store_action)
     {
         // 後でRequestsに移行する
         $project = [
@@ -72,11 +73,11 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\ProjectRequest  $request
      * @param  App\UseCases\Project\UpdateAction $update_action UseCaseでプロジェクトの更新処理を行う
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UpdateAction $update_action)
+    public function update(ProjectRequest $request, UpdateAction $update_action)
     {
         $project = [
             'name' => $request->name,
@@ -99,7 +100,7 @@ class ProjectController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  string $project_uuid プロジェクトのユニークID
-     * @param  \Illuminate\Http\Request $request
+     * @param  Illuminate\Http\Request $request
      * @param  App\UseCases\Project\DestoryAction $destroy_action UseCaseでプロジェクトの削除処理を行う
      * @return \Illuminate\Http\Response
      */

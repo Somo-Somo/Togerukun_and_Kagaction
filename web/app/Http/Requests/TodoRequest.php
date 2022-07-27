@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
-class ProjectRequest extends FormRequest
+class TodoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,6 +26,8 @@ class ProjectRequest extends FormRequest
     {
         return [
             'name'  => 'required|max:64',
+            'uuid' => 'required',
+            'date'  => 'date_format:Y-m-d'
         ];
     }
 
@@ -36,15 +38,18 @@ class ProjectRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => 'プロジェクト',
+            'name' => 'Todo',
+            'uuid' => 'uuid',
+            'date' => '日付'
         ];
     }
 
     public function messages()
     {
         return [
-            'required'    => ':attribute名を入力してください。',
+            'required'    => ':attributeを入力してください。',
             'max'         => ':attribute名は:max文字以内で入力してください。',
+            'date_format' => '正しい:attributeのフォーマットで入力してください'
         ];
     }
 }

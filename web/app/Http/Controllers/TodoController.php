@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\UseCases\Todo\StoreAction;
 use App\UseCases\Todo\UpdateAction;
 use App\UseCases\Todo\DestroyAction;
+use App\Http\Requests\TodoRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use \Symfony\Component\HttpFoundation\Response;
@@ -23,11 +24,11 @@ class TodoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  App\Http\Requests\TodoRequest  $request
      * @param  \App\UseCases\Todo\StoreAction $store_action Todoの登録処理
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, StoreAction $store_action)
+    public function store(TodoRequest $request, StoreAction $store_action)
     {
         $todo = [
             'name' => $request->name,
@@ -61,11 +62,11 @@ class TodoController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\TodoRequest  $request
      * @param  \App\UseCases\Todo\UpdateAction $update_action Todoの更新処理
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UpdateAction $update_action)
+    public function update(TodoRequest $request, UpdateAction $update_action)
     {
         $todo = [
             'name' => $request->name,
@@ -87,7 +88,7 @@ class TodoController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  string $todoUuid TodoのユニークID
-     * @param  \Illuminate\Http\Request $request
+     * @param  Illuminate\Http\Requestt  $request
      * @param  \App\UseCases\Todo\DestroyAction $destroy_action Todoの削除処理
      * @return \Illuminate\Http\Response
      */
