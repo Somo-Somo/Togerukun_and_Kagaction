@@ -27,9 +27,9 @@ class CauseRepository implements CauseRepositoryInterface
                 CREATE (cause:Cause{
                     uuid: $cause_uuid,
                     text: $text
-                }) <- [
-                    unavailable_cause:UNAVAILABLE_CAUSE{at:localdatetime({timezone: 'Asia/Tokyo'})}
-                ] - (todo)
+                }) - [
+                    :IS_THE_CAUSE_OF{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                ] -> (todo)
                 CREATE (user) - [created:CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (cause)
                 RETURN user, todo, cause
                 CYPHER,
@@ -52,8 +52,8 @@ class CauseRepository implements CauseRepositoryInterface
         $this->client->run(
             <<<'CYPHER'
                 MATCH (user:User { email : $user_email }) - [created:CREATED] -> (cause:Cause { uuid : $cause_uuid }),
-                (cause) <- [unavailable_cause:UNAVAILABLE_CAUSE] - (todo:Todo)
-                DELETE unavailable_cause, created
+                (cause) <- [is_the_cause_of:IS_THE_CAUSE_OF] - (todo:Todo)
+                DELETE is_the_cause_of, created
                 DELETE cause
                 RETURN user
                 CYPHER,
