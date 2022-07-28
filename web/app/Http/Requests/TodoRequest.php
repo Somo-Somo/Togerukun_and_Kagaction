@@ -27,7 +27,7 @@ class TodoRequest extends FormRequest
         return [
             'name'  => 'required|max:64',
             'uuid' => 'required',
-            'date'  => 'date_format:Y-m-d'
+            'date'  => 'nullable|date_format:Y-m-d'
         ];
     }
 
