@@ -21,6 +21,7 @@
             </v-text-field>
             <div
                 class="d-flex align-self-center"
+                style="z-index: 100"
                 :style="
                     todo.name
                         ? 'position: relative; right: 20px'
