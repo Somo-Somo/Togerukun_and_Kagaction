@@ -14,7 +14,7 @@
                     class="pa-0 ma-0"
                     v-model="text"
                     counter="64"
-                    :label="category"
+                    :label="formLabel"
                     clearable
                 ></v-text-field>
                 <Calender
@@ -36,7 +36,7 @@
                 <v-spacer></v-spacer>
                 <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
                 <v-btn
-                    v-if="category === 'プロジェクト' || step === 2"
+                    v-if="!displayDateForm || step === 2"
                     type="submit"
                     :loading="loading"
                     :disabled="!text || loading"
@@ -47,7 +47,7 @@
                     完了
                 </v-btn>
                 <v-btn
-                    v-if="category !== 'プロジェクト' && step === 1"
+                    v-if="displayDateForm && step === 1"
                     :disabled="!text || loading"
                     color="primary"
                     @click="onClickNext(text)"
@@ -72,7 +72,10 @@ export default {
         done: true,
     }),
     props: {
-        category: {
+        formCategory: {
+            type: String,
+        },
+        formLabel: {
             type: String,
         },
         inputForm: {
@@ -93,6 +96,9 @@ export default {
             set(value) {
                 this.$store.dispatch("form/setName", value);
             },
+        },
+        displayDateForm() {
+            return this.formCategory === "ToDo" ? true : false;
         },
         dateLabel() {
             return () => {

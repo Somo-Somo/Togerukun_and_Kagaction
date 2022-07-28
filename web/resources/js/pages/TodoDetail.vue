@@ -190,7 +190,8 @@
                 v-if="form"
                 @onClickCancel="onClickCancel"
                 @submitForm="submitForm"
-                :category="additionalInputFormLabel"
+                :formCategory="formCategory"
+                :formLabel="formLabel"
                 :inputForm="inputForm"
                 :loading="submitLoading"
             />
@@ -249,7 +250,7 @@ export default {
                 ? "ゴール"
                 : "｢" + this.parentTodo.name + "｣ のためのToDo";
         },
-        additionalInputFormLabel() {
+        formLabel() {
             if (this.tab === 0) {
                 return "「" + this.todo.name + "」のためのToDo";
             } else if (this.tab === 1) {
@@ -257,6 +258,9 @@ export default {
             } else {
                 return "コメント";
             }
+        },
+        formCategory() {
+            return this.linkedToDo[this.tab].name;
         },
         assistSubHeaderText() {
             return (tab) => {

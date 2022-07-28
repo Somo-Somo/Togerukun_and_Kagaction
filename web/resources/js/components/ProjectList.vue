@@ -77,7 +77,8 @@
                 @onClickCancel="onClickCancel"
                 @submitForm="submitForm"
                 :inputForm="inputForm"
-                :category="category"
+                :formCategory="category"
+                :formLabel="formLabel"
                 :loading="submitLoading"
             />
         </form>
@@ -132,6 +133,9 @@ export default {
             project: "project/project",
             projectList: "project/projectList",
         }),
+        formLabel() {
+            return this.category + "名を入力";
+        },
     },
     methods: {
         onClickCreate() {

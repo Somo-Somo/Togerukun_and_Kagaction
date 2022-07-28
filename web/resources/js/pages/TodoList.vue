@@ -46,7 +46,8 @@
                     v-if="form"
                     @onClickCancel="onClickCancel"
                     @submitForm="submitForm"
-                    :category="'ゴール'"
+                    :formCategory="category"
+                    :formLabel="formLabel"
                     :inputForm="inputForm"
                     :loading="submitLoading"
                 />
@@ -84,6 +85,7 @@ export default {
         show: false,
         submitLoading: false,
         form: false,
+        category: "ToDo",
     }),
     computed: {
         ...mapState({
@@ -95,6 +97,9 @@ export default {
             project: "project/project",
             todoList: "todo/todoList",
         }),
+        formLabel() {
+            return this.project.name + "のゴール";
+        },
     },
     methods: {
         setTab(newVal) {
