@@ -53,7 +53,7 @@ class FormatToTypeFrontend
             }
 
             // 原因
-            $box_storeing_todo[$todo['parent_todo']['uuid']]['causes'] = $todo['comments'] ? $todo['causes'] : [];
+            $box_storeing_todo[$todo['parent_todo']['uuid']]['causes'] = $todo['causes'] ? $todo['causes'] : [];
 
             // コメント
             $box_storeing_todo[$todo['parent_todo']['uuid']]['comments'] = $todo['comments'] ? $todo['comments'] : [];
