@@ -47,7 +47,7 @@
                     @onClickCancel="onClickCancel"
                     @submitForm="submitForm"
                     :formCategory="category"
-                    :formLabel="category"
+                    :formLabel="formLabel"
                     :inputForm="inputForm"
                     :loading="submitLoading"
                 />
@@ -98,9 +98,7 @@ export default {
             todoList: "todo/todoList",
         }),
         formLabel() {
-            return () => {
-                return this.project.name + "のゴール";
-            };
+            return this.project.name + "のゴール";
         },
     },
     methods: {
