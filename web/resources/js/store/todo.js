@@ -220,6 +220,7 @@ const actions = {
             depth: 0,
             date: date,
             comments: [],
+            causes: [],
             child: false,
             leftSideOfLine: [{ lastChild: false }],
         };
@@ -248,6 +249,7 @@ const actions = {
             depth: Number(parent.depth) + 1,
             date: date,
             comments: [],
+            causes: [],
             child: false,
             leftSideOfLine: [],
         };
