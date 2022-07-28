@@ -77,7 +77,8 @@
                 @onClickCancel="onClickCancel"
                 @submitForm="submitForm"
                 :inputForm="inputForm"
-                :category="category"
+                :formCategory="category"
+                :formLabel="category"
                 :loading="submitLoading"
             />
         </form>
