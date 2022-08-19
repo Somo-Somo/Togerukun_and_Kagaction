@@ -62,7 +62,6 @@ import Tab from "../../CommonParts/Molecules/Tab.vue";
 import Table from "../components/Table/Table.vue";
 import TodoCards from "../components/Cards/TodoCard.vue";
 import NewAdditionalCard from "../../CommonParts/Molecules/NewAdditionalCard.vue";
-import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
 import InputForm from "../../CommonParts/Organisms/InputForm.vue";
 import { mapGetters, mapState } from "vuex";
 
@@ -73,7 +72,6 @@ export default {
         Table,
         TodoCards,
         NewAdditionalCard,
-        SpBottomBtn,
         InputForm,
     },
     data: () => ({
