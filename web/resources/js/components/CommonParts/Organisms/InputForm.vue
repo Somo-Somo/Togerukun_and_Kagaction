@@ -17,7 +17,7 @@
                     :label="formLabel"
                     clearable
                 ></v-text-field>
-                <CalenderForm
+                <calender-form
                     :todo="(todo = { name: name, date: date })"
                     :dateLabel="text + 'の日付'"
                     v-if="step === 2"
@@ -27,13 +27,13 @@
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-                <CancelBtn
+                <cancel-btn
                     :btnName="step === 1 ? 'キャンセル' : '戻る'"
                     @click="step === 1 ? $emit('onClickCancel') : onClickBack()"
                 />
                 <v-spacer></v-spacer>
                 <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
-                <DoneBtn
+                <done-btn
                     :btnName="btnStateIsNext ? '次へ' : '完了'"
                     :disabled="!text || loading"
                     :loading="loading"

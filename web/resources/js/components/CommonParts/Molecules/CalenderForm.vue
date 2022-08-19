@@ -37,8 +37,13 @@
         </template>
         <v-date-picker v-model="todo.date" no-title scrollable>
             <v-spacer></v-spacer>
-            <CancelBtn :btnName="'キャンセル'" @click="calenderMenu = false" />
-            <DoneBtn :btnName="'保存'" :disabled="false" :loading="false" @click="onClickSave(todo.date)">
+            <cancel-btn :btnName="'キャンセル'" @click="calenderMenu = false" />
+            <done-btn
+                :btnName="'保存'"
+                :disabled="false"
+                :loading="false"
+                @click="onClickSave(todo.date)"
+            />
         </v-date-picker>
     </v-menu>
 </template>

@@ -185,7 +185,7 @@
                 </p>
             </div>
         </v-list>
-        <DeletingConfirmationDialog
+        <deleting-confirmation-dialog
             :deletingConfirmationDialog="deletingConfirmationDialog"
             :selectedDeletingItemName="selectedDeletingTodo.name"
             :loading="false"
@@ -196,6 +196,7 @@
 </template>
 
 <script>
+import DeletingConfirmationDialog from "../../Dialog/DeletingConfirmationDialog.vue";
 import DateSubTitle from "../Date/DateSubTitle.vue";
 import DeletingConfirmationDialog from "../Dialog/DeletingConfirmationDialog.vue";
 

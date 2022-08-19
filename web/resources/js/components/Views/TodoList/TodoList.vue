@@ -18,13 +18,13 @@
                             v-for="todoStatus in todoStatuses"
                             :key="todoStatus.name"
                         >
-                            <TodoCards
+                            <todo-cards
                                 v-if="tab !== 0"
                                 :project="project"
                                 :todoList="todoList"
                                 :todoStatus="todoStatuses[tab]"
                             />
-                            <Table
+                            <table
                                 v-if="tab === 0"
                                 :project="project"
                                 :todoList="todoList"
@@ -42,7 +42,7 @@
                 </div>
             </template>
             <form class="form" @submit.prevent="submitForm()">
-                <InputForm
+                <input-form
                     v-if="form"
                     @onClickCancel="onClickCancel"
                     @submitForm="submitForm"
@@ -58,12 +58,12 @@
 
 <script>
 import Header from "../components/Header.vue";
-import Tab from "../components/Tab.vue";
+import Tab from "../../CommonParts/Molecules/Tab.vue";
 import Table from "../components/Table/Table.vue";
 import TodoCards from "../components/Cards/TodoCard.vue";
-import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
+import NewAdditionalCard from "../../CommonParts/Molecules/NewAdditionalCard.vue";
 import SpBottomBtn from "../components/Buttons/SpBottomBtn.vue";
-import InputForm from "../components/InputForm.vue";
+import InputForm from "../../CommonParts/Organisms/InputForm.vue";
 import { mapGetters, mapState } from "vuex";
 
 export default {

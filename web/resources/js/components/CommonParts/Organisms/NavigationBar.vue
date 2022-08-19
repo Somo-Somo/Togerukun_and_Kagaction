@@ -51,7 +51,7 @@
                 </v-list-item>
             </v-list>
             <v-divider class="mx-6" color="#80CBC4"></v-divider>
-            <ProjectList />
+            <project-list />
             <v-footer color="#80CBC4" class="py-0" absolute>
                 <v-divider color="#80CBC4"></v-divider>
                 <v-sheet
