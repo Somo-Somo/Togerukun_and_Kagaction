@@ -49,8 +49,8 @@
 </template>
 
 <script>
-import CancelBtn from "../Atom/CancelBtn.vue";
-import DoneBtn from "../Atom/DoneBtn.vue";
+import CancelBtn from "../Atom/Btn/CancelBtn.vue";
+import DoneBtn from "../Atom/Btn/DoneBtn.vue";
 
 export default {
     components: {
