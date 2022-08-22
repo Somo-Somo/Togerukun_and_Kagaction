@@ -80,6 +80,7 @@ export default {
     data: () => ({
         activeLine: false,
         menus: [{ title: "削除", color: "color: red" }],
+        deletingConfirmationDialog: false,
         selectedDeletingTodo: { name: null },
         date: {
             title: null,
