@@ -1,5 +1,5 @@
 <template>
-    <v-list-item>
+    <div>
         <div class="d-flex" style="max-height: 88px">
             <div class="d-flex">
                 <goal-flag v-if="todo.depth === 0" />
@@ -53,7 +53,7 @@
                 @selectedMenu="selectedMenu"
             ></ellipsis-menu>
         </v-list-item-icon>
-    </v-list-item>
+    </div>
 </template>
 
 <script>
