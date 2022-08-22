@@ -76,7 +76,7 @@ export default {
         project: {
             type: Object,
         },
-        selectTodo: {
+        todo: {
             type: Object,
         },
         todoList: {
