@@ -24,7 +24,7 @@
                                 :todoList="todoList"
                                 :todoStatus="todoStatuses[tab]"
                             />
-                            <table
+                            <todo-tree-table
                                 v-if="tab === 0"
                                 :project="project"
                                 :todoList="todoList"
@@ -59,7 +59,7 @@
 <script>
 import Header from "../components/Header.vue";
 import Tab from "../../CommonParts/Molecules/Tab.vue";
-import Table from "../components/Table/Table.vue";
+import TodoTreeTable from "./Templates/TodoTreeTable.vue";
 import TodoCards from "../components/Cards/TodoCard.vue";
 import NewAdditionalCard from "../../CommonParts/Molecules/NewAdditionalCard.vue";
 import InputForm from "../../CommonParts/Organisms/InputForm.vue";
@@ -69,7 +69,7 @@ export default {
     components: {
         Header,
         Tab,
-        Table,
+        TodoTreeTable,
         TodoCards,
         NewAdditionalCard,
         InputForm,
