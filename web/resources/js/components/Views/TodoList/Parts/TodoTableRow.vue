@@ -3,7 +3,7 @@
         <div class="d-flex" style="max-height: 88px">
             <div class="d-flex">
                 <goal-flag v-if="todo.depth === 0" />
-                <spacer :style="'width: 50px'" v-if="todo.depth !== 0" />
+                <space style="'width: 50px'" v-if="todo.depth !== 0"></space>
             </div>
             <v-list-item-content
                 class="d-flex py-0"
@@ -13,7 +13,7 @@
                 <div class="d-flex">
                     <component
                         :is="currentComponent"
-                        :style="'width: 50px; height: 88px;'"
+                        style="'width: 50px; height: 88px;'"
                     ></component>
                 </div>
             </v-list-item-content>
@@ -25,65 +25,72 @@
                     v-model="todo.accomplish"
                     @click.stop="onClickAccomplish(todo)"
                 >
-                    <v-btn
-                        icon
+                    <accomplish-btn
                         height="24"
                         width="24"
-                        :color="todo.accomplish ? 'green' : ''"
-                    >
-                        <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
-                    </v-btn>
+                        color="todo.accomplish ? 'green' : ''"
+                    ></accomplish-btn>
                 </v-list-item-action>
                 <div class="d-flex mx-auto" v-if="todo.child" height="32">
-                    <LowerDashedLine />
+                    <l-shaped-dashed-line></l-shaped-dashed-line>
                 </div>
             </div>
         </div>
         <v-list-item-content class="px-3 py-0 ma-auto d-flex">
-            <todo-table-item-content
-                :project="project"
-                :todo="todo"
-                :todoList="todoList"
-            />
+            <todo-title-and-sub-title
+                :todoTitle="todo.name"
+                :todoSubTitle="todoSubTitle"
+                :date="todoDate"
+            ></todo-title-and-sub-title>
         </v-list-item-content>
         <v-list-item-icon
             class="align-self-center mx-0 px-2"
             v-show="activeLine === index"
         >
-            <menu
+            <ellipsis-menu
                 :menus="menus"
                 :selectCard="todo"
                 @selectedMenu="selectedMenu"
-            />
+            ></ellipsis-menu>
         </v-list-item-icon>
     </v-list-item>
 </template>
 
 <script>
 import GoalFlag from "../../../CommonParts/Atom/GoalFlag.vue";
-import TodoTableLeftSideOfLine from "./TodoTableLeftSideOfLine.vue";
-import TodoTableItemContent from "./TodoTableItemContent.vue";
-import Menu from "../Buttons/Menu.vue";
-import Spacer from "../../../CommonParts/Atom/Spacer.vue";
+import TodoTitleAndSubTitle from "../../../CommonParts/Molecules/TodoTitleAndSubTitle.vue";
+import EllipsisMenu from "../../../CommonParts/Molecules/EllipsisMenu.vue";
+import Space from "../../../CommonParts/Atom/Spacer.vue";
 import TShapedDashedLine from "../../../CommonParts/Atom/DashedLine/TShapedDashedLine.vue";
 import LShapedDashedLine from "../../../CommonParts/Atom/DashedLine/LShapedDashedLine.vue";
 import DashedLine from "../../../CommonParts/Atom/DashedLine/DashedLine.vue";
+import AccomplishBtn from "../../../CommonParts/Atom/Btn/AccomplishBtn.vue";
+import LDashedLine from "../../../DashedLine/LDashedLine.vue";
 
 export default {
     components: {
         GoalFlag,
-        TodoTableLeftSideOfLine,
-        TodoTableItemContent,
-        Menu,
-        Spacer,
+        TodoTitleAndSubTitle,
+        EllipsisMenu,
+        Space,
         TShapedDashedLine,
         LShapedDashedLine,
         DashedLine,
+        AccomplishBtn,
+        LDashedLine,
     },
     data: () => ({
         activeLine: false,
         menus: [{ title: "削除", color: "color: red" }],
         selectedDeletingTodo: { name: null },
+        date: {
+            title: null,
+            icon: "mdi-clock-outline",
+            iconSize: 14,
+            iconColor: "#212121",
+            fontColor: "#212121--text",
+            backGroundColor: "background-color: null;",
+        },
     }),
     props: {
         project: {
@@ -110,8 +117,72 @@ export default {
                 }
             };
         },
+        todoSubTitle() {
+            return () => {
+                if (this.todo.depth === 0) {
+                    return "「" + this.project.name + "」のゴール";
+                } else if (this.todo.depth > 0) {
+                    let parentName;
+                    this.todoList.map((value) => {
+                        if (this.todo.parentUuid === value.uuid)
+                            parentName = value.name;
+                    });
+                    return "「" + parentName + "」のためのToDo";
+                }
+            };
+        },
+        todoDate() {
+            return () => {
+                this.date.title = this.switchingDateTitle(this.todo);
+                this.date.backGroundColor = this.switchingDateBackGroundColor(
+                    this.todo
+                );
+                return this.date;
+            };
+        },
     },
     methods: {
+        switchingDateTitle(todo) {
+            const diff = this.calcDateDiff(todo);
+            if (diff > 0) {
+                return "残り" + diff + "日";
+            } else if (diff === 0) {
+                return "今日";
+            } else if (todo.accomplish) {
+                const year = new Date(todo.date).getFullYear();
+                const month = new Date(todo.date).getMonth() + 1;
+                const day = new Date(todo.date).getDay() + 1;
+                return new Date().getFullYear() === year
+                    ? month + "月" + day + "日"
+                    : year + "年" + month + "月" + day + "日";
+            } else {
+                return Math.abs(diff) + "日経過";
+            }
+        },
+        switchingDateBackGroundColor(todo) {
+            const diff = this.calcDateDiff(todo);
+            if (diff > 0) {
+                return diff < 4
+                    ? "background-color: yellow"
+                    : "background-color: transparent";
+            } else if (diff === 0) {
+                return "background-color: skyblue";
+            } else if (todo.accomplish) {
+                return "background-color: transparent;";
+            } else {
+                return "background-color: coral";
+            }
+        },
+        calcDateDiff(todo) {
+            const today = new Date(
+                Date.now() - new Date().getTimezoneOffset() * 60000
+            )
+                .toISOString()
+                .substr(0, 10);
+            const diff =
+                (new Date(todo.date) - new Date(today)) / (60 * 60 * 1000 * 24);
+            return diff;
+        },
         async toTodoDetail(todo) {
             await this.$store.dispatch("todo/selectTodo", todo);
             return this.$router.push({ path: "/todo/" + todo.uuid });
