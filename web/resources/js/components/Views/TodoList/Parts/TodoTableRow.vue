@@ -57,15 +57,14 @@
 </template>
 
 <script>
-import GoalFlag from "../../../CommonParts/Atom/GoalFlag.vue";
-import TodoTitleAndSubTitle from "../../../CommonParts/Molecules/TodoTitleAndSubTitle.vue";
-import EllipsisMenu from "../../../CommonParts/Molecules/EllipsisMenu.vue";
-import Space from "../../../CommonParts/Atom/Spacer.vue";
-import TShapedDashedLine from "../../../CommonParts/Atom/DashedLine/TShapedDashedLine.vue";
-import LShapedDashedLine from "../../../CommonParts/Atom/DashedLine/LShapedDashedLine.vue";
-import DashedLine from "../../../CommonParts/Atom/DashedLine/DashedLine.vue";
-import AccomplishBtn from "../../../CommonParts/Atom/Btn/AccomplishBtn.vue";
-import LDashedLine from "../../../DashedLine/LDashedLine.vue";
+import GoalFlag from "../../../Common/Parts/Atom/GoalFlag.vue";
+import TodoTitleAndSubTitle from "../../../Common/Parts/Molecules/TodoTitleAndSubTitle.vue";
+import EllipsisMenu from "../../../Common/Parts/Molecules/EllipsisMenu.vue";
+import Space from "../../../Common/Parts/Atom/Spacer.vue";
+import TShapedDashedLine from "../../../Common/Parts/Atom/DashedLine/TShapedDashedLine.vue";
+import LShapedDashedLine from "../../../Common/Parts/Atom/DashedLine/LShapedDashedLine.vue";
+import DashedLine from "../../../Common/Parts/Atom/DashedLine/DashedLine.vue";
+import AccomplishBtn from "../../../Common/Parts/Atom/Btn/AccomplishBtn.vue";
 
 export default {
     components: {
@@ -77,7 +76,6 @@ export default {
         LShapedDashedLine,
         DashedLine,
         AccomplishBtn,
-        LDashedLine,
     },
     data: () => ({
         activeLine: false,

@@ -46,7 +46,7 @@
 <script>
 import TodoTableRow from "../Parts/TodoTableRow.vue";
 import AdditionalGoalTableRow from "../Parts/AdditionalGoalTableRow.vue";
-import DeletingConfirmationDialog from "../../../CommonParts/Molecules/DeletingConfirmationDialog.vue";
+import DeletingConfirmationDialog from "../../../Common/Parts/Molecules/DeletingConfirmationDialog.vue";
 
 export default {
     components: {
