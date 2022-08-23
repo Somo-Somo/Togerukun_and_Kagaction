@@ -52,13 +52,10 @@
 <script>
 import TodoCard from "../Parts/Organisms/TodoCard.vue";
 import DeletingConfirmationDialog from "../../Dialog/DeletingConfirmationDialog.vue";
-import DateSubTitle from "../Date/DateSubTitle.vue";
-import DeletingConfirmationDialog from "../Dialog/DeletingConfirmationDialog.vue";
 
 export default {
     components: {
         TodoCard,
-        DateSubTitle,
         DeletingConfirmationDialog,
     },
     data: () => ({

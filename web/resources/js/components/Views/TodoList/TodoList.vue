@@ -57,17 +57,17 @@
 </template>
 
 <script>
-import Header from "../components/Header.vue";
-import Tab from "../../CommonParts/Molecules/Tab.vue";
+import TodoHeader from "../../Header.vue";
+import Tab from "../../Common/Parts/Molecules/Tab.vue";
 import TodoTreeTable from "./Templates/TodoTreeTable.vue";
-import TodoCards from "../components/Cards/TodoCard.vue";
-import NewAdditionalCard from "../../CommonParts/Molecules/NewAdditionalCard.vue";
-import InputForm from "../../CommonParts/Organisms/InputForm.vue";
+import TodoCards from "../../Common/Template/TodoCards.vue";
+import NewAdditionalCard from "../../Common/Parts/Molecules/NewAdditionalCard.vue";
+import InputForm from "../../Common/Parts/Organisms/InputForm.vue";
 import { mapGetters, mapState } from "vuex";
 
 export default {
     components: {
-        Header,
+        TodoHeader,
         Tab,
         TodoTreeTable,
         TodoCards,

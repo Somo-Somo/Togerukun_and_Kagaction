@@ -54,11 +54,8 @@
 </template>
 
 <script>
-import DateSubTitle from "../Date/DateSubTitle.vue";
 export default {
-    components: {
-        DateSubTitle,
-    },
+    components: {},
     data: () => ({}),
     props: {
         todoTitle: {

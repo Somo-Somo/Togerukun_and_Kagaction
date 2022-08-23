@@ -15,7 +15,7 @@
                             : 'font-size:0.75rem'
                     "
                 >
-                    ゴールを追加する
+                    ゴールを追加するん？
                 </p>
             </v-list-item-title>
         </v-list-item-content>
