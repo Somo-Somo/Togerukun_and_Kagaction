@@ -12,7 +12,7 @@
             >
                 <div class="d-flex">
                     <component
-                        :is="currentComponent"
+                        :is="currentComponent(num)"
                         :style="'width: 50px; height: 88px;'"
                     ></component>
                 </div>
@@ -110,12 +110,15 @@ export default {
     computed: {
         currentComponent() {
             return (num) => {
-                if (todo.depth === num && !todo.leftSideOfLine[num].lastChild) {
-                    return todo.leftSideOfLine[num].lastChild
+                if (
+                    this.todo.depth === num &&
+                    !this.todo.leftSideOfLine[num].lastChild
+                ) {
+                    return this.todo.leftSideOfLine[num].lastChild
                         ? "t-shaped-dashed-line"
                         : "l-shaped-dashed-line";
                 } else {
-                    return todo.leftSideOfLine[num].lastChild
+                    return this.todo.leftSideOfLine[num].lastChild
                         ? "spacer"
                         : "dashed-line";
                 }

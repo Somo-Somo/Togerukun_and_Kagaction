@@ -7,6 +7,7 @@ import Setting from "./pages/Setting.vue";
 import Login from "./pages/Login.vue";
 import Onboarding from "./pages/Onboarding.vue";
 import TodoList from "./components/Views/TodoList/TodoList.vue";
+// import TodoList from "./pages/TodoList.vue";
 import TodoDetail from "./pages/TodoDetail.vue";
 import Schedule from "./pages/Schedule.vue";
 import SystemError from "./pages/errors/System.vue";
