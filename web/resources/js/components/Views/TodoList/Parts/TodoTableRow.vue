@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="d-flex">
         <div class="d-flex" style="max-height: 88px">
             <div class="d-flex">
                 <goal-flag v-if="todo.depth === 0" />
@@ -117,18 +117,16 @@ export default {
             };
         },
         todoSubTitle() {
-            return () => {
-                if (this.todo.depth === 0) {
-                    return "「" + this.project.name + "」のゴール";
-                } else if (this.todo.depth > 0) {
-                    let parentName;
-                    this.todoList.map((value) => {
-                        if (this.todo.parentUuid === value.uuid)
-                            parentName = value.name;
-                    });
-                    return "「" + parentName + "」のためのToDo";
-                }
-            };
+            if (this.todo.depth === 0) {
+                return "「" + this.project.name + "」のゴール";
+            } else if (this.todo.depth > 0) {
+                let parentName;
+                this.todoList.map((value) => {
+                    if (this.todo.parentUuid === value.uuid)
+                        parentName = value.name;
+                });
+                return "「" + parentName + "」のためのToDo";
+            }
         },
         todoDate() {
             return () => {
