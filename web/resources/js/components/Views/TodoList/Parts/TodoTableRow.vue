@@ -134,13 +134,11 @@ export default {
             }
         },
         todoDate() {
-            return () => {
-                this.date.title = this.switchingDateTitle(this.todo);
-                this.date.backGroundColor = this.switchingDateBackGroundColor(
-                    this.todo
-                );
-                return this.date;
-            };
+            this.date.title = this.switchingDateTitle(this.todo);
+            this.date.backGroundColor = this.switchingDateBackGroundColor(
+                this.todo
+            );
+            return this.date;
         },
     },
     methods: {
