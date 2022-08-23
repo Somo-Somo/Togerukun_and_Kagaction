@@ -13,7 +13,7 @@
                 <div class="d-flex">
                     <component
                         :is="currentComponent"
-                        style="'width: 50px; height: 88px;'"
+                        :style="'width: 50px; height: 88px;'"
                     ></component>
                 </div>
             </v-list-item-content>
@@ -32,7 +32,10 @@
                     ></accomplish-btn>
                 </v-list-item-action>
                 <div class="d-flex mx-auto" v-if="todo.child" height="32">
-                    <l-shaped-dashed-line></l-shaped-dashed-line>
+                    <lower-half-dashed-line
+                        :height="28"
+                        :width="24"
+                    ></lower-half-dashed-line>
                 </div>
             </div>
         </div>
@@ -63,6 +66,7 @@ import EllipsisMenu from "../../../Common/Parts/Molecules/EllipsisMenu.vue";
 import Space from "../../../Common/Parts/Atom/Spacer.vue";
 import TShapedDashedLine from "../../../Common/Parts/Atom/DashedLine/TShapedDashedLine.vue";
 import LShapedDashedLine from "../../../Common/Parts/Atom/DashedLine/LShapedDashedLine.vue";
+import LowerHalfDashedLine from "../../../Common/Parts/Atom/DashedLine/LowerHalfDashedLine.vue";
 import DashedLine from "../../../Common/Parts/Atom/DashedLine/DashedLine.vue";
 import AccomplishBtn from "../../../Common/Parts/Atom/Btn/AccomplishBtn.vue";
 
@@ -74,6 +78,7 @@ export default {
         Space,
         TShapedDashedLine,
         LShapedDashedLine,
+        LowerHalfDashedLine,
         DashedLine,
         AccomplishBtn,
     },

@@ -1,6 +1,7 @@
 <template>
     <svg
-        style="style"
+        :width="width"
+        :height="height"
         viewBox="0 0 24 28"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -12,8 +13,11 @@
 <script>
 export default {
     props: {
-        style: {
-            type: String,
+        height: {
+            type: Number,
+        },
+        height: {
+            type: Number,
         },
     },
 };
