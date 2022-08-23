@@ -3,7 +3,10 @@
         <div class="d-flex" style="max-height: 88px">
             <div class="d-flex">
                 <goal-flag v-if="todo.depth === 0" />
-                <space style="'width: 50px'" v-if="todo.depth !== 0"></space>
+                <empty-space
+                    :style="'width: 50px;'"
+                    v-if="todo.depth !== 0"
+                ></empty-space>
             </div>
             <v-list-item-content
                 class="d-flex py-0"
@@ -13,7 +16,7 @@
                 <div class="d-flex">
                     <component
                         :is="currentComponent(num)"
-                        :style="'width: 50px; height: 88px;'"
+                        :style="'width:50px; height:88px;'"
                     ></component>
                 </div>
             </v-list-item-content>
@@ -63,7 +66,7 @@
 import GoalFlag from "../../../Common/Parts/Atom/GoalFlag.vue";
 import TodoTitleAndSubTitle from "../../../Common/Parts/Molecules/TodoTitleAndSubTitle.vue";
 import EllipsisMenu from "../../../Common/Parts/Molecules/EllipsisMenu.vue";
-import Space from "../../../Common/Parts/Atom/Spacer.vue";
+import EmptySpace from "../../../Common/Parts/Atom/Spacer.vue";
 import TShapedDashedLine from "../../../Common/Parts/Atom/DashedLine/TShapedDashedLine.vue";
 import LShapedDashedLine from "../../../Common/Parts/Atom/DashedLine/LShapedDashedLine.vue";
 import LowerHalfDashedLine from "../../../Common/Parts/Atom/DashedLine/LowerHalfDashedLine.vue";
@@ -75,7 +78,7 @@ export default {
         GoalFlag,
         TodoTitleAndSubTitle,
         EllipsisMenu,
-        Space,
+        EmptySpace,
         TShapedDashedLine,
         LShapedDashedLine,
         LowerHalfDashedLine,
@@ -110,16 +113,13 @@ export default {
     computed: {
         currentComponent() {
             return (num) => {
-                if (
-                    this.todo.depth === num &&
-                    !this.todo.leftSideOfLine[num].lastChild
-                ) {
+                if (this.todo.depth === num) {
                     return this.todo.leftSideOfLine[num].lastChild
-                        ? "t-shaped-dashed-line"
-                        : "l-shaped-dashed-line";
+                        ? "l-shaped-dashed-line"
+                        : "t-shaped-dashed-line";
                 } else {
                     return this.todo.leftSideOfLine[num].lastChild
-                        ? "spacer"
+                        ? "empty-space"
                         : "dashed-line";
                 }
             };
