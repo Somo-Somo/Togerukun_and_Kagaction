@@ -109,26 +109,6 @@ export default {
                 return false;
             };
         },
-        parentName() {
-            return (todo) => {
-                if (todo.depth === 0) {
-                    return "「" + this.project.name;
-                } else if (todo.depth > 0) {
-                    let parentName;
-                    this.todoList.map((value) => {
-                        if (todo.parentUuid === value.uuid)
-                            parentName = value.name;
-                    });
-                    return "「" + parentName;
-                }
-            };
-        },
-        parentType() {
-            return (todo) => {
-                if (todo.depth === 0) return "」のゴール";
-                if (todo.depth > 0) return "」のためのToDo";
-            };
-        },
     },
     methods: {
         showTodo() {
@@ -138,12 +118,6 @@ export default {
         async toTodoDetail(todo) {
             await this.$store.dispatch("todo/selectTodo", todo);
             return this.$router.push({ path: "/todo/" + todo.uuid });
-        },
-        selectMenu(menuTitle, todo) {
-            if (menuTitle === "削除") {
-                this.deletingConfirmationDialog = true;
-                this.selectedDeletingTodo = todo;
-            }
         },
         async deleteTodo() {
             this.deletingConfirmationDialog = false;
@@ -156,10 +130,6 @@ export default {
         onClickCancel() {
             this.deletingConfirmationDialog = false;
             this.selectedDeletingTodo = { name: null };
-        },
-        onClickAccomplish(todo) {
-            this.$set(todo, "accomplish", todo.accomplish ? false : true);
-            this.$store.dispatch("todo/updateAccomplish", todo);
         },
         sortScheduleList() {
             const scheduleList = [];
