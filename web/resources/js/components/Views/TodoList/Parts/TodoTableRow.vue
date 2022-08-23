@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex">
+    <div class="d-flex" style="'position: relative; width: 100%;'">
         <div class="d-flex" style="max-height: 88px">
             <div class="d-flex">
                 <goal-flag v-if="todo.depth === 0" />
