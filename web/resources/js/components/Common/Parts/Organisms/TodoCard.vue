@@ -9,7 +9,7 @@
                 "
             >
                 <v-list-item
-                    class="px-0"
+                    class="d-flex px-0"
                     style="width: 100%"
                     @click="toTodoDetail(todo)"
                     link
@@ -25,23 +25,19 @@
                             color="todo.accomplish ? 'green' : ''"
                         ></accomplish-btn>
                     </v-list-item-action>
-                    <v-list-item-content class="pa-0 d-flex">
-                        <div style="width: 100%">
-                            <todo-title-and-sub-title
-                                :todoTitle="todo.name"
-                                :todoSubTitle="todoSubTitle"
-                            ></todo-title-and-sub-title>
-                            <v-list-item-icon
-                                class="align-self-center mx-0 px-2"
-                            >
-                                <ellipsis-menu
-                                    :menus="menus"
-                                    :selectCard="todo"
-                                    @selectedMenu="selectedMenu"
-                                ></ellipsis-menu>
-                            </v-list-item-icon>
-                        </div>
+                    <v-list-item-content class="d-flex">
+                        <todo-title-and-sub-title
+                            :todoTitle="todo.name"
+                            :todoSubTitle="todoSubTitle"
+                        ></todo-title-and-sub-title>
                     </v-list-item-content>
+                    <v-list-item-icon class="align-self-center mx-0 px-4">
+                        <ellipsis-menu
+                            :menus="menus"
+                            :selectCard="todo"
+                            @selectedMenu="selectedMenu"
+                        ></ellipsis-menu>
+                    </v-list-item-icon>
                 </v-list-item>
             </v-list>
         </v-card>
@@ -85,27 +81,23 @@ export default {
     },
     computed: {
         todoSubTitle() {
-            return () => {
-                if (this.todo.depth === 0) {
-                    return "「" + this.project.name + "」のゴール";
-                } else if (this.todo.depth > 0) {
-                    let parentName;
-                    this.todoList.map((value) => {
-                        if (this.todo.parentUuid === value.uuid)
-                            parentName = value.name;
-                    });
-                    return "「" + parentName + "」のためのToDo";
-                }
-            };
+            if (this.todo.depth === 0) {
+                return "「" + this.project.name + "」のゴール";
+            } else if (this.todo.depth > 0) {
+                let parentName;
+                this.todoList.map((value) => {
+                    if (this.todo.parentUuid === value.uuid)
+                        parentName = value.name;
+                });
+                return "「" + parentName + "」のためのToDo";
+            }
         },
         todoDate() {
-            return () => {
-                this.date.title = this.switchingDateTitle(this.todo);
-                this.date.backGroundColor = this.switchingDateBackGroundColor(
-                    this.todo
-                );
-                return this.date;
-            };
+            this.date.title = this.switchingDateTitle(this.todo);
+            this.date.backGroundColor = this.switchingDateBackGroundColor(
+                this.todo
+            );
+            return this.date;
         },
     },
     methods: {
