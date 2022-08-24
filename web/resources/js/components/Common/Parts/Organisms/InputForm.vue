@@ -27,18 +27,23 @@
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-                <cancel-btn
-                    :btnName="step === 1 ? 'キャンセル' : '戻る'"
+                <v-btn
                     @click="step === 1 ? $emit('onClickCancel') : onClickBack()"
-                />
+                    text
+                >
+                    {{ step === 1 ? "キャンセル" : "戻る" }}
+                </v-btn>
                 <v-spacer></v-spacer>
                 <v-slide-x-reverse-transition> </v-slide-x-reverse-transition>
-                <done-btn
-                    :btnName="btnStateIsNext ? '次へ' : '完了'"
+                <v-btn
+                    color="primary"
                     :disabled="!text || loading"
                     :loading="loading"
                     @click="btnStateIsNext ? onClickNext(text) : onClickDone()"
-                />
+                    text
+                >
+                    {{ btnStateIsNext ? "次へ" : "完了" }}
+                </v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -46,11 +51,9 @@
 
 <script>
 import CalenderForm from "../Molecules/CalenderForm.vue";
-import CancelBtn from "../Atom/Btn/CancelBtn.vue";
-import DoneBtn from "../Atom/Btn/DoneBtn.vue";
 
 export default {
-    components: { CalenderForm, CancelBtn, DoneBtn },
+    components: { CalenderForm },
     data: () => ({
         step: 1,
         text: null,
