@@ -24,6 +24,8 @@
                         :project="project"
                         :todo="todo"
                         :todoList="todoList"
+                        :showMenuBtn="activeLine === index ? true : false"
+                        @selectedMenu="selectedMenu"
                     ></todo-table-row>
                 </v-list-item>
                 <additional-goal-table-row
@@ -76,6 +78,12 @@ export default {
         onClickCancel() {
             this.deletingConfirmationDialog = false;
             this.selectedDeletingTodo = { name: null };
+        },
+        selectedMenu(menuTitle, todo) {
+            if (menuTitle === "削除") {
+                this.deletingConfirmationDialog = true;
+                this.selectedDeletingTodo = todo;
+            }
         },
         deleteTodo() {
             this.deletingConfirmationDialog = false;

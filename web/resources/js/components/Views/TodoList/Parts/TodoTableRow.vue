@@ -52,7 +52,7 @@
         </v-list-item-content>
         <v-list-item-icon
             class="align-self-center mx-0 px-2"
-            v-show="activeLine === index"
+            v-show="showMenuBtn"
         >
             <ellipsis-menu
                 :menus="menus"
@@ -89,8 +89,6 @@ export default {
     data: () => ({
         activeLine: false,
         menus: [{ title: "削除", color: "color: red" }],
-        deletingConfirmationDialog: false,
-        selectedDeletingTodo: { name: null },
         date: {
             title: null,
             icon: "mdi-clock-outline",
@@ -109,6 +107,9 @@ export default {
         },
         todo: {
             type: Object,
+        },
+        showMenuBtn: {
+            type: Boolean,
         },
     },
     computed: {
@@ -198,10 +199,7 @@ export default {
             this.$store.dispatch("todo/updateAccomplish", todo);
         },
         selectedMenu(menuTitle, todo) {
-            if (menuTitle === "削除") {
-                this.deletingConfirmationDialog = true;
-                this.selectedDeletingTodo = todo;
-            }
+            this.$emit("selectedMenu", menuTitle, todo);
         },
     },
 };
