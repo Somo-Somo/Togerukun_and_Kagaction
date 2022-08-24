@@ -24,6 +24,18 @@
                     @onClickSave="updateDate"
                     @onClickRemove="removeDate"
                 />
+                <v-btn
+                    class="my-auto"
+                    style="position: absolute; right: 20px; top: 38px"
+                    v-if="step === 2"
+                    @click="removeDate()"
+                    small
+                    icon
+                >
+                    <v-icon :size="$vuetify.breakpoint.smAndUp ? '24' : '14'"
+                        >mdi-close</v-icon
+                    >
+                </v-btn>
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
