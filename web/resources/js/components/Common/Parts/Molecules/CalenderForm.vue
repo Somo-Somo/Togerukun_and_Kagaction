@@ -19,21 +19,6 @@
                 v-on="on"
             >
             </v-text-field>
-            <!-- <div
-                class="d-flex align-self-center"
-                style="z-index: 100"
-                :style="
-                    todo.name
-                        ? 'position: relative; right: 20px'
-                        : 'position: absolute; right: 24px'
-                "
-            >
-                <v-btn @click="onClickRemove(todo.date)" small icon>
-                    <v-icon :size="$vuetify.breakpoint.smAndUp ? '20' : '14'"
-                        >mdi-close</v-icon
-                    >
-                </v-btn>
-            </div> -->
         </template>
         <v-date-picker v-model="todo.date" no-title scrollable>
             <v-spacer></v-spacer>
