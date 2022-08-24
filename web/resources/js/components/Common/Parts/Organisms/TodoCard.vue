@@ -60,7 +60,7 @@ export default {
     data: () => ({
         deletingConfirmationDialog: false,
         selectedDeletingTodo: { name: null },
-        cardMenu: [{ title: "削除", color: "color: red" }],
+        menus: [{ title: "削除", color: "color: red" }],
         date: {
             icon: "mdi-clock-outline",
             iconSize: 14,
@@ -150,10 +150,7 @@ export default {
             return this.$router.push({ path: "/todo/" + todo.uuid });
         },
         selectedMenu(menuTitle, todo) {
-            if (menuTitle === "削除") {
-                this.deletingConfirmationDialog = true;
-                this.selectedDeletingTodo = todo;
-            }
+            this.$emit("selectedMenu", menuTitle, todo);
         },
         onClickAccomplish(todo) {
             this.$set(todo, "accomplish", todo.accomplish ? false : true);
