@@ -1,5 +1,5 @@
 <template>
-    <v-btn icon :height="height" :width="width" :color="color">
+    <v-btn :height="height" :width="width" color="color" icon>
         <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
     </v-btn>
 </template>

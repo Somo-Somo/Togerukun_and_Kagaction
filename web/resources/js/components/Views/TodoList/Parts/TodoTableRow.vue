@@ -29,9 +29,9 @@
                     @click.stop="onClickAccomplish(todo)"
                 >
                     <accomplish-btn
-                        height="24"
-                        width="24"
-                        color="todo.accomplish ? 'green' : ''"
+                        :height="24"
+                        :width="24"
+                        :color="todo.accomplish ? 'green' : ''"
                     ></accomplish-btn>
                 </v-list-item-action>
                 <div class="d-flex mx-auto" v-if="todo.child" height="32">
@@ -189,6 +189,10 @@ export default {
         async toTodoDetail(todo) {
             await this.$store.dispatch("todo/selectTodo", todo);
             return this.$router.push({ path: "/todo/" + todo.uuid });
+        },
+        onClickAccomplish(todo) {
+            this.$set(todo, "accomplish", todo.accomplish ? false : true);
+            this.$store.dispatch("todo/updateAccomplish", todo);
         },
         selectedMenu(menuTitle, todo) {
             if (menuTitle === "削除") {
