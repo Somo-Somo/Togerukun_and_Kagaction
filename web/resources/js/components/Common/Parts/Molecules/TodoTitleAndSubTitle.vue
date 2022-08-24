@@ -1,20 +1,26 @@
 <template>
     <div>
         <v-list-item-subtitle class="d-flex align-content-start mt-3 mb-1">
-            <div class="d-flex" :style="date.backGroundColor">
-                <v-icon :size="date.iconSize" :color="date.iconColor">{{
-                    date.icon
-                }}</v-icon>
+            <div
+                v-if="dateTitle"
+                class="d-flex"
+                :style="dateDetail.backGroundColor"
+            >
+                <v-icon
+                    :size="dateDetail.iconSize"
+                    :color="dateDetail.iconColor"
+                    >{{ dateDetail.icon }}</v-icon
+                >
                 <p
                     class="ma-0 px-2 font-weight-bold align-self-center"
-                    :class="date.fontColor"
+                    :class="dateDetail.fontColor"
                     :style="
                         $vuetify.breakpoint.smAndUp
                             ? 'font-size:12px'
                             : 'font-size:8px'
                     "
                 >
-                    {{ date.title }}
+                    {{ dateTitle }}
                 </p>
             </div>
             <div class="d-flex" style="max-width: 66%">
@@ -64,7 +70,10 @@ export default {
         todoSubTitle: {
             type: String,
         },
-        date: {
+        dateTitle: {
+            type: String,
+        },
+        dateDetail: {
             type: Object,
         },
     },

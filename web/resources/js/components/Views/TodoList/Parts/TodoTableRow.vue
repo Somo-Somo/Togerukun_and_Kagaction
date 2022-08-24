@@ -46,7 +46,8 @@
             <todo-title-and-sub-title
                 :todoTitle="todo.name"
                 :todoSubTitle="todoSubTitle"
-                :date="todoDate"
+                :dateDetail="dateDetail"
+                :dateTitle="dateTitle"
             ></todo-title-and-sub-title>
         </v-list-item-content>
         <v-list-item-icon
@@ -136,8 +137,10 @@ export default {
                 return "「" + parentName + "」のためのToDo";
             }
         },
-        todoDate() {
-            this.date.title = this.switchingDateTitle(this.todo);
+        dateTitle() {
+            return this.todo.date ? this.switchingDateTitle(this.todo) : null;
+        },
+        dateDetail() {
             this.date.backGroundColor = this.switchingDateBackGroundColor(
                 this.todo
             );
@@ -154,10 +157,10 @@ export default {
             } else if (todo.accomplish) {
                 const year = new Date(todo.date).getFullYear();
                 const month = new Date(todo.date).getMonth() + 1;
-                const day = new Date(todo.date).getDay() + 1;
+                const date = new Date(todo.date).getDate();
                 return new Date().getFullYear() === year
-                    ? month + "月" + day + "日"
-                    : year + "年" + month + "月" + day + "日";
+                    ? month + "月" + date + "日"
+                    : year + "年" + month + "月" + date + "日";
             } else {
                 return Math.abs(diff) + "日経過";
             }
