@@ -30,7 +30,7 @@
                 </v-list-item>
                 <additional-goal-table-row
                     v-if="todoList.length > 0"
-                    @click="$emit('onClickCreate')"
+                    @onClickCreate="$emit('onClickCreate')"
                 >
                 </additional-goal-table-row>
             </v-list-item-group>

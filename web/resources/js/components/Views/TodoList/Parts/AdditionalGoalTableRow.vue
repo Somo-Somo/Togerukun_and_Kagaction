@@ -2,6 +2,7 @@
     <v-list-item
         class="d-flex justify-space-around px-3"
         style="height: 64px"
+        @click="$emit('onClickCreate')"
         link
     >
         <v-icon class="pa-1">mdi-plus</v-icon>
