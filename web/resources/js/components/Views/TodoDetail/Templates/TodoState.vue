@@ -2,10 +2,10 @@
     <div class="d-flex flex-column">
         <todo-text-area :todo="todo" :parentTodo="parentTodo"></todo-text-area>
         <div class="d-flex px-1">
-            <accomplish
+            <todo-accomplish
                 :todo="todo"
                 @onClickAccomplish="onclickAccomplish"
-            ></accomplish>
+            ></todo-accomplish>
             <div
                 class="py-2 ml-md-2 d-flex align-self-center"
                 :style="
@@ -34,13 +34,13 @@
 
 <script>
 import TodoTextArea from "../Parts/TodoTextArea.vue";
-import Accomplish from "../Parts/Accomplish.vue";
+import TodoAccomplish from "../Parts/TodoAccomplish.vue";
 import Calender from "../components/Calender.vue";
 
 export default {
     components: {
         TodoTextArea,
-        Accomplish,
+        TodoAccomplish,
         Calender,
     },
     data: () => ({
