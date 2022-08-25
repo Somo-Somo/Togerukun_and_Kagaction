@@ -2,37 +2,10 @@
     <div class="d-flex flex-column">
         <todo-text-area :todo="todo" :parentTodo="parentTodo"></todo-text-area>
         <div class="d-flex px-1">
-            <div
-                class="py-2 d-flex justify-start"
-                :style="
-                    $vuetify.breakpoint.mdAndUp
-                        ? 'height: 72px'
-                        : 'height: 48px'
-                "
-            >
-                <v-subheader
-                    class="d-flex align-self-center pa-md-0"
-                    :class="
-                        $vuetify.breakpoint.mdAndUp
-                            ? 'todoSubTitle'
-                            : 'spTodoSubTitle'
-                    "
-                >
-                    <p
-                        class="ma-0 font-weight-bold"
-                        style="min-width: 36px"
-                        color="grey darken-1"
-                    >
-                        達成：
-                    </p>
-                </v-subheader>
-                <v-col class="px-4 py-0 d-flex align-self-center">
-                    <v-checkbox
-                        v-model="todo.accomplish"
-                        @click="onClickAccomplish(todo)"
-                    ></v-checkbox>
-                </v-col>
-            </div>
+            <accomplish
+                :todo="todo"
+                @onClickAccomplish="onclickAccomplish"
+            ></accomplish>
             <div
                 class="py-2 ml-md-2 d-flex align-self-center"
                 :style="
@@ -61,11 +34,13 @@
 
 <script>
 import TodoTextArea from "../Parts/TodoTextArea.vue";
+import Accomplish from "../Parts/Accomplish.vue";
 import Calender from "../components/Calender.vue";
 
 export default {
     components: {
         TodoTextArea,
+        Accomplish,
         Calender,
     },
     data: () => ({
