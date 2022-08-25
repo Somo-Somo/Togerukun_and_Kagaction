@@ -189,9 +189,6 @@ export default {
         },
     },
     methods: {
-        onClickAccomplish(todo) {
-            this.$store.dispatch("todo/updateAccomplish", todo);
-        },
         onClickCreate() {
             this.$store.dispatch("form/onClickCreate");
             this.form = true;
@@ -224,23 +221,6 @@ export default {
                 }
             }
             this.form = false;
-        },
-        updateTodoName() {
-            if (this.todo.name) {
-                this.$store.dispatch("todo/editTodo", this.todo);
-            }
-        },
-        updateDate(date) {
-            this.$store.dispatch("todo/updateDate", {
-                date: date,
-                todo: this.todo,
-            });
-        },
-        removeDate() {
-            this.$store.dispatch("todo/updateDate", {
-                date: null,
-                todo: this.todo,
-            });
         },
     },
     watch: {
