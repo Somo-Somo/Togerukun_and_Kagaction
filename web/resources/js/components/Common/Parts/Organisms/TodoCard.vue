@@ -9,7 +9,7 @@
                 "
             >
                 <v-list-item
-                    class="px-0"
+                    class="d-flex px-0"
                     style="width: 100%"
                     @click="toTodoDetail(todo)"
                     link
@@ -25,23 +25,21 @@
                             color="todo.accomplish ? 'green' : ''"
                         ></accomplish-btn>
                     </v-list-item-action>
-                    <v-list-item-content class="pa-0 d-flex">
-                        <div style="width: 100%">
-                            <todo-title-and-sub-title
-                                :todoTitle="todo.name"
-                                :todoSubTitle="todoSubTitle"
-                            ></todo-title-and-sub-title>
-                            <v-list-item-icon
-                                class="align-self-center mx-0 px-2"
-                            >
-                                <ellipsis-menu
-                                    :menus="menus"
-                                    :selectCard="todo"
-                                    @selectedMenu="selectedMenu"
-                                ></ellipsis-menu>
-                            </v-list-item-icon>
-                        </div>
+                    <v-list-item-content class="d-flex">
+                        <todo-title-and-sub-title
+                            :todoTitle="todo.name"
+                            :todoSubTitle="todoSubTitle"
+                            :dateDetail="dateDetail"
+                            :dateTitle="dateTitle"
+                        ></todo-title-and-sub-title>
                     </v-list-item-content>
+                    <v-list-item-icon class="align-self-center mx-0 px-4">
+                        <ellipsis-menu
+                            :menus="menus"
+                            :selectCard="todo"
+                            @selectedMenu="selectedMenu"
+                        ></ellipsis-menu>
+                    </v-list-item-icon>
                 </v-list-item>
             </v-list>
         </v-card>
@@ -62,9 +60,8 @@ export default {
     data: () => ({
         deletingConfirmationDialog: false,
         selectedDeletingTodo: { name: null },
-        cardMenu: [{ title: "削除", color: "color: red" }],
+        menus: [{ title: "削除", color: "color: red" }],
         date: {
-            title: null,
             icon: "mdi-clock-outline",
             iconSize: 14,
             iconColor: "#212121",
@@ -85,27 +82,25 @@ export default {
     },
     computed: {
         todoSubTitle() {
-            return () => {
-                if (this.todo.depth === 0) {
-                    return "「" + this.project.name + "」のゴール";
-                } else if (this.todo.depth > 0) {
-                    let parentName;
-                    this.todoList.map((value) => {
-                        if (this.todo.parentUuid === value.uuid)
-                            parentName = value.name;
-                    });
-                    return "「" + parentName + "」のためのToDo";
-                }
-            };
+            if (this.todo.depth === 0) {
+                return "「" + this.project.name + "」のゴール";
+            } else if (this.todo.depth > 0) {
+                let parentName;
+                this.todoList.map((value) => {
+                    if (this.todo.parentUuid === value.uuid)
+                        parentName = value.name;
+                });
+                return "「" + parentName + "」のためのToDo";
+            }
         },
-        todoDate() {
-            return () => {
-                this.date.title = this.switchingDateTitle(this.todo);
-                this.date.backGroundColor = this.switchingDateBackGroundColor(
-                    this.todo
-                );
-                return this.date;
-            };
+        dateTitle() {
+            return this.todo.date ? this.switchingDateTitle(this.todo) : null;
+        },
+        dateDetail() {
+            this.date.backGroundColor = this.switchingDateBackGroundColor(
+                this.todo
+            );
+            return this.date;
         },
     },
     methods: {
@@ -118,10 +113,10 @@ export default {
             } else if (todo.accomplish) {
                 const year = new Date(todo.date).getFullYear();
                 const month = new Date(todo.date).getMonth() + 1;
-                const day = new Date(todo.date).getDay() + 1;
+                const date = new Date(todo.date).getDate();
                 return new Date().getFullYear() === year
-                    ? month + "月" + day + "日"
-                    : year + "年" + month + "月" + day + "日";
+                    ? month + "月" + date + "日"
+                    : year + "年" + month + "月" + date + "日";
             } else {
                 return Math.abs(diff) + "日経過";
             }
@@ -140,15 +135,22 @@ export default {
                 return "background-color: coral";
             }
         },
+        calcDateDiff(todo) {
+            const today = new Date(
+                Date.now() - new Date().getTimezoneOffset() * 60000
+            )
+                .toISOString()
+                .substr(0, 10);
+            const diff =
+                (new Date(todo.date) - new Date(today)) / (60 * 60 * 1000 * 24);
+            return diff;
+        },
         async toTodoDetail(todo) {
             await this.$store.dispatch("todo/selectTodo", todo);
             return this.$router.push({ path: "/todo/" + todo.uuid });
         },
         selectedMenu(menuTitle, todo) {
-            if (menuTitle === "削除") {
-                this.deletingConfirmationDialog = true;
-                this.selectedDeletingTodo = todo;
-            }
+            this.$emit("selectedMenu", menuTitle, todo);
         },
         onClickAccomplish(todo) {
             this.$set(todo, "accomplish", todo.accomplish ? false : true);

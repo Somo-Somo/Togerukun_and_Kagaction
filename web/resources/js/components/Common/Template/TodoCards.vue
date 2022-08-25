@@ -17,6 +17,7 @@
                     :project="project"
                     :todo="todo"
                     :todoList="todoList"
+                    @selectedMenu="selectedMenu"
                 ></todo-card>
             </v-col>
             <div
@@ -61,7 +62,6 @@ export default {
     data: () => ({
         deletingConfirmationDialog: false,
         selectedDeletingTodo: { name: null },
-        cardMenu: [{ title: "削除", color: "color: red" }],
     }),
     props: {
         project: {
@@ -137,6 +137,12 @@ export default {
                 return a.date < b.date ? -1 : 1; //オブジェクトの昇順ソート
             });
             return sortScheduleList;
+        },
+        selectedMenu(menuTitle, todo) {
+            if (menuTitle === "削除") {
+                this.deletingConfirmationDialog = true;
+                this.selectedDeletingTodo = todo;
+            }
         },
     },
     watch: {
