@@ -4,7 +4,11 @@
         :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
         fluid
     >
-        <Header :project="project" :todo="todo" :parentTodo="parentTodo" />
+        <todo-header
+            :project="project"
+            :todo="todo"
+            :parentTodo="parentTodo"
+        ></todo-header>
         <template>
             <div
                 class="d-flex flex-column"
@@ -200,7 +204,7 @@
 </template>
 
 <script>
-import Header from "../components/Header.vue";
+import TodoHeader from "../../Header.vue";
 import Calender from "../components/Calender.vue";
 import TodoCards from "../components/Cards/TodoCard.vue";
 import Comments from "../components/Comments.vue";
@@ -212,7 +216,7 @@ import { mapGetters, mapState } from "vuex";
 
 export default {
     components: {
-        Header,
+        TodoHeader,
         Calender,
         TodoCards,
         Comments,
