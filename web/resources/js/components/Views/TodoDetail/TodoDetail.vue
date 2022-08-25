@@ -18,93 +18,7 @@
                         : 'spTodoDetailMain'
                 "
             >
-                <div class="py-2 py-md-4 d-flex justify-start flex-column">
-                    <v-subheader
-                        class="pa-md-0 d-flex"
-                        :class="
-                            $vuetify.breakpoint.mdAndUp
-                                ? 'todoSubTitle'
-                                : 'spTodoSubTitle'
-                        "
-                    >
-                        <p class="ma-0 font-weight-bold" color="grey darken-1">
-                            {{ subHeader }}
-                        </p>
-                    </v-subheader>
-                    <v-textarea
-                        label="名前を入力"
-                        v-model="todo.name"
-                        @change="updateTodoName"
-                        class="pa-0"
-                        rows="1"
-                        :class="
-                            $vuetify.breakpoint.smAndUp ? 'text-h5' : 'text-h6'
-                        "
-                        auto-grow
-                        single-line
-                        solo
-                        flat
-                        hide-details
-                    ></v-textarea>
-                </div>
-                <div class="d-flex px-1">
-                    <div
-                        class="py-2 d-flex justify-start"
-                        :style="
-                            $vuetify.breakpoint.mdAndUp
-                                ? 'height: 72px'
-                                : 'height: 48px'
-                        "
-                    >
-                        <v-subheader
-                            class="d-flex align-self-center pa-md-0"
-                            :class="
-                                $vuetify.breakpoint.mdAndUp
-                                    ? 'todoSubTitle'
-                                    : 'spTodoSubTitle'
-                            "
-                        >
-                            <p
-                                class="ma-0 font-weight-bold"
-                                style="min-width: 36px"
-                                color="grey darken-1"
-                            >
-                                達成：
-                            </p>
-                        </v-subheader>
-                        <v-col class="px-4 py-0 d-flex align-self-center">
-                            <v-checkbox
-                                v-model="todo.accomplish"
-                                @click="onClickAccomplish(todo)"
-                            ></v-checkbox>
-                        </v-col>
-                    </div>
-                    <div
-                        class="py-2 ml-md-2 d-flex align-self-center"
-                        :style="
-                            $vuetify.breakpoint.mdAndUp
-                                ? 'height: 72px'
-                                : 'height: 48px'
-                        "
-                    >
-                        <v-subheader class="d-flex align-self-center pa-md-0">
-                            <p
-                                class="ma-0 font-weight-bold"
-                                color="grey darken-1"
-                            >
-                                日付 :
-                            </p>
-                        </v-subheader>
-                        <v-col class="px-md-4 pa-0 d-flex align-self-center">
-                            <Calender
-                                :todo="todo"
-                                :dateLabel="null"
-                                @onClickSave="updateDate"
-                                @onClickRemove="removeDate"
-                            />
-                        </v-col>
-                    </div>
-                </div>
+                <todo-state :todo="todo" :parentTodo="parentTodo"></todo-state>
                 <div class="">
                     <div class="d-flex justify-space-between flex-column">
                         <v-tabs
@@ -186,8 +100,6 @@
                     </div>
                 </div>
             </div>
-            <!-- スマホ版追加ボタン -->
-            <!-- <SpBottomBtn @clickAditional="onClickCreate" :headerTitle="page" /> -->
         </template>
         <form class="form" @submit.prevent="submitForm()">
             <InputForm
@@ -205,7 +117,7 @@
 
 <script>
 import TodoHeader from "../../Header.vue";
-import Calender from "../components/Calender.vue";
+import TodoState from "./Templates/TodoState.vue";
 import TodoCards from "../components/Cards/TodoCard.vue";
 import Comments from "../components/Comments.vue";
 import Cause from "../components/Cause.vue";
@@ -217,7 +129,7 @@ import { mapGetters, mapState } from "vuex";
 export default {
     components: {
         TodoHeader,
-        Calender,
+        TodoState,
         TodoCards,
         Comments,
         Cause,
