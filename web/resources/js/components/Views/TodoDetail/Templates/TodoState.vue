@@ -6,28 +6,11 @@
                 :todo="todo"
                 @onClickAccomplish="onclickAccomplish"
             ></todo-accomplish>
-            <div
-                class="py-2 ml-md-2 d-flex align-self-center"
-                :style="
-                    $vuetify.breakpoint.mdAndUp
-                        ? 'height: 72px'
-                        : 'height: 48px'
-                "
-            >
-                <v-subheader class="d-flex align-self-center pa-md-0">
-                    <p class="ma-0 font-weight-bold" color="grey darken-1">
-                        日付 :
-                    </p>
-                </v-subheader>
-                <v-col class="px-md-4 pa-0 d-flex align-self-center">
-                    <Calender
-                        :todo="todo"
-                        :dateLabel="null"
-                        @onClickSave="updateDate"
-                        @onClickRemove="removeDate"
-                    />
-                </v-col>
-            </div>
+            <todo-date
+                :todo="todo"
+                @onClickSave="updateDate"
+                @onClickRemove="removeDate"
+            ></todo-date>
         </div>
     </div>
 </template>
@@ -35,13 +18,13 @@
 <script>
 import TodoTextArea from "../Parts/TodoTextArea.vue";
 import TodoAccomplish from "../Parts/TodoAccomplish.vue";
-import Calender from "../components/Calender.vue";
+import TodoDate from "../Parts/TodoDate.vue";
 
 export default {
     components: {
         TodoTextArea,
         TodoAccomplish,
-        Calender,
+        TodoDate,
     },
     data: () => ({
         form: false,
