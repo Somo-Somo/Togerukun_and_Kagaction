@@ -1,32 +1,6 @@
 <template>
     <div class="d-flex flex-column">
-        <div class="py-2 py-md-4 d-flex justify-start flex-column">
-            <v-subheader
-                class="pa-md-0 d-flex"
-                :class="
-                    $vuetify.breakpoint.mdAndUp
-                        ? 'todoSubTitle'
-                        : 'spTodoSubTitle'
-                "
-            >
-                <p class="ma-0 font-weight-bold" color="grey darken-1">
-                    {{ subHeader }}
-                </p>
-            </v-subheader>
-            <v-textarea
-                label="名前を入力"
-                v-model="todo.name"
-                @change="updateTodoName"
-                class="pa-0"
-                rows="1"
-                :class="$vuetify.breakpoint.smAndUp ? 'text-h5' : 'text-h6'"
-                auto-grow
-                single-line
-                solo
-                flat
-                hide-details
-            ></v-textarea>
-        </div>
+        <todo-text-area :todo="todo" :parentTodo="parentTodo"></todo-text-area>
         <div class="d-flex px-1">
             <div
                 class="py-2 d-flex justify-start"
@@ -86,10 +60,12 @@
 </template>
 
 <script>
+import TodoTextArea from "../Parts/TodoTextArea.vue";
 import Calender from "../components/Calender.vue";
 
 export default {
     components: {
+        TodoTextArea,
         Calender,
     },
     data: () => ({
@@ -104,21 +80,10 @@ export default {
             type: Object,
         },
     },
-    computed: {
-        subHeader() {
-            return this.todo.depth === 0
-                ? "ゴール"
-                : "｢" + this.parentTodo.name + "｣ のためのToDo";
-        },
-    },
+    computed: {},
     methods: {
         onClickAccomplish(todo) {
             this.$store.dispatch("todo/updateAccomplish", todo);
-        },
-        updateTodoName() {
-            if (this.todo.name) {
-                this.$store.dispatch("todo/editTodo", this.todo);
-            }
         },
         updateDate(date) {
             this.$store.dispatch("todo/updateDate", {
@@ -136,13 +101,4 @@ export default {
 };
 </script>
 
-<style scoped lang="sass">
-.todoSubTitle
-  font-size: 1rem
-  height: 36px
-
-.spTodoSubTitle
-  font-size: 12px
-  height: 24px
-  padding: 0 0 0 12px
-</style>
+<style scoped lang="sass"></style>
