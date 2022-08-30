@@ -190,10 +190,6 @@ export default {
                 (new Date(todo.date) - new Date(today)) / (60 * 60 * 1000 * 24);
             return diff;
         },
-        async toTodoDetail(todo) {
-            await this.$store.dispatch("todo/selectTodo", todo);
-            return this.$router.push({ path: "/todo/" + todo.uuid });
-        },
         onClickAccomplish(todo) {
             this.$set(todo, "accomplish", todo.accomplish ? false : true);
             this.$store.dispatch("todo/updateAccomplish", todo);

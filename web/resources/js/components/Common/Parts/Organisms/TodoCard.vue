@@ -1,22 +1,24 @@
 <template>
     <div class="d-flex">
         <!-- 予定 -->
-        <v-card class="rounded" style="width: 100%" outlined>
+        <v-card
+            class="rounded"
+            style="width: 100%"
+            outlined
+            @click="onClickCard(todo)"
+            link
+        >
             <v-list
                 class="py-0 d-flex align-content-center"
                 :style="
                     $vuetify.breakpoint.smAndUp ? 'height:80px' : 'height:64px'
                 "
             >
-                <v-list-item
-                    class="d-flex px-0"
-                    style="width: 100%"
-                    @click="toTodoDetail(todo)"
-                    link
-                >
+                <v-list-item class="d-flex px-0" style="width: 100%">
                     <v-list-item-action
                         class="d-flex px-4 ma-auto"
                         style="height: 24px"
+                        v-model="todo.accomplish"
                         @click.stop="onClickAccomplish(todo)"
                     >
                         <accomplish-btn
@@ -145,16 +147,15 @@ export default {
                 (new Date(todo.date) - new Date(today)) / (60 * 60 * 1000 * 24);
             return diff;
         },
-        async toTodoDetail(todo) {
-            await this.$store.dispatch("todo/selectTodo", todo);
-            return this.$router.push({ path: "/todo/" + todo.uuid });
-        },
         selectedMenu(menuTitle, todo) {
             this.$emit("selectedMenu", menuTitle, todo);
         },
         onClickAccomplish(todo) {
             this.$set(todo, "accomplish", todo.accomplish ? false : true);
             this.$store.dispatch("todo/updateAccomplish", todo);
+        },
+        onClickCard(todo) {
+            this.$emit("toTodoDetail", todo);
         },
     },
     watch: {

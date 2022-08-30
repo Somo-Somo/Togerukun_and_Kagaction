@@ -18,6 +18,7 @@
                     :todo="todo"
                     :todoList="todoList"
                     @selectedMenu="selectedMenu"
+                    @toTodoDetail="toTodoDetail"
                 ></todo-card>
             </v-col>
             <div
@@ -145,11 +146,7 @@ export default {
             }
         },
     },
-    watch: {
-        todoList(next, prev) {
-            return;
-        },
-    },
+    watch: {},
 };
 </script>
 <style scoped lang="sass">
