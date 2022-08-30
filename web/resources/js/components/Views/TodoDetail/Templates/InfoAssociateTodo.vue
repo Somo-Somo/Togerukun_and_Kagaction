@@ -32,7 +32,7 @@
 <script>
 import Tab from "../../../Common/Parts/Molecules/Tab.vue";
 import AssistSubHeader from "../Parts/AssistSubHeader.vue";
-import TodoCards from "../components/Cards/TodoCard.vue";
+import TodoCards from "../../../Common/Template/TodoCards.vue";
 import Comments from "../components/Comments.vue";
 import Cause from "../components/Cause.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
