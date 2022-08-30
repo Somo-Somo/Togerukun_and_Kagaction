@@ -8,23 +8,23 @@
             class="overflow-y-auto d-flex flex-column"
             :class="$vuetify.breakpoint.mdAndUp ? 'cardStyle' : 'spCardStyle'"
         >
-            <TodoCards
+            <todo-cards
                 v-if="tab === 0"
                 :project="project"
                 :selectTodo="todo"
                 :todoList="todoList"
                 :todoStatus="linkedToDo[0]"
-            />
+            ></todo-cards>
             <Cause v-if="tab === 1" :todo="todo" />
             <todo-comments
                 v-if="tab === 2 && todo.comments.length > 0"
                 :todo="todo"
             ></todo-comments>
             <!-- PC版追加カード -->
-            <NewAdditionalCard
+            <new-additional-card
                 :category="linkedToDo[tab].name"
                 @clickAditional="onClickCreate"
-            />
+            ></new-additional-card>
         </div>
     </div>
 </template>
