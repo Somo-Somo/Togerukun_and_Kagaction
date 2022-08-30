@@ -15,7 +15,7 @@
                 :todoList="todoList"
                 :todoStatus="linkedToDo[0]"
             ></todo-cards>
-            <Cause v-if="tab === 1" :todo="todo" />
+            <todo-causes v-if="tab === 1" :todo="todo"></todo-causes>
             <todo-comments
                 v-if="tab === 2 && todo.comments.length > 0"
                 :todo="todo"
@@ -34,7 +34,7 @@ import Tab from "../../../Common/Parts/Molecules/Tab.vue";
 import AssistSubHeader from "../Parts/AssistSubHeader.vue";
 import TodoCards from "../../../Common/Template/TodoCards.vue";
 import TodoComments from "../Parts/TodoComments.vue";
-import Cause from "../components/Cause.vue";
+import TodoCauses from "../Parts/TodoCauses.vue";
 import NewAdditionalCard from "../../../Common/Parts/Molecules/NewAdditionalCard.vue";
 
 export default {
@@ -43,7 +43,7 @@ export default {
         AssistSubHeader,
         TodoCards,
         TodoComments,
-        Cause,
+        TodoCauses,
         NewAdditionalCard,
     },
     data: () => ({
