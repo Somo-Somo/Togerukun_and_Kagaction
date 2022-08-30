@@ -147,7 +147,7 @@ export default {
 <style scoped lang="sass">
 .todoDetailMain
   width: 772px
-  position: fixed
+  position: relative
 
 .spTodoDetailMain
   width: calc(100vw - 24px)

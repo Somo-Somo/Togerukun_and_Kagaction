@@ -20,9 +20,9 @@
                         @click.stop="onClickAccomplish(todo)"
                     >
                         <accomplish-btn
-                            height="24"
-                            width="24"
-                            color="todo.accomplish ? 'green' : ''"
+                            :height="24"
+                            :width="24"
+                            :color="todo.accomplish ? 'green' : ''"
                         ></accomplish-btn>
                     </v-list-item-action>
                     <v-list-item-content class="d-flex">

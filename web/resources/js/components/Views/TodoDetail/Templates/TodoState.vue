@@ -9,7 +9,7 @@
         <div class="d-flex px-1">
             <todo-accomplish
                 :todo="todo"
-                @onClickAccomplish="onclickAccomplish"
+                @onClickAccomplish="onClickAccomplish"
             ></todo-accomplish>
             <todo-date
                 :todo="todo"

@@ -13,7 +13,7 @@
                 :project="project"
                 :selectTodo="todo"
                 :todoList="todoList"
-                :todoStatus="linkedToDo[0]"
+                :todoStatus="linkedTodo[0]"
             ></todo-cards>
             <todo-causes v-if="tab === 1" :todo="todo"></todo-causes>
             <todo-comments
@@ -22,7 +22,7 @@
             ></todo-comments>
             <!-- PC版追加カード -->
             <new-additional-card
-                :category="linkedToDo[tab].name"
+                :category="linkedTodo[tab].name"
                 @clickAditional="onClickCreate"
             ></new-additional-card>
         </div>
@@ -59,7 +59,7 @@ export default {
         parentTodo: {
             type: Object,
         },
-        linkedToDo: {
+        linkedTodo: {
             type: Array,
         },
         todoList: {
