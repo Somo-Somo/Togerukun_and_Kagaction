@@ -2,34 +2,7 @@
     <div class="">
         <div class="d-flex justify-space-between flex-column">
             <tab :todoStatuses="linkedTodo" :tab="tab" @setTab="setTab"></tab>
-            <v-subheader
-                v-if="tab !== 2"
-                class="px-md-0 mt-2 todoSubTitle"
-                v-show="$vuetify.breakpoint.smAndUp"
-            >
-                <p
-                    class="ma-0 font-weight-black caption align-self-center"
-                    color="grey lighten-1"
-                    style="
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    "
-                    :style="
-                        $vuetify.breakpoint.smAndUp
-                            ? 'max-width: 70%'
-                            : 'max-width: 40vw'
-                    "
-                >
-                    「{{ todo.name }}
-                </p>
-                <p
-                    class="ma-0 font-weight-black caption align-self-center"
-                    color="grey lighten-1"
-                >
-                    {{ assistSubHeaderText(tab) }}
-                </p>
-            </v-subheader>
+            <assist-sub-header :tab="tab" :todo="todo"></assist-sub-header>
         </div>
         <div
             class="overflow-y-auto d-flex flex-column"
@@ -58,6 +31,7 @@
 
 <script>
 import Tab from "../../../Common/Parts/Molecules/Tab.vue";
+import AssistSubHeader from "../Parts/AssistSubHeader.vue";
 import TodoCards from "../components/Cards/TodoCard.vue";
 import Comments from "../components/Comments.vue";
 import Cause from "../components/Cause.vue";
@@ -66,6 +40,7 @@ import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
 export default {
     components: {
         Tab,
+        AssistSubHeader,
         TodoCards,
         Comments,
         Cause,
@@ -94,17 +69,7 @@ export default {
             type: Object,
         },
     },
-    computed: {
-        assistSubHeaderText() {
-            return (tab) => {
-                if (tab === 0) {
-                    return "」を達成するには？";
-                } else if (tab === 1) {
-                    return "」が達成できない原因は？";
-                }
-            };
-        },
-    },
+    computed: {},
     methods: {
         setTab(newVal) {
             return this.$emit("setTab", newVal);
@@ -119,16 +84,6 @@ export default {
 </script>
 
 <style scoped lang="sass">
-
-.todoSubTitle
-  font-size: 1rem
-  height: 36px
-
-.spTodoSubTitle
-  font-size: 12px
-  height: 24px
-  padding: 0 0 0 12px
-
 .spTabStyle
   width: 25%
   height: 36px
