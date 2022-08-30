@@ -22,8 +22,8 @@
             />
             <!-- PC版追加カード -->
             <NewAdditionalCard
-                @clickAditional="onClickCreate"
                 :category="linkedToDo[tab].name"
+                @clickAditional="onClickCreate"
             />
         </div>
     </div>
@@ -35,7 +35,7 @@ import AssistSubHeader from "../Parts/AssistSubHeader.vue";
 import TodoCards from "../../../Common/Template/TodoCards.vue";
 import Comments from "../../../Common/Parts/Organisms/Comments.vue";
 import Cause from "../components/Cause.vue";
-import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
+import NewAdditionalCard from "../../../Common/Parts/Molecules/NewAdditionalCard.vue";
 
 export default {
     components: {
