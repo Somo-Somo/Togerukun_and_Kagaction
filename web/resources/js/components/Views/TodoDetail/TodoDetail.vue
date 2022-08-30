@@ -27,6 +27,7 @@
                     :todoList="todoList"
                     :project="project"
                     @setTab="setTab"
+                    @onClickCreate="onClickCreate"
                 ></info-associate-todo>
             </div>
         </template>
@@ -101,6 +102,10 @@ export default {
         onClickCancel() {
             this.$store.dispatch("form/closeForm");
             this.form = false;
+        },
+        onClickCreate() {
+            this.$store.dispatch("form/onClickCreate");
+            this.form = true;
         },
         submitForm(form) {
             this.$store.dispatch("form/closeForm");

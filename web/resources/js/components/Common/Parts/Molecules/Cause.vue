@@ -1,9 +1,9 @@
 <template>
-    <div>
-        <v-list-item-action class="px-4 ma-auto" style="height: 24px">
+    <div class="d-flex" style="width: 100%">
+        <v-list-item-action class="px-4 ma-0" style="height: 24px">
             <v-icon>mdi-help-circle-outline</v-icon>
         </v-list-item-action>
-        <div class="d-flex px-2">
+        <div class="d-flex px-2" style="width: 100%">
             <v-list-item-title class="py-auto">
                 <p
                     class="font-weight-black ma-0"

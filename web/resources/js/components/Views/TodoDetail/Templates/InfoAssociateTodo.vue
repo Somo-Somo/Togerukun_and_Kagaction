@@ -23,7 +23,7 @@
             <!-- PC版追加カード -->
             <new-additional-card
                 :category="linkedTodo[tab].name"
-                @clickAditional="onClickCreate"
+                @clickAditional="clickAdditional"
             ></new-additional-card>
         </div>
     </div>
@@ -74,9 +74,8 @@ export default {
         setTab(newVal) {
             return this.$emit("setTab", newVal);
         },
-        onClickCreate() {
-            this.$store.dispatch("form/onClickCreate");
-            this.form = true;
+        clickAdditional() {
+            this.$emit("onClickCreate");
         },
     },
     watch: {},
