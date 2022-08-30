@@ -2,7 +2,9 @@
     <div>
         <TodoHeader :project="project" />
         <v-container class="d-flex flex-column py-0 px-16" fluid>
-            <Tab :todoStatuses="todoStatuses" :tab="tab" @setTab="setTab" />
+            <div class="px-4 pt-2">
+                <Tab :todoStatuses="todoStatuses" :tab="tab" @setTab="setTab" />
+            </div>
             <template>
                 <!-- PC版 -->
                 <div
