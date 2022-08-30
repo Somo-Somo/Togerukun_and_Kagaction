@@ -2,7 +2,20 @@
     <div>
         <TodoHeader :project="project" />
         <v-container class="d-flex flex-column py-0 px-16" fluid>
-            <Tab :todoStatuses="todoStatuses" :tab="tab" @setTab="setTab" />
+            <div
+                class="d-flex justify-space-between"
+                :class="
+                    $vuetify.breakpoint.mdAndUp ? 'tabsStyle' : 'spTabsStyle'
+                "
+            >
+                <div class="px-4 pt-2">
+                    <Tab
+                        :todoStatuses="todoStatuses"
+                        :tab="tab"
+                        @setTab="setTab"
+                    />
+                </div>
+            </div>
             <template>
                 <!-- PC版 -->
                 <div
@@ -133,6 +146,9 @@ export default {
 </script>
 
 <style scoped lang="sass">
+.tabsStyle
+  width: 772px
+
 .spTabStyle
   width: 25%
   height: 40px
