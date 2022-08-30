@@ -36,9 +36,9 @@
 </template>
 
 <script>
-import Comment from "../Molecules/Comment.vue";
-import DeletingConfirmationDialog from "../Molecules/DeletingConfirmationDialog.vue";
-import EllipsisMenu from "../Molecules/EllipsisMenu.vue";
+import Comment from "../../../Common/Parts/Molecules/Comment.vue";
+import DeletingConfirmationDialog from "../../../Common/Parts/Molecules/DeletingConfirmationDialog.vue";
+import EllipsisMenu from "../../../Common/Parts/Molecules/EllipsisMenu.vue";
 
 export default {
     components: {

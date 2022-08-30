@@ -1,5 +1,10 @@
 <template>
-    <div class="d-flex flex-column">
+    <div
+        class="d-flex flex-column"
+        :class="
+            $vuetify.breakpoint.mdAndUp ? 'todoDetailMain' : 'spTodoDetailMain'
+        "
+    >
         <todo-text-area :todo="todo" :parentTodo="parentTodo"></todo-text-area>
         <div class="d-flex px-1">
             <todo-accomplish
@@ -59,4 +64,13 @@ export default {
 };
 </script>
 
-<style scoped lang="sass"></style>
+<style scoped lang="sass">
+.todoDetailMain
+  width: 772px
+  position: fixed
+
+.spTodoDetailMain
+  width: calc(100vw - 24px)
+  position: fixed
+  top: 72px
+</style>

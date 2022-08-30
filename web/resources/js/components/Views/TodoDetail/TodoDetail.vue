@@ -48,7 +48,7 @@
 import TodoHeader from "../../Header.vue";
 import TodoState from "./Templates/TodoState.vue";
 import InfoAssociateTodo from "./Templates/InfoAssociateTodo.vue";
-import InputForm from "../components/InputForm.vue";
+import InputForm from "../../Common/Parts/Organisms/InputForm.vue";
 import { mapGetters, mapState } from "vuex";
 
 export default {
