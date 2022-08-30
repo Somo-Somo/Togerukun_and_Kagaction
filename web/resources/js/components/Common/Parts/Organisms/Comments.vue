@@ -16,11 +16,11 @@
                     v-show="commentIndex === index"
                 >
                     <v-list-item-icon class="d-flex align-self-center ma-0">
-                        <Menu
+                        <ellipsis-menu
                             :menus="menus"
                             :selectCard="comment"
                             @selectedMenu="selectedMenu"
-                        />
+                        ></ellipsis-menu>
                     </v-list-item-icon>
                 </div>
             </v-list-item>
@@ -37,14 +37,14 @@
 
 <script>
 import Comment from "../Molecules/Comment.vue";
-import DeletingConfirmationDialog from "../components/Dialog/DeletingConfirmationDialog.vue";
-import Menu from "../components/Buttons/Menu.vue";
+import DeletingConfirmationDialog from "../Molecules/DeletingConfirmationDialog.vue";
+import EllipsisMenu from "../Molecules/EllipsisMenu.vue";
 
 export default {
     components: {
         Comment,
         DeletingConfirmationDialog,
-        Menu,
+        EllipsisMenu,
     },
     data: () => ({
         menus: [{ title: "削除", color: "color: red" }],
