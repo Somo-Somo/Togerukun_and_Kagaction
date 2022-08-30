@@ -16,10 +16,10 @@
                 :todoStatus="linkedToDo[0]"
             />
             <Cause v-if="tab === 1" :todo="todo" />
-            <Comments
+            <todo-comments
                 v-if="tab === 2 && todo.comments.length > 0"
                 :todo="todo"
-            />
+            ></todo-comments>
             <!-- PC版追加カード -->
             <NewAdditionalCard
                 :category="linkedToDo[tab].name"
@@ -33,7 +33,7 @@
 import Tab from "../../../Common/Parts/Molecules/Tab.vue";
 import AssistSubHeader from "../Parts/AssistSubHeader.vue";
 import TodoCards from "../../../Common/Template/TodoCards.vue";
-import Comments from "../../../Common/Parts/Organisms/Comments.vue";
+import TodoComments from "../Parts/TodoComments.vue";
 import Cause from "../components/Cause.vue";
 import NewAdditionalCard from "../../../Common/Parts/Molecules/NewAdditionalCard.vue";
 
@@ -42,7 +42,7 @@ export default {
         Tab,
         AssistSubHeader,
         TodoCards,
-        Comments,
+        TodoComments,
         Cause,
         NewAdditionalCard,
     },
