@@ -39,6 +39,7 @@
 import Comment from "../Molecules/Comment.vue";
 import DeletingConfirmationDialog from "../components/Dialog/DeletingConfirmationDialog.vue";
 import Menu from "../components/Buttons/Menu.vue";
+
 export default {
     components: {
         Comment,
@@ -58,20 +59,6 @@ export default {
     },
     computed: {},
     methods: {
-        getInitial(comment) {
-            return comment.user_name.charAt(0);
-        },
-        getDateAndTime(comment) {
-            const dateAndTime = new Date(comment.created_at);
-            const month = dateAndTime.getMonth() + 1;
-            const date = dateAndTime.getDate();
-            const hours = dateAndTime.getHours().toString().padStart(2, "0");
-            const minutes = dateAndTime
-                .getMinutes()
-                .toString()
-                .padStart(2, "0");
-            return month + "月" + date + "日 " + hours + ":" + minutes;
-        },
         selectedMenu(menuTitle, comment) {
             if (menuTitle === "削除") {
                 this.deletingConfirmationDialog = true;
