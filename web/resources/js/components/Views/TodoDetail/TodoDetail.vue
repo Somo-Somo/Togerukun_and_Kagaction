@@ -20,10 +20,13 @@
             >
                 <todo-state :todo="todo" :parentTodo="parentTodo"></todo-state>
                 <info-associate-todo
+                    :tab="tab"
                     :todo="todo"
                     :parentTodo="parentTodo"
+                    :linkedTodo="linkedTodo"
                     :todoList="todoList"
                     :project="project"
+                    @setTab="setTab"
                 ></info-associate-todo>
             </div>
         </template>
@@ -57,7 +60,7 @@ export default {
     },
     data: () => ({
         tab: 0,
-        linkedToDo: [
+        linkedTodo: [
             { name: "ToDo", show: false },
             { name: "原因", show: false },
             { name: "コメント", show: false },
@@ -72,18 +75,12 @@ export default {
         }),
         ...mapGetters({
             user: "auth/user",
-            inputFormName: "form/name",
             inputForm: "form/inputForm",
             project: "project/project",
             todo: "todo/todo",
             parentTodo: "todo/parentTodo",
             todoList: "todo/todoList",
         }),
-        subHeader() {
-            return this.todo.depth === 0
-                ? "ゴール"
-                : "｢" + this.parentTodo.name + "｣ のためのToDo";
-        },
         formLabel() {
             if (this.tab === 0) {
                 return "「" + this.todo.name + "」のためのToDo";
@@ -94,22 +91,12 @@ export default {
             }
         },
         formCategory() {
-            return this.linkedToDo[this.tab].name;
-        },
-        assistSubHeaderText() {
-            return (tab) => {
-                if (tab === 0) {
-                    return "」を達成するには？";
-                } else if (tab === 1) {
-                    return "」が達成できない原因は？";
-                }
-            };
+            return this.linkedTodo[this.tab].name;
         },
     },
     methods: {
-        onClickCreate() {
-            this.$store.dispatch("form/onClickCreate");
-            this.form = true;
+        setTab(newVal) {
+            return (this.tab = newVal);
         },
         onClickCancel() {
             this.$store.dispatch("form/closeForm");

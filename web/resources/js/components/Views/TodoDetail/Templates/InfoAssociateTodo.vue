@@ -1,24 +1,7 @@
 <template>
     <div class="">
         <div class="d-flex justify-space-between flex-column">
-            <v-tabs
-                v-model="tab"
-                class="px-0"
-                color="black"
-                :height="$vuetify.breakpoint.mdAndUp ? '' : '36'"
-            >
-                <v-tabs-slider color="#80CBC4"></v-tabs-slider>
-                <v-tab
-                    class="px-0"
-                    v-for="kind in linkedToDo"
-                    :key="kind.name"
-                    :class="$vuetify.breakpoint.mdAndUp ? '' : 'spTabStyle'"
-                >
-                    <p class="ma-0 font-weight-bold">
-                        {{ kind.name }}
-                    </p>
-                </v-tab>
-            </v-tabs>
+            <tab :todoStatuses="linkedTodo" :tab="tab" @setTab="setTab"></tab>
             <v-subheader
                 v-if="tab !== 2"
                 class="px-md-0 mt-2 todoSubTitle"
@@ -74,35 +57,35 @@
 </template>
 
 <script>
+import Tab from "../../../Common/Parts/Molecules/Tab.vue";
 import TodoCards from "../components/Cards/TodoCard.vue";
 import Comments from "../components/Comments.vue";
 import Cause from "../components/Cause.vue";
 import NewAdditionalCard from "../components/Cards/NewAddtionalCard.vue";
-import { mapGetters, mapState } from "vuex";
 
 export default {
     components: {
+        Tab,
         TodoCards,
         Comments,
         Cause,
         NewAdditionalCard,
     },
     data: () => ({
-        tab: 0,
-        linkedToDo: [
-            { name: "ToDo", show: false },
-            { name: "原因", show: false },
-            { name: "コメント", show: false },
-        ],
-        submitLoading: false,
         form: false,
     }),
     props: {
+        tab: {
+            type: Number,
+        },
         todo: {
             type: Object,
         },
         parentTodo: {
             type: Object,
+        },
+        linkedToDo: {
+            type: Array,
         },
         todoList: {
             type: Array,
@@ -123,6 +106,9 @@ export default {
         },
     },
     methods: {
+        setTab(newVal) {
+            return this.$emit("setTab", newVal);
+        },
         onClickCreate() {
             this.$store.dispatch("form/onClickCreate");
             this.form = true;
