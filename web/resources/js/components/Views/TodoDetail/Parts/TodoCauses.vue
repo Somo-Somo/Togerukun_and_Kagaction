@@ -19,7 +19,7 @@
                             link
                         >
                             <cause :cause="cause"></cause>
-                            <div v-show="causeIndex === index">
+                            <div v-show="causeIndex === index" class="px-2">
                                 <v-list-item-icon
                                     class="d-flex align-self-center ma-0"
                                 >
