@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import TodoHeader from "../../Header.vue";
+import TodoHeader from "../../Common/Parts/Organisms/TodoHeader.vue";
 import TodoState from "./Templates/TodoState.vue";
 import InfoAssociateTodo from "./Templates/InfoAssociateTodo.vue";
 import InputForm from "../../Common/Parts/Organisms/InputForm.vue";
