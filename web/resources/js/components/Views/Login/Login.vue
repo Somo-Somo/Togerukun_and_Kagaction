@@ -8,15 +8,10 @@
             min-height="560"
             elevation="2"
         >
-            <v-alert
+            <success-alert
                 v-if="completedRegister"
-                class="my-2"
-                outlined
-                type="success"
-                text
-            >
-                会員登録が完了しました。<br />先ほどご登録いただいたメールアドレスとパスワードをこちらでご入力ください。
-            </v-alert>
+                :message="successMessage"
+            ></success-alert>
             <v-card-title class="d-flex text-center pa-4">
                 <div class="mx-auto">
                     <img src="/img/Kagaction_Login.svg" />
@@ -157,9 +152,13 @@
 </template>
 
 <script>
+import SuccessAlert from "../../Common/Parts/Atom/SuccessAlert.vue";
 import { mapState, mapGetters } from "vuex";
 
 export default {
+    components: {
+        SuccessAlert,
+    },
     data: () => ({
         isLoginForm: true,
         email: "",
@@ -176,6 +175,8 @@ export default {
         passwordShow: false,
         completedRegister: false,
         loading: false,
+        successMessage:
+            "会員登録が完了しました。<br />先ほどご登録いただいたメールアドレスとパスワードをこちらでご入力ください。",
     }),
     computed: {
         ...mapState({
