@@ -12,157 +12,13 @@
                         : 'padding:8px'
                 "
             >
-                <div class="d-flex">
-                    <v-card class="rounded" style="width: 100%" outlined>
-                        <v-list
-                            class="py-0 d-flex align-content-center"
-                            :style="
-                                $vuetify.breakpoint.smAndUp
-                                    ? 'height:80px'
-                                    : 'height:64px'
-                            "
-                        >
-                            <v-list-item
-                                class="px-0"
-                                style="width: 100%"
-                                @click="toTodoDetail(todo)"
-                                link
-                            >
-                                <v-list-item-action
-                                    class="d-flex px-4 ma-auto"
-                                    style="height: 24px"
-                                    @click.stop="onClickAccomplish(todo)"
-                                >
-                                    <v-btn
-                                        icon
-                                        height="24"
-                                        width="24"
-                                        :color="todo.accomplish ? 'green' : ''"
-                                    >
-                                        <v-icon
-                                            >mdi-checkbox-marked-circle-outline</v-icon
-                                        >
-                                    </v-btn>
-                                </v-list-item-action>
-                                <v-list-item-content class="pa-0 d-flex">
-                                    <div style="width: 100%">
-                                        <v-list-item-subtitle
-                                            class="d-flex align-content-start mt-3 mb-1"
-                                        >
-                                            <DateSubTitle :todo="todo" />
-                                            <div
-                                                class="d-flex"
-                                                style="max-width: 66%"
-                                            >
-                                                <p
-                                                    class="ma-0 grey--text font-weight-bold align-self-center"
-                                                    style="
-                                                        font-size: 8px;
-                                                        max-width: 100%;
-                                                        white-space: nowrap;
-                                                        overflow: hidden;
-                                                        text-overflow: ellipsis;
-                                                    "
-                                                >
-                                                    {{ parentName(todo) }}
-                                                </p>
-                                                <p
-                                                    class="ma-0 grey--text font-weight-bold align-self-center"
-                                                    style="font-size: 8px"
-                                                >
-                                                    」のToDo
-                                                </p>
-                                            </div>
-                                        </v-list-item-subtitle>
-                                        <v-list-item-title class="py-2 pb-4">
-                                            <p
-                                                class="font-weight-black ma-0"
-                                                style="
-                                                    max-width: calc(
-                                                        100% - 36px
-                                                    );
-                                                    white-space: nowrap;
-                                                    overflow: hidden;
-                                                    text-overflow: ellipsis;
-                                                "
-                                                :style="
-                                                    $vuetify.breakpoint.smAndUp
-                                                        ? 'font-size:1rem'
-                                                        : 'font-size:0.8rem'
-                                                "
-                                            >
-                                                {{ todo.name }}
-                                            </p></v-list-item-title
-                                        >
-                                        <v-menu
-                                            class="rounded-lg elevation-0"
-                                            offset-y
-                                        >
-                                            <template
-                                                v-slot:activator="{ on, attrs }"
-                                            >
-                                                <v-list-item-action
-                                                    class="ma-0"
-                                                    style="
-                                                        position: absolute;
-                                                        top: 28px;
-                                                        right: 16px;
-                                                    "
-                                                    :style="
-                                                        $vuetify.breakpoint
-                                                            .smAndUp
-                                                            ? 'top: 28px;'
-                                                            : 'top: 24px;'
-                                                    "
-                                                >
-                                                    <v-btn
-                                                        v-bind="attrs"
-                                                        v-on="on"
-                                                        small
-                                                        icon
-                                                        link
-                                                    >
-                                                        <v-icon
-                                                            :size="
-                                                                $vuetify
-                                                                    .breakpoint
-                                                                    .smAndUp
-                                                                    ? '24'
-                                                                    : '20'
-                                                            "
-                                                        >
-                                                            mdi-dots-vertical
-                                                        </v-icon>
-                                                    </v-btn>
-                                                </v-list-item-action>
-                                            </template>
-                                            <v-list>
-                                                <v-list-item
-                                                    v-for="menu in cardMenu"
-                                                    :key="menu.title"
-                                                    @click="
-                                                        selectMenu(
-                                                            menu.title,
-                                                            todo
-                                                        )
-                                                    "
-                                                    link
-                                                >
-                                                    <v-list-item-title
-                                                        :style="menu.color"
-                                                        >{{
-                                                            menu.title
-                                                        }}</v-list-item-title
-                                                    >
-                                                </v-list-item>
-                                            </v-list>
-                                        </v-menu>
-                                    </div>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </div>
+                <todo-card
+                    :todo="todo"
+                    :todoList="scheduleList"
+                    :project="project(todo)"
+                    @selectedMenu="selectedMenu"
+                    @toTodoDetail="toTodoDetail"
+                ></todo-card>
             </v-col>
             <div class="my-4" v-show="!existCard && !loading">
                 <p
@@ -188,18 +44,17 @@
 </template>
 
 <script>
-import DateSubTitle from "../Date/DateSubTitle.vue";
+import TodoCard from "../../../Common/Parts/Organisms/TodoCard.vue";
 import DeletingConfirmationDialog from "../../../Common/Parts/Molecules/DeletingConfirmationDialog.vue";
 
 export default {
     components: {
-        DateSubTitle,
+        TodoCard,
         DeletingConfirmationDialog,
     },
     data: () => ({
         deletingConfirmationDialog: false,
         selectedDeletingTodo: null,
-        cardMenu: [{ title: "削除", color: "color: red" }],
         existCard: false,
     }),
     props: {
@@ -217,10 +72,8 @@ export default {
         },
     },
     computed: {
-        parentName() {
-            return (todo) => {
-                return " 「" + this.projectList[todo.projectUuid].name;
-            };
+        project(todo) {
+            return this.projectList[todo.projectUuid];
         },
         showCard() {
             return (todo) => {
