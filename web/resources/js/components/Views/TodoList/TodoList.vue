@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import TodoHeader from "../../Header.vue";
+import TodoHeader from "../../Common/Parts/Organisms/TodoHeader.vue";
 import Tab from "../../Common/Parts/Molecules/Tab.vue";
 import TodoTreeTable from "./Templates/TodoTreeTable.vue";
 import TodoCards from "../../Common/Template/TodoCards.vue";
