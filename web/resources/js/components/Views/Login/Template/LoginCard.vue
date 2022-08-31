@@ -56,7 +56,6 @@ import SuccessAlert from "../../../Common/Parts/Atom/SuccessAlert.vue";
 import LoginCardTitle from "../Parts/LoginCardTitle.vue";
 import LoginForm from "../Parts/LoginForm.vue";
 import LoginCardFooter from "../Parts/LoginCardFooter.vue";
-import { mapState, mapGetters } from "vuex";
 
 export default {
     components: {
@@ -66,102 +65,37 @@ export default {
         LoginCardFooter,
     },
     data: () => ({
-        isLoginForm: true,
-        formValue: {
-            name: "",
-            email: "",
-            password: "",
-        },
-        passwordShow: false,
-        completedRegister: false,
-        loading: false,
         successMessage:
             "会員登録が完了しました。<br />先ほどご登録いただいたメールアドレスとパスワードをこちらでご入力ください。",
     }),
-    computed: {
-        ...mapState({
-            apiStatus: (state) => state.auth.apiStatus,
-        }),
-        ...mapGetters({
-            loginErrorMessages: "auth/loginErrorMessages",
-            registerErrorMessages: "auth/registerErrorMessages",
-        }),
-        loginAndRegisterOfErrorMessages() {
-            return {
-                register: this.registerErrorMessages,
-                login: this.loginErrorMessages,
-            };
+    props: {
+        isLoginForm: {
+            type: Boolean,
+        },
+        formValue: {
+            type: Object,
+        },
+        completedRegister: {
+            type: Boolean,
+        },
+        loading: {
+            type: Boolean,
+        },
+        loginAndRegisterOfErrorMessages: {
+            type: Object,
         },
     },
+    computed: {},
     methods: {
         setFormValue(newVal) {
-            return (this.formValue = newVal);
+            this.$emit("setFormValue", newVal);
         },
         switchForm() {
-            this.clearError();
-            this.formValue.email = "";
-            this.formValue.password = "";
-            this.isLoginForm = this.isLoginForm ? false : true;
+            this.$emit("switchForm");
         },
         submitForm() {
-            this.completedRegister = false;
-            this.isLoginForm ? this.login() : this.register();
+            this.$emit("submitForm");
         },
-        async register() {
-            // 共通フォームを使ってためここでDataをSET
-            const registerForm = {
-                name: this.formValue.name,
-                email: this.formValue.email,
-                password: this.formValue.password,
-            };
-            this.loading = true;
-
-            await this.$store.dispatch("auth/register", registerForm);
-
-            this.loading = false;
-            if (this.apiStatus) {
-                this.completedRegister = true;
-                this.formValue.email = null;
-                this.formValue.password = null;
-                this.isLoginForm = true;
-            }
-        },
-        async login() {
-            // 共通フォームを使ってためここでDataをSET
-            const loginForm = {
-                email: this.formValue.email,
-                password: this.formValue.password,
-            };
-            this.loading = true;
-            await this.$store.dispatch("auth/login", loginForm);
-
-            if (this.apiStatus) {
-                const data = await this.$store.dispatch(
-                    "initialize/getUserHasProjectAndTodo",
-                    this.$route
-                );
-                this.loading = false;
-                if (data.onboarding) {
-                    this.$router.push("/onboarding");
-                } else if (Object.keys(data.schedule).length) {
-                    this.$router.push("/schedule");
-                } else if (Object.keys(data.project).length) {
-                    const firstProject = Object.entries(data.project)[0][1];
-                    this.$store.dispatch("project/selectProject", firstProject);
-                    this.$router.push("/project/" + firstProject.uuid);
-                } else {
-                    this.$router.push("/schedule");
-                }
-            }
-            this.loading = false;
-        },
-        clearError() {
-            this.$store.commit("auth/setLoginErrorMessages", null);
-            this.$store.commit("auth/setRegisterErrorMessages", null);
-        },
-    },
-    created() {
-        this.clearError();
     },
 };
 </script>
