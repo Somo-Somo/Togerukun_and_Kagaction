@@ -8,7 +8,7 @@ import Login from "./pages/Login.vue";
 import Onboarding from "./pages/Onboarding.vue";
 import TodoList from "./components/Views/TodoList/TodoList.vue";
 import TodoDetail from "./components/Views/TodoDetail/TodoDetail.vue";
-import Schedule from "./pages/Schedule.vue";
+import Schedule from "./components/Views/Schedule/Schedule.vue";
 import SystemError from "./pages/errors/System.vue";
 import NotFound from "./pages/errors/NotFound.vue";
 
