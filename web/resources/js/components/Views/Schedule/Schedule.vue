@@ -12,7 +12,7 @@
                     $vuetify.breakpoint.mdAndUp ? 'tabsStyle' : 'spTabsStyle'
                 "
             >
-                <tab :tab="tab" :todoStatuses="periods"></tab>
+                <tab :tab="tab" :todoStatuses="periods" @setTab="setTab"></tab>
             </div>
             <v-divider
                 v-if="!$vuetify.breakpoint.mdAndUp"
@@ -56,7 +56,7 @@ export default {
     },
     data: () => ({
         category: "ToDo",
-        tab: null,
+        tab: 0,
         periods: [
             { name: "今日", show: false },
             { name: "7日以内", show: false },
@@ -112,6 +112,9 @@ export default {
                 return a.date < b.date ? -1 : 1; //オブジェクトの昇順ソート
             });
             return scheduleList;
+        },
+        setTab(newVal) {
+            return (this.tab = newVal);
         },
     },
 };

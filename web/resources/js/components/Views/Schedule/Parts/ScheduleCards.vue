@@ -72,8 +72,10 @@ export default {
         },
     },
     computed: {
-        project(todo) {
-            return this.projectList[todo.projectUuid];
+        project() {
+            return (todo) => {
+                return this.projectList[todo.projectUuid];
+            };
         },
         showCard() {
             return (todo) => {
@@ -136,7 +138,7 @@ export default {
             await this.$store.dispatch("todo/selectTodo", todo);
             return this.$router.push({ path: "/todo/" + todo.uuid });
         },
-        selectMenu(menuTitle, todo) {
+        selectedMenu(menuTitle, todo) {
             if (menuTitle === "削除") {
                 this.deletingConfirmationDialog = true;
                 this.selectedDeletingTodo = todo;
