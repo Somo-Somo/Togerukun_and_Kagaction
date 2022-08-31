@@ -41,41 +41,10 @@
                         </v-btn>
                     </div>
                     <v-divider></v-divider>
-                    <div class="my-4 d-flex">
-                        <p
-                            class="ma-0 align-self-center"
-                            style="font-size: 14px"
-                        >
-                            ※
-                            現在こちらのサービスはテスト版として運用させていただいています。
-                        </p>
-                    </div>
-                    <div class="my-4 d-flex">
-                        <p
-                            class="ma-0 align-self-center"
-                            style="font-size: 14px"
-                        >
-                            {{
-                                isLoginForm
-                                    ? "アカウントをお持ちでない方"
-                                    : "すでにアカウントをお持ちですか？"
-                            }}
-                        </p>
-                        <v-btn
-                            class="align-self-center font-weight-bold"
-                            color="primary"
-                            @click="
-                                isLoginForm = isLoginForm ? false : true;
-                                email = '';
-                                password = '';
-                                clearError();
-                            "
-                            text
-                            small
-                        >
-                            {{ isLoginForm ? "会員登録" : "ログイン" }}
-                        </v-btn>
-                    </div>
+                    <login-card-footer
+                        :isLoginForm="isLoginForm"
+                        @switchForm="switchForm"
+                    ></login-card-footer>
                 </div>
             </div>
         </form>
@@ -86,6 +55,7 @@
 import SuccessAlert from "../../../Common/Parts/Atom/SuccessAlert.vue";
 import LoginCardTitle from "../Parts/LoginCardTitle.vue";
 import LoginForm from "../Parts/LoginForm.vue";
+import LoginCardFooter from "../Parts/LoginCardFooter.vue";
 import { mapState, mapGetters } from "vuex";
 
 export default {
@@ -93,19 +63,11 @@ export default {
         SuccessAlert,
         LoginCardTitle,
         LoginForm,
+        LoginCardFooter,
     },
     data: () => ({
         isLoginForm: true,
         formValue: {
-            name: "",
-            email: "",
-            password: "",
-        },
-        loginForm: {
-            email: "",
-            password: "",
-        },
-        registerForm: {
             name: "",
             email: "",
             password: "",
@@ -135,33 +97,43 @@ export default {
         setFormValue(newVal) {
             return (this.formValue = newVal);
         },
+        switchForm() {
+            this.clearError();
+            this.formValue.email = "";
+            this.formValue.password = "";
+            this.isLoginForm = this.isLoginForm ? false : true;
+        },
         submitForm() {
             this.completedRegister = false;
             this.isLoginForm ? this.login() : this.register();
         },
         async register() {
             // 共通フォームを使ってためここでDataをSET
-            this.registerForm.email = this.formValue.email;
-            this.registerForm.password = this.formValue.password;
+            const registerForm = {
+                name: this.formValue.name,
+                email: this.formValue.email,
+                password: this.formValue.password,
+            };
             this.loading = true;
 
-            await this.$store.dispatch("auth/register", this.registerForm);
+            await this.$store.dispatch("auth/register", registerForm);
 
             this.loading = false;
             if (this.apiStatus) {
                 this.completedRegister = true;
                 this.formValue.email = null;
                 this.formValue.password = null;
-                this.registerForm.name = null;
                 this.isLoginForm = true;
             }
         },
         async login() {
             // 共通フォームを使ってためここでDataをSET
-            this.loginForm.email = this.formValue.email;
-            this.loginForm.password = this.formValue.password;
+            const loginForm = {
+                email: this.formValue.email,
+                password: this.formValue.password,
+            };
             this.loading = true;
-            await this.$store.dispatch("auth/login", this.loginForm);
+            await this.$store.dispatch("auth/login", loginForm);
 
             if (this.apiStatus) {
                 const data = await this.$store.dispatch(
