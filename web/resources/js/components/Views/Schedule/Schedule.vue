@@ -31,12 +31,12 @@
                     indeterminate
                 ></v-progress-circular>
 
-                <ScheduleCards
+                <schedule-cards
                     :projectList="projectList"
                     :scheduleList="scheduleList"
                     :period="periods[tab]"
                     :loading="loading"
-                />
+                ></schedule-cards>
             </div>
         </template>
     </v-container>
@@ -45,7 +45,7 @@
 <script>
 import TodoHeader from "../../Common/Parts/Organisms/TodoHeader.vue";
 import Tab from "../../Common/Parts/Molecules/Tab.vue";
-import ScheduleCards from "../components/Cards/ScheduleCard.vue";
+import ScheduleCards from "./Parts/ScheduleCards.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -128,10 +128,6 @@ export default {
   position: absolute
   top: 64px
 
-.spTabStyle
-  width: 25%
-  height: 40px
-  font-size: 0.75rem
 
 .cardStyle
   height: calc(100vh - 152px)
