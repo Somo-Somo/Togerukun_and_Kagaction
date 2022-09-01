@@ -87,9 +87,6 @@ export default {
     },
     computed: {},
     methods: {
-        setFormValue(newVal) {
-            this.$emit("setFormValue", newVal);
-        },
         switchForm() {
             this.$emit("switchForm");
         },

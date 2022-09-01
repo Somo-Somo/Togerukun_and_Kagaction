@@ -3,7 +3,9 @@
         <v-text-field
             v-model="formValue.name"
             v-if="!isLoginForm"
-            :error-messages="errorMessages ? errorMessages.name : null"
+            :error-messages="
+                errorMessages.register ? errorMessages.register.name : null
+            "
             autofocus
             dense
             height="48px"
@@ -13,7 +15,7 @@
 
         <v-text-field
             v-model="formValue.email"
-            :error-messages="errorMessagesEmail"
+            :error-messages="errorMessagesEmail()"
             autofocus
             dense
             height="48px"
@@ -25,7 +27,7 @@
             v-model="formValue.password"
             :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
             :type="passwordShow ? 'text' : 'password'"
-            :error-messages="errorMessagesPassword"
+            :error-messages="errorMessagesPassword()"
             dense
             height="48px"
             name="input-password"
@@ -35,7 +37,7 @@
         ></v-text-field>
         <div
             v-if="!isLoginForm"
-            style="position: relative"
+            style="position: relative; top: 8px"
             :style="!errorMessages ? 'top: -16px;' : 'top: -8px;'"
         >
             <ul>
@@ -70,28 +72,38 @@ export default {
         },
     },
     computed: {
-        errorMessages() {
-            return this.isLoginForm
-                ? this.loginAndRegisterOfErrorMessages.loginErrorMessages
-                : this.loginAndRegisterOfErrorMessages.registerErrorMessages;
-        },
         errorMessagesEmail() {
-            return this.errorMessages.email
-                ? this.errorMessages.email[0]
-                : null;
+            return () => {
+                const errorMessages = this.errorMessages();
+                return errorMessages
+                    ? this.getEmailErrorMassage(errorMessages)
+                    : null;
+            };
         },
         errorMessagesPassword() {
-            return this.errorMessages.password
-                ? this.errorMessages.password[0]
+            return () => {
+                const errorMessages = this.errorMessages();
+                return errorMessages
+                    ? this.getPasswordErrorMassage(errorMessages)
+                    : null;
+            };
+        },
+    },
+    methods: {
+        errorMessages() {
+            return this.isLoginForm
+                ? this.loginAndRegisterOfErrorMessages.login
+                : this.loginAndRegisterOfErrorMessages.register;
+        },
+        getEmailErrorMassage(errorMessages) {
+            return errorMessages["email"] !== undefined
+                ? errorMessages["email"][0]
                 : null;
         },
-        formValue: {
-            get() {
-                return this.formValue;
-            },
-            set(newVal) {
-                this.$emit("setFormValue", newVal);
-            },
+        getPasswordErrorMassage(errorMessages) {
+            return errorMessages["password"] !== undefined
+                ? errorMessages["password"][0]
+                : null;
         },
     },
 };

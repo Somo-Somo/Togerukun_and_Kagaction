@@ -3,10 +3,9 @@
         <login-card
             :isLoginForm="isLoginForm"
             :formValue="formValue"
-            :completedRedister="completedRedister"
+            :completedRegister="completedRegister"
             :loading="loading"
             :loginAndRegisterOfErrorMessages="loginAndRegisterOfErrorMessages"
-            @setFormValue="setFormValue"
             @switchForm="switchForm"
             @submitForm="submitForm"
         ></login-card>
@@ -47,9 +46,6 @@ export default {
         },
     },
     methods: {
-        setFormValue(newVal) {
-            return (this.formValue = newVal);
-        },
         switchForm() {
             this.clearError();
             this.formValue.email = "";
