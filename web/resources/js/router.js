@@ -4,7 +4,7 @@ import store from "./store";
 
 // ページコンポーネントをインポートする
 import Setting from "./pages/Setting.vue";
-import Login from "./pages/Login.vue";
+import Login from "./components/Views/Login/Login.vue";
 import Onboarding from "./pages/Onboarding.vue";
 import TodoList from "./components/Views/TodoList/TodoList.vue";
 import TodoDetail from "./components/Views/TodoDetail/TodoDetail.vue";
