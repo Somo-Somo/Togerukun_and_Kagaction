@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import Header from "../components/Header.vue";
+import Header from "../../Common/Parts/Organisms/TodoHeader.vue";
 import SettingMain from "./Templates/SettingMain.vue";
 import { mapGetters } from "vuex";
 
