@@ -3,7 +3,8 @@ import VueRouter from "vue-router";
 import store from "./store";
 
 // ページコンポーネントをインポートする
-import Setting from "./pages/Setting.vue";
+// import Setting from "./pages/Setting.vue";
+import Setting from "./components/Views/Setting/Setting.vue";
 import Login from "./components/Views/Login/Login.vue";
 import Onboarding from "./pages/Onboarding.vue";
 import TodoList from "./components/Views/TodoList/TodoList.vue";
