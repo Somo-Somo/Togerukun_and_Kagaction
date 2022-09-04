@@ -56,13 +56,13 @@ export default {
         }),
     },
     methods: {
-        async logout() {
+        async onClickLogout() {
             await this.$store.dispatch("auth/logout");
             if (this.apiStatus) {
                 this.$router.go({ path: "/login", force: true });
             }
         },
-        contact() {
+        onClickContact() {
             window.open("https://forms.gle/uzKkE8FGqThyWWgD8", "_blank");
         },
     },
