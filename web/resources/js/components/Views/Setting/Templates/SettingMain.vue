@@ -1,7 +1,10 @@
 <template>
     <div>
         <v-row class="d-flex justify-start ma-2">
-            <user-account :user="user"></user-account>
+            <user-account
+                :user="user"
+                :userAccountStyle="userAccountStyle"
+            ></user-account>
         </v-row>
         <setting-rows
             @onClickLogout="onClickLogout"
@@ -22,6 +25,9 @@ export default {
     data: () => ({}),
     props: {
         user: {
+            type: Object,
+        },
+        userAccountStyle: {
             type: Object,
         },
     },

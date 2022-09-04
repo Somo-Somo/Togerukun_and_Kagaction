@@ -1,11 +1,17 @@
 <template>
-    <div>
-        <v-list-item-avatar color="brown" size="36">
-            <span class="white--text text-subtitle-2">{{ initial }}</span>
+    <div class="d-flex">
+        <v-list-item-avatar color="brown" :size="userAccountStyle.avatarSize">
+            <span
+                class="white--text"
+                :class="userAccountStyle.avatarInitialFontSizeClass"
+                >{{ initial }}</span
+            >
         </v-list-item-avatar>
         <v-list-item-content>
-            <v-list-item-title>{{ user.name }}</v-list-item-title>
-            <v-list-item-subtitle style="font-size: 0.75em">
+            <v-list-item-title :class="userAccountStyle.nameFontSizeClass">{{
+                user.name
+            }}</v-list-item-title>
+            <v-list-item-subtitle :class="userAccountStyle.idColorClass">
                 ID: {{ userId }}
             </v-list-item-subtitle>
         </v-list-item-content>
@@ -17,6 +23,9 @@ export default {
     data: () => ({}),
     props: {
         user: {
+            type: Object,
+        },
+        userAccountStyle: {
             type: Object,
         },
     },

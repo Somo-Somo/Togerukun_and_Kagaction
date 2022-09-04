@@ -9,6 +9,7 @@
             :apiStatus="apiStatus"
             :isLogin="isLogin"
             :user="user"
+            :userAccountStyle="userAccountStyle"
             @onClickLogout="onClickLogout"
             @onClickContact="onClickContact"
         ></setting-main>
@@ -26,6 +27,13 @@ export default {
         SettingMain,
     },
     data: () => ({
+        userAccountStyle: {
+            avatarSize: 48,
+            avatarInitialFontSizeClass: "text-subtitle-1",
+            nameFontSizeClass: "text-h5",
+            idFontSizeClass: "",
+            idColorClass: "grey--text",
+        },
         items: [
             {
                 icon: "mdi-email-fast-outline ",
