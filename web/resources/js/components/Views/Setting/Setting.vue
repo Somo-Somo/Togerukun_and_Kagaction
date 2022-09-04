@@ -25,7 +25,21 @@ export default {
         Header,
         SettingMain,
     },
-    data: () => ({}),
+    data: () => ({
+        items: [
+            {
+                icon: "mdi-email-fast-outline ",
+                text: "お問い合わせ",
+                click: "contact",
+            },
+            {
+                icon: "mdi-logout",
+                text: "ログアウト",
+                color: "error--text",
+                click: "logout",
+            },
+        ],
+    }),
     computed: {
         ...mapGetters({
             apiStatus: "auth/apiStatus",
