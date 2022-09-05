@@ -35,9 +35,6 @@
                     <calender-form
                         v-if="stepQuestionAndAnswerIndex + 1 === 3"
                         :date="stepQuestionsAndAnswers[2].answer"
-                        :dateLabel="
-                            stepQuestionsAndAnswers[1].answer + 'の日付'
-                        "
                         @onClickSave="updateDate"
                         @onClickRemove="resetDate"
                     ></calender-form>
@@ -53,7 +50,9 @@
                         :loading="loading"
                         :disabled="!stepQuestionAndAnswer.answer"
                         @click="
-                            step === 3 ? finishedOnboarding() : nextStep(step)
+                            step === 3
+                                ? finishedOnboarding(date)
+                                : nextStep(step)
                         "
                         text
                     >

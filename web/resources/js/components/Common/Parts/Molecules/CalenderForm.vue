@@ -11,7 +11,7 @@
         <template class="d-flex" v-slot:activator="{ on, attrs }">
             <v-text-field
                 class="d-flex align-self-center ma-0 pt-5"
-                v-model="date"
+                v-model="calenderDate"
                 :label="dateLabel"
                 prepend-icon="mdi-calendar"
                 readonly
@@ -20,7 +20,7 @@
             >
             </v-text-field>
         </template>
-        <v-date-picker v-model="date" no-title scrollable>
+        <v-date-picker v-model="calenderDate" no-title scrollable>
             <v-spacer></v-spacer>
             <v-btn @click="calenderMenu = false" text> キャンセル </v-btn>
             <v-btn color="primary" @click="onClickSave(date)" text>
@@ -50,7 +50,16 @@ export default {
             type: String,
         },
     },
-    computed: {},
+    computed: {
+        calenderDate: {
+            get() {
+                return this.date;
+            },
+            set(newVal) {
+                this.$emit("onClickSave", newVal);
+            },
+        },
+    },
     methods: {
         onClickSave(date) {
             this.calenderMenu = false;
