@@ -29,26 +29,7 @@
             </v-list>
             <v-divider class="mx-6" color="#80CBC4"></v-divider>
             <ProjectList />
-            <v-footer color="#80CBC4" class="py-0" absolute>
-                <v-divider color="#80CBC4"></v-divider>
-                <v-sheet
-                    class="d-flex flex-row justify-space-around"
-                    style="height: 72px"
-                    color="#80CBC4"
-                >
-                    <v-list-item-avatar color="brown" size="36">
-                        <span class="white--text text-subtitle-2">{{
-                            initial
-                        }}</span>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                        <v-list-item-title>{{ user.name }}</v-list-item-title>
-                        <v-list-item-subtitle style="font-size: 0.75em">
-                            ID: {{ userId }}
-                        </v-list-item-subtitle>
-                    </v-list-item-content>
-                </v-sheet>
-            </v-footer>
+            <navigation-footer :user="user"></navigation-footer>
         </v-navigation-drawer>
     </div>
 </template>
@@ -56,12 +37,14 @@
 <script>
 import NavigationHeader from "../Parts/Organisms/NavigationHeader.vue";
 import ProjectList from "../components/ProjectList.vue";
+import NavigationFooter from "../Parts/Organisms/NavigationFooter.vue";
 import { mapGetters } from "vuex";
 
 export default {
     components: {
         NavigationHeader,
         ProjectList,
+        NavigationFooter,
     },
     data: () => ({
         items: [
@@ -77,12 +60,6 @@ export default {
             navigation: "navigation/navigation",
             projectList: "project/projectList",
         }),
-        initial() {
-            return this.user.name.charAt(0);
-        },
-        userId() {
-            return this.user.uuid.substr(0, 23);
-        },
     },
     methods: {
         switchNavigation() {
