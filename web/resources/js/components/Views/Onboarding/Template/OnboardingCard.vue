@@ -5,8 +5,9 @@
             <v-divider></v-divider>
             <v-stepper-items>
                 <onboarding-main-content
-                    :step="step"
                     :user="user"
+                    :step="step"
+                    :loading="loading"
                     @nextStep="nextStep"
                     @prevStep="prevStep"
                     @finishedOnboarding="finishedOnboarding"
@@ -33,6 +34,7 @@ export default {
         step: {
             type: Number,
         },
+        loading: { type: Boolean },
     },
     computed: {},
     methods: {
