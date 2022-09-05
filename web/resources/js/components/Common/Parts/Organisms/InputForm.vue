@@ -83,9 +83,6 @@ export default {
         inputForm: {
             type: Boolean,
         },
-        hypotheses: {
-            type: Object,
-        },
         loading: {
             type: Boolean,
         },
