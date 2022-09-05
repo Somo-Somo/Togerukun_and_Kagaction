@@ -12,6 +12,7 @@
             <onboarding-card
                 :user="user"
                 :step="step"
+                :loading="loading"
                 @prevStep="prevStep"
                 @nextStep="nextStep"
                 @finishedOnboarding="finishedOnboarding"
@@ -33,6 +34,7 @@ export default {
     data: () => ({
         step: 1,
         steps: 3,
+        loading: false,
     }),
     computed: {
         ...mapGetters({
@@ -51,6 +53,7 @@ export default {
             return (this.step = stepQuestionAndAnswerNum - 1);
         },
         async finishedOnboarding(stepQuestionsAndAnswers) {
+            this.loading = true;
             await this.$store.dispatch(
                 "onboarding/finishedOnboarding",
                 stepQuestionsAndAnswers
@@ -62,6 +65,7 @@ export default {
             const firstProject = Object.entries(initialize.project)[0][1];
             await this.$store.dispatch("project/selectProject", firstProject);
             this.$router.push("/project/" + firstProject.uuid);
+            this.loading = false;
         },
     },
     watch: {
