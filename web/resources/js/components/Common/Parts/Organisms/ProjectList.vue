@@ -78,7 +78,7 @@ import ProjectListHeader from "../Molecules/ProjectListHeader.vue";
 import ProjectListRow from "../Molecules/ProjectListRow.vue";
 import EllipsisMenu from "../Molecules/EllipsisMenu.vue";
 import InputForm from "../Organisms/InputForm.vue";
-import DeletingConfirmationDialog from "../components/Dialog/DeletingConfirmationDialog.vue";
+import DeletingConfirmationDialog from "../Molecules/DeletingConfirmationDialog.vue";
 import { mapGetters, mapState } from "vuex";
 
 export default {
