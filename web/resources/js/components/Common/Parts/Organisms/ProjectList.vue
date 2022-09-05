@@ -26,17 +26,11 @@
                 <project-list-row
                     :icon="'mdi-folder-outline'"
                     :text="project.name"
+                    :showMenu="showMenu"
+                    :projectListRowIndex="index"
+                    :project="project"
+                    @selectedMenu="selectedMenu"
                 ></project-list-row>
-                <v-list-item-icon
-                    class="align-self-center mx-0"
-                    v-show="showMenu === index"
-                >
-                    <ellipsis-menu
-                        :menus="cardMenus"
-                        :selectCard="project"
-                        @selectedMenu="selectedMenu"
-                    ></ellipsis-menu>
-                </v-list-item-icon>
             </v-list-item>
             <v-list-item
                 v-if="!loading"
@@ -48,6 +42,10 @@
                 <project-list-row
                     :icon="'mdi-plus'"
                     :text="'プロジェクトを追加'"
+                    :showMenu="showMenu"
+                    :projectListRowIndex="null"
+                    :project="null"
+                    @selectedMenu="selectedMenu"
                 ></project-list-row>
             </v-list-item>
         </v-list>
@@ -87,7 +85,6 @@ export default {
         ProjectListRow,
         EllipsisMenu,
         InputForm,
-        Menu,
         DeletingConfirmationDialog,
     },
     data: () => ({
@@ -99,10 +96,6 @@ export default {
             uuid: null,
         },
         showMenu: false,
-        cardMenus: [
-            { title: "編集", color: "color: black" },
-            { title: "削除", color: "color: red" },
-        ],
         submitLoading: false,
     }),
     computed: {

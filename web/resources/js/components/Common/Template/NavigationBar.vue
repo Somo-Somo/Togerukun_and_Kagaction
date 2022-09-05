@@ -28,7 +28,7 @@
                 </v-list-item>
             </v-list>
             <v-divider class="mx-6" color="#80CBC4"></v-divider>
-            <ProjectList />
+            <project-list></project-list>
             <navigation-footer :user="user"></navigation-footer>
         </v-navigation-drawer>
     </div>
@@ -36,7 +36,7 @@
 
 <script>
 import NavigationHeader from "../Parts/Organisms/NavigationHeader.vue";
-import ProjectList from "../components/ProjectList.vue";
+import ProjectList from "../Parts/Organisms/ProjectList.vue";
 import NavigationFooter from "../Parts/Organisms/NavigationFooter.vue";
 import { mapGetters } from "vuex";
 
