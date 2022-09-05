@@ -7,10 +7,12 @@
                 >{{ initial }}</span
             >
         </v-list-item-avatar>
-        <v-list-item-content>
-            <v-list-item-title :class="userAccountStyle.nameFontSizeClass">{{
-                user.name
-            }}</v-list-item-title>
+        <v-list-item-content class="py-0">
+            <v-list-item-title
+                class="ma-0"
+                :class="userAccountStyle.nameFontSizeClass"
+                >{{ user.name }}</v-list-item-title
+            >
             <v-list-item-subtitle :class="userAccountStyle.idColorClass">
                 ID: {{ userId }}
             </v-list-item-subtitle>
@@ -34,7 +36,7 @@ export default {
             return this.user.name.charAt(0);
         },
         userId() {
-            return this.user.uuid.substr(0, 23);
+            return this.user.uuid.substr(0, 21);
         },
     },
     methods: {},
