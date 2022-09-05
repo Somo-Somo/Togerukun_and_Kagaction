@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-row class="d-flex justify-start ma-2">
+        <v-row class="d-flex justify-start ma-2 px-2">
             <user-account
                 :user="user"
                 :userAccountStyle="userAccountStyle"
