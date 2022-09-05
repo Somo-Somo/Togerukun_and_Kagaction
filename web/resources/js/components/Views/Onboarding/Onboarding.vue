@@ -4,10 +4,10 @@
         style="max-width: 960px; height: 100%"
         fluid
     >
-        <Header
+        <todo-header
             :headerTitle="'Kagactionへようこそ'"
             v-if="$vuetify.breakpoint.mdAndUp"
-        />
+        ></todo-header>
         <div class="my-16">
             <v-stepper v-model="step">
                 <v-stepper-header style="width: 100%">
@@ -156,12 +156,12 @@
 </template>
 
 <script>
-import Header from "../components/Header.vue";
+import TodoHeader from "../../Common/Parts/Organisms/TodoHeader.vue";
 import { mapGetters } from "vuex";
 
 export default {
     components: {
-        Header,
+        TodoHeader,
     },
     data: () => ({
         step: 1,
