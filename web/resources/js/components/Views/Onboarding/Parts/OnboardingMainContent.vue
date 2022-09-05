@@ -50,9 +50,7 @@
                         :loading="loading"
                         :disabled="!stepQuestionAndAnswer.answer"
                         @click="
-                            step === 3
-                                ? finishedOnboarding(date)
-                                : nextStep(step)
+                            step === 3 ? finishedOnboarding() : nextStep(step)
                         "
                         text
                     >
@@ -180,7 +178,7 @@ export default {
             this.$emit("prevStep", stepQuestionAndAnswerNum);
         },
         async finishedOnboarding() {
-            this.$emit("finishedOnboarding", this.stepQuestionAndAnswers);
+            this.$emit("finishedOnboarding", this.stepQuestionsAndAnswers);
         },
     },
     watch: {},

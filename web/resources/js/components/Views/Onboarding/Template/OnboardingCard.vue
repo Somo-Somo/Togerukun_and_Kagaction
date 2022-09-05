@@ -44,8 +44,8 @@ export default {
         prevStep(stepQuestionAndAnswerNum) {
             this.$emit("prevStep", stepQuestionAndAnswerNum);
         },
-        async finishedOnboarding(stepQuestionAndAnswers) {
-            this.$emit("finishedOnboarding", stepQuestionAndAnswers);
+        async finishedOnboarding(stepQuestionsAndAnswers) {
+            this.$emit("finishedOnboarding", stepQuestionsAndAnswers);
         },
     },
     watch: {},
