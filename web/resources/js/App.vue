@@ -1,7 +1,9 @@
 <template>
     <v-app id="inspire">
-        <navigation-bar v-if="checkPath && !onboarding"></navigation-bar>
-        <Navbar v-if="checkPath && !onboarding" />
+        <navigation-bar
+            v-if="checkPath && this.$route.path !== '/onboarding'"
+        ></navigation-bar>
+        <Navbar v-if="checkPath && this.$route.path !== '/onboarding'" />
         <v-main :class="$vuetify.breakpoint.mdAndUp ? '' : 'py-0'">
             <RouterView />
         </v-main>
@@ -25,10 +27,14 @@ export default {
             check: "auth/check",
             user: "auth/user",
             errorCode: "error/code",
-            onboarding: "onboarding/onboarding",
         }),
         checkPath() {
             return this.$route.path !== "/login" ? true : false;
+        },
+        onboarding() {
+            if (this.$store.getters["onboarding/onboarding"]) {
+                this.$router.push("/onboarding");
+            }
         },
     },
     watch: {
@@ -39,11 +45,6 @@ export default {
                 this.$router.push("/500");
             } else if (val === NOT_FOUND) {
                 this.$router.push("/not-found");
-            }
-        },
-        onboarding(val, old) {
-            if (val) {
-                this.$router.push("/onboarding");
             }
         },
         $route() {

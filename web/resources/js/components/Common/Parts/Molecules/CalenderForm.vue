@@ -44,7 +44,7 @@ export default {
     }),
     props: {
         date: {
-            type: Date,
+            type: String,
         },
         dateLabel: {
             type: String,

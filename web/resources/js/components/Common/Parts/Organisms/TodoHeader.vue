@@ -7,7 +7,10 @@
         app
     >
         <v-app-bar-nav-icon
-            v-if="(!navigation || !onboarding) && $vuetify.breakpoint.md"
+            v-if="
+                (!navigation || this.$route.path !== '/onboarding') &&
+                $vuetify.breakpoint.md
+            "
             @click="clickHumburgerMenu"
             class="mt-3 hidden-sm-and-down"
         ></v-app-bar-nav-icon>
@@ -146,9 +149,6 @@ export default {
     computed: {
         navigation() {
             return this.$store.getters["navigation/navigation"];
-        },
-        onborading() {
-            return this.$store.getters["onboarding/onboarding"];
         },
     },
     methods: {
