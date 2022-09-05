@@ -23,23 +23,19 @@
                 style="height: 48px"
                 link
             >
-                <v-list-item-icon class="align-self-center mr-6">
-                    <v-icon color="teal lighten-5">mdi-folder-outline</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content class="align-self-center">
-                    <v-list-item-title style="font-size: 0.9em">{{
-                        project.name
-                    }}</v-list-item-title>
-                </v-list-item-content>
+                <project-list-row
+                    :icon="'mdi-folder-outline'"
+                    :text="project.name"
+                ></project-list-row>
                 <v-list-item-icon
                     class="align-self-center mx-0"
                     v-show="showMenu === index"
                 >
-                    <Menu
+                    <ellipsis-menu
                         :menus="cardMenus"
                         :selectCard="project"
                         @selectedMenu="selectedMenu"
-                    />
+                    ></ellipsis-menu>
                 </v-list-item-icon>
             </v-list-item>
             <v-list-item
@@ -49,14 +45,10 @@
                 style="height: 48px"
                 link
             >
-                <v-list-item-icon class="align-self-center mr-6">
-                    <v-icon color="teal lighten-5">mdi-plus</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content class="align-self-center">
-                    <v-list-item-title style="font-size: 0.9em"
-                        >プロジェクト追加</v-list-item-title
-                    >
-                </v-list-item-content>
+                <project-list-row
+                    :icon="'mdi-plus'"
+                    :text="'プロジェクトを追加'"
+                ></project-list-row>
             </v-list-item>
         </v-list>
         <!-- 追加のフォーム -->
@@ -83,14 +75,18 @@
 
 <script>
 import ProjectListHeader from "../Molecules/ProjectListHeader.vue";
+import ProjectListRow from "../Molecules/ProjectListRow.vue";
+import EllipsisMenu from "../Molecules/EllipsisMenu.vue";
 import InputForm from "../components/InputForm.vue";
-import Menu from "../components/Buttons/Menu.vue";
+
 import DeletingConfirmationDialog from "../components/Dialog/DeletingConfirmationDialog.vue";
 import { mapGetters, mapState } from "vuex";
 
 export default {
     components: {
         ProjectListHeader,
+        ProjectListRow,
+        EllipsisMenu,
         InputForm,
         Menu,
         DeletingConfirmationDialog,
