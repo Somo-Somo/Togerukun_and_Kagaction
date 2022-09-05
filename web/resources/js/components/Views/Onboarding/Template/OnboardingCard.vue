@@ -1,25 +1,7 @@
 <template>
     <div class="my-16">
         <v-stepper v-model="step">
-            <v-stepper-header style="width: 100%">
-                <template
-                    class=""
-                    v-for="(stepHeader, stepHeaderIndex) in stepHeaders"
-                >
-                    <v-stepper-step
-                        class="caption font-weight-bold"
-                        :key="`${stepHeaderIndex + 1}-title`"
-                        :complete="stepHeaderIndex + 1 < step"
-                        :step="stepHeaderIndex + 1"
-                    >
-                        {{ stepHeader.title }}
-                    </v-stepper-step>
-                    <v-divider
-                        :key="`${stepHeaderIndex + 1}-divider`"
-                        v-if="stepHeaderIndex + 1 !== 3"
-                    ></v-divider>
-                </template>
-            </v-stepper-header>
+            <onboarding-step-header :step="step"></onboarding-step-header>
             <v-divider></v-divider>
             <v-stepper-items>
                 <template
@@ -145,20 +127,17 @@
 
 <script>
 import TodoHeader from "../../Common/Parts/Organisms/TodoHeader.vue";
+import OnboardingStepHeader from "../Parts/OnboardingStepHeader.vue";
 import { mapGetters } from "vuex";
 
 export default {
     components: {
         TodoHeader,
+        OnboardingStepHeader,
     },
     data: () => ({
         step: 1,
         steps: 3,
-        stepHeaders: [
-            { title: "プロジェクト作成" },
-            { title: "ゴール作成" },
-            { title: "日付の設定" },
-        ],
         stepQuestionsAndAnswers: [
             {
                 question:
