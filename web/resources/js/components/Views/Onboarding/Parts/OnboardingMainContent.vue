@@ -1,66 +1,69 @@
-<template
-    v-for="(
-        stepQuestionAndAnswer, stepQuestionAndAnswerIndex
-    ) in stepQuestionsAndAnswers"
->
-    <v-stepper-content
-        :step="stepQuestionAndAnswerIndex + 1"
-        :key="`${stepQuestionAndAnswerIndex + 1}-content`"
-    >
-        <div>
-            <p class="font-weight-black px-4" style="font-size: 1.75rem">
-                {{ getQuestion(stepQuestionAndAnswer) }}
-            </p>
-            <p
-                class="subtitle-2 #757575--text ma-0 px-4"
-                style="font-weight: 600 !important"
+<template>
+    <div>
+        <template
+            v-for="(
+                stepQuestionAndAnswer, stepQuestionAndAnswerIndex
+            ) in stepQuestionsAndAnswers"
+        >
+            <v-stepper-content
+                :step="stepQuestionAndAnswerIndex + 1"
+                :key="`${stepQuestionAndAnswerIndex + 1}-title`"
             >
-                {{ getAddition(stepQuestionAndAnswer) }}
-            </p>
-            <v-text-field
-                class="pa-4"
-                v-if="step !== 3"
-                v-model="stepQuestionAndAnswer.answer"
-                maxlength="64"
-                counter="64"
-                :hint="stepQuestionAndAnswer.hint"
-                :label="stepQuestionAndAnswer.label"
-                clearable
-            ></v-text-field>
-            <calender-form
-                :date="stepQuestionsAndAnswers[2].answer"
-                :dateLabel="stepQuestionAndAnswers[1].answer + 'の日付'"
-                @onClickSave="updateDate"
-                @onClickRemove="resetDate"
-            ></calender-form>
-        </div>
-        <div class="d-flex">
-            <v-btn
-                text
-                v-if="step !== 1"
-                @click="prevStep(stepQuestionAndAnswerIndex + 1)"
-            >
-                戻る
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-                class="d-flex flex-end"
-                color="primary"
-                :loading="loading"
-                :disabled="!stepQuestionAndAnswer.answer"
-                @click="
-                    step === 3
-                        ? finishedOnboarding()
-                        : nextStep(stepQuestionAndAnswerIndex + 1)
-                "
-                text
-            >
-                {{ step === 3 ? "完了" : "次へ" }}
-            </v-btn>
-        </div>
-    </v-stepper-content>
+                <div>
+                    <p
+                        class="font-weight-black px-4"
+                        style="font-size: 1.75rem"
+                    >
+                        {{ getQuestion(stepQuestionAndAnswer) }}
+                    </p>
+                    <p
+                        class="subtitle-2 #757575--text ma-0 px-4"
+                        style="font-weight: 600 !important"
+                    >
+                        {{ getAddition(stepQuestionAndAnswer) }}
+                    </p>
+                    <v-text-field
+                        class="pa-4"
+                        v-if="step !== 3"
+                        v-model="stepQuestionAndAnswer.answer"
+                        maxlength="64"
+                        counter="64"
+                        :hint="stepQuestionAndAnswer.hint"
+                        :label="stepQuestionAndAnswer.label"
+                        clearable
+                    ></v-text-field>
+                    <calender-form
+                        v-if="stepQuestionAndAnswerIndex + 1 === 3"
+                        :date="stepQuestionsAndAnswers[2].answer"
+                        :dateLabel="
+                            stepQuestionsAndAnswers[1].answer + 'の日付'
+                        "
+                        @onClickSave="updateDate"
+                        @onClickRemove="resetDate"
+                    ></calender-form>
+                </div>
+                <div class="d-flex">
+                    <v-btn text v-if="step !== 1" @click="prevStep(step)">
+                        戻る
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        class="d-flex flex-end"
+                        color="primary"
+                        :loading="loading"
+                        :disabled="!stepQuestionAndAnswer.answer"
+                        @click="
+                            step === 3 ? finishedOnboarding() : nextStep(step)
+                        "
+                        text
+                    >
+                        {{ step === 3 ? "完了" : "次へ" }}
+                    </v-btn>
+                </div>
+            </v-stepper-content>
+        </template>
+    </div>
 </template>
-
 <script>
 import CalenderForm from "../../../Common/Parts/Molecules/CalenderForm.vue";
 
@@ -98,7 +101,6 @@ export default {
                     .substr(0, 10),
             },
         ],
-        loading: false,
     }),
     props: {
         user: {
@@ -119,7 +121,7 @@ export default {
                 } else if (this.step === 2) {
                     return (
                         "「" +
-                        this.stepQuestionsAndAnswer[0].answer +
+                        this.stepQuestionsAndAnswers[0].answer +
                         "」" +
                         stepQuestionAndAnswer.question
                     );
@@ -179,7 +181,6 @@ export default {
             this.$emit("prevStep", stepQuestionAndAnswerNum);
         },
         async finishedOnboarding() {
-            this.loading = true;
             this.$emit("finishedOnboarding", this.stepQuestionAndAnswers);
         },
     },
