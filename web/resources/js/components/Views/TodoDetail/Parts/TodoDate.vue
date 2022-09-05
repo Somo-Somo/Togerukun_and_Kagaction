@@ -8,7 +8,7 @@
         </v-subheader>
         <v-col class="px-md-4 pa-0 d-flex align-self-center">
             <calender-form
-                :todo="todo"
+                :date="todo.date"
                 :dateLabel="null"
                 @onClickSave="onClickSave"
                 @onClickRemove="onClickRemove"

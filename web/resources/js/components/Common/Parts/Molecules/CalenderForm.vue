@@ -11,7 +11,7 @@
         <template class="d-flex" v-slot:activator="{ on, attrs }">
             <v-text-field
                 class="d-flex align-self-center ma-0 pt-5"
-                v-model="todo.date"
+                v-model="date"
                 :label="dateLabel"
                 prepend-icon="mdi-calendar"
                 readonly
@@ -20,10 +20,10 @@
             >
             </v-text-field>
         </template>
-        <v-date-picker v-model="todo.date" no-title scrollable>
+        <v-date-picker v-model="date" no-title scrollable>
             <v-spacer></v-spacer>
             <v-btn @click="calenderMenu = false" text> キャンセル </v-btn>
-            <v-btn color="primary" @click="onClickSave(todo.date)" text>
+            <v-btn color="primary" @click="onClickSave(date)" text>
                 保存
             </v-btn>
         </v-date-picker>
@@ -43,8 +43,8 @@ export default {
         calenderMenu: false,
     }),
     props: {
-        todo: {
-            type: Object,
+        date: {
+            type: Date,
         },
         dateLabel: {
             type: String,

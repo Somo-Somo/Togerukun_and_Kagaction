@@ -18,7 +18,7 @@
                     clearable
                 ></v-text-field>
                 <calender-form
-                    :todo="(todo = { name: name, date: date })"
+                    :date="date"
                     :dateLabel="text + 'の日付'"
                     v-if="step === 2"
                     @onClickSave="updateDate"
