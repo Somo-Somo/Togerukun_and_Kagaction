@@ -3,9 +3,7 @@
         <v-text-field
             v-model="formValue.name"
             v-if="!isLoginForm"
-            :error-messages="
-                errorMessages.register ? errorMessages.register.name : null
-            "
+            :error-messages="errorMessagesName()"
             autofocus
             dense
             height="48px"
@@ -72,6 +70,15 @@ export default {
         },
     },
     computed: {
+        errorMessagesName() {
+            return () => {
+                return this.loginAndRegisterOfErrorMessages.register
+                    ? this.getNameErrorMessage(
+                          this.loginAndRegisterOfErrorMessages.register
+                      )
+                    : null;
+            };
+        },
         errorMessagesEmail() {
             return () => {
                 const errorMessages = this.errorMessages();
@@ -94,6 +101,11 @@ export default {
             return this.isLoginForm
                 ? this.loginAndRegisterOfErrorMessages.login
                 : this.loginAndRegisterOfErrorMessages.register;
+        },
+        getNameErrorMessage(errorMessages) {
+            return errorMessages["name"] !== undefined
+                ? errorMessages["name"][0]
+                : null;
         },
         getEmailErrorMassage(errorMessages) {
             return errorMessages["email"] !== undefined
