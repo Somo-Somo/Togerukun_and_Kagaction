@@ -39,15 +39,8 @@ export default {
     computed: {
         ...mapGetters({
             user: "auth/user",
+            onboarding: "onboarding/onboarding",
         }),
-        doneOnboarding() {
-            if (
-                !this.$store.getters["onboarding/onboarding"] &&
-                !this.loading
-            ) {
-                this.$router.push("/schedule");
-            }
-        },
     },
     methods: {
         nextStep(stepQuestionAndAnswerNum) {
@@ -75,7 +68,15 @@ export default {
             this.loading = false;
         },
     },
-    watch: {},
+    watch: {
+        onboarding(val, old) {
+            // オンボーディング完了後のプロジェクト移動前にこのwatchが発動してしまうので
+            // ローディング中は予定に遷移しないようにする
+            if (!val && !this.loading) {
+                this.$router.push("/schedule");
+            }
+        },
+    },
 };
 </script>
 <style scoped lang="sass"></style>

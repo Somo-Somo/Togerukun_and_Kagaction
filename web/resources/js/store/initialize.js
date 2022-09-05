@@ -31,7 +31,11 @@ const actions = {
             context.commit("schedule/setScheduleList", response.data.schedule, {
                 root: true,
             });
-            // context.commit ('onboarding/setOnboarding', response.data.onboarding, { root: true });
+            context.commit(
+                "onboarding/setOnboarding",
+                response.data.onboarding,
+                { root: true }
+            );
             context.commit("finishedLoading");
             if (route.name === "todoList") {
                 const projectUuid = route.params.id;
