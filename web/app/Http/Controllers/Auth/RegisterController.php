@@ -37,7 +37,6 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
-
         // ユーザー作成後UserRepositoryを通してNeo4jに保存
         $create_user = $this->user_repository->register($user);
 

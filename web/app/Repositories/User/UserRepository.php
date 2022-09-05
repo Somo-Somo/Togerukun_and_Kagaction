@@ -17,10 +17,10 @@ class UserRepository implements UserRepositoryInterface
     /**
      * ユーザーの情報をDBに登録
      *
-     * @param array $user
+     * @param object $user
      * @return $create_user
      */
-    public function register(array $user)
+    public function register(object $user)
     {
         $create_user = $this->client->run(
             <<<'CYPHER'
