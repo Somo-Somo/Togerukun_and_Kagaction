@@ -3,20 +3,6 @@
         <project-list-header
             @onClickCreate="onClickCreate"
         ></project-list-header>
-        <div class="d-flex justify-space-between px-2">
-            <v-subheader
-                class="d-flex align-self-center"
-                style="font-size: 0.825em; height: 32px"
-                >プロジェクト
-            </v-subheader>
-            <v-icon
-                class="hidden-sm-and-down pr-2"
-                size="18"
-                height="18"
-                @click="onClickCreate"
-                >mdi-plus-circle</v-icon
-            >
-        </div>
         <v-progress-circular
             class="d-flex mx-auto my-8"
             v-if="loading"
