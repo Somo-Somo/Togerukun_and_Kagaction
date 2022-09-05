@@ -2,7 +2,7 @@
     <v-footer color="#80CBC4" class="py-0" absolute>
         <v-divider color="#80CBC4"></v-divider>
         <v-sheet
-            class="d-flex flex-row justify-space-around"
+            class="d-flex flex-row justify-space-around my-auto"
             style="height: 72px"
             color="#80CBC4"
         >
@@ -25,8 +25,8 @@ export default {
         userAccountStyle: {
             avatarSize: 36,
             avatarInitialFontSizeClass: "text-subtitle-2",
-            nameFontSizeClass: "text-h6",
-            idFontSizeClass: "",
+            nameFontSizeClass: "text-subtitle-1",
+            idFontSizeClass: "text-caption",
             idColorClass: "",
         },
     }),
