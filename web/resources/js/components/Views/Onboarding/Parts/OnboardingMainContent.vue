@@ -28,8 +28,8 @@
                 clearable
             ></v-text-field>
             <calender-form
-                :date="date"
-                :dateLabel="stepQuestionAndAnswers[2].answer + 'の日付'"
+                :date="stepQuestionsAndAnswers[2].answer"
+                :dateLabel="stepQuestionAndAnswers[1].answer + 'の日付'"
                 @onClickSave="updateDate"
                 @onClickRemove="resetDate"
             ></calender-form>
@@ -44,25 +44,18 @@
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn
-                v-if="step !== 3"
                 class="d-flex flex-end"
                 color="primary"
-                @click="nextStep(stepQuestionAndAnswerIndex + 1)"
-                :disabled="!stepQuestionAndAnswer.answer"
-                text
-            >
-                次へ
-            </v-btn>
-            <v-btn
-                v-if="step === 3"
-                class="d-flex flex-end"
-                color="primary"
-                @click="finishedOnboarding()"
                 :loading="loading"
                 :disabled="!stepQuestionAndAnswer.answer"
+                @click="
+                    step === 3
+                        ? finishedOnboarding()
+                        : nextStep(stepQuestionAndAnswerIndex + 1)
+                "
                 text
             >
-                完了
+                {{ step === 3 ? "完了" : "次へ" }}
             </v-btn>
         </div>
     </v-stepper-content>
@@ -76,7 +69,6 @@ export default {
         CalenderForm,
     },
     data: () => ({
-        steps: 3,
         stepQuestionsAndAnswers: [
             {
                 question:
@@ -106,9 +98,6 @@ export default {
                     .substr(0, 10),
             },
         ],
-        date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-            .toISOString()
-            .substr(0, 10),
         loading: false,
     }),
     props: {
@@ -169,39 +158,27 @@ export default {
     },
     methods: {
         updateDate(date) {
-            this.date = date;
+            this.stepQuestionsAndAnswers[2].answer = date;
         },
         resetDate() {
-            this.date = new Date(
+            this.stepQuestionsAndAnswers[2].answer = new Date(
                 Date.now() - new Date().getTimezoneOffset() * 60000
             )
                 .toISOString()
                 .substr(0, 10);
         },
         nextStep(stepQuestionAndAnswerNum) {
-            return (this.step =
-                stepQuestionAndAnswerNum === this.steps
-                    ? 1
-                    : stepQuestionAndAnswerNum + 1);
+            this.$emit("nextStep", stepQuestionAndAnswerNum);
         },
         prevStep(stepQuestionAndAnswerNum) {
             if (stepQuestionAndAnswerNum === 2) {
-                this.stepQuestionsAndAnswers[
-                    stepQuestionAndAnswerNum - 1
-                ].answer = null;
+                this.stepQuestionsAndAnswers[1].answer = null;
             } else if (stepQuestionAndAnswerNum === 3) {
-                this.stepQuestionsAndAnswers[
-                    stepQuestionAndAnswerNum - 1
-                ].answer = new Date(
-                    Date.now() - new Date().getTimezoneOffset() * 60000
-                )
-                    .toISOString()
-                    .substr(0, 10);
+                this.resetDate();
             }
-            return (this.step = stepQuestionAndAnswerNum - 1);
+            this.$emit("prevStep", stepQuestionAndAnswerNum);
         },
         async finishedOnboarding() {
-            this.stepQuestionsAndAnswers[2].answer = this.date;
             this.loading = true;
             this.$emit("finishedOnboarding", this.stepQuestionAndAnswers);
         },
