@@ -6,33 +6,10 @@
             app
             hide-overlay
         >
-            <v-app-bar
-                class="d-flex px-0 py-0 mt-2"
-                color="#80CBC4"
-                style="height: 72px"
-                elevation="0"
-                absolute
-            >
-                <v-hover v-slot="{ hover }">
-                    <div
-                        class="d-flex justify-space-between"
-                        style="width: 222px"
-                    >
-                        <img
-                            :src="'/img/Kagaction_logo_app.png'"
-                            alt="アプリロゴ"
-                        />
-                        <v-icon
-                            class="my-6"
-                            style="height: 24px"
-                            :class="{ 'show-btn': hover }"
-                            :color="transparent"
-                            @click="clickChevronDoubleLeft"
-                            >mdi-chevron-double-left</v-icon
-                        >
-                    </div>
-                </v-hover>
-            </v-app-bar>
+            <navigation-header
+                :transparent="transparent"
+                @onClickChevronDoubleLeft="switchNavigation"
+            ></navigation-header>
             <v-list class="pb-4" style="padding-top: 72px">
                 <v-list-item
                     v-for="item in items"
@@ -77,11 +54,13 @@
 </template>
 
 <script>
+import NavigationHeader from "../Parts/Organisms/NavigationHeader.vue";
 import ProjectList from "../components/ProjectList.vue";
 import { mapGetters } from "vuex";
 
 export default {
     components: {
+        NavigationHeader,
         ProjectList,
     },
     data: () => ({
@@ -106,7 +85,7 @@ export default {
         },
     },
     methods: {
-        clickChevronDoubleLeft() {
+        switchNavigation() {
             this.$store.dispatch("navigation/changeNavState");
         },
         async fromItem(item) {
