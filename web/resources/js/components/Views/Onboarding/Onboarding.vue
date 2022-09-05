@@ -10,6 +10,7 @@
         ></todo-header>
         <div class="my-16">
             <onboarding-card
+                :user="user"
                 :step="step"
                 @prevStep="prevStep"
                 @nextStep="nextStep"

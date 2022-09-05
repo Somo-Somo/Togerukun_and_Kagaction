@@ -17,18 +17,19 @@
 </template>
 
 <script>
-import TodoHeader from "../../Common/Parts/Organisms/TodoHeader.vue";
 import OnboardingStepHeader from "../Parts/OnboardingStepHeader.vue";
 import OnboardingMainContent from "../Parts/OnboardingMainContent.vue";
 
 export default {
     components: {
-        TodoHeader,
         OnboardingStepHeader,
         OnboardingMainContent,
     },
     data: () => ({}),
     props: {
+        user: {
+            type: Object,
+        },
         step: {
             type: Number,
         },
