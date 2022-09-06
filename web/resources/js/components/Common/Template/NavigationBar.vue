@@ -1,11 +1,6 @@
 <template>
     <div class="hidden-sm-and-down" style="width: 256px">
-        <v-navigation-drawer
-            color="#80CBC4"
-            v-model="navigation"
-            app
-            hide-overlay
-        >
+        <v-navigation-drawer color="#80CBC4" app hide-overlay>
             <navigation-header
                 :transparent="transparent"
                 @onClickChevronDoubleLeft="switchNavigation"
