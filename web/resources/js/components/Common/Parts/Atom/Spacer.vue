@@ -1,11 +1,11 @@
 <template>
-    <v-spacer style="style"></v-spacer>
+    <v-spacer :style="heightAndWidth"></v-spacer>
 </template>
 
 <script>
 export default {
     props: {
-        style: {
+        heightAndWidth: {
             type: String,
         },
     },
