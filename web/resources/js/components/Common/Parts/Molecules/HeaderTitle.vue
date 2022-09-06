@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex align-self-center">
         <h1
-            v-if="todo.depth > 1"
+            v-if="todo"
             :style="
                 $vuetify.breakpoint.mdAndUp
                     ? 'font-size: 18px'
