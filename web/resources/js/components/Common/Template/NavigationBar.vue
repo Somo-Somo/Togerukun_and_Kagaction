@@ -53,17 +53,21 @@ export default {
         ],
         transparent: "rgba(128, 128, 128, 0.3)",
     }),
+    props: {
+        navigation: {
+            type: Boolean,
+        },
+    },
     computed: {
         ...mapGetters({
             loading: "initialize/loading",
             user: "auth/user",
-            navigation: "navigation/navigation",
             projectList: "project/projectList",
         }),
     },
     methods: {
         switchNavigation() {
-            this.$store.dispatch("navigation/changeNavState");
+            this.$emit("switchNavigation");
         },
         async fromItem(item) {
             return this.$router.push({ path: item.url });

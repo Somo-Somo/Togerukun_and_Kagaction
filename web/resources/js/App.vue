@@ -1,7 +1,9 @@
 <template>
     <v-app id="inspire">
         <navigation-bar
-            v-if="checkPath && this.$route.path !== '/onboarding'"
+            v-if="navigation && checkPath && this.$route.path !== '/onboarding'"
+            :navigation="navigation"
+            @switchNavigation="navigation = !navigation"
         ></navigation-bar>
         <v-main :class="$vuetify.breakpoint.mdAndUp ? '' : 'py-0'">
             <RouterView />
