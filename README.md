@@ -18,8 +18,9 @@
 - Vue.js@2.6.14
 - Vuetify@2.6.3
 - PostgreSQL 13.7
-- Neo4j Aura ver.4
+- Neo4j DB Aura ver.4
 - Docker/Docker-compose
+- nginx 3.9
 
 ## 機能一覧
 
