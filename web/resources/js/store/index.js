@@ -8,7 +8,6 @@ import onboarding from "./onboarding";
 import project from "./project";
 import todo from "./todo";
 import initialize from "./initialize";
-import navigation from "./navigation";
 
 Vue.use(Vuex);
 
@@ -21,7 +20,6 @@ const store = new Vuex.Store({
         project,
         todo,
         initialize,
-        navigation,
     },
 });
 
