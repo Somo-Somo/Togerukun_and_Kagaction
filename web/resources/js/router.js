@@ -11,8 +11,8 @@ import Onboarding from "./components/Views/Onboarding/Onboarding.vue";
 import TodoList from "./components/Views/TodoList/TodoList.vue";
 import TodoDetail from "./components/Views/TodoDetail/TodoDetail.vue";
 import Schedule from "./components/Views/Schedule/Schedule.vue";
-import SystemError from "./pages/errors/System.vue";
-import NotFound from "./pages/errors/NotFound.vue";
+import SystemError from "./components/Views/Error/SystemError.vue";
+import NotFound from "./components/Views/Error/NotFound.vue";
 
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
