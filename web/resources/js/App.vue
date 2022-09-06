@@ -22,6 +22,9 @@ export default {
         NavigationBar,
         Footer,
     },
+    data: () => ({
+        navigation: true,
+    }),
     computed: {
         ...mapGetters({
             check: "auth/check",
