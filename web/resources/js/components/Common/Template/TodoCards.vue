@@ -53,7 +53,7 @@
 
 <script>
 import TodoCard from "../Parts/Organisms/TodoCard.vue";
-import DeletingConfirmationDialog from "../../Dialog/DeletingConfirmationDialog.vue";
+import DeletingConfirmationDialog from "../Parts/Molecules/DeletingConfirmationDialog.vue";
 
 export default {
     components: {
