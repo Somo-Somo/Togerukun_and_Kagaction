@@ -5,8 +5,10 @@
         fluid
     >
         <main-header
-            :headerTitle="'設定'"
             v-if="$vuetify.breakpoint.mdAndUp"
+            :headerTitle="'設定'"
+            :navigation="navigation"
+            @clickHumburgerMenu="clickHumburgerMenu"
         ></main-header>
         <setting-main
             :apiStatus="apiStatus"
@@ -51,6 +53,11 @@ export default {
             },
         ],
     }),
+    props: {
+        navigation: {
+            type: Boolean,
+        },
+    },
     computed: {
         ...mapGetters({
             apiStatus: "auth/apiStatus",
@@ -59,6 +66,9 @@ export default {
         }),
     },
     methods: {
+        clickHumburgerMenu() {
+            this.$emit("switchNavigation");
+        },
         async onClickLogout() {
             await this.$store.dispatch("auth/logout");
             if (this.apiStatus) {

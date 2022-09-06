@@ -1,27 +1,31 @@
 <template>
     <v-app id="inspire">
         <navigation-bar
-            v-if="checkPath && this.$route.path !== '/onboarding'"
+            v-if="navigation && checkPath && this.$route.path !== '/onboarding'"
+            :navigation="navigation"
+            @switchNavigation="navigation = !navigation"
         ></navigation-bar>
-        <Navbar v-if="checkPath && this.$route.path !== '/onboarding'" />
         <v-main :class="$vuetify.breakpoint.mdAndUp ? '' : 'py-0'">
-            <RouterView />
+            <RouterView
+                :navigation="navigation"
+                @switchNavigation="navigation = !navigation"
+            />
         </v-main>
-        <Footer v-if="checkPath" />
     </v-app>
 </template>
 
 <script>
 import NavigationBar from "./components/Common/Template/NavigationBar.vue";
-import Footer from "./components/Footer.vue";
 import { NOT_FOUND, INTERNAL_SERVER_ERROR, UNAUTHORIZED } from "./util";
 import { mapGetters } from "vuex";
 
 export default {
     components: {
         NavigationBar,
-        Footer,
     },
+    data: () => ({
+        navigation: true,
+    }),
     computed: {
         ...mapGetters({
             check: "auth/check",

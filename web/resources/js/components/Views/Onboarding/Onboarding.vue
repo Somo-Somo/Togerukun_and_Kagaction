@@ -5,8 +5,8 @@
         fluid
     >
         <main-header
-            :headerTitle="'Kagactionへようこそ'"
             v-if="$vuetify.breakpoint.mdAndUp"
+            :headerTitle="'Kagactionへようこそ'"
         ></main-header>
         <div class="my-16">
             <onboarding-card
