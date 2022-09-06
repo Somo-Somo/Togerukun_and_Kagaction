@@ -4,7 +4,11 @@
         style="max-width: 900px"
         fluid
     >
-        <main-header :headerTitle="'予定'"></main-header>
+        <main-header
+            :headerTitle="'予定'"
+            :navigation="navigation"
+            @clickHumburgerMenu="clickHumburgerMenu"
+        ></main-header>
         <template>
             <div
                 class="d-flex justify-space-between"
@@ -64,6 +68,11 @@ export default {
             { name: "期限切れ", show: false },
         ],
     }),
+    props: {
+        navigation: {
+            type: Boolean,
+        },
+    },
     computed: {
         ...mapGetters({
             loading: "initialize/loading",
@@ -76,6 +85,9 @@ export default {
         },
     },
     methods: {
+        clickHumburgerMenu() {
+            this.$emit("switchNavigation");
+        },
         convertSchduleList() {
             const todosHasDate = this.expandProjectList();
             const scheduleList = this.sortTodoListByDate(todosHasDate);

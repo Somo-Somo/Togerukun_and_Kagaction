@@ -8,6 +8,8 @@
             :project="project"
             :todo="todo"
             :parentTodo="parentTodo"
+            :navigation="navigation"
+            @clickHumburgerMenu="clickHumburgerMenu"
         ></main-header>
         <template>
             <div
@@ -70,6 +72,11 @@ export default {
         form: false,
         date: null,
     }),
+    props: {
+        navigation: {
+            type: Boolean,
+        },
+    },
     computed: {
         ...mapState({
             apiStatus: (state) => state.auth.apiStatus,
@@ -96,6 +103,9 @@ export default {
         },
     },
     methods: {
+        clickHumburgerMenu() {
+            this.$emit("switchNavigation");
+        },
         setTab(newVal) {
             return (this.tab = newVal);
         },

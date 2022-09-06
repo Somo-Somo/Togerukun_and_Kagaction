@@ -63,6 +63,9 @@ export default {
         HeaderTitle,
     },
     props: {
+        navigation: {
+            type: Boolean,
+        },
         headerTitle: {
             type: String,
         },
@@ -83,7 +86,7 @@ export default {
     },
     methods: {
         clickHumburgerMenu() {
-            this.$store.dispatch("navigation/changeNavState");
+            this.$emit("clickHumburgerMenu");
         },
         async onClickHeaderTitle(key, value) {
             if (this.$route.params.id !== value.uuid) {

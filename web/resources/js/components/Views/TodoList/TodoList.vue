@@ -1,6 +1,10 @@
 <template>
     <div>
-        <main-header :project="project"></main-header>
+        <main-header
+            :project="project"
+            :navigation="navigation"
+            @clickHumburgerMenu="clickHumburgerMenu"
+        ></main-header>
         <v-container class="d-flex flex-column py-0 px-16" fluid>
             <div
                 class="d-flex justify-space-between"
@@ -98,6 +102,11 @@ export default {
         form: false,
         category: "ToDo",
     }),
+    props: {
+        navigation: {
+            type: Boolean,
+        },
+    },
     computed: {
         ...mapState({
             apiStatus: (state) => state.auth.apiStatus,
@@ -113,6 +122,9 @@ export default {
         },
     },
     methods: {
+        clickHumburgerMenu() {
+            this.$emit("switchNavigation");
+        },
         setTab(newVal) {
             return (this.tab = newVal);
         },

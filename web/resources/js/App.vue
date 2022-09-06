@@ -6,7 +6,10 @@
             @switchNavigation="navigation = !navigation"
         ></navigation-bar>
         <v-main :class="$vuetify.breakpoint.mdAndUp ? '' : 'py-0'">
-            <RouterView />
+            <RouterView
+                :navigation="navigation"
+                @switchNavigation="navigation = !navigation"
+            />
         </v-main>
     </v-app>
 </template>
