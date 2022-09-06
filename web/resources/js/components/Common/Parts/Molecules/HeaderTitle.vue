@@ -32,9 +32,6 @@ export default {
         title: {
             type: String,
         },
-        project: {
-            type: Object,
-        },
         todo: {
             type: Object,
         },
