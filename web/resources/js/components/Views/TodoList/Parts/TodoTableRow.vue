@@ -16,7 +16,7 @@
                 <div class="d-flex">
                     <component
                         :is="currentComponent(num)"
-                        :style="'width:50px; height:88px;'"
+                        :heightAndWidth="'width:50px; height:88px;'"
                     ></component>
                 </div>
             </v-list-item-content>
@@ -36,8 +36,7 @@
                 </v-list-item-action>
                 <div class="d-flex mx-auto" v-if="todo.child" height="32">
                     <lower-half-dashed-line
-                        :height="28"
-                        :width="24"
+                        :heightAndWidth="'width:24px; height:28px;'"
                     ></lower-half-dashed-line>
                 </div>
             </div>
