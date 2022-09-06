@@ -6,7 +6,7 @@
 - 何のために行うのか可視化することができます。
 - 日付を用いて Todo が実行できたか確認を行い、目標が達成するための行動を仮説検証することができます。
 
-![Kagaction Sample](https://gyazo.com/b9960a606a5d54fdea443b49fb69a015)
+![b9960a606a5d54fdea443b49fb69a015](https://user-images.githubusercontent.com/98217749/188604493-bda9306e-2cf5-49e4-b740-26611669e566.jpg)
 
 ## URL
 
