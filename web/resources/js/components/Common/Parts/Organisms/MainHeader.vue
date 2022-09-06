@@ -15,29 +15,42 @@
             class="mt-3 hidden-sm-and-down"
         ></v-app-bar-nav-icon>
         <v-toolbar-title class="d-flex justify-start mt-3 px-0 ml-md-2">
-            <header-title v-if="!project" :title="headerTitle"></header-title>
-            <header-title
-                v-if="project"
-                :title="project.name"
-                @onClickHeaderTitle="onClickHeaderTitle('project', project)"
-            ></header-title>
-            <header-title
-                v-if="todo.depth > 1"
-                :title="'...'"
-                :todo="todo"
-            ></header-title>
-            <header-title
-                v-if="parentTodo"
-                :title="parentTodo.name"
-                :todo="todo"
-                @onClickHeaderTitle="onClickHeaderTitle('todo', parentTodo)"
-            ></header-title>
-            <header-title
-                v-if="todo"
-                :title="todo.name"
-                :todo="todo"
-                @onClickHeaderTitle="onClickHeaderTitle('todo', todo)"
-            ></header-title>
+            <div class="d-flex">
+                <header-title
+                    v-if="!project"
+                    :title="headerTitle"
+                ></header-title>
+            </div>
+            <div class="d-flex">
+                <header-title
+                    v-if="project"
+                    :title="project.name"
+                    @onClickHeaderTitle="onClickHeaderTitle('project', project)"
+                ></header-title>
+            </div>
+            <div v-if="todo" class="d-flex">
+                <header-title
+                    v-if="todo['depth'] > 1"
+                    :title="'. . .'"
+                    :todo="todo"
+                ></header-title>
+            </div>
+            <div class="d-flex">
+                <header-title
+                    v-if="parentTodo"
+                    :title="parentTodo.name"
+                    :todo="todo"
+                    @onClickHeaderTitle="onClickHeaderTitle('todo', parentTodo)"
+                ></header-title>
+            </div>
+            <div class="d-flex">
+                <header-title
+                    v-if="todo"
+                    :title="todo.name"
+                    :todo="todo"
+                    @onClickHeaderTitle="onClickHeaderTitle('todo', todo)"
+                ></header-title>
+            </div>
         </v-toolbar-title>
     </v-app-bar>
 </template>
