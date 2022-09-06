@@ -1,6 +1,6 @@
 <template>
     <div>
-        <TodoHeader :project="project" />
+        <main-header :project="project"></main-header>
         <v-container class="d-flex flex-column py-0 px-16" fluid>
             <div
                 class="d-flex justify-space-between"
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import TodoHeader from "../../Common/Parts/Organisms/TodoHeader.vue";
+import MainHeader from "../../Common/Parts/Organisms/MainHeader.vue";
 import Tab from "../../Common/Parts/Molecules/Tab.vue";
 import TodoTreeTable from "./Templates/TodoTreeTable.vue";
 import TodoCards from "../../Common/Template/TodoCards.vue";
@@ -80,7 +80,7 @@ import { mapGetters, mapState } from "vuex";
 
 export default {
     components: {
-        TodoHeader,
+        MainHeader,
         Tab,
         TodoTreeTable,
         TodoCards,

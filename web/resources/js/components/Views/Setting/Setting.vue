@@ -4,7 +4,10 @@
         style="max-width: 900px"
         fluid
     >
-        <Header :headerTitle="'設定'" v-if="$vuetify.breakpoint.mdAndUp" />
+        <main-header
+            :headerTitle="'設定'"
+            v-if="$vuetify.breakpoint.mdAndUp"
+        ></main-header>
         <setting-main
             :apiStatus="apiStatus"
             :isLogin="isLogin"
@@ -17,13 +20,13 @@
 </template>
 
 <script>
-import Header from "../../Common/Parts/Organisms/TodoHeader.vue";
+import MainHeader from "../../Common/Parts/Organisms/MainHeader.vue";
 import SettingMain from "./Templates/SettingMain.vue";
 import { mapGetters } from "vuex";
 
 export default {
     components: {
-        Header,
+        MainHeader,
         SettingMain,
     },
     data: () => ({
