@@ -7,12 +7,9 @@
         app
     >
         <v-app-bar-nav-icon
-            v-if="
-                (!navigation || this.$route.path !== '/onboarding') &&
-                $vuetify.breakpoint.md
-            "
-            @click="clickHumburgerMenu"
+            v-if="!navigation && this.$route.path !== '/onboarding'"
             class="mt-3 hidden-sm-and-down"
+            @click="clickHumburgerMenu"
         ></v-app-bar-nav-icon>
         <v-toolbar-title class="d-flex justify-start mt-3 px-0 ml-md-2">
             <div class="d-flex">
@@ -79,11 +76,7 @@ export default {
             type: Object,
         },
     },
-    computed: {
-        navigation() {
-            return this.$store.getters["navigation/navigation"];
-        },
-    },
+    computed: {},
     methods: {
         clickHumburgerMenu() {
             this.$emit("clickHumburgerMenu");
