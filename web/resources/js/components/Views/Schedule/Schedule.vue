@@ -4,7 +4,7 @@
         style="max-width: 900px"
         fluid
     >
-        <todo-header :headerTitle="'予定'"></todo-header>
+        <main-header :headerTitle="'予定'"></main-header>
         <template>
             <div
                 class="d-flex justify-space-between"
@@ -43,14 +43,14 @@
 </template>
 
 <script>
-import TodoHeader from "../../Common/Parts/Organisms/TodoHeader.vue";
+import MainHeader from "../../Common/Parts/Organisms/MainHeader.vue";
 import Tab from "../../Common/Parts/Molecules/Tab.vue";
 import ScheduleCards from "./Parts/ScheduleCards.vue";
 import { mapGetters } from "vuex";
 
 export default {
     components: {
-        TodoHeader,
+        MainHeader,
         Tab,
         ScheduleCards,
     },

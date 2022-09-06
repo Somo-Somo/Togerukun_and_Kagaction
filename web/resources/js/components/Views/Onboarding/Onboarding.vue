@@ -4,10 +4,10 @@
         style="max-width: 960px; height: 100%"
         fluid
     >
-        <todo-header
+        <main-header
             :headerTitle="'Kagactionへようこそ'"
             v-if="$vuetify.breakpoint.mdAndUp"
-        ></todo-header>
+        ></main-header>
         <div class="my-16">
             <onboarding-card
                 :user="user"
@@ -22,13 +22,13 @@
 </template>
 
 <script>
-import TodoHeader from "../../Common/Parts/Organisms/TodoHeader.vue";
+import MainHeader from "../../Common/Parts/Organisms/MainHeader.vue";
 import OnboardingCard from "./Template/OnboardingCard.vue";
 import { mapGetters } from "vuex";
 
 export default {
     components: {
-        TodoHeader,
+        MainHeader,
         OnboardingCard,
     },
     data: () => ({

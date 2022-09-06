@@ -4,11 +4,11 @@
         :style="$vuetify.breakpoint.mdAndUp ? 'max-width: 900px' : ''"
         fluid
     >
-        <todo-header
+        <main-header
             :project="project"
             :todo="todo"
             :parentTodo="parentTodo"
-        ></todo-header>
+        ></main-header>
         <template>
             <div
                 class="d-flex flex-column"
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import TodoHeader from "../../Common/Parts/Organisms/TodoHeader.vue";
+import MainHeader from "../../Common/Parts/Organisms/MainHeader.vue";
 import TodoState from "./Templates/TodoState.vue";
 import InfoAssociateTodo from "./Templates/InfoAssociateTodo.vue";
 import InputForm from "../../Common/Parts/Organisms/InputForm.vue";
@@ -54,7 +54,7 @@ import { mapGetters, mapState } from "vuex";
 
 export default {
     components: {
-        TodoHeader,
+        MainHeader,
         TodoState,
         InfoAssociateTodo,
         InputForm,
