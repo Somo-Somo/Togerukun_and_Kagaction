@@ -11,6 +11,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CauseController;
 use App\Http\Controllers\Initialize;
 use App\Http\Controllers\Onboarding;
+use App\Http\Controllers\Api\LineBotController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -72,3 +73,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // オンボーディング
     Route::post('/onboarding', Onboarding::class);
 });
+
+// LINE Bot
+Route::post('/line-bot/reply', [LineBotController::class, 'reply']);
