@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\LineBotService;
+use Illuminate\Support\Facades\Log;
 
 class LineBotController extends Controller
 {
@@ -38,7 +39,7 @@ class LineBotController extends Controller
         $param_str
         __EOM__;
 
-        \Log::debug($log_message);
+        Log::debug($log_message);
 
         $status_code = $this->line_bot_service->eventHandler($request);
 
