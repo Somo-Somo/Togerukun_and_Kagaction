@@ -14,6 +14,9 @@ use App\Http\Controllers\Onboarding;
 use App\Http\Controllers\Api\LineBotController;
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use LINE\LINEBot\HTTPClient\CurlHTTPClient;
+use LINE\LINEBot;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +29,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// LINE Bot
+// Route::post('/line-bot/reply', [LineBotController::class, 'reply']);
+$httpClient = new CurlHTTPClient($_ENV['LINE_CHANNEL_ACCESS_TOKEN']);
+$bot = new LINEBot($httpClient, ['channelSecret' => $_ENV['LINE_CHANNEL_SECRET']]);
+
+Route::post('/webhook', function (Request $request) use ($bot) {
+    $request->collect('events')->each(function ($event) use ($bot) {
+        $bot->replyText($event['replyToken'], $event['message']['text']);
+    });
+    return 'ok!';
+});
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
@@ -73,6 +87,3 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // オンボーディング
     Route::post('/onboarding', Onboarding::class);
 });
-
-// LINE Bot
-Route::post('/line-bot/reply', [LineBotController::class, 'reply']);
