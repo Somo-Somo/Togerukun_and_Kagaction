@@ -41,7 +41,7 @@ export default {
             type: String,
         },
         showMenu: {
-            type: [Boolean, Number],
+            type: [Boolean, String],
         },
         projectListRowIndex: {
             type: [Boolean, Number, String],

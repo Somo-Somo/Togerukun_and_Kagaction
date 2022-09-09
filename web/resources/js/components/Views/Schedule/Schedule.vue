@@ -81,7 +81,10 @@ export default {
             allTodoList: "todo/allTodoList",
         }),
         scheduleList() {
-            return this.convertSchduleList();
+            if (this.allTodoList) {
+                return this.convertSchduleList();
+            }
+            return null;
         },
     },
     methods: {
