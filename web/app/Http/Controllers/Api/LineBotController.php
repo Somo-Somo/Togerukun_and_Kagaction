@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Services\LineBotService;
-use App\Usecases\Line\HasRegister;
+use App\Usecases\Line\LineUserRegister;
+use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 
@@ -29,11 +29,17 @@ class LineBotController extends Controller
      */
     protected $bot;
 
-    public function __construct()
+    /**
+     * @param App\Repositories\User\UserRepositoryInterface
+     */
+    protected $user_repository;
+
+    public function __construct(UserRepositoryInterface $user_repository_interface)
     {
         $this->line_bot_service = new LineBotService();
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
+        $this->user_repository = $user_repository_interface;
     }
 
     /**
@@ -45,7 +51,7 @@ class LineBotController extends Controller
      *
      * @param Request
      */
-    public function reply(Request $request, HasRegister $hasRegister)
+    public function reply(Request $request, LineUserRegister $line_user_register)
     {
         // Requestが来たかどうか確認する
         $content = 'Request from LINE';
@@ -59,21 +65,12 @@ class LineBotController extends Controller
         // LINEのユーザーIDをuserIdに代入
         $user_id = $request['events'][0]['source']['userId'];
 
-        $user = $hasRegister->invoke($user_id);
+        // userIdがあるユーザーを検索
+        $user = User::where('line_user_id', $user_id)->first();
 
         if ($user === NULL) {
-            $profile = $this->bot->getProfile($user_id)->getJSONDecodedBody();
-            // userの会員登録が行われていない場合
-            $user = User::create([
-                'name' => $profile['displayName'],
-                'uuid' => (string) Str::uuid(),
-                'line_user_id' => $user_id,
-            ]);
-
-            Log::debug($user);
+            $line_user_register->invoke($user_id);
         }
-
-
 
         Log::debug($user_id);
 
