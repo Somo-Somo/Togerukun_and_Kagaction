@@ -11,8 +11,12 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CauseController;
 use App\Http\Controllers\Initialize;
 use App\Http\Controllers\Onboarding;
+use App\Http\Controllers\Api\LineBotController;
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use LINE\LINEBot\HTTPClient\CurlHTTPClient;
+use LINE\LINEBot;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +29,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// LINE Bot
+Route::post('/line-bot/reply', [LineBotController::class, 'reply']);
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
