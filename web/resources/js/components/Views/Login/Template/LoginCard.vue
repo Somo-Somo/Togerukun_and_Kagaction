@@ -24,7 +24,6 @@
                             loginAndRegisterOfErrorMessages
                         "
                         :formValue="formValue"
-                        @setFormValue="setFormValue"
                     ></login-form>
                     <div class="login-btn mt-2 mb-8">
                         <v-btn
