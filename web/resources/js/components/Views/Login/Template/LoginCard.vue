@@ -1,7 +1,7 @@
 <template>
     <v-card
         :tile="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-        class="mx-auto fill-width py-4 px-12"
+        class="align-self-center ma-auto fill-width py-4 px-12"
         flat
         max-width="480"
         min-height="560"
