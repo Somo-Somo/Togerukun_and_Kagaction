@@ -43,9 +43,7 @@ export default {
     },
     watch: {
         errorCode(val, old) {
-            if (val === UNAUTHORIZED) {
-                this.$router.push("/login");
-            } else if (val === INTERNAL_SERVER_ERROR) {
+            if (val === INTERNAL_SERVER_ERROR) {
                 this.$router.push("/500");
             } else if (val === NOT_FOUND) {
                 this.$router.push("/not-found");
