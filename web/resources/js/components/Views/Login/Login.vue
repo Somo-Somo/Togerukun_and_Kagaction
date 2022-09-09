@@ -1,5 +1,5 @@
 <template>
-    <div class="pa-16" style="height: 100%">
+    <div class="d-flex pa-16" style="height: 100vh">
         <login-card
             :isLoginForm="isLoginForm"
             :formValue="formValue"
