@@ -133,8 +133,10 @@ export default {
             this.selectedDeletingProject.uuid = null;
         },
         selectProject(project) {
-            this.$store.dispatch("project/selectProject", project);
-            return this.$router.push({ path: "/project/" + project.uuid });
+            if (this.$route.params.id !== project.uuid) {
+                this.$store.dispatch("project/selectProject", project);
+                return this.$router.push({ path: "/project/" + project.uuid });
+            }
         },
         selectedMenu(menuTitle, project) {
             if (menuTitle === "編集") {
