@@ -18,8 +18,7 @@ class ModifyToUserForLineBotTable extends Migration
             $table->string('email')->nullable()->change();
             $table->string('password')->nullable()->change();
             $table->string('uuid')->nullable(false)->change();
-            $table->string('provider', 255)->nullable()->after('password');
-            $table->string('line_id', 255)->nullable()->after('password');
+            $table->string('line_user_id', 255)->nullable()->unique()->after('password');
         });
     }
 
