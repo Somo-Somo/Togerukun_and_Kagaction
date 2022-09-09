@@ -28,9 +28,6 @@ const actions = {
             await context.commit("todo/setAllTodoList", response.data.todo, {
                 root: true,
             });
-            context.commit("schedule/setScheduleList", response.data.schedule, {
-                root: true,
-            });
             context.commit(
                 "onboarding/setOnboarding",
                 response.data.onboarding,
