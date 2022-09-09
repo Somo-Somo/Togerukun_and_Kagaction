@@ -37,14 +37,26 @@ class LineUserRegister
     public function invoke($user_id)
     {
         $profile = $this->bot->getProfile($user_id)->getJSONDecodedBody();
+
         // userの会員登録が行われていない場合
         $user = User::create([
             'name' => $profile['displayName'],
             'uuid' => (string) Str::uuid(),
             'line_user_id' => $user_id,
         ]);
+
         // ユーザー作成後UserRepositoryを通してNeo4jに保存
-        $this->user_repository->register($user);
-        Log::debug($user);
+        $formated_user_array = [
+            'user_id' => $user['id'],
+            'uuid' => $user['uuid'],
+            'name' => $user['name'],
+            'email' => null,
+            'password' => null,
+            'line_user_id' => $user['line_user_id']
+        ];
+        // userをneo4jのDBにも登録
+        $created_user = $this->user_repository->register($formated_user_array);
+
+        Log::debug($created_user);
     }
 }
