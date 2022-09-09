@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\LineBotService;
-use App\Usecases\Line\LineUserRegister;
-use App\Repositories\User\UserRepositoryInterface;
+use App\Usecases\Line\LineRegister;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -29,17 +28,11 @@ class LineBotController extends Controller
      */
     protected $bot;
 
-    /**
-     * @param App\Repositories\User\UserRepositoryInterface
-     */
-    protected $user_repository;
-
-    public function __construct(UserRepositoryInterface $user_repository_interface)
+    public function __construct()
     {
         $this->line_bot_service = new LineBotService();
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
-        $this->user_repository = $user_repository_interface;
     }
 
     /**
@@ -51,7 +44,7 @@ class LineBotController extends Controller
      *
      * @param Request
      */
-    public function reply(Request $request, LineUserRegister $line_user_register)
+    public function reply(Request $request, LineRegister $line_register)
     {
         // Requestが来たかどうか確認する
         $content = 'Request from LINE';
@@ -65,15 +58,14 @@ class LineBotController extends Controller
         // LINEのユーザーIDをuserIdに代入
         $user_id = $request['events'][0]['source']['userId'];
 
-        // userIdがあるユーザーを検索
+        //userIdがあるユーザーを検索
+        User::where('line_user_id', $user_id)->first()->delete();
         $user = User::where('line_user_id', $user_id)->first();
 
         if ($user === NULL) {
-            $line_user_register->invoke($user_id);
+            $line_register->invoke($user_id);
         }
-
         Log::debug($user_id);
-
         $status_code = $this->line_bot_service->eventHandler($request);
 
         return response('', $status_code, []);

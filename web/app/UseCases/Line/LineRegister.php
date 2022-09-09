@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 
-class LineUserRegister
+class LineRegister
 {
     /**
      * @param LINE\LINEBot\HTTPClient\CurlHTTPClient
@@ -45,18 +45,7 @@ class LineUserRegister
             'line_user_id' => $user_id,
         ]);
 
-        // ユーザー作成後UserRepositoryを通してNeo4jに保存
-        $formated_user_array = [
-            'user_id' => $user['id'],
-            'uuid' => $user['uuid'],
-            'name' => $user['name'],
-            'email' => null,
-            'password' => null,
-            'line_user_id' => $user['line_user_id']
-        ];
         // userをneo4jのDBにも登録
-        $created_user = $this->user_repository->register($formated_user_array);
-
-        Log::debug($created_user);
+        $this->user_repository->register($user);
     }
 }
