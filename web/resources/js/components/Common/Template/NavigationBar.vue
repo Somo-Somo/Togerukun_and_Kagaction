@@ -67,15 +67,6 @@ export default {
         async fromItem(item) {
             return this.$router.push({ path: item.url });
         },
-        selectProject(project) {
-            if (this.$route.params.id !== project.uuid) {
-                this.$store.dispatch("project/selectProject", project);
-                return this.$router.push({ path: "/project/" + project.uuid });
-            }
-        },
-        onClickCreate() {
-            this.$store.dispatch("form/onClickCreate");
-        },
     },
 };
 </script>
