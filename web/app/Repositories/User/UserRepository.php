@@ -41,7 +41,8 @@ class UserRepository implements UserRepositoryInterface
                 'uuid' => $user['uuid'],
                 'name' => $user['name'],
                 'email' => $user['email'],
-                'password' => $user['password']
+                'password' => $user['password'],
+                'line_user_id' => $user['line_user_id']
             ]
         );
         return $create_user;
