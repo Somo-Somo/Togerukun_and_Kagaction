@@ -21,14 +21,16 @@ class LineBotRepository implements LineBotRepositoryInterface
      */
     public function findIfProjectExists(string $id)
     {
-        $this->client->run(
+        $ifProjectExists = $this->client->run(
             <<<'CYPHER'
-                OPTIONAL MATCH  x = (user:User { line_user_id : $id })-[:HAS] -> (project:Project)
-                RETURN x
+                OPTIONAL MATCH if_project_exists = (user:User { line_user_id : $line_user_id }) - [:HAS] -> (project:Project)
+                RETURN if_project_exists
                 CYPHER,
             [
                 'line_user_id' => $id,
             ]
         );
+
+        return $ifProjectExists->toArray();
     }
 }
