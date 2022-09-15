@@ -42,7 +42,7 @@ class MessageReceivedAction
      */
     public function invoke(array $message)
     {
-        if ($message['type'] === 'text') {
+        if ($message['message']['type'] === 'text') {
             $question_number = LineUsersQuestion::where('line_user_id', $message['source']['userId'])->first();
 
             // 質問がない場合
@@ -51,6 +51,11 @@ class MessageReceivedAction
             }
             // プロジェクトに関する質問の場合
             else if ($question_number === LineUsersQuestion::PROJECT) {
+                $project = [
+                    'name' => $message['message']['text'],
+                    'uuid' => (string) Str::uuid(),
+                    'created_by_user_uuid' => User::where('line_user_id', $message['source']['userId'])->value('uuid')
+                ];
                 # code...
             }
             // Todoに関する質問の場合
