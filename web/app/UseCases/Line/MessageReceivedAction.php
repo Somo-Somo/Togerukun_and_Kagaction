@@ -5,6 +5,9 @@ namespace App\UseCases\Line;
 use App\Models\User;
 use App\Models\LineUsersQuestion;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\Project\ProjectRepositoryInterface;
+use App\Repositories\Todo\TodoRepositoryInterface;
+use App\Repositories\Date\DateRepositoryInterface;
 use App\Repositories\Line\LineBotRepositoryInterface;
 use Illuminate\Support\Str;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -27,11 +30,25 @@ class MessageReceivedAction
      */
     protected $line_bot_repository;
 
-    public function __construct(LineBotRepositoryInterface $line_bot_repository_interface)
-    {
+    /**
+     * @param App\Repositories\Project\ProjectRepositoryInterface
+     */
+    protected $project_repository;
+
+    /**
+     * @param App\Repositories\Line\LineRepositoryInterface $line_repository_interface
+     * @param App\Repositories\Project\ProjectRepositoryInterface $project_repository_interface
+     * @param App\Repositories\Todo\TodoRepositoryInterface $todo_repository_interface
+     * @param App\Repositories\Date\DateRepositoryInterface $date_repository_interface
+     */
+    public function __construct(
+        LineBotRepositoryInterface $line_bot_repository_interface,
+        ProjectRepositoryInterface $project_repository_interface
+    ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
         $this->line_bot_repository = $line_bot_repository_interface;
+        $this->project_repository = $project_repository_interface;
     }
 
     /**
@@ -56,6 +73,8 @@ class MessageReceivedAction
                     'uuid' => (string) Str::uuid(),
                     'created_by_user_uuid' => User::where('line_user_id', $message['source']['userId'])->value('uuid')
                 ];
+                // プロジェクトを作成
+                $this->project_repository->create($project);
                 # code...
             }
             // Todoに関する質問の場合
