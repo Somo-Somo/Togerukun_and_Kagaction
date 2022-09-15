@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\LineUsersQuestion;
 use App\Services\LineBotService;
 use App\Usecases\Line\LineRegister;
 use App\Usecases\Line\MessageReceivedAction;
@@ -61,7 +62,8 @@ class LineBotController extends Controller
         $user_id = $request['events'][0]['source']['userId'];
 
         //userIdがあるユーザーを検索
-        // User::where('line_user_id', $user_id)->first()->delete();
+        LineUsersQuestion::where('line_user_id', $user_id)->first()->delete();
+        User::where('line_user_id', $user_id)->first()->delete();
         $user = User::where('line_user_id', $user_id)->first();
 
         // ユーザー登録されていない場合はユーザー登録
@@ -71,12 +73,16 @@ class LineBotController extends Controller
 
         // ユーザーからメッセージを受け取った時
         if ($request['events'][0]['type'] === 'message') {
-            $message_received_action->invoke($request['events'][0]);
+            $reply_message = $message_received_action->invoke($request['events'][0]);
+            Log::debug($reply_message);
+            return $request->collect('events')->each(function ($event) use ($reply_message) {
+                $this->bot->replyText($event['replyToken'], $reply_message);
+            });
         }
 
-        $ifProjectExists = $this->line_bot_repository->findIfProjectExists($user_id);
-
+        // $ifProjectExists = $this->line_bot_repository->findIfProjectExists($user_id);
         Log::debug($request['events']);
+
         $status_code = $this->line_bot_service->eventHandler($request);
 
         Log::debug($status_code);
