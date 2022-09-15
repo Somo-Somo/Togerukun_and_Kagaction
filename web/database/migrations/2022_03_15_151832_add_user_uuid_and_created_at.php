@@ -14,7 +14,7 @@ class AddUserUuidAndCreatedAt extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('uuid')->unique()->nullable();
+            $table->string('uuid')->unique()->nullable(false)->after('password');
         });
     }
 
@@ -26,7 +26,6 @@ class AddUserUuidAndCreatedAt extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
         });
     }
 }

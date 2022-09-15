@@ -15,10 +15,12 @@ class CreateLineUsersQuestionsTable extends Migration
     {
         Schema::create('line_users_questions', function (Blueprint $table) {
             $table->id();
-            $table->string('line_user_id')->unique();
+            $table->string('line_user_id')->unique()->nullable(false);
             $table->string('question_number');
             $table->string('parent_uuid')->nullable();
             $table->timestamps();
+
+            $table->foreign('line_user_id')->references('line_user_id')->on('users');
         });
     }
 

@@ -15,9 +15,9 @@ class ModifyToUserForLineBotTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('email')->nullable()->change();
-            $table->string('password')->nullable()->change();
-            $table->string('uuid')->nullable(false)->change();
+            // $table->string('email')->nullable()->change();
+            // $table->string('password')->nullable()->change();
+            // $table->string('uuid')->nullable(false)->change();
             $table->string('line_user_id', 255)->nullable()->unique()->after('password');
         });
     }
