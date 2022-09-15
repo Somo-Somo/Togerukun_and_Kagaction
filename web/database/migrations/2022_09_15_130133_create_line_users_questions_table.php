@@ -16,7 +16,7 @@ class CreateLineUsersQuestionsTable extends Migration
         Schema::create('line_users_questions', function (Blueprint $table) {
             $table->id();
             $table->string('line_user_id')->unique()->nullable(false);
-            $table->string('question_number');
+            $table->integer('question_number');
             $table->string('parent_uuid')->nullable();
             $table->timestamps();
 
