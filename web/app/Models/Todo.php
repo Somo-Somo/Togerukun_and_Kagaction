@@ -19,7 +19,7 @@ class Todo extends Model
     public static function askGoal(string $user_name, string $project_name)
     {
         $reply_message =
-            'ありがとうございます！' . "\n" . $user_name . 'さんが' . $project_name . 'で達成したいゴールまたは目標を教えてください！';
+            'ありがとうございます！' . "\n" . $user_name . 'さんが「' . $project_name . '」で達成したいゴールまたは目標を教えてください！';
         return $reply_message;
     }
 }
