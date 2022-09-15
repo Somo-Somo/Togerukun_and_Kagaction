@@ -15,11 +15,11 @@ class LineUsersQuestion extends Model
      *
      * @var array<string>
      */
-    protected $fillable = ['line_user_id', 'question_number'];
-
+    protected $fillable = ['line_user_id', 'question_number', 'parent_uuid'];
 
     // question_numberに対するクラス定数
-    const PROJECT = 0;
-    const TODO = 1;
-    const DATE = 2;
+    const NO_QUESTION = 0;
+    const PROJECT = 1;
+    const TODO = 2;
+    const DATE = 3;
 }
