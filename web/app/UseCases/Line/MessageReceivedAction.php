@@ -61,8 +61,9 @@ class MessageReceivedAction
     public function invoke(array $message)
     {
         if ($message['message']['type'] === 'text') {
+            // 該当のユーザーを探す
             $line_user = User::where('line_user_id', $message['source']['userId'])->first();
-            $question_number = LineUsersQuestion::where('line_user_id', $message['source']['userId'])->first();
+            $question_number = $line_user->question->question_number;
 
             // 質問がない場合
             if ($question_number === LineUsersQuestion::NO_QUESTION) {
@@ -75,8 +76,14 @@ class MessageReceivedAction
                     'uuid' => (string) Str::uuid(),
                     'created_by_user_id' => $line_user->id
                 ];
+
                 // プロジェクトを作成
                 $this->project_repository->create($project);
+
+                // 質問の更新
+                $line_user->question->question_number->update([
+                    'question_number' => LineUsersQuestion::TODO
+                ]);
 
                 # 返信メッセージ
                 return Todo::askGoal($line_user->name, $project['name']);

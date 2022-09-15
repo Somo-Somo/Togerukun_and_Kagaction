@@ -49,7 +49,7 @@ class User extends Authenticatable
      * ユーザー(LINE)に関連する質問テーブルの取得
      *
      */
-    public function line_users_question()
+    public function question()
     {
         return $this->hasOne(LineUsersQuestion::class, 'line_user_id', 'line_user_id');
     }
