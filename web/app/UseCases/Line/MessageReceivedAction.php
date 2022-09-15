@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 
+
 class MessageReceivedAction
 {
     /**
@@ -70,7 +71,7 @@ class MessageReceivedAction
                 # code...
             }
             // プロジェクトに関する質問の場合
-            else if ($question_number === LineUsersQuestion::PROJECT) {
+            if ($question_number === LineUsersQuestion::PROJECT) {
                 $project = [
                     'name' => $message['message']['text'],
                     'uuid' => (string) Str::uuid(),
@@ -80,8 +81,8 @@ class MessageReceivedAction
                 // プロジェクトを作成
                 $this->project_repository->create($project);
 
-                // 質問の更新
-                $line_user->question->question_number->update([
+                //質問の更新
+                $line_user->question->update([
                     'question_number' => LineUsersQuestion::TODO
                 ]);
 
@@ -89,13 +90,14 @@ class MessageReceivedAction
                 return Todo::askGoal($line_user->name, $project['name']);
             }
             // Todoに関する質問の場合
-            else if ($question_number === LineUsersQuestion::TODO) {
+            if ($question_number === LineUsersQuestion::TODO) {
                 # code...
             }
             // 日付に関する質問の場合
-            else if ($question_number === LineUsersQuestion::DATE) {
+            if ($question_number === LineUsersQuestion::DATE) {
                 # code...
             }
+            return;
         }
     }
 }
