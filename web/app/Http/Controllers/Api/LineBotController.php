@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\LineBotService;
 use App\Usecases\Line\LineRegister;
+use App\Usecases\Line\MessageReceivedAction;
 use App\Repositories\Line\LineBotRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -54,7 +55,7 @@ class LineBotController extends Controller
      *
      * @param Request
      */
-    public function reply(Request $request, LineRegister $line_register)
+    public function reply(Request $request, LineRegister $line_register, MessageReceivedAction $message_received_action)
     {
         // LINEのユーザーIDをuserIdに代入
         $user_id = $request['events'][0]['source']['userId'];
@@ -70,7 +71,7 @@ class LineBotController extends Controller
 
         // ユーザーからメッセージを受け取った時
         if ($request['events'][0]['type'] === 'message') {
-            # code...
+            $message_received_action->invoke($request['events'][0]);
         }
 
         $ifProjectExists = $this->line_bot_repository->findIfProjectExists($user_id);
