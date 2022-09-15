@@ -24,12 +24,12 @@ class GetUserHasProjectAndTodoAction
      * ユーザーのプロジェクトとTodoをDBからfetch
      * Todo一覧に形を変換
      *
-     * @param string $user_email
+     * @param string $user_id
      * @return array $todo_list
      */
-    public function invoke(string $user_email)
+    public function invoke(string $user_id)
     {
-        $fetch_project_and_todo_from_db = $this->user_repository->getUserHasProjetAndTodo($user_email);
+        $fetch_project_and_todo_from_db = $this->user_repository->getUserHasProjetAndTodo($user_id);
         $todo_list = $this->todo_list_converter->invoke($fetch_project_and_todo_from_db);
         return $todo_list;
     }

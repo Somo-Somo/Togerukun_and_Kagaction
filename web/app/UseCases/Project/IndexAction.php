@@ -20,12 +20,12 @@ class IndexAction
      * ユーザーが保持しているプロジェクトをDBから取得
      * 配列化して、uuidをKEYに連想配列で一覧を作る
      *
-     * @param string $user_email
+     * @param int $user_id
      * @return array $project_list
      */
-    public function invoke(string $user_email)
+    public function invoke(int $user_id)
     {
-        $project_cypher_map = $this->project_repository->getProjectList($user_email);
+        $project_cypher_map = $this->project_repository->getProjectList($user_id);
 
         $projcets_cypher_list = $project_cypher_map->toArray();
         $project_list = [];

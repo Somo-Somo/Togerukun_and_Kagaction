@@ -23,7 +23,7 @@ class CommentRepository implements CommentRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }) - [:CREATED] -> (todo:Todo {uuid: $todo_uuid})
+                MATCH (user:User { user_id : $user_id }) - [:CREATED] -> (todo:Todo {uuid: $todo_uuid})
                 CREATE (comment:Comment{
                     uuid: $comment_uuid,
                     text: $text
@@ -34,7 +34,7 @@ class CommentRepository implements CommentRepositoryInterface
                 RETURN user, todo, comment
                 CYPHER,
             [
-                'user_email' => $comment['user_email'],
+                'user_id' => $comment['user_id'],
                 'todo_uuid' => $comment['todo_uuid'],
                 'comment_uuid' => $comment['comment_uuid'],
                 'text' => $comment['text']
@@ -51,7 +51,7 @@ class CommentRepository implements CommentRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }), (comment:Comment { uuid: $uuid })
+                MATCH (user:User { user_id : $user_id }), (comment:Comment { uuid: $uuid })
                 SET comment.text = $text
                 WITH user,comment
                 OPTIONAL MATCH x = (user)-[updated:UPDATED]->(comment)
@@ -63,7 +63,7 @@ class CommentRepository implements CommentRepositoryInterface
                 RETURN comment
                 CYPHER,
             [
-                'user_email' => $comment['user_email'],
+                'user_id' => $comment['user_id'],
                 'uuid' => $comment['uuid'],
                 'text' => $comment['text']
             ]
@@ -79,14 +79,14 @@ class CommentRepository implements CommentRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }) - [created:CREATED] -> (comment:Comment { uuid : $comment_uuid }),
+                MATCH (user:User { user_id : $user_id }) - [created:CREATED] -> (comment:Comment { uuid : $comment_uuid }),
                 (comment) - [to: TO] -> (todo:Todo)
                 DELETE to, created
                 DELETE comment
                 RETURN user
                 CYPHER,
             [
-                'user_email' => $comment['user_email'],
+                'user_id' => $comment['user_id'],
                 'comment_uuid' => $comment['comment_uuid']
             ]
         );
