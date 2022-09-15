@@ -3,6 +3,7 @@
 namespace App\UseCases\Line;
 
 use App\Models\User;
+use App\Models\Todo;
 use App\Models\LineUsersQuestion;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
@@ -60,6 +61,7 @@ class MessageReceivedAction
     public function invoke(array $message)
     {
         if ($message['message']['type'] === 'text') {
+            $line_user = User::where('line_user_id', $message['source']['userId'])->first();
             $question_number = LineUsersQuestion::where('line_user_id', $message['source']['userId'])->first();
 
             // 質問がない場合
@@ -71,11 +73,13 @@ class MessageReceivedAction
                 $project = [
                     'name' => $message['message']['text'],
                     'uuid' => (string) Str::uuid(),
-                    'created_by_user_uuid' => User::where('line_user_id', $message['source']['userId'])->value('uuid')
+                    'created_by_user_id' => $line_user->id
                 ];
                 // プロジェクトを作成
                 $this->project_repository->create($project);
-                # code...
+
+                # 返信メッセージ
+                return Todo::askGoal($line_user->name, $project['name']);
             }
             // Todoに関する質問の場合
             else if ($question_number === LineUsersQuestion::TODO) {
