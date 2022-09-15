@@ -78,7 +78,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User{user:$user_id}) - [not_execute:NOT_EXECUTE] -> (:Onboarding)
+                MATCH (user:User{user_id:$user_id}) - [not_execute:NOT_EXECUTE] -> (:Onboarding)
                 CREATE (user)-[
                     :HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}
                 ]->(
