@@ -60,7 +60,7 @@ class LineBotController extends Controller
         $user_id = $request['events'][0]['source']['userId'];
 
         //userIdがあるユーザーを検索
-        User::where('line_user_id', $user_id)->first()->delete();
+        // User::where('line_user_id', $user_id)->first()->delete();
         $user = User::where('line_user_id', $user_id)->first();
 
         // ユーザー登録されていない場合はユーザー登録
