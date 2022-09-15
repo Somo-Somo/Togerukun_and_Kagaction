@@ -68,9 +68,14 @@ class LineBotController extends Controller
             $line_register->invoke($user_id);
         }
 
+        // ユーザーからメッセージを受け取った時
+        if ($request['events'][0]['type'] === 'message') {
+            # code...
+        }
+
         $ifProjectExists = $this->line_bot_repository->findIfProjectExists($user_id);
 
-        Log::debug($ifProjectExists);
+        Log::debug($request['events']);
         $status_code = $this->line_bot_service->eventHandler($request);
 
         Log::debug($status_code);
