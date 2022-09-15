@@ -3,6 +3,7 @@
 namespace App\UseCases\Line;
 
 use App\Models\User;
+use App\Models\LineUsersQuestion;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -34,18 +35,26 @@ class LineRegister
      * @param
      * @return
      */
-    public function invoke($user_id)
+    public function invoke($line_user_id)
     {
-        $profile = $this->bot->getProfile($user_id)->getJSONDecodedBody();
+        $profile = $this->bot->getProfile($line_user_id)->getJSONDecodedBody();
 
-        // userの会員登録が行われていない場合
+        // Lineユーザーの会員登録を行う
         $user = User::create([
             'name' => $profile['displayName'],
             'uuid' => (string) Str::uuid(),
-            'line_user_id' => $user_id,
+            'line_user_id' => $line_user_id,
+        ]);
+
+        // Lineユーザーへの質問テーブルにも新しくレコードを保存する
+        LineUsersQuestion::create([
+            'line_user_id' => $line_user_id,
+            'question_number' => LineUsersQuestion::PROJECT
         ]);
 
         // userをneo4jのDBにも登録
-        $this->user_repository->register($user);
+        if ($user) {
+            $this->user_repository->register($user);
+        }
     }
 }
