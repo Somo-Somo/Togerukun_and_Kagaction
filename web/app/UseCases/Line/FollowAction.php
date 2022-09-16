@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\LineUsersQuestion;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 

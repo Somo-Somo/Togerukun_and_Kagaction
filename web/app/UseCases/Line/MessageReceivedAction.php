@@ -12,6 +12,7 @@ use App\Repositories\Todo\TodoRepositoryInterface;
 use App\Repositories\Date\DateRepositoryInterface;
 use App\Repositories\Line\LineBotRepositoryInterface;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 
