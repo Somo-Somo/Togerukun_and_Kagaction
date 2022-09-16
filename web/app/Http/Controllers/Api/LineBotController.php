@@ -6,13 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\LineUsersQuestion;
 use App\Services\LineBotService;
-use App\Usecases\Line\LineRegister;
+use App\Usecases\Line\FollowAction;
 use App\Usecases\Line\MessageReceivedAction;
 use App\Repositories\Line\LineBotRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
+use LINE\LINEBot\Event\FollowEvent;
+use LINE\LINEBot\Event\MessageEvent\TextMessage;
 
 class LineBotController extends Controller
 {
@@ -57,27 +59,20 @@ class LineBotController extends Controller
      *
      * @param Request
      */
-    public function reply(Request $request, LineRegister $line_register, MessageReceivedAction $message_received_action)
+    public function reply(Request $request, FollowAction $follow_action, MessageReceivedAction $message_received_action)
     {
-        // LINEのユーザーIDをuserIdに代入
-        $user_id = $request['events'][0]['source']['userId'];
-
-        //userIdがあるユーザーを検索
-        LineUsersQuestion::where('line_user_id', $user_id)->first()->delete();
-        User::where('line_user_id', $user_id)->first()->delete();
-        $user = User::where('line_user_id', $user_id)->first();
-
-        // ユーザー登録されていない場合はユーザー登録
-        if ($user === NULL) {
-            $line_register->invoke($user_id);
-        }
-
-        // ユーザーからメッセージを受け取った時
-        if ($request['events'][0]['type'] === 'message') {
-            $message_received_action->invoke($request['events'][0]);
-        }
-
         $status_code = $this->line_bot_service->eventHandler($request);
+
+        // リクエストをEventオブジェクトに変換する
+        $events = $this->bot->parseEventRequest($request->getContent(), $request->header('x-line-signature'));
+
+        foreach ($events as $event) {
+            if ($event->getType() === 'follow') {
+                $follow_action->invoke($event->getUserId());
+            } else if ($event->getType() === 'message') {
+                $message_received_action->invoke($event);
+            }
+        }
 
         Log::debug($status_code);
 

@@ -58,14 +58,15 @@ class MessageReceivedAction
     /**
      * 受け取ったメッセージを場合分けしていく
      *
-     * @param array $message
+     * @param object $event
      * @return
      */
-    public function invoke(array $message)
+    public function invoke(object $event)
     {
-        if ($message['message']['type'] === 'text') {
+        if ($event->getEvent()['message']['type'] === 'text') {
             // 該当のユーザーを探す
-            $line_user = User::where('line_user_id', $message['source']['userId'])->first();
+            $line_user = User::where('line_user_id', $event->getUserId())->first();
+
             $question_number = $line_user->question->question_number;
 
             // 質問がない場合
@@ -75,14 +76,14 @@ class MessageReceivedAction
             // プロジェクトに関する質問の場合
             if ($question_number === LineUsersQuestion::PROJECT) {
                 $project = [
-                    'name' => $message['message']['text'],
+                    'name' => $event->getText(),
                     'uuid' => (string) Str::uuid(),
                     'created_by_user_id' => $line_user->id
                 ];
 
                 // 返信メッセージ
                 $this->bot->replyText(
-                    $message['replyToken'],
+                    $event->getReplyToken(),
                     Project::confirmProject($project['name']),
                     Todo::askGoal($line_user->name, $project['name'])
                 );
