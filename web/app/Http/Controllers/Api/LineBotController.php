@@ -39,8 +39,9 @@ class LineBotController extends Controller
     /**
      * @param App\Repositories\Line\LineBotRepositoryInterface $line_bot_repository_interface
      */
-    public function __construct(LineBotRepositoryInterface $line_bot_repository_interface)
-    {
+    public function __construct(
+        LineBotRepositoryInterface $line_bot_repository_interface
+    ) {
         $this->line_bot_service = new LineBotService();
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
