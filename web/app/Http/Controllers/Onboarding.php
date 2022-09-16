@@ -37,7 +37,7 @@ class Onboarding extends Controller
                 'uuid' => (string) Str::uuid(),
                 'date' => $request->goalDate
             ],
-            'created_by_user_email' => $request->user()->email
+            'created_by_user_id' => $request->user()->id
         ];
         $this->user_repository->finishedOnboarding($onboarding);
         $json = [

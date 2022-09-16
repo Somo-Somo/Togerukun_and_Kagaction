@@ -41,6 +41,10 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\User\UserRepositoryInterface::class,
             \App\Repositories\User\UserRepository::class,
         );
+        $this->app->bind(
+            \App\Repositories\Line\LineBotRepositoryInterface::class,
+            \App\Repositories\Line\LineBotRepository::class,
+        );
     }
 
     /**

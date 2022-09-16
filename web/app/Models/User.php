@@ -44,4 +44,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * ユーザー(LINE)に関連する質問テーブルの取得
+     *
+     */
+    public function question()
+    {
+        return $this->hasOne(LineUsersQuestion::class, 'line_user_id', 'line_user_id');
+    }
 }

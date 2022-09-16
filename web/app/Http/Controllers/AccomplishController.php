@@ -21,7 +21,7 @@ class AccomplishController extends Controller
     {
         $todo = [
             'uuid' => $todo_uuid,
-            'user_email' => $request->user()->email,
+            'user_id' => $request->user()->id,
         ];
 
         $update_action->invoke($todo);
@@ -46,7 +46,7 @@ class AccomplishController extends Controller
     {
         $todo = [
             'uuid' => $todo_uuid,
-            'user_email' => $request->user()->email,
+            'user_id' => $request->user()->id,
         ];
 
         $destroy_action->invoke($todo);

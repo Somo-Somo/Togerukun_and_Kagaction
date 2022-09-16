@@ -2,19 +2,16 @@
 
 namespace App\Models;
 
-class Project 
+class Project
 {
-    private $id;
-
-    private $uuid;
-
-    private $name;
-
-    public function __construct(int $id, string $uuid, string $name)
+    /**
+     * プロジェクトを確認する
+     *
+     * @param string $user_name
+     * @return string $reply_message
+     */
+    public static function confirmProject(string $project_name)
     {
-        $this->id = $id;
-        $this->uuid = $uuid;
-        $this->name = $name;
+        return  '「' . $project_name . '」だね！';
     }
-
 }

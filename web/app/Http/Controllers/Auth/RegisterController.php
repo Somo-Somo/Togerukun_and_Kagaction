@@ -41,7 +41,7 @@ class RegisterController extends Controller
         $create_user = $this->user_repository->register($user);
 
         if ($create_user) {
-            $generateAction->invoke($user->email);
+            $generateAction->invoke($user->id);
         }
 
         return response()->json(new UserResource($user), Response::HTTP_CREATED);

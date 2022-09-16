@@ -35,7 +35,7 @@ class TodoController extends Controller
             'uuid' => $request->uuid,
             'parent_uuid' => $request->parentUuid,
             'date' => $request->date,
-            'user_email' => $request->user()->email,
+            'user_id' => $request->user()->id,
         ];
 
         $store_action->invoke($todo);
@@ -71,7 +71,7 @@ class TodoController extends Controller
         $todo = [
             'name' => $request->name,
             'uuid' => $request->uuid,
-            'user_email' => $request->user()->email,
+            'user_id' => $request->user()->id,
         ];
 
         $update_action->invoke($todo);
@@ -96,7 +96,7 @@ class TodoController extends Controller
     {
         $todo = [
             'uuid' => $todoUuid,
-            'user_email' => $request->user()->email,
+            'user_id' => $request->user()->id,
         ];
 
         $destroy_action->invoke($todo);

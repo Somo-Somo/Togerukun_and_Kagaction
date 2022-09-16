@@ -19,10 +19,10 @@ class GenerateAction
     /**
      * テンプレートのプロジェクトをRepository介してDBに保存
      *
-     * @param string $user_email
+     * @param int $user_id
      */
-    public function invoke(string $user_email)
+    public function invoke(int $user_id)
     {
-        $this->project_repository->generateInitialTemplate($user_email);
+        $this->project_repository->generateInitialTemplate($user_id);
     }
 }

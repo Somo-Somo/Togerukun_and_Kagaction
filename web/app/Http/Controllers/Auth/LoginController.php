@@ -49,7 +49,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            $onboarding = $this->user_repository->whetherExecuteOnboarding($request->user()->email);
+            $onboarding = $this->user_repository->whetherExecuteOnboarding($request->user()->id);
             $user = new UserResource($request->user());
             $response = [
                 'user' => $user,

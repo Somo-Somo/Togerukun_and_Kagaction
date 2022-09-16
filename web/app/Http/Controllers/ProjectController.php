@@ -22,10 +22,10 @@ class ProjectController extends Controller
      */
     public function index(ProjectRequest $request, IndexAction $index_action)
     {
-        $user_email = $request->user()->email;
+        $user_id = $request->user()->id;
 
         // ユースケースを実行し、レスポンスの元になるデータを受け取る
-        $project_list = $index_action->invoke($user_email);
+        $project_list = $index_action->invoke($user_id);
 
         return response()->json($project_list, Response::HTTP_OK);
     }
@@ -43,7 +43,7 @@ class ProjectController extends Controller
         $project = [
             'name' => $request->name,
             'uuid' => (string) Str::uuid(),
-            'created_by_user_email' => $request->user()->email,
+            'created_by_user_id' => $request->user()->id,
         ];
 
         // ユースケースを実行し、レスポンスの元になるデータを受け取る
@@ -82,7 +82,7 @@ class ProjectController extends Controller
         $project = [
             'name' => $request->name,
             'uuid' => $request->uuid,
-            'user_email' => $request->user()->email,
+            'user_id' => $request->user()->id,
         ];
 
         $update_action->invoke($project);
@@ -108,7 +108,7 @@ class ProjectController extends Controller
     {
         $project = [
             'uuid' => $project_uuid,
-            'user_email' => $request->user()->email,
+            'user_id' => $request->user()->id,
         ];
 
         $destroy_action->invoke($project);

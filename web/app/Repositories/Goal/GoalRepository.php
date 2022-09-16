@@ -23,7 +23,7 @@ class GoalRepository implements GoalRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { email : $user_email }), (project:Project { uuid: $parent_uuid })
+                MATCH (user:User { user_id : $user_id }), (project:Project { uuid: $parent_uuid })
                 CREATE (user)-[
                             :CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}
                         ]->(
@@ -41,7 +41,7 @@ class GoalRepository implements GoalRepositoryInterface
                 'name' => $goal['name'],
                 'uuid' => $goal['uuid'],
                 'parent_uuid' => $goal['parent_uuid'],
-                'user_email' => $goal['user_email'],
+                'user_id' => $goal['user_id'],
             ]
         );
     }
