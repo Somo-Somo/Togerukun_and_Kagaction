@@ -32,7 +32,7 @@ class CommentController extends Controller
     public function store(string $todo_uuid, CommentRequest $request, StoreAction $store_action)
     {
         $comment = [
-            'user_id' => $request->user()->id,
+            'user_uuid' => $request->user()->uuid,
             'todo_uuid' => $todo_uuid,
             'comment_uuid' => $request->uuid,
             'text' => $request->text
@@ -69,7 +69,7 @@ class CommentController extends Controller
     public function update(CommentRequest $request, UpdateAction $update_action)
     {
         $comment = [
-            'user_id' => $request->user()->id,
+            'user_uuid' => $request->user()->uuid,
             'uuid' => $request->uuid,
             'text' => $request->text
         ];
@@ -95,7 +95,7 @@ class CommentController extends Controller
     public function destroy(string $comment_uuid, Request $request, DestroyAction $destroy_action)
     {
         $comment = [
-            'user_id' => $request->user()->id,
+            'user_uuid' => $request->user()->uuid,
             'comment_uuid' => $comment_uuid,
         ];
 

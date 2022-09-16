@@ -41,7 +41,7 @@ class CauseController extends Controller
     public function store(string $todo_uuid, CauseRequest $request, StoreAction $store_action)
     {
         $cause = [
-            'user_id' => $request->user()->id,
+            'user_uuid' => $request->user()->uuid,
             'todo_uuid' => $todo_uuid,
             'cause_uuid' => $request->uuid,
             'text' => $request->text
@@ -102,7 +102,7 @@ class CauseController extends Controller
     public function destroy(string $cause_uuid, Request $request, DestroyAction $destroy_action)
     {
         $cause = [
-            'user_id' => $request->user()->id,
+            'user_uuid' => $request->user()->uuid,
             'cause_uuid' => $cause_uuid,
         ];
 
