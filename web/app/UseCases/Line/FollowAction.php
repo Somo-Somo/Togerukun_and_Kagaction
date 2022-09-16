@@ -37,9 +37,9 @@ class FollowAction
     public function invoke(string $line_user_id)
     {
         // ユーザーが既に会員登録されているか確認する
-        $has_user = User::where('line_user_id', $line_user_id)->first();
+        $has_user_account = User::where('line_user_id', $line_user_id)->first();
 
-        if ($has_user === NULL) {
+        if ($has_user_account === NULL) {
             $profile = $this->bot->getProfile($line_user_id)->getJSONDecodedBody();
 
             // Lineユーザーの会員登録を行う
