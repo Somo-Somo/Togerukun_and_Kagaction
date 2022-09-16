@@ -8,6 +8,7 @@ use App\Models\Todo;
 use App\Models\LineUsersQuestion;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
+use App\Repositories\Goal\GoalRepositoryInterface;
 use App\Repositories\Todo\TodoRepositoryInterface;
 use App\Repositories\Date\DateRepositoryInterface;
 use App\Repositories\Line\LineBotRepositoryInterface;
@@ -40,19 +41,34 @@ class MessageReceivedAction
     protected $project_repository;
 
     /**
+     * @param App\Repositories\Goal\GoalRepositoryInterface
+     */
+    protected $goal_repository;
+
+    /**
+     * @param App\Repositories\Todo\TodoRepositoryInterface
+     */
+    protected $todo_repository;
+
+    /**
      * @param App\Repositories\Line\LineRepositoryInterface $line_repository_interface
      * @param App\Repositories\Project\ProjectRepositoryInterface $project_repository_interface
+     * @param App\Repositories\Goal\GoalRepositoryInterface $todo_repository_interface
      * @param App\Repositories\Todo\TodoRepositoryInterface $todo_repository_interface
      * @param App\Repositories\Date\DateRepositoryInterface $date_repository_interface
      */
     public function __construct(
         LineBotRepositoryInterface $line_bot_repository_interface,
-        ProjectRepositoryInterface $project_repository_interface
+        ProjectRepositoryInterface $project_repository_interface,
+        GoalRepositoryInterface $goal_repository_interface,
+        TodoRepositoryInterface $todo_repository_interface
     ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
         $this->line_bot_repository = $line_bot_repository_interface;
         $this->project_repository = $project_repository_interface;
+        $this->goal_repository = $goal_repository_interface;
+        $this->todo_repository = $todo_repository_interface;
     }
 
     /**
@@ -90,7 +106,8 @@ class MessageReceivedAction
 
                 //質問の更新
                 $line_user->question->update([
-                    'question_number' => LineUsersQuestion::TODO
+                    'question_number' => LineUsersQuestion::TODO,
+                    'parent_uuid' => $project['uuid']
                 ]);
 
                 // GraphDBに保存
@@ -99,13 +116,31 @@ class MessageReceivedAction
                 return;
             }
             // Todoに関する質問の場合
-            if ($question_number === LineUsersQuestion::TODO) {
+            if ($question_number === LineUsersQuestion::GOAL || $question_number === LineUsersQuestion::TODO) {
                 $todo = [
                     'name' => $event->getText(),
                     'uuid' => (string) Str::uuid(),
                     'parent_uuid' => $line_user->question->parent_uuid,
                     'created_by_user_id' => $line_user->id
                 ];
+
+                // 返信メッセージ(日付)
+                $response = $this->bot->replyMessage(
+                    $event->getReplyToken(),
+                    Todo::askTodoLimited($line_user->name, $todo['name'])
+                );
+
+                Log::debug((array)$response);
+
+                // //質問の更新
+                // $line_user->question->update([
+                //     'question_number' => LineUsersQuestion::DATE,
+                //     'parent_uuid' => $todo['uuid']
+                // ]);
+
+                // GraphDBに保存
+                $question_number === LineUsersQuestion::GOAL ?
+                    $this->goal_repository->create($todo) : $this->todo_repository->create($todo);
             }
             // 日付に関する質問の場合
             if ($question_number === LineUsersQuestion::DATE) {
