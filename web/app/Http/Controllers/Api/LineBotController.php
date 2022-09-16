@@ -73,20 +73,12 @@ class LineBotController extends Controller
 
         // ユーザーからメッセージを受け取った時
         if ($request['events'][0]['type'] === 'message') {
-            $reply_message = $message_received_action->invoke($request['events'][0]);
-            Log::debug($reply_message);
-            return $request->collect('events')->each(function ($event) use ($reply_message) {
-                $this->bot->replyText($event['replyToken'], $reply_message);
-            });
+            $message_received_action->invoke($request['events'][0]);
         }
-
-        // $ifProjectExists = $this->line_bot_repository->findIfProjectExists($user_id);
-        Log::debug($request['events']);
 
         $status_code = $this->line_bot_service->eventHandler($request);
 
         Log::debug($status_code);
-
 
         return response('', $status_code, []);
     }

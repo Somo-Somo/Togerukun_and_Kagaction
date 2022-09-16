@@ -11,6 +11,7 @@ use App\Repositories\Todo\TodoRepositoryInterface;
 use App\Repositories\Date\DateRepositoryInterface;
 use App\Repositories\Line\LineBotRepositoryInterface;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 
@@ -78,16 +79,19 @@ class MessageReceivedAction
                     'created_by_user_id' => $line_user->id
                 ];
 
-                // プロジェクトを作成
-                $this->project_repository->create($project);
+                # 返信メッセージ
+                $reply_message = Todo::askGoal($line_user->name, $project['name']);
+                $this->bot->replyText($message['replyToken'], $reply_message);
 
                 //質問の更新
                 $line_user->question->update([
                     'question_number' => LineUsersQuestion::TODO
                 ]);
 
-                # 返信メッセージ
-                return Todo::askGoal($line_user->name, $project['name']);
+                // GraphDBに保存
+                $this->project_repository->create($project);
+
+                return;
             }
             // Todoに関する質問の場合
             if ($question_number === LineUsersQuestion::TODO) {
