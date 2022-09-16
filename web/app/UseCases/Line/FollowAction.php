@@ -32,10 +32,10 @@ class FollowAction
     /**
      * ユーザーが会員登録されているか確認する
      *
-     * @param
+     * @param string $line_user_id
      * @return
      */
-    public function invoke($line_user_id)
+    public function invoke(string $line_user_id)
     {
         // ユーザーが既に会員登録されているか確認する
         $has_user = User::where('line_user_id', $line_user_id)->first();

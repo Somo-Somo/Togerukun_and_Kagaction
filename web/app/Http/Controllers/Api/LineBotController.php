@@ -60,11 +60,11 @@ class LineBotController extends Controller
     public function reply(Request $request, FollowAction $follow_action, MessageReceivedAction $message_received_action)
     {
         // LINEのユーザーIDをuserIdに代入
-        $user_id = $request['events'][0]['source']['userId'];
+        $line_user_id = $request['events'][0]['source']['userId'];
 
         // ユーザーからフォローされた時
         if ($request['events'][0]['type'] === 'follow') {
-            $follow_action->invoke($user_id);
+            $follow_action->invoke($line_user_id);
         }
         // ユーザーからメッセージを受け取った時
         if ($request['events'][0]['type'] === 'message') {
@@ -74,7 +74,6 @@ class LineBotController extends Controller
         $status_code = $this->line_bot_service->eventHandler($request);
 
         Log::debug($status_code);
-        Log::debug($request['events'][0]);
 
         return response('', $status_code, []);
     }
