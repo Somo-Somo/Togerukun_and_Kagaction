@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\LineUsersQuestion;
 use App\Services\LineBotService;
-use App\Usecases\Line\LineRegister;
+use App\Usecases\Line\FollowAction;
 use App\Usecases\Line\MessageReceivedAction;
 use App\Repositories\Line\LineBotRepositoryInterface;
 use Illuminate\Http\Request;
@@ -57,21 +57,15 @@ class LineBotController extends Controller
      *
      * @param Request
      */
-    public function reply(Request $request, LineRegister $line_register, MessageReceivedAction $message_received_action)
+    public function reply(Request $request, FollowAction $follow_action, MessageReceivedAction $message_received_action)
     {
         // LINEのユーザーIDをuserIdに代入
         $user_id = $request['events'][0]['source']['userId'];
 
-        //userIdがあるユーザーを検索
-        LineUsersQuestion::where('line_user_id', $user_id)->first()->delete();
-        User::where('line_user_id', $user_id)->first()->delete();
-        $user = User::where('line_user_id', $user_id)->first();
-
-        // ユーザー登録されていない場合はユーザー登録
-        if ($user === NULL) {
-            $line_register->invoke($user_id);
+        // ユーザーからフォローされた時
+        if ($request['events'][0]['type'] === 'follow') {
+            $follow_action->invoke($user_id);
         }
-
         // ユーザーからメッセージを受け取った時
         if ($request['events'][0]['type'] === 'message') {
             $message_received_action->invoke($request['events'][0]);
@@ -80,6 +74,7 @@ class LineBotController extends Controller
         $status_code = $this->line_bot_service->eventHandler($request);
 
         Log::debug($status_code);
+        Log::debug($request['events'][0]);
 
         return response('', $status_code, []);
     }

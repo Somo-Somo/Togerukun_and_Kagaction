@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 
-class LineRegister
+class FollowAction
 {
     /**
      * @param LINE\LINEBot\HTTPClient\CurlHTTPClient
@@ -37,24 +37,30 @@ class LineRegister
      */
     public function invoke($line_user_id)
     {
-        $profile = $this->bot->getProfile($line_user_id)->getJSONDecodedBody();
+        // ユーザーが既に会員登録されているか確認する
+        $has_user = User::where('line_user_id', $line_user_id)->first();
 
-        // Lineユーザーの会員登録を行う
-        $user = User::create([
-            'name' => $profile['displayName'],
-            'uuid' => (string) Str::uuid(),
-            'line_user_id' => $line_user_id,
-        ]);
+        if ($has_user === NULL) {
+            $profile = $this->bot->getProfile($line_user_id)->getJSONDecodedBody();
 
-        // Lineユーザーへの質問テーブルにも新しくレコードを保存する
-        LineUsersQuestion::create([
-            'line_user_id' => $line_user_id,
-            'question_number' => LineUsersQuestion::PROJECT
-        ]);
+            // Lineユーザーの会員登録を行う
+            $user = User::create([
+                'name' => $profile['displayName'],
+                'uuid' => (string) Str::uuid(),
+                'line_user_id' => $line_user_id,
+            ]);
 
-        // userをneo4jのDBにも登録
-        if ($user) {
-            $this->user_repository->register($user);
+            // Lineユーザーへの質問テーブルにも新しくレコードを保存する
+            LineUsersQuestion::create([
+                'line_user_id' => $line_user_id,
+                'question_number' => LineUsersQuestion::PROJECT
+            ]);
+
+            // userをneo4jのDBにも登録
+            if ($user) {
+                $this->user_repository->register($user);
+            }
         }
+        return;
     }
 }
