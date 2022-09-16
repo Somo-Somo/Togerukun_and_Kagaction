@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
+use LINE\LINEBot\Event\FollowEvent;
+use LINE\LINEBot\Event\MessageEvent\TextMessage;
 
 class LineBotController extends Controller
 {
@@ -59,19 +61,18 @@ class LineBotController extends Controller
      */
     public function reply(Request $request, FollowAction $follow_action, MessageReceivedAction $message_received_action)
     {
-        // LINEのユーザーIDをuserIdに代入
-        $line_user_id = $request['events'][0]['source']['userId'];
-
-        // ユーザーからフォローされた時
-        if ($request['events'][0]['type'] === 'follow') {
-            $follow_action->invoke($line_user_id);
-        }
-        // ユーザーからメッセージを受け取った時
-        if ($request['events'][0]['type'] === 'message') {
-            $message_received_action->invoke($request['events'][0]);
-        }
-
         $status_code = $this->line_bot_service->eventHandler($request);
+
+        // リクエストをEventオブジェクトに変換する
+        $events = $this->bot->parseEventRequest($request->getContent(), $request->header('x-line-signature'));
+
+        foreach ($events as $event) {
+            if ($event->getType() === 'follow') {
+                $follow_action->invoke($event->getUserId());
+            } else if ($event->getType() === 'message') {
+                $message_received_action->invoke($event);
+            }
+        }
 
         Log::debug($status_code);
 
