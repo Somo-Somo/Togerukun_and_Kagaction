@@ -29,6 +29,7 @@ class LineUsersQuestion extends Model
     // question_numberに対するクラス定数
     const NO_QUESTION = 0;
     const PROJECT = 1;
-    const TODO = 2;
-    const DATE = 3;
+    const GOAL = 2;
+    const TODO = 3;
+    const DATE = 4;
 }
