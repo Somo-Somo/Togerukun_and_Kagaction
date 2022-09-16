@@ -51,18 +51,18 @@ class UserRepository implements UserRepositoryInterface
     /**
      * すでにオンボーディングを終えているかDB上で確認
      *
-     * @param string $user_id
+     * @param string $user_uuid
      * @return $onboarding_done_in_array オンボーディングモデルを配列上にしたもの
      */
-    public function whetherExecuteOnboarding(int $user_id)
+    public function whetherExecuteOnboarding(string $user_uuid)
     {
         $onboarding = $this->client->run(
             <<<'CYPHER'
-                OPTIONAL MATCH (user:User{user_id:$user_id}) - [:NOT_EXECUTE] -> (onboarding:Onboarding)
+                OPTIONAL MATCH ( user:User{ uuid : $user_uuid }) - [:NOT_EXECUTE] -> (onboarding:Onboarding)
                 RETURN onboarding
                 CYPHER,
             [
-                'user_id' => $user_id,
+                'user_uuid' => $user_uuid,
             ]
         );
         $onboarding_done_in_array = $onboarding->toArray()[0]['onboarding'];
@@ -78,7 +78,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User{user_id:$user_id}) - [not_execute:NOT_EXECUTE] -> (:Onboarding)
+                MATCH (user:User{ uuid : $user_uuid }) - [not_execute:NOT_EXECUTE] -> (:Onboarding)
                 CREATE (user)-[
                     :HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}
                 ]->(
@@ -107,7 +107,7 @@ class UserRepository implements UserRepositoryInterface
                 'goal_name' => $onboarding['goal']['name'],
                 'goal_uuid' => $onboarding['goal']['uuid'],
                 'goal_date' => $onboarding['goal']['date'],
-                'user_id' => $onboarding['created_by_user_id']
+                'user_uuid' => $onboarding['created_by_user_uuid']
             ]
         );
     }
@@ -115,14 +115,14 @@ class UserRepository implements UserRepositoryInterface
     /**
      * ユーザーが持っているプロジェクトとTodoを取得
      *
-     * @param int $user_id
+     * @param string $user_uuid
      * @return $user_has_project_and_todo
      */
-    public function getUserHasProjetAndTodo(int $user_id)
+    public function getUserHasProjetAndTodo(string $user_uuid)
     {
         $user_has_project_and_todo = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User{user_id:$user_id}) - [:HAS] -> (project:Project),
+                MATCH (user:User{ uuid : $user_uuid }) - [:HAS] -> (project:Project),
                     len = (project) <- [r*] - (parent:Todo)
                 OPTIONAL MATCH (parent)<-[]-(child:Todo)
                 OPTIONAL MATCH (:User)-[date:DATE]->(parent)
@@ -135,7 +135,7 @@ class UserRepository implements UserRepositoryInterface
                 ORDER BY r
                 CYPHER,
             [
-                'user_id' => $user_id,
+                'user_uuid' => $user_uuid,
             ]
         );
 

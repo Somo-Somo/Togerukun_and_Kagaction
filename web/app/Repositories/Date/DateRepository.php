@@ -17,14 +17,14 @@ class DateRepository implements DateRepositoryInterface
     /**
      * 日付が設定してあるTodoをDBから取得
      *
-     * @param int $user_id
+     * @param string $user_uuid
      * @return $todo_and_schedule
      */
-    public function getDate(int $user_id)
+    public function getDate(string $user_uuid)
     {
         $todo_and_schedule = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { user_id : $user_id }) - [date:DATE] -> (todo:Todo),
+                MATCH (user:User { uuid : $user_uuid }) - [date:DATE] -> (todo:Todo),
                 len = (project:Project) <- [r*] - (todo)
                 OPTIONAL MATCH (user) - [accomplished:ACCOMPLISHED] -> (todo)
                 OPTIONAL MATCH (todo) - [:TO_ACHIEVE] -> (parent:Todo)
@@ -36,7 +36,7 @@ class DateRepository implements DateRepositoryInterface
                 ORDER BY date.on ASC
                 CYPHER,
             [
-                'user_id' => $user_id,
+                'user_uuid' => $user_uuid,
             ]
         );
         return $todo_and_schedule;
@@ -51,7 +51,7 @@ class DateRepository implements DateRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { user_id : $user_id }), (todo:Todo { uuid: $uuid })
+                MATCH (user:User { uuid : $user_uuid }), (todo:Todo { uuid: $uuid })
                 OPTIONAL MATCH x = (user) - [date:DATE] -> (todo)
                 WHERE x IS NOT NULL
                 SET date.on = $date
@@ -64,7 +64,7 @@ class DateRepository implements DateRepositoryInterface
                 CYPHER,
             [
                 'uuid' => $todo['uuid'],
-                'user_id' => $todo['user_id'],
+                'user_uuid' => $todo['user_uuid'],
                 'date' => $todo['date']
             ]
         );
@@ -79,7 +79,7 @@ class DateRepository implements DateRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { user_id : $user_id }) -
+                MATCH (user:User { uuid : $user_uuid }) -
                 [date: DATE]
                 ->(todo:Todo { uuid: $uuid })
                 DELETE date
@@ -87,7 +87,7 @@ class DateRepository implements DateRepositoryInterface
                 CYPHER,
             [
                 'uuid' => $todo['uuid'],
-                'user_id' => $todo['user_id']
+                'user_uuid' => $todo['user_uuid']
             ]
         );
     }
