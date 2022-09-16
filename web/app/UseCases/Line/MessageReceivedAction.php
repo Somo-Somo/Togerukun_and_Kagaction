@@ -3,6 +3,7 @@
 namespace App\UseCases\Line;
 
 use App\Models\User;
+use App\Models\Project;
 use App\Models\Todo;
 use App\Models\LineUsersQuestion;
 use App\Repositories\User\UserRepositoryInterface;
@@ -79,9 +80,12 @@ class MessageReceivedAction
                     'created_by_user_id' => $line_user->id
                 ];
 
-                # 返信メッセージ
-                $reply_message = Todo::askGoal($line_user->name, $project['name']);
-                $this->bot->replyText($message['replyToken'], $reply_message);
+                // 返信メッセージ
+                $this->bot->replyText(
+                    $message['replyToken'],
+                    Project::confirmProject($project['name']),
+                    Todo::askGoal($line_user->name, $project['name'])
+                );
 
                 //質問の更新
                 $line_user->question->update([
