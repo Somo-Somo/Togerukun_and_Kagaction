@@ -100,7 +100,12 @@ class MessageReceivedAction
             }
             // Todoに関する質問の場合
             if ($question_number === LineUsersQuestion::TODO) {
-                # code...
+                $todo = [
+                    'name' => $event->getText(),
+                    'uuid' => (string) Str::uuid(),
+                    'parent_uuid' => $line_user->question->parent_uuid,
+                    'created_by_user_id' => $line_user->id
+                ];
             }
             // 日付に関する質問の場合
             if ($question_number === LineUsersQuestion::DATE) {
