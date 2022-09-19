@@ -47,7 +47,7 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $created_project = $this->client->run(
             <<<'CYPHER'
-                    MATCH (user:User { user_uuid : $user_uuid })
+                    MATCH (user:User { uuid : $user_uuid })
                     CREATE (user)-[
                                 :HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}
                             ]->(
@@ -76,7 +76,7 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                    MATCH (user:User { user_uuid : $user_uuid }), (project:Project { uuid: $uuid })
+                    MATCH (user:User { uuid : $user_uuid }), (project:Project { uuid: $uuid })
                     SET project.name = $name
                     WITH user,project
                     OPTIONAL MATCH x = (user)-[updated:UPDATED]->(project)
@@ -104,7 +104,7 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { user_uuid : $user_uuid }), (:User)-[has:HAS]->(project:Project{ uuid :$uuid })
+                MATCH (user:User { uuid : $user_uuid }), (:User)-[has:HAS]->(project:Project{ uuid :$uuid })
                 CREATE (user)-[
                             :DELETED{at:localdatetime({timezone: 'Asia/Tokyo'})}
                         ]->(project)
@@ -129,7 +129,7 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                    MATCH (user:User{user_uuid:$user_uuid})
+                    MATCH (user:User{ uuid : $user_uuid })
                     CREATE (user) - [:HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (:Project{name:'仕事', uuid:$project_work_uuid})
                     CREATE (user) - [:HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (:Project{name:'生活', uuid:$project_life_uuid})
                 CYPHER,
