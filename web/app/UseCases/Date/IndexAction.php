@@ -23,12 +23,12 @@ class IndexAction
     /**
      * 日付が付随しているTodoを取得して日付があるTodo一覧に展開する
      *
-     * @param int $user_id
+     * @param string $user_uuid
      * @return array $schedule_list 日付があるTodo一覧
      */
-    public function invoke(int $user_id)
+    public function invoke(string $user_uuid)
     {
-        $fetch_todo_and_date = $this->date_repository->getDate($user_id);
+        $fetch_todo_and_date = $this->date_repository->getDate($user_uuid);
         $schedule_list = $this->schedule_list_converter->invoke($fetch_todo_and_date);
         return $schedule_list;
     }

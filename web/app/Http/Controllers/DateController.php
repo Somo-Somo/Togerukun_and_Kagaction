@@ -54,7 +54,7 @@ class DateController extends Controller
         $todo = [
             'uuid' => $todo_uuid,
             'date' => $request->date,
-            'user_id' => $request->user()->id,
+            'user_uuid' => $request->user()->uuid,
         ];
 
         $update_action->invoke($todo);
@@ -79,7 +79,7 @@ class DateController extends Controller
     {
         $todo = [
             'uuid' => $todo_uuid,
-            'user_id' => $request->user()->id,
+            'user_uuid' => $request->user()->uuid,
         ];
 
         $destroy_action->invoke($todo);

@@ -4,7 +4,7 @@ namespace App\Repositories\Date;
 
 interface DateRepositoryInterface
 {
-    public function getDate(int $user_id);
+    public function getDate(string $user_uuid);
     public function updateDate(array $todo);
     public function destroyDate(array $todo);
 }
