@@ -46,7 +46,7 @@ class TodoRepository implements TodoRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH   (user:User { user_id : $user_id }),
+                MATCH   (user:User { uuid : $user_uuid }),
                         (parent:Todo { uuid: $parent_uuid }) - [*] -> (project:Project)
                 CREATE (user)-[
                             :CREATED{at:localdatetime({timezone: 'Asia/Tokyo'})}
@@ -68,7 +68,7 @@ class TodoRepository implements TodoRepositoryInterface
                 'name' => $todo['name'],
                 'uuid' => $todo['uuid'],
                 'parent_uuid' => $todo['parent_uuid'],
-                'user_id' => $todo['user_id'],
+                'user_uuid' => $todo['user_uuid'],
             ]
         );
     }
@@ -82,7 +82,7 @@ class TodoRepository implements TodoRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                    MATCH (user:User { user_id : $user_id }), (todo:Todo { uuid: $uuid })
+                    MATCH (user:User { uuid : $user_uuid }), (todo:Todo { uuid: $uuid })
                     SET todo.name = $name
                     WITH user,todo
                     OPTIONAL MATCH x = (user)-[updated:UPDATED]->(todo)
@@ -96,7 +96,7 @@ class TodoRepository implements TodoRepositoryInterface
             [
                 'name' => $todo['name'],
                 'uuid' => $todo['uuid'],
-                'user_id' => $todo['user_id'],
+                'user_uuid' => $todo['user_uuid'],
             ]
         );
     }
@@ -110,7 +110,7 @@ class TodoRepository implements TodoRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { user_id : $user_id }), (todo:Todo{ uuid :$uuid }) - [r] -> (parent)
+                MATCH (user:User { uuid : $user_uuid }), (todo:Todo{ uuid :$uuid }) - [r] -> (parent)
                 CREATE (user)-[
                             :DELETED{at:localdatetime({timezone: 'Asia/Tokyo'})}
                         ]->(todo)
@@ -119,7 +119,7 @@ class TodoRepository implements TodoRepositoryInterface
                 CYPHER,
             [
                 'uuid' => $todo['uuid'],
-                'user_id' => $todo['user_id'],
+                'user_uuid' => $todo['user_uuid'],
             ]
         );
     }
@@ -133,7 +133,7 @@ class TodoRepository implements TodoRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { user_id : $user_id }), (todo:Todo { uuid: $uuid })
+                MATCH (user:User { uuid : $user_uuid }), (todo:Todo { uuid: $uuid })
                 CREATE (user) - [
                     accomplished:ACCOMPLISHED{at:localdatetime({timezone: 'Asia/Tokyo'})}
                 ] -> (todo)
@@ -141,7 +141,7 @@ class TodoRepository implements TodoRepositoryInterface
                 CYPHER,
             [
                 'uuid' => $todo['uuid'],
-                'user_id' => $todo['user_id'],
+                'user_uuid' => $todo['user_uuid'],
             ]
         );
     }
@@ -155,13 +155,13 @@ class TodoRepository implements TodoRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { user_id : $user_id })-[accomplish:ACCOMPLISHED]->(todo:Todo { uuid: $uuid })
+                MATCH (user:User { uuid : $user_uuid })-[accomplish:ACCOMPLISHED]->(todo:Todo { uuid: $uuid })
                 DELETE accomplish
                 RETURN todo
                 CYPHER,
             [
                 'uuid' => $todo['uuid'],
-                'user_id' => $todo['user_id'],
+                'user_uuid' => $todo['user_uuid'],
             ]
         );
     }

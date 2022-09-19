@@ -18,19 +18,19 @@ class ProjectRepository implements ProjectRepositoryInterface
     /**
      * プロジェクト一覧をDBから取得
      *
-     * @param int $user_id
+     * @param string $user_uuid
      * @return $project_list
      */
-    public function getProjectList(int $user_id)
+    public function getProjectList(string $user_uuid)
     {
         $project_list = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { user_id : $user_id })-[:HAS]->(project:Project)
+                MATCH (user:User { uuid : $user_uuid })-[:HAS]->(project:Project)
                 RETURN project
                 ORDER BY project
                 CYPHER,
             [
-                'user_id' => $user_id,
+                'user_uuid' => $user_uuid,
             ]
         );
 
@@ -47,7 +47,7 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $created_project = $this->client->run(
             <<<'CYPHER'
-                    MATCH (user:User { user_id : $user_id })
+                    MATCH (user:User { uuid : $user_uuid })
                     CREATE (user)-[
                                 :HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}
                             ]->(
@@ -60,7 +60,7 @@ class ProjectRepository implements ProjectRepositoryInterface
             [
                 'name' => $project['name'],
                 'uuid' => $project['uuid'],
-                'user_id' => $project['created_by_user_id'],
+                'user_uuid' => $project['created_by_user_uuid'],
             ]
         );
 
@@ -76,7 +76,7 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                    MATCH (user:User { user_id : $user_id }), (project:Project { uuid: $uuid })
+                    MATCH (user:User { uuid : $user_uuid }), (project:Project { uuid: $uuid })
                     SET project.name = $name
                     WITH user,project
                     OPTIONAL MATCH x = (user)-[updated:UPDATED]->(project)
@@ -90,7 +90,7 @@ class ProjectRepository implements ProjectRepositoryInterface
             [
                 'name' => $project['name'],
                 'uuid' => $project['uuid'],
-                'user_id' => $project['user_id'],
+                'user_uuid' => $project['user_uuid'],
             ]
         );
     }
@@ -104,7 +104,7 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { user_id : $user_id }), (:User)-[has:HAS]->(project:Project{ uuid :$uuid })
+                MATCH (user:User { uuid : $user_uuid }), (:User)-[has:HAS]->(project:Project{ uuid :$uuid })
                 CREATE (user)-[
                             :DELETED{at:localdatetime({timezone: 'Asia/Tokyo'})}
                         ]->(project)
@@ -113,7 +113,7 @@ class ProjectRepository implements ProjectRepositoryInterface
                 CYPHER,
             [
                 'uuid' => $project['uuid'],
-                'user_id' => $project['user_id'],
+                'user_uuid' => $project['user_uuid'],
             ]
         );
     }
@@ -123,18 +123,18 @@ class ProjectRepository implements ProjectRepositoryInterface
      * ※絶対にこんな書き方して言い訳がない
      * 会員登録後の使い方のテンプレをKagaction内で表示する
      *
-     * @param string $user_id
+     * @param string $user_uuid
      */
-    public function generateInitialTemplate(int $user_id)
+    public function generateInitialTemplate(string $user_uuid)
     {
         $this->client->run(
             <<<'CYPHER'
-                    MATCH (user:User{user_id:$user_id})
+                    MATCH (user:User{ uuid : $user_uuid })
                     CREATE (user) - [:HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (:Project{name:'仕事', uuid:$project_work_uuid})
                     CREATE (user) - [:HAS{at:localdatetime({timezone: 'Asia/Tokyo'})}] -> (:Project{name:'生活', uuid:$project_life_uuid})
                 CYPHER,
             [
-                'user_id' => $user_id,
+                'user_uuid' => $user_uuid,
                 'project_work_uuid' => (string) Str::uuid(),
                 'project_life_uuid' => (string) Str::uuid(),
             ]

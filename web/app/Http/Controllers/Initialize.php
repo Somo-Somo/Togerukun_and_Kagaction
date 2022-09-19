@@ -36,10 +36,10 @@ class Initialize extends Controller
         \App\UseCases\Project\IndexAction $project_index_action,
         \App\UseCases\Date\IndexAction $date_index_action,
     ) {
-        $todo_list = $get_user_has_project_and_todo_action->invoke($request->user()->id);
-        $project_list = $project_index_action->invoke($request->user()->id);
-        $schedule_list = $date_index_action->invoke($request->user()->id);
-        $onboarding = $this->user_repository->whetherExecuteOnboarding($request->user()->id);
+        $todo_list = $get_user_has_project_and_todo_action->invoke($request->user()->uuid);
+        $project_list = $project_index_action->invoke($request->user()->uuid);
+        $schedule_list = $date_index_action->invoke($request->user()->uuid);
+        $onboarding = $this->user_repository->whetherExecuteOnboarding($request->user()->uuid);
 
         $user_has_project_and_todo = [
             'project' => $project_list,

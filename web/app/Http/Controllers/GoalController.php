@@ -32,7 +32,7 @@ class GoalController extends Controller
             'uuid' => $request->uuid,
             'parent_uuid' => $request->parentUuid,
             'date' => $request->date,
-            'user_id' => $request->user()->id,
+            'user_uuid' => $request->user()->uuid,
         ];
 
         $store_action->invoke($goal);

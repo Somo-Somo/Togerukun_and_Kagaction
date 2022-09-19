@@ -23,7 +23,7 @@ class CauseRepository implements CauseRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { user_id : $user_id }) - [:CREATED] -> (todo:Todo {uuid: $todo_uuid})
+                MATCH (user:User { uuid : $user_uuid }) - [:CREATED] -> (todo:Todo {uuid: $todo_uuid})
                 CREATE (cause:Cause{
                     uuid: $cause_uuid,
                     text: $text
@@ -34,7 +34,7 @@ class CauseRepository implements CauseRepositoryInterface
                 RETURN user, todo, cause
                 CYPHER,
             [
-                'user_id' => $cause['user_id'],
+                'user_uuid' => $cause['user_uuid'],
                 'todo_uuid' => $cause['todo_uuid'],
                 'cause_uuid' => $cause['cause_uuid'],
                 'text' => $cause['text']
@@ -51,14 +51,14 @@ class CauseRepository implements CauseRepositoryInterface
     {
         $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { user_id : $user_id }) - [created:CREATED] -> (cause:Cause { uuid : $cause_uuid }),
+                MATCH (user:User { uuid : $user_uuid }) - [created:CREATED] -> (cause:Cause { uuid : $cause_uuid }),
                 (cause) <- [is_the_cause_of:IS_THE_CAUSE_OF] - (todo:Todo)
                 DELETE is_the_cause_of, created
                 DELETE cause
                 RETURN user
                 CYPHER,
             [
-                'user_id' => $cause['user_id'],
+                'user_uuid' => $cause['user_uuid'],
                 'cause_uuid' => $cause['cause_uuid']
             ]
         );
