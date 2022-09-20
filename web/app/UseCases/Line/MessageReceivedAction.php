@@ -124,7 +124,7 @@ class MessageReceivedAction
             ];
 
             // 返信メッセージ(日付)
-            $response = $this->bot->replyMessage(
+            $this->bot->replyMessage(
                 $event->getReplyToken(),
                 Todo::askTodoLimited($line_user->name, $todo['name'])
             );
