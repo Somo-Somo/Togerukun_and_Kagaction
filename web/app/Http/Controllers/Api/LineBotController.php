@@ -69,7 +69,9 @@ class LineBotController extends Controller
         foreach ($events as $event) {
             if ($event->getType() === 'follow') {
                 $follow_action->invoke($event->getUserId());
-            } else if ($event->getType() === 'message') {
+            } else if (
+                $event->getType() === 'message' || $event->getType() === 'postback'
+            ) {
                 $message_received_action->invoke($event);
             }
         }
