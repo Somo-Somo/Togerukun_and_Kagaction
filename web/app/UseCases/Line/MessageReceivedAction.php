@@ -3,10 +3,8 @@
 namespace App\UseCases\Line;
 
 use App\Models\User;
-use App\Models\Todo;
 use App\Models\LineUsersQuestion;
 use App\UseCases\Line\ProjectResponseAction;
-use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 
@@ -24,11 +22,6 @@ class MessageReceivedAction
     protected $bot;
 
     /**
-     * @param App\Repositories\Todo\DateRepositoryInterface
-     */
-    protected $date_repository;
-
-    /**
      * @param App\UseCases\Line\ProjectResponseAction
      */
     protected $project_response_action;
@@ -39,27 +32,17 @@ class MessageReceivedAction
     protected $todo_response_action;
 
     /**
-     * @param App\UseCases\Line\DateResponseAction
-     */
-    protected $date_response_action;
-
-    /**
-     * @param App\Repositories\Line\LineRepositoryInterface $line_repository_interface
-     * @param App\Repositories\Date\DateRepositoryInterface $date_repository_interface
      * @param App\UseCases\LINE\ProjectResponseAction $project_response_action
      * @param App\UseCases\LINE\TodoResponseAction $todo_response_action
-     * @param App\UseCases\LINE\DateResponseAction $date_response_action
      */
     public function __construct(
         ProjectResponseAction $project_response_action,
         TodoResponseAction $todo_response_action,
-        DateResponseAction $date_response_action,
     ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
         $this->project_response_action = $project_response_action;
         $this->todo_response_action = $todo_response_action;
-        $this->date_response_action = $date_response_action;
     }
 
     /**
@@ -77,6 +60,12 @@ class MessageReceivedAction
 
         if ($question_number === LineUsersQuestion::NO_QUESTION) {
             // 質問がない場合
+            if ($event->getText() === '振り返る') {
+                # code...
+            } else if ($event->getText() === 'やること') {
+            } else if ($event->getText() === 'やること') {
+                # code...
+            }
         } else if ($question_number === LineUsersQuestion::PROJECT) {
             // プロジェクトに関する質問の場合
             $this->project_response_action->invoke($event, $line_user);
@@ -86,9 +75,6 @@ class MessageReceivedAction
         ) {
             // TodoやGOALに関する質問の場合
             $this->todo_response_action->invoke($event, $line_user, $question_number);
-        } else if ($question_number === LineUsersQuestion::DATE) {
-            // 日付に関する質問の場合
-            $this->date_response_action->invoke($event, $line_user);
         }
         return;
     }
