@@ -3,6 +3,7 @@
 namespace App\UseCases\Line;
 
 use App\Models\User;
+use App\Models\Todo;
 use App\Models\LineUsersQuestion;
 use App\UseCases\Line\ProjectResponseAction;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -57,15 +58,16 @@ class MessageReceivedAction
         $line_user = User::where('line_user_id', $event->getUserId())->first();
 
         $question_number = $line_user->question->question_number;
-
-        if ($question_number === LineUsersQuestion::NO_QUESTION) {
+        if ($event->getText() === '振り返る') {
+        } else if ($event->getText() === 'やること') {
+            // リッチメニューからやることを選択
+            $this->bot->replyMessage(
+                $event->getReplyToken(),
+                Todo::askAddOrList()
+            );
+        } else if ($event->getText() === '使い方') {
+        } else if ($question_number === LineUsersQuestion::NO_QUESTION) {
             // 質問がない場合
-            if ($event->getText() === '振り返る') {
-                # code...
-            } else if ($event->getText() === 'やること') {
-            } else if ($event->getText() === 'やること') {
-                # code...
-            }
         } else if ($question_number === LineUsersQuestion::PROJECT) {
             // プロジェクトに関する質問の場合
             $this->project_response_action->invoke($event, $line_user);

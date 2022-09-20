@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\TemplateActionBuilder\DatetimePickerTemplateActionBuilder;
+use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 
@@ -102,5 +103,29 @@ class Todo extends Model
     public static function explainSettingOfCheck()
     {
         return  'また週に1回、もくサポくんから振り返りのリマインドを送ることができるよ！' . "\n" . '「メニュー>振り返り」から日時の設定を自分で変更することができます！';
+    }
+
+    /**
+     * Todoの一覧を見るか、それとも新しくTodoを追加するか
+     *
+     * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
+     */
+    public static function askAddOrList()
+    {
+        $builder =
+            new TemplateMessageBuilder(
+                'やること', // チャット一覧に表示される
+                new ButtonTemplateBuilder(
+                    'やること', // title
+                    '選択してください', // text
+                    null, // 画像url
+                    [
+                        new PostbackTemplateActionBuilder('やることの一覧を見る', 'TODO_LIST'),
+                        new PostbackTemplateActionBuilder('やることを新しく追加する', 'ADD_TODO'),
+                    ]
+                )
+
+            );
+        return $builder;
     }
 }
