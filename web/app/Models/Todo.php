@@ -120,8 +120,8 @@ class Todo extends Model
                     '選択してください', // text
                     null, // 画像url
                     [
-                        new PostbackTemplateActionBuilder('やることの一覧を見る', 'TODO_LIST'),
-                        new PostbackTemplateActionBuilder('やることを新しく追加する', 'ADD_TODO'),
+                        new PostbackTemplateActionBuilder('一覧を見る', 'TODO_LIST'),
+                        new PostbackTemplateActionBuilder('新しく追加する', 'ADD_TODO'),
                     ]
                 )
 
