@@ -154,14 +154,21 @@ class MessageReceivedAction
                 'user_uuid' => $line_user->uuid,
                 'date' => $event->getPostbackParams()['date']
             ];
-            Log::debug($date);
-            $this->date_repository->updateDate($date);
+
             $this->bot->replyText(
                 $event->getReplyToken(),
                 Todo::confirmDate(new DateTime($date['date'])),
                 Todo::callForAdditionalTodo(),
                 Todo::explainSettingOfCheck()
             );
+
+            //質問の更新
+            $line_user->question->update([
+                'question_number' => LineUsersQuestion::NO_QUESTION,
+                'parent_uuid' => null
+            ]);
+
+            $this->date_repository->updateDate($date);
         }
         return;
     }
