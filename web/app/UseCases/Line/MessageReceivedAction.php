@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
+use DateTime;
 
 
 class MessageReceivedAction
@@ -51,6 +52,11 @@ class MessageReceivedAction
     protected $todo_repository;
 
     /**
+     * @param App\Repositories\Todo\DateRepositoryInterface
+     */
+    protected $date_repository;
+
+    /**
      * @param App\Repositories\Line\LineRepositoryInterface $line_repository_interface
      * @param App\Repositories\Project\ProjectRepositoryInterface $project_repository_interface
      * @param App\Repositories\Goal\GoalRepositoryInterface $todo_repository_interface
@@ -61,7 +67,8 @@ class MessageReceivedAction
         LineBotRepositoryInterface $line_bot_repository_interface,
         ProjectRepositoryInterface $project_repository_interface,
         GoalRepositoryInterface $goal_repository_interface,
-        TodoRepositoryInterface $todo_repository_interface
+        TodoRepositoryInterface $todo_repository_interface,
+        DateRepositoryInterface $date_repository_interface,
     ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
@@ -69,6 +76,7 @@ class MessageReceivedAction
         $this->project_repository = $project_repository_interface;
         $this->goal_repository = $goal_repository_interface;
         $this->todo_repository = $todo_repository_interface;
+        $this->date_repository = $date_repository_interface;
     }
 
     /**
@@ -79,72 +87,89 @@ class MessageReceivedAction
      */
     public function invoke(object $event)
     {
-        if ($event->getEvent()['message']['type'] === 'text') {
-            // 該当のユーザーを探す
-            $line_user = User::where('line_user_id', $event->getUserId())->first();
+        // 該当のユーザーを探す
+        $line_user = User::where('line_user_id', $event->getUserId())->first();
 
-            $question_number = $line_user->question->question_number;
+        $question_number = $line_user->question->question_number;
 
-            // 質問がない場合
-            if ($question_number === LineUsersQuestion::NO_QUESTION) {
-                # code...
-            }
-            // プロジェクトに関する質問の場合
-            if ($question_number === LineUsersQuestion::PROJECT) {
-                $project = [
-                    'name' => $event->getText(),
-                    'uuid' => (string) Str::uuid(),
-                    'created_by_user_uuid' => $line_user->uuid
-                ];
+        // 質問がない場合
+        if ($question_number === LineUsersQuestion::NO_QUESTION) {
+            # code...
+        }
+        // プロジェクトに関する質問の場合
+        if ($question_number === LineUsersQuestion::PROJECT) {
+            $project = [
+                'name' => $event->getText(),
+                'uuid' => (string) Str::uuid(),
+                'created_by_user_uuid' => $line_user->uuid
+            ];
 
-                // 返信メッセージ
-                $this->bot->replyText(
-                    $event->getReplyToken(),
-                    Project::confirmProject($project['name']),
-                    Todo::askGoal($line_user->name, $project['name'])
-                );
+            // 返信メッセージ
+            $this->bot->replyText(
+                $event->getReplyToken(),
+                Project::confirmProject($project['name']),
+                Todo::askGoal($line_user->name, $project['name'])
+            );
 
-                //質問の更新
-                $line_user->question->update([
-                    'question_number' => LineUsersQuestion::GOAL,
-                    'parent_uuid' => $project['uuid']
-                ]);
+            //質問の更新
+            $line_user->question->update([
+                'question_number' => LineUsersQuestion::GOAL,
+                'parent_uuid' => $project['uuid']
+            ]);
 
-                // GraphDBに保存
-                $this->project_repository->create($project);
+            // GraphDBに保存
+            $this->project_repository->create($project);
 
-                return;
-            }
-            // Todoに関する質問の場合
-            if ($question_number === LineUsersQuestion::GOAL || $question_number === LineUsersQuestion::TODO) {
-                $todo = [
-                    'name' => $event->getText(),
-                    'uuid' => (string) Str::uuid(),
-                    'parent_uuid' => $line_user->question->parent_uuid,
-                    'user_uuid' => $line_user->uuid
-                ];
-
-                // 返信メッセージ(日付)
-                $response = $this->bot->replyMessage(
-                    $event->getReplyToken(),
-                    Todo::askTodoLimited($line_user->name, $todo['name'])
-                );
-
-                //質問の更新
-                $line_user->question->update([
-                    'question_number' => LineUsersQuestion::DATE,
-                    'parent_uuid' => $todo['uuid']
-                ]);
-
-                // GraphDBに保存
-                $question_number === LineUsersQuestion::GOAL ?
-                    $this->goal_repository->create($todo) : $this->todo_repository->create($todo);
-            }
-            // 日付に関する質問の場合
-            if ($question_number === LineUsersQuestion::DATE) {
-                # code...
-            }
             return;
         }
+        // Todoに関する質問の場合
+        if ($question_number === LineUsersQuestion::GOAL || $question_number === LineUsersQuestion::TODO) {
+            $todo = [
+                'name' => $event->getText(),
+                'uuid' => (string) Str::uuid(),
+                'parent_uuid' => $line_user->question->parent_uuid,
+                'user_uuid' => $line_user->uuid
+            ];
+
+            // 返信メッセージ(日付)
+            $this->bot->replyMessage(
+                $event->getReplyToken(),
+                Todo::askTodoLimited($line_user->name, $todo['name'])
+            );
+
+            //質問の更新
+            $line_user->question->update([
+                'question_number' => LineUsersQuestion::DATE,
+                'parent_uuid' => $todo['uuid']
+            ]);
+
+            // GraphDBに保存
+            $question_number === LineUsersQuestion::GOAL ?
+                $this->goal_repository->create($todo) : $this->todo_repository->create($todo);
+        }
+        // 日付に関する質問の場合
+        if ($question_number === LineUsersQuestion::DATE) {
+            $date = [
+                'uuid' => $line_user->question->parent_uuid,
+                'user_uuid' => $line_user->uuid,
+                'date' => $event->getPostbackParams()['date']
+            ];
+
+            $this->bot->replyText(
+                $event->getReplyToken(),
+                Todo::confirmDate(new DateTime($date['date'])),
+                Todo::callForAdditionalTodo(),
+                Todo::explainSettingOfCheck()
+            );
+
+            //質問の更新
+            $line_user->question->update([
+                'question_number' => LineUsersQuestion::NO_QUESTION,
+                'parent_uuid' => null
+            ]);
+
+            $this->date_repository->updateDate($date);
+        }
+        return;
     }
 }
