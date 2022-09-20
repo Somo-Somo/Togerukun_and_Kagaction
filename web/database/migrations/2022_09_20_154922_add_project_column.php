@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUserUuidAndCreatedAt extends Migration
+class AddProjectColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddUserUuidAndCreatedAt extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            // $table->string('uuid')->unique()->nullable(false)->after('password');
+        Schema::table('projects', function (Blueprint $table) {
+            // $table->string('user_uuid')->unique()->after('id');
+            // $table->foreign('user_uuid')->references('uuid')->on('users');
         });
     }
 
@@ -25,7 +26,6 @@ class AddUserUuidAndCreatedAt extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-        });
+        //
     }
 }

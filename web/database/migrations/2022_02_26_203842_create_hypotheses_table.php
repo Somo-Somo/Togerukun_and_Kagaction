@@ -13,14 +13,14 @@ class CreateHypothesesTable extends Migration
      */
     public function up()
     {
-        Schema::create('hypotheses', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('uuid')->unique();
-            $table->string('parent_uuid');
-            $table->string('status');
-            $table->timestamps();
-        });
+        // Schema::create('hypotheses', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        //     $table->string('uuid')->unique();
+        //     $table->string('parent_uuid');
+        //     $table->string('status');
+        //     $table->timestamps();
+        // });
     }
 
     /**
