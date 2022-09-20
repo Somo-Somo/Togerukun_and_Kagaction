@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
+use DateTime;
 
 
 class MessageReceivedAction
@@ -155,6 +156,12 @@ class MessageReceivedAction
             ];
             Log::debug($date);
             $this->date_repository->updateDate($date);
+            $this->bot->replyText(
+                $event->getReplyToken(),
+                Todo::confirmDate(new DateTime($date['date'])),
+                Todo::callForAdditionalTodo(),
+                Todo::explainSettingOfCheck()
+            );
         }
         return;
     }
