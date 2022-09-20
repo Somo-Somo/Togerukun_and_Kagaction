@@ -130,8 +130,6 @@ class MessageReceivedAction
                     Todo::askTodoLimited($line_user->name, $todo['name'])
                 );
 
-                Log::debug((array)$response);
-
                 //質問の更新
                 $line_user->question->update([
                     'question_number' => LineUsersQuestion::DATE,
