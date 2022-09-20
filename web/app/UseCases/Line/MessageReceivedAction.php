@@ -51,6 +51,11 @@ class MessageReceivedAction
     protected $todo_repository;
 
     /**
+     * @param App\Repositories\Todo\DateRepositoryInterface
+     */
+    protected $date_repository;
+
+    /**
      * @param App\Repositories\Line\LineRepositoryInterface $line_repository_interface
      * @param App\Repositories\Project\ProjectRepositoryInterface $project_repository_interface
      * @param App\Repositories\Goal\GoalRepositoryInterface $todo_repository_interface
@@ -61,7 +66,8 @@ class MessageReceivedAction
         LineBotRepositoryInterface $line_bot_repository_interface,
         ProjectRepositoryInterface $project_repository_interface,
         GoalRepositoryInterface $goal_repository_interface,
-        TodoRepositoryInterface $todo_repository_interface
+        TodoRepositoryInterface $todo_repository_interface,
+        DateRepositoryInterface $date_repository_interface,
     ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
@@ -69,6 +75,7 @@ class MessageReceivedAction
         $this->project_repository = $project_repository_interface;
         $this->goal_repository = $goal_repository_interface;
         $this->todo_repository = $todo_repository_interface;
+        $this->date_repository = $date_repository_interface;
     }
 
     /**
@@ -147,6 +154,7 @@ class MessageReceivedAction
                 'date' => $event->getPostbackParams()['date']
             ];
             Log::debug($date);
+            $this->date_repository->updateDate($date);
         }
         return;
     }
