@@ -37,9 +37,11 @@ class FollowAction
     public function invoke(string $line_user_id)
     {
         // ユーザーが既に会員登録されているか確認する
-        $has_user = User::where('line_user_id', $line_user_id)->first();
+        $has_user_account = User::where('line_user_id', $line_user_id)->first();
+        // Line上で登録済みか
+        $has_line_user_account = LineUsersQuestion::where('line_user_id', $line_user_id)->first();
 
-        if ($has_user === NULL) {
+        if ($has_user_account === NULL) {
             $profile = $this->bot->getProfile($line_user_id)->getJSONDecodedBody();
 
             // Lineユーザーの会員登録を行う
@@ -59,6 +61,14 @@ class FollowAction
             if ($user) {
                 $this->user_repository->register($user);
             }
+        }
+        // 一旦開発中はこれで
+        // 質問を最初に戻す
+        if ($has_line_user_account) {
+            $has_line_user_account->update([
+                'question_number' => LineUsersQuestion::PROJECT,
+                'parent_uuid' => null,
+            ]);
         }
         return;
     }
