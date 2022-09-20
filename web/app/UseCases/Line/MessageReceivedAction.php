@@ -94,7 +94,7 @@ class MessageReceivedAction
                 $project = [
                     'name' => $event->getText(),
                     'uuid' => (string) Str::uuid(),
-                    'created_by_user_id' => $line_user->id
+                    'created_by_user_uuid' => $line_user->uuid
                 ];
 
                 // 返信メッセージ
@@ -121,22 +121,22 @@ class MessageReceivedAction
                     'name' => $event->getText(),
                     'uuid' => (string) Str::uuid(),
                     'parent_uuid' => $line_user->question->parent_uuid,
-                    'user_id' => $line_user->id
+                    'user_uuid' => $line_user->uuid
                 ];
 
-                // // 返信メッセージ(日付)
-                // $response = $this->bot->replyMessage(
-                //     $event->getReplyToken(),
-                //     Todo::askTodoLimited($line_user->name, $todo['name'])
-                // );
+                // 返信メッセージ(日付)
+                $response = $this->bot->replyMessage(
+                    $event->getReplyToken(),
+                    Todo::askTodoLimited($line_user->name, $todo['name'])
+                );
 
-                // Log::debug((array)$response);
+                Log::debug((array)$response);
 
-                // //質問の更新
-                // $line_user->question->update([
-                //     'question_number' => LineUsersQuestion::DATE,
-                //     'parent_uuid' => $todo['uuid']
-                // ]);
+                //質問の更新
+                $line_user->question->update([
+                    'question_number' => LineUsersQuestion::DATE,
+                    'parent_uuid' => $todo['uuid']
+                ]);
 
                 // GraphDBに保存
                 $question_number === LineUsersQuestion::GOAL ?
