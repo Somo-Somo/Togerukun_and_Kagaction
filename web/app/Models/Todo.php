@@ -17,6 +17,22 @@ class Todo extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_uuid',
+        'name',
+        'uuid',
+        'parent_uuid',
+        'date',
+        'accomplish',
+        'depth',
+        'created_at'
+    ];
+
+    /**
      * プロジェクトのゴールを聞く
      *
      * @param string $user_name
