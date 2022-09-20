@@ -68,13 +68,16 @@ class TodoResponseAction
      */
     public function invoke(object $event, User $line_user, int $question_number)
     {
+        $parentTodo = Todo::where('uuid', $line_user->question->parent_uuid)->first();
+        $depth = $parentTodo ? (int)$parentTodo->depth + 1 : 0;
 
         // TodoやGOALに関する質問の場合
         $todo = [
             'name' => $event->getText(),
             'uuid' => (string) Str::uuid(),
             'parent_uuid' => $line_user->question->parent_uuid,
-            'user_uuid' => $line_user->uuid
+            'user_uuid' => $line_user->uuid,
+            'depth' => $depth
         ];
 
         // 返信メッセージ(日付)
@@ -82,6 +85,9 @@ class TodoResponseAction
             $event->getReplyToken(),
             Todo::askTodoLimited($line_user->name, $todo['name'])
         );
+
+        // TodoのSQLへの保存
+        Todo::create($todo);
 
         //質問の更新
         $line_user->question->update([
