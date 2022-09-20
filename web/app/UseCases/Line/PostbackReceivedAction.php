@@ -8,7 +8,7 @@ use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 
 
-class PostBackAction
+class PostbackReceivedAction
 {
     /**
      * @param LINE\LINEBot\HTTPClient\CurlHTTPClient

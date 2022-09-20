@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\LineBotService;
-use App\Usecases\Line\FollowAction;
-use App\Usecases\Line\MessageReceivedAction;
-use App\Usecases\Line\PostBackAction;
+use App\UseCases\Line\FollowAction;
+use App\UseCases\Line\MessageReceivedAction;
+use App\UseCases\Line\PostbackReceivedAction;
 use App\Repositories\Line\LineBotRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -60,7 +60,7 @@ class LineBotController extends Controller
         Request $request,
         FollowAction $follow_action,
         MessageReceivedAction $message_received_action,
-        PostBackAction $post_back_action,
+        PostbackReceivedAction $postback_received_action,
     ) {
         $status_code = $this->line_bot_service->eventHandler($request);
 
@@ -73,7 +73,7 @@ class LineBotController extends Controller
             } else if ($event->getType() === 'message') {
                 $message_received_action->invoke($event);
             } elseif ($event->getType() === 'postback') {
-                $post_back_action->invoke($event);
+                $postback_received_action->invoke($event);
             }
         }
 
