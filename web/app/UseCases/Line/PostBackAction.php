@@ -26,7 +26,7 @@ class PostBackAction
     protected $date_response_action;
 
     /**
-     * @param App\UseCases\LINE\DateResponseAction $date_response_action
+     * @param App\UseCases\Line\DateResponseAction $date_response_action
      */
     public function __construct(
         DateResponseAction $date_response_action,
