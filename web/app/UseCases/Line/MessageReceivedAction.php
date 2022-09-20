@@ -101,16 +101,17 @@ class MessageReceivedAction
 
         $question_number = $line_user->question->question_number;
 
-        // 質問がない場合
+
         if ($question_number === LineUsersQuestion::NO_QUESTION) {
-            # code...
-        }
-        // プロジェクトに関する質問の場合
-        if ($question_number === LineUsersQuestion::PROJECT) {
+            // 質問がない場合
+        } else if ($question_number === LineUsersQuestion::PROJECT) {
+            // プロジェクトに関する質問の場合
             $this->project_response_action->invoke($event, $line_user);
-        }
-        // Todoに関する質問の場合
-        if ($question_number === LineUsersQuestion::GOAL || $question_number === LineUsersQuestion::TODO) {
+        } else if (
+            $question_number === LineUsersQuestion::GOAL ||
+            $question_number === LineUsersQuestion::TODO
+        ) {
+            // TodoやGOALに関する質問の場合
             $todo = [
                 'name' => $event->getText(),
                 'uuid' => (string) Str::uuid(),
@@ -133,9 +134,8 @@ class MessageReceivedAction
             // GraphDBに保存
             $question_number === LineUsersQuestion::GOAL ?
                 $this->goal_repository->create($todo) : $this->todo_repository->create($todo);
-        }
-        // 日付に関する質問の場合
-        if ($question_number === LineUsersQuestion::DATE) {
+        } else if ($question_number === LineUsersQuestion::DATE) {
+            // 日付に関する質問の場合
             $date = [
                 'uuid' => $line_user->question->parent_uuid,
                 'user_uuid' => $line_user->uuid,
