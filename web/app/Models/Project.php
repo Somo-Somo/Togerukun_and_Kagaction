@@ -2,8 +2,22 @@
 
 namespace App\Models;
 
-class Project
+use Illuminate\Database\Eloquent\Model;
+
+class Project extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_uuid',
+        'name',
+        'uuid',
+        'created_at'
+    ];
+
     /**
      * プロジェクトを確認する
      *

@@ -62,6 +62,13 @@ class ProjectResponseAction
             Todo::askGoal($line_user->name, $project['name'])
         );
 
+        // プロジェクトのSQLへの保存
+        Project::create([
+            'user_uuid' => $line_user->uuid,
+            'name' => $project['name'],
+            'uuid' => $project['uuid']
+        ]);
+
         //質問の更新
         $line_user->question->update([
             'question_number' => LineUsersQuestion::GOAL,
