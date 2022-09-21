@@ -18,12 +18,14 @@ class CreateTodosTable extends Migration
             $table->string('user_uuid');
             $table->string('name');
             $table->string('uuid')->unique();
+            $table->string('project_uuid');
             $table->string('parent_uuid');
             $table->date('date')->nullable();
             $table->boolean('accomplish')->nullable();
             $table->integer('depth');
             $table->timestamps();
             $table->foreign('user_uuid')->references('uuid')->on('users');
+            $table->foreign('project_uuid')->references('uuid')->on('projects');
         });
     }
 

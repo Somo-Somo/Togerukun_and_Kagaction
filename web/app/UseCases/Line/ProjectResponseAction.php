@@ -72,7 +72,8 @@ class ProjectResponseAction
         //質問の更新
         $line_user->question->update([
             'question_number' => LineUsersQuestion::GOAL,
-            'parent_uuid' => $project['uuid']
+            'parent_uuid' => $project['uuid'],
+            'project_uuid' => $project['uuid']
         ]);
 
         // GraphDBに保存

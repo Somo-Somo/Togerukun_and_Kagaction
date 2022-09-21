@@ -15,7 +15,7 @@ class LineUsersQuestion extends Model
      *
      * @var array<string,integer,string>
      */
-    protected $fillable = ['line_user_id', 'question_number', 'parent_uuid'];
+    protected $fillable = ['line_user_id', 'question_number', 'parent_uuid', 'project_uuid'];
 
     /**
      * The attributes that should be casted to native types.

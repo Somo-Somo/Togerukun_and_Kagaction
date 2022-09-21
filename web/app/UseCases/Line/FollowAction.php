@@ -68,6 +68,7 @@ class FollowAction
             $has_line_user_account->update([
                 'question_number' => LineUsersQuestion::PROJECT,
                 'parent_uuid' => null,
+                'project_uuid' => null,
             ]);
         }
         return;

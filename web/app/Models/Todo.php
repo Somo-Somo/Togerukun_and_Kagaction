@@ -27,6 +27,7 @@ class Todo extends Model
         'name',
         'uuid',
         'parent_uuid',
+        'project_uuid',
         'date',
         'accomplish',
         'depth',

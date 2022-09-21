@@ -18,9 +18,11 @@ class CreateLineUsersQuestionsTable extends Migration
             $table->string('line_user_id')->unique()->nullable(false);
             $table->integer('question_number');
             $table->string('parent_uuid')->nullable();
+            $table->string('project_uuid')->nullable();
             $table->timestamps();
 
             $table->foreign('line_user_id')->references('line_user_id')->on('users');
+            $table->foreign('project_uuid')->references('uuid')->on('projects');
         });
     }
 

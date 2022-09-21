@@ -82,6 +82,7 @@ class TodoResponseAction
             'name' => $event->getText(),
             'uuid' => (string) Str::uuid(),
             'parent_uuid' => $line_user->question->parent_uuid,
+            'project_uuid' => $line_user->question->project_uuid,
             'user_uuid' => $line_user->uuid,
             'depth' => $depth
         ];
