@@ -69,6 +69,11 @@ class PostbackReceivedAction
                 $todo = Todo::where('uuid', $uuid_value)->first();
                 // 返信メッセージ
                 $this->bot->replyText($event->getReplyToken(), Todo::askTodoName($todo));
+                //質問の更新
+                $line_user->question->update([
+                    'question_number' => LineUsersQuestion::TODO,
+                    'parent_uuid' => $uuid_value,
+                ]);
             }
         } else if ($action_value === LineUsersQuestion::LIMIT_DATE) {
             // 日付に関する質問の場合
