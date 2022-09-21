@@ -12,9 +12,10 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
 use DateTime;
 use Egulias\EmailValidator\Warning\TLD;
+use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 
 class SelectTodoListAction
 {
@@ -69,12 +70,14 @@ class SelectTodoListAction
      */
     public function invoke(object $event, User $line_user)
     {
+        $todoCarouselColumns = [];
         foreach ($line_user->todo as $key => $todo) {
-            new CarouselColumnTemplateBuilder($todo->name, $todo->name, null, []);
-            Log::debug($todo);
-            Log::debug($todo->name);
-            Log::debug($todo);
+            $todoCarouselColumns[] = Todo::createTodoCarouselColumn($todo);
         }
+        $this->bot->replyMessage(
+            $event->getReplyToken(),
+            new TemplateMessageBuilder('やること一覧', new CarouselTemplateBuilder($todoCarouselColumns))
+        );
         return;
     }
 }

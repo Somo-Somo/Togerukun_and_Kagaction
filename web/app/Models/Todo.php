@@ -140,4 +140,28 @@ class Todo extends Model
             );
         return $builder;
     }
+
+
+    /**
+     * Todoの一覧を見るか、それとも新しくTodoを追加するか
+     *
+     * @param object $todo
+     * @return LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
+     */
+    public static function createTodoCarouselColumn(object $todo)
+    {
+        if ($todo->depth === "0") {
+            $parentTitle = 'プロジェクト:「' . $todo->project->name . '」のゴール';
+        } else {
+            $parentTodo = Todo::where('uuid', $todo->parent_uuid)->first();
+            $parentTitle = '「' . $parentTodo->name . '」のためにやること';
+        }
+        $actions = [
+            new PostbackTemplateActionBuilder('やることの追加', 'action=add&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('名前の編集', 'action=edit&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('削除', 'action=delete&todo_uuid=' . $todo->uuid),
+        ];
+        $builder = new CarouselColumnTemplateBuilder($todo->name, $parentTitle, null, $actions);
+        return $builder;
+    }
 }
