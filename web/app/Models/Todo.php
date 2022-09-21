@@ -141,6 +141,33 @@ class Todo extends Model
         return $builder;
     }
 
+    /**
+     * Todoの一覧を見るか、それとも新しくTodoを追加するか
+     *
+     * @param User $line_user
+     * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
+     */
+    public static function createTodoListTitleMessage(User $line_user)
+    {
+        $title = '「' . $line_user->question->project->name . '」のやること一覧';
+        $text =   'プロジェクト:「' . $line_user->question->project->name . '」のやることは' . count($line_user->todo) . '件あります';
+        $builder =
+            new TemplateMessageBuilder(
+                'やること', // チャット一覧に表示される
+                new ButtonTemplateBuilder(
+                    $title, // title
+                    $text, // text
+                    null, // 画像url
+                    [
+                        new PostbackTemplateActionBuilder(
+                            '新しくゴールを追加',
+                            'action=create_goal&project_uuid=' . $line_user->question->project_uuid
+                        )
+                    ]
+                )
+            );
+        return $builder;
+    }
 
     /**
      * Todoの一覧を見るか、それとも新しくTodoを追加するか
@@ -157,9 +184,9 @@ class Todo extends Model
             $parentTitle = '「' . $parentTodo->name . '」のためにやること';
         }
         $actions = [
+            new PostbackTemplateActionBuilder('名前の編集/削除', 'action=change&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('やることの追加', 'action=add&todo_uuid=' . $todo->uuid),
-            new PostbackTemplateActionBuilder('名前の編集', 'action=edit&todo_uuid=' . $todo->uuid),
-            new PostbackTemplateActionBuilder('削除', 'action=delete&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('振り返る', 'action=check&todo_uuid=' . $todo->uuid),
         ];
         $builder = new CarouselColumnTemplateBuilder($todo->name, $parentTitle, null, $actions);
         return $builder;
