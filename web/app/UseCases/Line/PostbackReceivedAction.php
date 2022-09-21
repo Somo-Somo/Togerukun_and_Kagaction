@@ -3,6 +3,7 @@
 namespace App\UseCases\Line;
 
 use App\Models\User;
+use App\Models\Todo;
 use App\Models\LineUsersQuestion;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
@@ -37,7 +38,7 @@ class PostbackReceivedAction
      */
     public function __construct(
         DateResponseAction $date_response_action,
-        Todo\SelectTodoListAction $select_todo_list_action,
+        \App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action,
     ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
@@ -60,17 +61,15 @@ class PostbackReceivedAction
         list($action_data, $uuid_data) = explode("&", $event->getPostbackData());
         [$action_key, $action_value] = explode("=", $action_data);
         [$uuid_key, $uuid_value] = explode("=", $uuid_data);
-        Log::debug($action_value);
-        Log::debug($uuid_value);
-        if ($uuid_value == NULL) {
-            Log::debug('NULLです');
-        }
-
 
         if ($action_value === LineUsersQuestion::TODO_LIST) {
             $this->select_todo_list_action->invoke($event, $line_user);
         } elseif ($action_value === LineUsersQuestion::ADD_TODO) {
-            # code...
+            if ($uuid_value) {
+                $todo = Todo::where('uuid', $uuid_value)->first();
+                // 返信メッセージ
+                $this->bot->replyText($event->getReplyToken(), Todo::askTodoName($todo));
+            }
         } else if ($action_value === LineUsersQuestion::LIMIT_DATE) {
             // 日付に関する質問の場合
             $this->date_response_action->invoke($event, $line_user);

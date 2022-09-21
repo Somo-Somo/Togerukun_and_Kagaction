@@ -57,6 +57,17 @@ class Todo extends Model
     }
 
     /**
+     * プロジェクトのゴールを聞く
+     *
+     * @param Todo $todo
+     * @return string $reply_message
+     */
+    public static function askTodoName(Todo $todo)
+    {
+        return '「' . $todo->name . '」を達成するためにやることを教えてください！';
+    }
+
+    /**
      * Todoの期限を聞く
      *
      * @param string $user_name
