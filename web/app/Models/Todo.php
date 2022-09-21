@@ -10,6 +10,7 @@ use LINE\LINEBot\TemplateActionBuilder\DatetimePickerTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 
 use function Psy\debug;
 
@@ -33,6 +34,15 @@ class Todo extends Model
         'depth',
         'created_at'
     ];
+
+    /**
+     * Todoに紐づくProject
+     *
+     */
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_uuid', 'uuid');
+    }
 
     /**
      * プロジェクトのゴールを聞く
