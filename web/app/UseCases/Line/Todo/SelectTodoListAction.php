@@ -4,18 +4,15 @@ namespace App\UseCases\Line\Todo;
 
 use App\Models\User;
 use App\Models\Todo;
-use App\Models\LineUsersQuestion;
-use App\Repositories\Goal\GoalRepositoryInterface;
-use App\Repositories\Todo\TodoRepositoryInterface;
-use App\Repositories\Line\LineBotRepositoryInterface;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
-use DateTime;
-use Egulias\EmailValidator\Warning\TLD;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
+use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
+
+use function Psy\debug;
 
 class SelectTodoListAction
 {
@@ -30,36 +27,12 @@ class SelectTodoListAction
     protected $bot;
 
     /**
-     * @param App\Repositories\Line\LineBotRepositoryInterface
+     *
      */
-    protected $line_bot_repository;
-
-    /**
-     * @param App\Repositories\Goal\GoalRepositoryInterface
-     */
-    protected $goal_repository;
-
-    /**
-     * @param App\Repositories\Todo\TodoRepositoryInterface
-     */
-    protected $todo_repository;
-
-    /**
-     * @param App\Repositories\Line\LineRepositoryInterface $line_repository_interface
-     * @param App\Repositories\Project\ProjectRepositoryInterface $project_repository_interface
-     * @param App\Repositories\Goal\GoalRepositoryInterface $todo_repository_interface
-     * @param App\Repositories\Todo\TodoRepositoryInterface $todo_repository_interface
-     */
-    public function __construct(
-        LineBotRepositoryInterface $line_bot_repository_interface,
-        GoalRepositoryInterface $goal_repository_interface,
-        TodoRepositoryInterface $todo_repository_interface,
-    ) {
+    public function __construct()
+    {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
-        $this->line_bot_repository = $line_bot_repository_interface;
-        $this->goal_repository = $goal_repository_interface;
-        $this->todo_repository = $todo_repository_interface;
     }
 
     /**
@@ -70,14 +43,19 @@ class SelectTodoListAction
      */
     public function invoke(object $event, User $line_user)
     {
-        $todoCarouselColumns = [];
-        foreach ($line_user->todo as $key => $todo) {
-            $todoCarouselColumns[] = Todo::createTodoCarouselColumn($todo);
+        $todo_carousel_columns = [];
+        foreach ($line_user->todo as $todo) {
+            $todo_carousel_columns[] = Todo::createTodoCarouselColumn($todo);
         }
-        $this->bot->replyMessage(
+        $todo_carousels = new CarouselTemplateBuilder($todo_carousel_columns);
+        $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+        $builder->add(Todo::createTodoListTitleMessage($line_user));
+        $builder->add(new TemplateMessageBuilder('やること一覧', $todo_carousels));
+        $response = $this->bot->replyMessage(
             $event->getReplyToken(),
-            new TemplateMessageBuilder('やること一覧', new CarouselTemplateBuilder($todoCarouselColumns))
+            $builder
         );
+        Log::debug((array)$response);
         return;
     }
 }
