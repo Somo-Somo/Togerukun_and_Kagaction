@@ -26,14 +26,22 @@ class PostbackReceivedAction
     protected $date_response_action;
 
     /**
+     * @param App\UseCases\Line\Todo\SelectTodoListAction
+     */
+    protected $select_todo_list_action;
+
+    /**
      * @param App\UseCases\Line\DateResponseAction $date_response_action
+     * @param App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action
      */
     public function __construct(
         DateResponseAction $date_response_action,
+        Todo\SelectTodoListAction $select_todo_list_action,
     ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
         $this->date_response_action = $date_response_action;
+        $this->select_todo_list_action = $select_todo_list_action;
     }
 
     /**
@@ -50,7 +58,7 @@ class PostbackReceivedAction
         $question_number = $line_user->question->question_number;
 
         if ($event->getPostbackData() === LineUsersQuestion::TODO_LIST) {
-            # code...
+            $this->select_todo_list_action->invoke($event, $line_user);
         } elseif ($event->getPostbackData() === LineUsersQuestion::ADD_TODO) {
             # code...
         } else if ($event->getPostbackData() === LineUsersQuestion::LIMIT_DATE) {
