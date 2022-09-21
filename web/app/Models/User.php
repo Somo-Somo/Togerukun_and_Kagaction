@@ -53,4 +53,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(LineUsersQuestion::class, 'line_user_id', 'line_user_id');
     }
+
+    /**
+     * ユーザー(LINE)に紐づくTodo全ての取得
+     *
+     */
+    public function todo()
+    {
+        return $this->hasMany(Todo::class, 'user_uuid', 'uuid');
+    }
 }
