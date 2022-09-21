@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\LineUsersQuestion;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
+use Illuminate\Support\Facades\Log;
 
 
 class PostbackReceivedAction
@@ -55,13 +56,22 @@ class PostbackReceivedAction
         // 該当のユーザーを探す
         $line_user = User::where('line_user_id', $event->getUserId())->first();
 
-        $question_number = $line_user->question->question_number;
+        //postbackのデータをactionとuuidで分割
+        list($action_data, $uuid_data) = explode("&", $event->getPostbackData());
+        [$action_key, $action_value] = explode("=", $action_data);
+        [$uuid_key, $uuid_value] = explode("=", $uuid_data);
+        Log::debug($action_value);
+        Log::debug($uuid_value);
+        if ($uuid_value == NULL) {
+            Log::debug('NULLです');
+        }
 
-        if ($event->getPostbackData() === LineUsersQuestion::TODO_LIST) {
+
+        if ($action_value === LineUsersQuestion::TODO_LIST) {
             $this->select_todo_list_action->invoke($event, $line_user);
-        } elseif ($event->getPostbackData() === LineUsersQuestion::ADD_TODO) {
+        } elseif ($action_value === LineUsersQuestion::ADD_TODO) {
             # code...
-        } else if ($event->getPostbackData() === LineUsersQuestion::LIMIT_DATE) {
+        } else if ($action_value === LineUsersQuestion::LIMIT_DATE) {
             // 日付に関する質問の場合
             $this->date_response_action->invoke($event, $line_user);
         }

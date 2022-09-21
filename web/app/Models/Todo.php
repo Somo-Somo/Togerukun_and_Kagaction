@@ -60,13 +60,13 @@ class Todo extends Model
      * Todoの期限を聞く
      *
      * @param string $user_name
-     * @param string $todo_name
+     * @param array $todo
      * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder()
      */
-    public static function askTodoLimited(string $user_name, string $todo_name)
+    public static function askTodoLimited(string $user_name, array $todo)
     {
-        $title = '「' . $todo_name . '」の期日';
-        $text = 'それでは' . $user_name . 'さんはいつまでに「' . $todo_name . '」を達成したいですか?';
+        $title = '「' . $todo['name'] . '」の期日';
+        $text = 'それでは' . $user_name . 'さんはいつまでに「' . $todo['name'] . '」を達成したいですか?';
         $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
         $builder->add(new TextMessageBuilder($text));
         $builder->add(
@@ -77,7 +77,7 @@ class Todo extends Model
                     'いつまでに達成したいか考えてみよう！', // text
                     null, // 画像url
                     [
-                        new DatetimePickerTemplateActionBuilder('期日を選択', 'LIMIT_DATE', 'date')
+                        new DatetimePickerTemplateActionBuilder('期日を選択', 'action=LIMIT_DATE&todo_uuid=' . $todo['uuid'], 'date')
                     ]
                 )
             )
@@ -132,8 +132,8 @@ class Todo extends Model
                     '選択してください', // text
                     null, // 画像url
                     [
-                        new PostbackTemplateActionBuilder('一覧を見る', 'TODO_LIST'),
-                        new PostbackTemplateActionBuilder('新しく追加する', 'ADD_TODO'),
+                        new PostbackTemplateActionBuilder('一覧を見る', 'action=TODO_LIST&project_uuid='),
+                        new PostbackTemplateActionBuilder('新しく追加する', 'action=ADD_TODO&todo_uuid='),
                     ]
                 )
 
@@ -161,7 +161,7 @@ class Todo extends Model
                     [
                         new PostbackTemplateActionBuilder(
                             '新しくゴールを追加',
-                            'action=create_goal&project_uuid=' . $line_user->question->project_uuid
+                            'action=CREATE_GOAL&project_uuid=' . $line_user->question->project_uuid
                         )
                     ]
                 )
@@ -184,9 +184,9 @@ class Todo extends Model
             $parentTitle = '「' . $parentTodo->name . '」のためにやること';
         }
         $actions = [
-            new PostbackTemplateActionBuilder('名前の編集/削除', 'action=change&todo_uuid=' . $todo->uuid),
-            new PostbackTemplateActionBuilder('やることの追加', 'action=add&todo_uuid=' . $todo->uuid),
-            new PostbackTemplateActionBuilder('振り返る', 'action=check&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('名前の編集/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
         ];
         $builder = new CarouselColumnTemplateBuilder($todo->name, $parentTitle, null, $actions);
         return $builder;
