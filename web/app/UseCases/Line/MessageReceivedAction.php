@@ -63,7 +63,7 @@ class MessageReceivedAction
             // リッチメニューからやることを選択
             $this->bot->replyMessage(
                 $event->getReplyToken(),
-                Todo::askAddOrList()
+                Todo::askAddOrList($line_user->name)
             );
         } else if ($event->getText() === '使い方') {
         } else if ($question_number === LineUsersQuestion::NO_QUESTION) {

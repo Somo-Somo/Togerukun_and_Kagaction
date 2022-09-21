@@ -108,15 +108,16 @@ class Todo extends Model
     /**
      * Todoの一覧を見るか、それとも新しくTodoを追加するか
      *
+     * @param string $line_user_name
      * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
      */
-    public static function askAddOrList()
+    public static function askAddOrList(string $line_user_name)
     {
         $builder =
             new TemplateMessageBuilder(
                 'やること', // チャット一覧に表示される
                 new ButtonTemplateBuilder(
-                    'やること', // title
+                    $line_user_name . 'さんのやること', // title
                     '選択してください', // text
                     null, // 画像url
                     [
