@@ -10,6 +10,16 @@ class LineUsersQuestion extends Model
 {
     use HasFactory;
 
+    // question_numberに対するクラス定数
+    const NO_QUESTION = 0;
+    const PROJECT = 1;
+    const GOAL = 2;
+    const TODO = 3;
+    const DATE = 4;
+    const TODO_LIST = 'TODO_LIST';
+    const ADD_TODO = 'ADD_TODO';
+    const LIMIT_DATE = 'LIMIT_DATE';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,13 +36,12 @@ class LineUsersQuestion extends Model
         'question_number' => 'integer'
     ];
 
-    // question_numberに対するクラス定数
-    const NO_QUESTION = 0;
-    const PROJECT = 1;
-    const GOAL = 2;
-    const TODO = 3;
-    const DATE = 4;
-    const TODO_LIST = 'TODO_LIST';
-    const ADD_TODO = 'ADD_TODO';
-    const LIMIT_DATE = 'LIMIT_DATE';
+    /**
+     * questionに紐づくプロジェクト
+     *
+     */
+    public function project()
+    {
+        return $this->hasOne(Project::class, 'uuid', 'project_uuid');
+    }
 }
