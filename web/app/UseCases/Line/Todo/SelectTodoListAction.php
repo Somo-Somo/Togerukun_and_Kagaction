@@ -49,11 +49,10 @@ class SelectTodoListAction
         $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
         $builder->add(Todo::createTodoListTitleMessage($line_user));
         $builder->add(new TemplateMessageBuilder('やること一覧', $todo_carousels));
-        $response = $this->bot->replyMessage(
+        $this->bot->replyMessage(
             $event->getReplyToken(),
             $builder
         );
-        Log::debug((array)$response);
         return;
     }
 }
