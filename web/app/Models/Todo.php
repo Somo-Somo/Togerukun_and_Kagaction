@@ -66,7 +66,7 @@ class Todo extends Model
                     'いつまでに達成したいか考えてみよう！', // text
                     null, // 画像url
                     [
-                        new DatetimePickerTemplateActionBuilder('期日を選択', 'storeId=12345', 'date')
+                        new DatetimePickerTemplateActionBuilder('期日を選択', 'LIMIT_DATE', 'date')
                     ]
                 )
             )

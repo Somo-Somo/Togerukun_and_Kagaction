@@ -49,7 +49,11 @@ class PostbackReceivedAction
 
         $question_number = $line_user->question->question_number;
 
-        if ($question_number === LineUsersQuestion::DATE) {
+        if ($event->getPostbackData() === LineUsersQuestion::TODO_LIST) {
+            # code...
+        } elseif ($event->getPostbackData() === LineUsersQuestion::ADD_TODO) {
+            # code...
+        } else if ($event->getPostbackData() === LineUsersQuestion::LIMIT_DATE) {
             // 日付に関する質問の場合
             $this->date_response_action->invoke($event, $line_user);
         }

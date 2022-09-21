@@ -32,4 +32,7 @@ class LineUsersQuestion extends Model
     const GOAL = 2;
     const TODO = 3;
     const DATE = 4;
+    const TODO_LIST = 'TODO_LIST';
+    const ADD_TODO = 'ADD_TODO';
+    const LIMIT_DATE = 'LIMIT_DATE';
 }
