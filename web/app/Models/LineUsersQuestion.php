@@ -26,6 +26,12 @@ class LineUsersQuestion extends Model
         'OK_DELETE_TODO' => true,
         'NOT_DELETE_TODO' => true
     ];
+    const CHANGE_DATE = [
+        'ASK_DATE' => true,
+        'RESCHEDULE' => true,
+        'CONFIRM_REMOVE' => true,
+        'REMOVE_DATE' => true,
+    ];
 
     /**
      * The attributes that are mass assignable.
