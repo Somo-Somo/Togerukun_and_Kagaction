@@ -33,17 +33,25 @@ class PostbackReceivedAction
     protected $select_todo_list_action;
 
     /**
+     * @param \App\UseCases\Line\Todo\RenameTodo
+     */
+    protected $rename_todo;
+
+    /**
      * @param App\UseCases\Line\DateResponseAction $date_response_action
      * @param App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action
+     * @param \App\UseCases\Line\Todo\RenameTodo $rename_todo
      */
     public function __construct(
         DateResponseAction $date_response_action,
         \App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action,
+        \App\UseCases\Line\Todo\RenameTodo $rename_todo,
     ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
         $this->date_response_action = $date_response_action;
         $this->select_todo_list_action = $select_todo_list_action;
+        $this->rename_todo_name = $rename_todo;
     }
 
     /**
@@ -64,9 +72,9 @@ class PostbackReceivedAction
 
 
 
-        if ($action_value === LineUsersQuestion::TODO_LIST) {
+        if ($action_value === 'TODO_LIST') {
             $this->select_todo_list_action->invoke($event, $line_user);
-        } elseif ($action_value === LineUsersQuestion::ADD_TODO) {
+        } else if ($action_value === 'ADD_TODO') {
             if ($uuid_value) {
                 $parent_todo = Todo::where('uuid', $uuid_value)->first();
                 // 返信メッセージ
@@ -77,12 +85,14 @@ class PostbackReceivedAction
                     'parent_uuid' => $uuid_value,
                 ]);
             }
-        } else if ($action_value === LineUsersQuestion::LIMIT_DATE) {
+        } else if ($action_value === 'LIMIT_DATE') {
             // 日付に関する質問の場合
             $this->date_response_action->invoke($event, $line_user, $uuid_value);
-        } else if ($action_value === LineUsersQuestion::CHANGE_TODO) {
+        } else if ($action_value === 'CHANGE_TODO') {
             $builder = Todo::changeTodo(Todo::where('uuid', $uuid_value)->first());
             $this->bot->replyMessage($event->getReplyToken(), $builder);
+        } else if ($action_value === 'RENAME_TODO_NAME') {
+            $this->rename_todo->invoke($event, $line_user, $uuid_value);
         }
         return;
     }

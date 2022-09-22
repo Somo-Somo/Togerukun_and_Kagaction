@@ -98,6 +98,17 @@ class Todo extends Model
     }
 
     /**
+     * 変更後のTodoの名前を聞く
+     *
+     * @param Todo $todo
+     * @return string $reply_message
+     */
+    public static function askTodoReName(Todo $todo)
+    {
+        return 'やること:「' . $todo->name . '」の変更後の名前を教えてください！';
+    }
+
+    /**
      * 日付を確認する
      *
      * @param Todo $todo
@@ -271,7 +282,7 @@ class Todo extends Model
                 "選択してください",
                 null,
                 [
-                    new PostbackTemplateActionBuilder("名前の編集", 'action=EDIT_TODO_NAME&todo_uuid=' . $todo->uuid),
+                    new PostbackTemplateActionBuilder("名前の編集", 'action=RENAME_TODO_NAME&todo_uuid=' . $todo->uuid),
                     new PostbackTemplateActionBuilder('やることの削除', 'action=DELETE_TODO&todo_uuid=' . $todo->uuid),
                     new PostbackTemplateActionBuilder('期限の編集', 'action=EDIT_DATE&todo_uuid=' . $todo->uuid),
                     new PostbackTemplateActionBuilder('期限の削除', 'action=DELETE_DATE&todo_uuid=' . $todo->uuid),
