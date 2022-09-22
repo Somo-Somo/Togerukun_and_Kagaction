@@ -78,8 +78,6 @@ class PostbackReceivedAction
         [$action_key, $action_value] = explode("=", $action_data);
         [$uuid_key, $uuid_value] = explode("=", $uuid_data);
 
-
-
         if ($action_value === 'TODO_LIST') {
             $this->select_todo_list_action->invoke($event, $line_user);
         } else if ($action_value === 'ADD_TODO') {
