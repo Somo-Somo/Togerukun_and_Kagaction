@@ -62,4 +62,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Todo::class, 'user_uuid', 'uuid');
     }
+
+    /**
+     * ユーザー(LINE)に紐づくオンボーディング
+     *
+     */
+    public function onboarding()
+    {
+        return $this->hasMany(Onboarding::class, 'user_uuid', 'uuid');
+    }
 }

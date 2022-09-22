@@ -4,6 +4,7 @@ namespace App\UseCases\Line;
 
 use App\Models\User;
 use App\Models\LineUsersQuestion;
+use App\Models\Onboarding;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Str;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -55,6 +56,10 @@ class FollowAction
             LineUsersQuestion::create([
                 'line_user_id' => $line_user_id,
                 'question_number' => LineUsersQuestion::PROJECT
+            ]);
+
+            Onboarding::create([
+                'user_uuid' => $user['uuid']
             ]);
 
             // userをneo4jのDBにも登録
