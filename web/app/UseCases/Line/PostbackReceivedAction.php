@@ -38,20 +38,28 @@ class PostbackReceivedAction
     protected $rename_todo;
 
     /**
+     * @param \App\UseCases\Line\Todo\DeleteTodo
+     */
+    protected $delete_todo;
+
+    /**
      * @param App\UseCases\Line\DateResponseAction $date_response_action
      * @param App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action
      * @param \App\UseCases\Line\Todo\RenameTodo $rename_todo
+     * @param \App\UseCases\Line\Todo\DeleteTodo $delete_todo
      */
     public function __construct(
         DateResponseAction $date_response_action,
         \App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action,
         \App\UseCases\Line\Todo\RenameTodo $rename_todo,
+        \App\UseCases\Line\Todo\DeleteTodo $delete_todo,
     ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
         $this->date_response_action = $date_response_action;
         $this->select_todo_list_action = $select_todo_list_action;
         $this->rename_todo = $rename_todo;
+        $this->delete_todo = $delete_todo;
     }
 
     /**
@@ -94,7 +102,7 @@ class PostbackReceivedAction
         } else if ($action_value === 'RENAME_TODO') {
             $this->rename_todo->invoke($event, $line_user, $uuid_value);
         } else if (isset(LineUsersQuestion::DELETE_TODO[$action_value])) {
-            # code..
+            $this->delete_todo->invoke($event, $line_user, $action_value, $uuid_value);
         }
         return;
     }

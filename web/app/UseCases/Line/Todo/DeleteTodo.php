@@ -14,7 +14,7 @@ use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 
 use function Psy\debug;
 
-class RenameTodo
+class DeleteTodo
 {
     /**
      * @param LINE\LINEBot\HTTPClient\CurlHTTPClient
@@ -51,9 +51,36 @@ class RenameTodo
      */
     public function invoke(object $event, User $line_user, string $action_type, string $todo_uuid)
     {
+        $todo = Todo::where('uuid', $todo_uuid)->first();
         if ($action_type === 'DELETE_TODO') {
+            $this->bot->replyMessage(
+                $event->getReplyToken(),
+                Todo::confirmDeleteTodo($todo)
+            );
         } else if ($action_type === 'OK_DELETE_TODO') {
-            # code...
+            // neo4j側のTodoを削除and削除されるTodo以下の子Todoを持ってくる
+            $delete_childs = $this->todo_repository->destroy([
+                'uuid' => $todo_uuid,
+                'user_uuid' => $line_user->uuid
+            ]);
+
+            $delete_num = count($delete_childs) + 1;
+            $message = '「' . $todo->name . '」を含む' . $delete_num . '件のやることが削除されました';
+
+            // 返信メッセージ
+            $this->bot->replyText(
+                $event->getReplyToken(),
+                $message
+            );
+
+            // 削除するTodoのuuidだけ配列に入れる
+            $delete_uuids = [$todo_uuid];
+            foreach ($delete_childs as $delete_child) {
+                $delete_uuids[] = $delete_child->toArray()['child']->getProperties()['uuid'];
+            }
+
+            // SQLの方のTodoを削除
+            Todo::whereIn('uuid', $delete_uuids)->delete();
         } else if ($action_type === 'NOT_DELETE_TODO') {
             # code...
         }
