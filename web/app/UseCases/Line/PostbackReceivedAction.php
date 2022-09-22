@@ -66,9 +66,9 @@ class PostbackReceivedAction
             $this->select_todo_list_action->invoke($event, $line_user);
         } elseif ($action_value === LineUsersQuestion::ADD_TODO) {
             if ($uuid_value) {
-                $todo = Todo::where('uuid', $uuid_value)->first();
+                $parent_todo = Todo::where('uuid', $uuid_value)->first();
                 // 返信メッセージ
-                $this->bot->replyText($event->getReplyToken(), Todo::askTodoName($todo));
+                $this->bot->replyText($event->getReplyToken(), Todo::askTodoName($parent_todo));
                 //質問の更新
                 $line_user->question->update([
                     'question_number' => LineUsersQuestion::TODO,
@@ -77,7 +77,7 @@ class PostbackReceivedAction
             }
         } else if ($action_value === LineUsersQuestion::LIMIT_DATE) {
             // 日付に関する質問の場合
-            $this->date_response_action->invoke($event, $line_user);
+            $this->date_response_action->invoke($event, $line_user, $uuid_value);
         }
         return;
     }
