@@ -4,13 +4,9 @@ namespace App\UseCases\Line\Todo;
 
 use App\Models\User;
 use App\Models\Todo;
-use App\Models\LineUsersQuestion;
 use App\Repositories\Todo\TodoRepositoryInterface;
-use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 
 use function Psy\debug;
 
