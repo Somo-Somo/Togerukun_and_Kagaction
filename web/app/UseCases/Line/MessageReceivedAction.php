@@ -51,7 +51,7 @@ class MessageReceivedAction
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
         $this->project_response_action = $project_response_action;
         $this->todo_response_action = $todo_response_action;
-        $this->rename_todo_name = $rename_todo;
+        $this->rename_todo = $rename_todo;
     }
 
     /**

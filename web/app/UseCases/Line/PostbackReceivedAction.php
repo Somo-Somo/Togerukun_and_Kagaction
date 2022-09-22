@@ -51,7 +51,7 @@ class PostbackReceivedAction
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
         $this->date_response_action = $date_response_action;
         $this->select_todo_list_action = $select_todo_list_action;
-        $this->rename_todo_name = $rename_todo;
+        $this->rename_todo = $rename_todo;
     }
 
     /**
@@ -91,7 +91,7 @@ class PostbackReceivedAction
         } else if ($action_value === 'CHANGE_TODO') {
             $builder = Todo::changeTodo(Todo::where('uuid', $uuid_value)->first());
             $this->bot->replyMessage($event->getReplyToken(), $builder);
-        } else if ($action_value === 'RENAME_TODO_NAME') {
+        } else if ($action_value === 'RENAME_TODO') {
             $this->rename_todo->invoke($event, $line_user, $uuid_value);
         }
         return;

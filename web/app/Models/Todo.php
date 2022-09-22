@@ -123,6 +123,20 @@ class Todo extends Model
     }
 
     /**
+     * 日付を確認する
+     *
+     * @param Todo $todo
+     * @param DateTime $date
+     * @return string $reply_message
+     */
+    public static function reportNewTodoName(Todo $todo, string $new_todo_name)
+    {
+
+        return '「' . $todo->name . '」から「' . $new_todo_name . '」へ変更が完了しました';
+    }
+
+
+    /**
      * Todo追加の呼びかけ
      *
      * @return string $reply_message
@@ -210,7 +224,7 @@ class Todo extends Model
             $parentTitle = '「' . $parentTodo->name . '」のためにやること';
         }
         $actions = [
-            new PostbackTemplateActionBuilder('名前・期限の編集/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('名前・期限の変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
         ];
@@ -282,9 +296,9 @@ class Todo extends Model
                 "選択してください",
                 null,
                 [
-                    new PostbackTemplateActionBuilder("名前の編集", 'action=RENAME_TODO_NAME&todo_uuid=' . $todo->uuid),
+                    new PostbackTemplateActionBuilder("名前の変更", 'action=RENAME_TODO&todo_uuid=' . $todo->uuid),
                     new PostbackTemplateActionBuilder('やることの削除', 'action=DELETE_TODO&todo_uuid=' . $todo->uuid),
-                    new PostbackTemplateActionBuilder('期限の編集', 'action=EDIT_DATE&todo_uuid=' . $todo->uuid),
+                    new PostbackTemplateActionBuilder('期限の変更', 'action=EDIT_DATE&todo_uuid=' . $todo->uuid),
                     new PostbackTemplateActionBuilder('期限の削除', 'action=DELETE_DATE&todo_uuid=' . $todo->uuid),
                 ]
             )
