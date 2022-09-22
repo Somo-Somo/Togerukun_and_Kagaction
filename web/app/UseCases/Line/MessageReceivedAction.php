@@ -33,17 +33,25 @@ class MessageReceivedAction
     protected $todo_response_action;
 
     /**
+     * @param \App\UseCases\Line\Todo\RenameTodo
+     */
+    protected $rename_todo;
+
+    /**
      * @param App\UseCases\LINE\ProjectResponseAction $project_response_action
      * @param App\UseCases\LINE\TodoResponseAction $todo_response_action
+     * @param \App\UseCases\Line\Todo\RenameTodo $rename_todo
      */
     public function __construct(
         ProjectResponseAction $project_response_action,
         TodoResponseAction $todo_response_action,
+        \App\UseCases\Line\Todo\RenameTodo $rename_todo,
     ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
         $this->project_response_action = $project_response_action;
         $this->todo_response_action = $todo_response_action;
+        $this->rename_todo_name = $rename_todo;
     }
 
     /**
@@ -77,6 +85,8 @@ class MessageReceivedAction
         ) {
             // TodoやGOALに関する質問の場合
             $this->todo_response_action->invoke($event, $line_user, $question_number);
+        } else if ($question_number === LineUsersQuestion::RENAME_TODO) {
+            $this->rename_todo->invoke($event, $line_user, $line_user->question->parent_uuid);
         }
         return;
     }
