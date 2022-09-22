@@ -88,7 +88,8 @@ class DateResponseAction
             $parent_todo = Todo::where('uuid', $todo->parent_uuid)->first();
             $carousel_columns = [
                 Todo::continueAddTodoOfTodo($todo),
-                Todo::continueAddTodoOfParentTodo($parent_todo)
+                Todo::continueAddTodoOfParentTodo($parent_todo),
+                Todo::comeBackTodoList($todo->project)
             ];
             $carousel = new CarouselTemplateBuilder($carousel_columns);
             $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();

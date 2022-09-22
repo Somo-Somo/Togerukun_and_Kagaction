@@ -211,12 +211,11 @@ class Todo extends Model
      */
     public static function continueAddTodoOfTodo(object $todo)
     {
-        $carouselTitle = '「' . $todo->name . '」ためのやることを追加';
         $carouselText =  '「' . $todo->name . '」を達成するためにやることを新しく追加しますか?';
         $actions = [
             new PostbackTemplateActionBuilder('追加する', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
         ];
-        $builder = new CarouselColumnTemplateBuilder($carouselTitle, $carouselText, null, $actions);
+        $builder = new CarouselColumnTemplateBuilder(null, $carouselText, null, $actions);
         return $builder;
     }
 
@@ -228,12 +227,27 @@ class Todo extends Model
      */
     public static function continueAddTodoOfParentTodo(object $parent_todo)
     {
-        $carouselTitle = '「' . $parent_todo->name . '」ためのやることを追加';
         $carouselText =  '「' . $parent_todo->name . '」を達成するためにやることを引き続き追加しますか?';
         $actions = [
             new PostbackTemplateActionBuilder('追加する', 'action=ADD_TODO&todo_uuid=' . $parent_todo->uuid),
         ];
-        $builder = new CarouselColumnTemplateBuilder($carouselTitle, $carouselText, null, $actions);
+        $builder = new CarouselColumnTemplateBuilder(null, $carouselText, null, $actions);
+        return $builder;
+    }
+
+    /**
+     * 引き続き親TodoのTodoを追加する
+     *
+     * @param object $project
+     * @return LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
+     */
+    public static function comeBackTodoList(object $project)
+    {
+        $carouselText =  '「' . $project->name . '」のやること一覧に戻りますか？';
+        $actions = [
+            new PostbackTemplateActionBuilder('戻る', 'action=TODO_LIST&todo_uuid=' . $project->uuid),
+        ];
+        $builder = new CarouselColumnTemplateBuilder(null, $carouselText, null, $actions);
         return $builder;
     }
 }
