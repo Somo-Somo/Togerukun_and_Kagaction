@@ -27,7 +27,7 @@ class LineUsersQuestion extends Model
         'NOT_DELETE_TODO' => true
     ];
     const CHANGE_DATE = [
-        'ASK_DATE' => true,
+        'ASK_RESCHEDULE' => true,
         'RESCHEDULE' => true,
         'CONFIRM_REMOVE' => true,
         'REMOVE_DATE' => true,

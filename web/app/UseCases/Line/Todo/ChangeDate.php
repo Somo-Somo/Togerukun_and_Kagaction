@@ -47,6 +47,11 @@ class ChangeDate
     public function invoke(object $event, User $line_user, string $action_type, string $todo_uuid)
     {
         $todo = Todo::where('uuid', $todo_uuid)->first();
+        if ($action_type === 'ASK_RESCHEDULE') {
+        } else if ($action_type === 'RESCHEDULE') {
+        } else if ($action_type === 'CONFIRM_REMOVE') {
+        } else if ($action_type === 'REMOVE_DATE') {
+        }
 
         return;
     }
