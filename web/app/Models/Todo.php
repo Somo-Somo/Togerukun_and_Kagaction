@@ -11,6 +11,7 @@ use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
 
 use function Psy\debug;
 
@@ -198,7 +199,7 @@ class Todo extends Model
             $parentTitle = '「' . $parentTodo->name . '」のためにやること';
         }
         $actions = [
-            new PostbackTemplateActionBuilder('名前の編集/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('名前・期限の編集/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
         ];
@@ -252,5 +253,30 @@ class Todo extends Model
         ];
         $builder = new CarouselColumnTemplateBuilder(null, $carouselText, null, $actions);
         return $builder;
+    }
+
+    /**
+     * 引き続き親TodoのTodoを追加する
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
+     */
+    public static function changeTodo(Todo $todo)
+    {
+        $title =  '「' . $todo->name . '」';
+        return new TemplateMessageBuilder(
+            $title,
+            new ButtonTemplateBuilder(
+                $title,
+                "選択してください",
+                null,
+                [
+                    new PostbackTemplateActionBuilder("名前の編集", 'action=EDIT_TODO_NAME&todo_uuid=' . $todo->uuid),
+                    new PostbackTemplateActionBuilder('やることの削除', 'action=DELETE_TODO&todo_uuid=' . $todo->uuid),
+                    new PostbackTemplateActionBuilder('期限の編集', 'action=EDIT_DATE&todo_uuid=' . $todo->uuid),
+                    new PostbackTemplateActionBuilder('期限の削除', 'action=DELETE_DATE&todo_uuid=' . $todo->uuid),
+                ]
+            )
+        );
     }
 }

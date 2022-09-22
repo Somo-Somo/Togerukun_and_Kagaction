@@ -19,6 +19,7 @@ class LineUsersQuestion extends Model
     const TODO_LIST = 'TODO_LIST';
     const ADD_TODO = 'ADD_TODO';
     const LIMIT_DATE = 'LIMIT_DATE';
+    const CHANGE_TODO = 'CHANGE_TODO';
 
     /**
      * The attributes that are mass assignable.
