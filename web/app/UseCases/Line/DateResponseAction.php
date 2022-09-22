@@ -5,6 +5,7 @@ namespace App\UseCases\Line;
 use App\Models\User;
 use App\Models\Todo;
 use App\Models\LineUsersQuestion;
+use App\Models\Onboarding;
 use App\Repositories\Date\DateRepositoryInterface;
 use App\Repositories\Line\LineBotRepositoryInterface;
 use Illuminate\Support\Facades\Log;
@@ -64,12 +65,20 @@ class DateResponseAction
             'date' => $event->getPostbackParams()['date']
         ];
 
-        $this->bot->replyText(
-            $event->getReplyToken(),
-            Todo::confirmDate(new DateTime($date['date'])),
-            Todo::callForAdditionalTodo(),
-            Todo::explainSettingOfCheck()
-        );
+        // オンボーディングが終わっているか確認
+        $not_completed_onboarding = Onboarding::where('user_id', $line_user->uuid)->first();
+
+        if ($not_completed_onboarding) {
+            $this->bot->replyText(
+                $event->getReplyToken(),
+                Todo::confirmDate(new DateTime($date['date'])),
+                Todo::callForAdditionalTodo(),
+                Todo::explainSettingOfCheck()
+            );
+            $not_completed_onboarding->delete();
+        } else {
+        }
+
 
         // Todoに日付の期限を授ける
         Todo::where('uuid', $date['uuid'])
