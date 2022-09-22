@@ -82,7 +82,12 @@ class DeleteTodo
             // SQLの方のTodoを削除
             Todo::whereIn('uuid', $delete_uuids)->delete();
         } else if ($action_type === 'NOT_DELETE_TODO') {
-            # code...
+            // 削除のキャンセル
+            // 返信メッセージ
+            $this->bot->replyText(
+                $event->getReplyToken(),
+                '「' . $todo->name . '」の削除をキャンセルしました'
+            );
         }
 
         return;
