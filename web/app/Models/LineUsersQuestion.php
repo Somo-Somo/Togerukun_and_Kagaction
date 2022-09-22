@@ -21,6 +21,11 @@ class LineUsersQuestion extends Model
     const ADD_TODO = 'ADD_TODO';
     const LIMIT_DATE = 'LIMIT_DATE';
     const CHANGE_TODO = 'CHANGE_TODO';
+    const DELETE_TODO = [
+        'DELETE_TODO' => true,
+        'OK_DELETE_TODO' => true,
+        'NOT_DELETE_TODO' => true
+    ];
 
     /**
      * The attributes that are mass assignable.

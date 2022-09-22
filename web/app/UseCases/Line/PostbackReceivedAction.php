@@ -93,6 +93,8 @@ class PostbackReceivedAction
             $this->bot->replyMessage($event->getReplyToken(), $builder);
         } else if ($action_value === 'RENAME_TODO') {
             $this->rename_todo->invoke($event, $line_user, $uuid_value);
+        } else if (isset(LineUsersQuestion::DELETE_TODO[$action_value])) {
+            # code..
         }
         return;
     }
