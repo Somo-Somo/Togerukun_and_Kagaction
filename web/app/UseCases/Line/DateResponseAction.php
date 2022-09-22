@@ -69,22 +69,22 @@ class DateResponseAction
             'date' => $event->getPostbackParams()['date']
         ];
 
+        // 紐づいているTodo
+        $todo = Todo::where('uuid', $uuid_value)->first();
+
         // オンボーディングが終わっているか確認
         $not_completed_onboarding = Onboarding::where('user_uuid', $line_user->uuid)->first();
-
-        Log::debug($not_completed_onboarding);
 
         if ($not_completed_onboarding) {
             // オンボーディングが終わっていない場合
             $this->bot->replyText(
                 $event->getReplyToken(),
-                Todo::confirmDate(new DateTime($date['date'])),
+                Todo::confirmDate($todo, new DateTime($date['date'])),
                 Todo::callForAdditionalTodo(),
                 Todo::explainSettingOfCheck()
             );
             $not_completed_onboarding->delete();
         } else {
-            $todo = Todo::where('uuid', $uuid_value)->first();
             $parent_todo = Todo::where('uuid', $todo->parent_uuid)->first();
             $carousel_columns = [
                 Todo::continueAddTodoOfTodo($todo),
@@ -93,7 +93,7 @@ class DateResponseAction
             ];
             $carousel = new CarouselTemplateBuilder($carousel_columns);
             $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-            $builder->add(new TextMessageBuilder(Todo::confirmDate(new DateTime($date['date']))));
+            $builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
             $builder->add(new TemplateMessageBuilder('選択', $carousel));
             $this->bot->replyMessage(
                 $event->getReplyToken(),

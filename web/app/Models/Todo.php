@@ -99,12 +99,15 @@ class Todo extends Model
     /**
      * 日付を確認する
      *
+     * @param Todo $todo
      * @param DateTime $date
      * @return string $reply_message
      */
-    public static function confirmDate(DateTime $date)
+    public static function confirmDate(Todo $todo, DateTime $date)
     {
-        return  '「' . $date->format('Y年m月d日') . '」だね！';
+        $confirm =  '「' . $date->format('Y年m月d日') . '」ですね！';
+        $fighting =  'それでは' . $date->format('Y年m月d日') . 'までに「' . $todo->name . '」が達成できるよう頑張っていきましょう！';
+        return $confirm . "\n" . $fighting;
     }
 
     /**
