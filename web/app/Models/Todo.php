@@ -123,7 +123,7 @@ class Todo extends Model
     }
 
     /**
-     * 日付を確認する
+     * 名前の変更を確認する
      *
      * @param Todo $todo
      * @param DateTime $date
@@ -131,8 +131,30 @@ class Todo extends Model
      */
     public static function reportNewTodoName(Todo $todo, string $new_todo_name)
     {
-
         return '「' . $todo->name . '」から「' . $new_todo_name . '」へ変更が完了しました';
+    }
+
+    /**
+     * 日付を確認する
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
+     */
+    public static function confirmDeleteTodo(Todo $todo)
+    {
+        $text = 'やること:「' . $todo->name . '」を削除してもよろしいですか？' . "\n" . '「' . $todo->name . '」を達成するために設定したやることも全て削除されてしまいます。';
+        $builder =
+            new TemplateMessageBuilder(
+                '削除の確認',
+                new ConfirmTemplateBuilder(
+                    $text, // title
+                    [
+                        new PostbackTemplateActionBuilder('はい', 'action=OK_DELETE_TODO&project_uuid=' . $todo->uuid),
+                        new PostbackTemplateActionBuilder('いいえ', 'action=NOT_DELETE_TODO&todo_uuid='),
+                    ]
+                )
+            );
+        return $builder;
     }
 
 
