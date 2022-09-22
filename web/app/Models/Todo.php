@@ -202,4 +202,38 @@ class Todo extends Model
         $builder = new CarouselColumnTemplateBuilder($todo->name, $parentTitle, null, $actions);
         return $builder;
     }
+
+    /**
+     * 作ったTodoのTodoを新しく追加する
+     *
+     * @param object $todo
+     * @return LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
+     */
+    public static function continueAddTodoOfTodo(object $todo)
+    {
+        $carouselTitle = '「' . $todo->name . '」ためのやることを追加';
+        $carouselText =  '「' . $todo->name . '」を達成するためにやることを新しく追加しますか?';
+        $actions = [
+            new PostbackTemplateActionBuilder('追加する', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
+        ];
+        $builder = new CarouselColumnTemplateBuilder($carouselTitle, $carouselText, null, $actions);
+        return $builder;
+    }
+
+    /**
+     * 引き続き親TodoのTodoを追加する
+     *
+     * @param object $parentTodo
+     * @return LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
+     */
+    public static function continueAddTodoOfParentTodo(object $parent_todo)
+    {
+        $carouselTitle = '「' . $parent_todo->name . '」ためのやることを追加';
+        $carouselText =  '「' . $parent_todo->name . '」を達成するためにやることを引き続き追加しますか?';
+        $actions = [
+            new PostbackTemplateActionBuilder('追加する', 'action=ADD_TODO&todo_uuid=' . $parent_todo->uuid),
+        ];
+        $builder = new CarouselColumnTemplateBuilder($carouselTitle, $carouselText, null, $actions);
+        return $builder;
+    }
 }

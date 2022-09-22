@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 use DateTime;
-
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 
 class DateResponseAction
 {
@@ -54,21 +56,26 @@ class DateResponseAction
      * 受け取ったメッセージを場合分けしていく
      *
      * @param object $event
+     * @param User $line_user
+     * @param string $uuid_value
      * @return
      */
-    public function invoke(object $event, User $line_user)
+    public function invoke(object $event, User $line_user, string $uuid_value)
     {
         // 日付に関する質問の場合
         $date = [
-            'uuid' => $line_user->question->parent_uuid,
+            'uuid' => $uuid_value,
             'user_uuid' => $line_user->uuid,
             'date' => $event->getPostbackParams()['date']
         ];
 
         // オンボーディングが終わっているか確認
-        $not_completed_onboarding = Onboarding::where('user_id', $line_user->uuid)->first();
+        $not_completed_onboarding = Onboarding::where('user_uuid', $line_user->uuid)->first();
+
+        Log::debug($not_completed_onboarding);
 
         if ($not_completed_onboarding) {
+            // オンボーディングが終わっていない場合
             $this->bot->replyText(
                 $event->getReplyToken(),
                 Todo::confirmDate(new DateTime($date['date'])),
@@ -77,8 +84,21 @@ class DateResponseAction
             );
             $not_completed_onboarding->delete();
         } else {
+            $todo = Todo::where('uuid', $uuid_value)->first();
+            $parent_todo = Todo::where('uuid', $todo->parent_uuid)->first();
+            $carousel_columns = [
+                Todo::continueAddTodoOfTodo($todo),
+                Todo::continueAddTodoOfParentTodo($parent_todo)
+            ];
+            $carousel = new CarouselTemplateBuilder($carousel_columns);
+            $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+            $builder->add(new TextMessageBuilder(Todo::confirmDate(new DateTime($date['date']))));
+            $builder->add(new TemplateMessageBuilder('選択', $carousel));
+            $this->bot->replyMessage(
+                $event->getReplyToken(),
+                $builder
+            );
         }
-
 
         // Todoに日付の期限を授ける
         Todo::where('uuid', $date['uuid'])
