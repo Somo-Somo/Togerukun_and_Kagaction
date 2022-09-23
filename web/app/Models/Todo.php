@@ -98,6 +98,31 @@ class Todo extends Model
     }
 
     /**
+     * Todoの期限を聞く
+     *
+     * @param string $user_name
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder()
+     */
+    public static function askReschedule(Todo $todo)
+    {
+        $date = new DateTime($todo->date);
+        $builder =
+            new TemplateMessageBuilder(
+                '期日の変更', // チャット一覧に表示される
+                new ButtonTemplateBuilder(
+                    $todo->name . 'の期日', // title
+                    $date->format('Y年m月d日') . 'までに' . $todo->name, // text
+                    null, // 画像url
+                    [
+                        new DatetimePickerTemplateActionBuilder('期日の変更', 'action=RESCHEDULE&todo_uuid=' . $todo->uuid, 'date')
+                    ]
+                )
+            );
+        return $builder;
+    }
+
+    /**
      * 変更後のTodoの名前を聞く
      *
      * @param Todo $todo
@@ -320,8 +345,8 @@ class Todo extends Model
                 [
                     new PostbackTemplateActionBuilder("名前の変更", 'action=RENAME_TODO&todo_uuid=' . $todo->uuid),
                     new PostbackTemplateActionBuilder('やることの削除', 'action=DELETE_TODO&todo_uuid=' . $todo->uuid),
-                    new PostbackTemplateActionBuilder('期限の変更', 'action=EDIT_DATE&todo_uuid=' . $todo->uuid),
-                    new PostbackTemplateActionBuilder('期限の削除', 'action=DELETE_DATE&todo_uuid=' . $todo->uuid),
+                    new PostbackTemplateActionBuilder('期限の変更', 'action=ASK_RESCHEDULE&todo_uuid=' . $todo->uuid),
+                    new PostbackTemplateActionBuilder('期限の削除', 'action=CONFIRM_REMOVE&todo_uuid=' . $todo->uuid),
                 ]
             )
         );

@@ -48,6 +48,10 @@ class ChangeDate
     {
         $todo = Todo::where('uuid', $todo_uuid)->first();
         if ($action_type === 'ASK_RESCHEDULE') {
+            $this->bot->replyMessage(
+                $event->getReplyToken(),
+                Todo::askReschedule($todo)
+            );
         } else if ($action_type === 'RESCHEDULE') {
         } else if ($action_type === 'CONFIRM_REMOVE') {
         } else if ($action_type === 'REMOVE_DATE') {
