@@ -4,7 +4,7 @@ namespace App\UseCases\Line\Todo;
 
 use App\Models\User;
 use App\Models\Todo;
-use App\Repositories\Todo\TodoRepositoryInterface;
+use App\Repositories\Date\DateRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
@@ -22,18 +22,18 @@ class ChangeDate
     protected $bot;
 
     /**
-     * @param App\Repositories\Todo\TodoRepositoryInterface
+     * @param App\Repositories\Date\DateRepositoryInterface
      */
-    protected $todo_repository;
+    protected $date_repository;
 
     /**
-     * @param App\Repositories\Todo\TodoRepositoryInterface $todo_repository_interface
+     * @param App\Repositories\Date\DateRepositoryInterface $date_repository_interface
      */
-    public function __construct(TodoRepositoryInterface $todo_repository_interface)
+    public function __construct(DateRepositoryInterface $date_repository_interface)
     {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
-        $this->todo_repository = $todo_repository_interface;
+        $this->date_repository = $date_repository_interface;
     }
 
     /**
@@ -53,6 +53,25 @@ class ChangeDate
                 Todo::askReschedule($todo)
             );
         } else if ($action_type === 'RESCHEDULE') {
+            $new_date = [
+                'uuid' => $todo_uuid,
+                'user_uuid' => $line_user->uuid,
+                'date' => $event->getPostbackParams()['date']
+            ];
+
+            // 返信メッセージ
+            $this->bot->replyText(
+                $event->getReplyToken(),
+                Todo::confirmReschedule($todo, $new_date['date'])
+            );
+
+            // SQLのアップデート
+            $todo->update([
+                'date' => $new_date
+            ]);
+
+            // Neo4jのアップデート
+            $this->date_repository->updateDate($new_date);
         } else if ($action_type === 'CONFIRM_REMOVE') {
         } else if ($action_type === 'REMOVE_DATE') {
         }

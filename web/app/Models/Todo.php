@@ -148,6 +148,19 @@ class Todo extends Model
     }
 
     /**
+     * 日付を確認する
+     *
+     * @param Todo $todo
+     * @param DateTime $date
+     * @return string $reply_message
+     */
+    public static function confirmReschedule(Todo $todo, DateTime $new_date)
+    {
+        $old_date = new DateTime($todo->date);
+        return '「' . $todo->name . '」の期限を' . $old_date->format('Y年m月d日') . 'から' .  $new_date->format('Y年m月d日') . 'に変更しました';
+    }
+
+    /**
      * 名前の変更を確認する
      *
      * @param Todo $todo
