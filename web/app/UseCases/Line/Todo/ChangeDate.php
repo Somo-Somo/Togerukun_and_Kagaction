@@ -72,10 +72,7 @@ class ChangeDate
 
             // Neo4jのアップデート
             $this->date_repository->updateDate($new_date);
-        } else if ($action_type === 'CONFIRM_REMOVE') {
-        } else if ($action_type === 'REMOVE_DATE') {
         }
-
         return;
     }
 }

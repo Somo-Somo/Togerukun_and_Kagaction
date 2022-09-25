@@ -29,8 +29,6 @@ class LineUsersQuestion extends Model
     const CHANGE_DATE = [
         'ASK_RESCHEDULE' => true,
         'RESCHEDULE' => true,
-        'CONFIRM_REMOVE' => true,
-        'REMOVE_DATE' => true,
     ];
 
     /**

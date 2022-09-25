@@ -359,7 +359,6 @@ class Todo extends Model
                     new PostbackTemplateActionBuilder("名前の変更", 'action=RENAME_TODO&todo_uuid=' . $todo->uuid),
                     new PostbackTemplateActionBuilder('やることの削除', 'action=DELETE_TODO&todo_uuid=' . $todo->uuid),
                     new PostbackTemplateActionBuilder('期限の変更', 'action=ASK_RESCHEDULE&todo_uuid=' . $todo->uuid),
-                    new PostbackTemplateActionBuilder('期限の削除', 'action=CONFIRM_REMOVE&todo_uuid=' . $todo->uuid),
                 ]
             )
         );
