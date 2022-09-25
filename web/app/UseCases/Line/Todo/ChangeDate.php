@@ -8,6 +8,7 @@ use App\Repositories\Date\DateRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
+use DateTime;
 
 class ChangeDate
 {
@@ -62,7 +63,7 @@ class ChangeDate
             // 返信メッセージ
             $this->bot->replyText(
                 $event->getReplyToken(),
-                Todo::confirmReschedule($todo, $new_date['date'])
+                Todo::confirmReschedule($todo, new DateTime($new_date['date']))
             );
 
             // SQLのアップデート
