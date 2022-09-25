@@ -232,8 +232,8 @@ class Todo extends Model
                     '選択してください', // text
                     null, // 画像url
                     [
-                        new PostbackTemplateActionBuilder('一覧を見る', 'action=TODO_LIST&project_uuid='),
-                        new PostbackTemplateActionBuilder('新しく追加する', 'action=ADD_TODO&todo_uuid='),
+                        new PostbackTemplateActionBuilder('一覧を見る', 'action=ALL_TODO_LIST&project_uuid='),
+                        new PostbackTemplateActionBuilder('今週までにやることをみる', 'action=WEEKLY_TODO_LIST&todo_uuid='),
                     ]
                 )
 
@@ -245,12 +245,20 @@ class Todo extends Model
      * Todoの一覧を見るか、それとも新しくTodoを追加するか
      *
      * @param User $line_user
+     * @param string $action_value
+     * @param object $todo_list
      * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
      */
-    public static function createTodoListTitleMessage(User $line_user)
+    public static function createTodoListTitleMessage(User $line_user, string $action_value, object $todo_list)
     {
-        $title = '「' . $line_user->question->project->name . '」のやること一覧';
-        $text =   'プロジェクト:「' . $line_user->question->project->name . '」のやることは' . count($line_user->todo) . '件あります';
+        if ($action_value === 'ALL_TODO_LIST') {
+            $title = '「' . $line_user->question->project->name . '」のやること一覧';
+            $text =   'プロジェクト:「' . $line_user->question->project->name . '」のやることは' . count($line_user->todo) . '件あります';
+        } else if ($action_value === 'WEEKLY_TODO_LIST') {
+            $title = $line_user->name . 'さんの今週までにやること一覧';
+            $text = $line_user->name . 'さんの今週までにやることは' . count($todo_list) . '件あります';
+        }
+
         $builder =
             new TemplateMessageBuilder(
                 'やること', // チャット一覧に表示される

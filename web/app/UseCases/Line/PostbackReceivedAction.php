@@ -86,8 +86,8 @@ class PostbackReceivedAction
         [$action_key, $action_value] = explode("=", $action_data);
         [$uuid_key, $uuid_value] = explode("=", $uuid_data);
 
-        if ($action_value === 'TODO_LIST') {
-            $this->select_todo_list_action->invoke($event, $line_user);
+        if (isset(LineUsersQuestion::TODO_LIST[$action_value])) {
+            $this->select_todo_list_action->invoke($event, $line_user, $action_value);
         } else if ($action_value === 'ADD_TODO') {
             if ($uuid_value) {
                 $parent_todo = Todo::where('uuid', $uuid_value)->first();

@@ -9,7 +9,7 @@ use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
-
+use DateTime;
 use function Psy\debug;
 
 class SelectTodoListAction
@@ -39,15 +39,32 @@ class SelectTodoListAction
      * @param object $event
      * @return
      */
-    public function invoke(object $event, User $line_user)
+    public function invoke(object $event, User $line_user, string $action_value)
     {
+
+        if ($action_value === 'ALL_TODO_LIST') {
+            $todo_list = $line_user->todo;
+        } else if ($action_value === 'WEEKLY_TODO_LIST') {
+            $today_date_time = new DateTime();
+            // $today = $today_date_time->format('Y-m-d');
+            $next_week_date_time = $today_date_time->modify('+1 week');
+            $next_week = $next_week_date_time->format('Y-m-d');
+            // Log::debug($next_week);
+            $todo_list = Todo::where('user_uuid', $line_user->uuid)
+                ->where('date', '<', $next_week)->get();
+            Log::debug($todo_list);
+            // $todo_list = $line_user->todo::where('date', '<', $next_week)->get();
+        } else {
+            $todo_list = [];
+        }
+
         $todo_carousel_columns = [];
-        foreach ($line_user->todo as $todo) {
+        foreach ($todo_list as $todo) {
             $todo_carousel_columns[] = Todo::createTodoCarouselColumn($todo);
         }
         $todo_carousels = new CarouselTemplateBuilder($todo_carousel_columns);
         $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-        $builder->add(Todo::createTodoListTitleMessage($line_user));
+        $builder->add(Todo::createTodoListTitleMessage($line_user, $action_value, $todo_list));
         $builder->add(new TemplateMessageBuilder('やること一覧', $todo_carousels));
         $this->bot->replyMessage(
             $event->getReplyToken(),
