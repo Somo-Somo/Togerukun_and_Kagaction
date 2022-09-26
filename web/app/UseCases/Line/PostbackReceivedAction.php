@@ -43,6 +43,11 @@ class PostbackReceivedAction
     protected $delete_todo;
 
     /**
+     * @param \App\UseCases\Line\Todo\CheckTodo
+     */
+    protected $check_todo;
+
+    /**
      * @param \App\UseCases\Line\Todo\ChangeDate
      */
     protected $change_date;
@@ -52,6 +57,7 @@ class PostbackReceivedAction
      * @param App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action
      * @param \App\UseCases\Line\Todo\RenameTodo $rename_todo
      * @param \App\UseCases\Line\Todo\DeleteTodo $delete_todo
+     * @param \App\UseCases\Line\Todo\CheckTodo $check_todo
      * @param \App\UseCases\Line\Todo\ChangeDate $change_date
      */
     public function __construct(
@@ -59,6 +65,7 @@ class PostbackReceivedAction
         \App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action,
         \App\UseCases\Line\Todo\RenameTodo $rename_todo,
         \App\UseCases\Line\Todo\DeleteTodo $delete_todo,
+        \App\UseCases\Line\Todo\CheckTodo $check_todo,
         \App\UseCases\Line\Todo\ChangeDate $change_date,
     ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
@@ -67,6 +74,7 @@ class PostbackReceivedAction
         $this->select_todo_list_action = $select_todo_list_action;
         $this->rename_todo = $rename_todo;
         $this->delete_todo = $delete_todo;
+        $this->check_todo = $check_todo;
         $this->change_date = $change_date;
     }
 
@@ -111,7 +119,8 @@ class PostbackReceivedAction
             $this->delete_todo->invoke($event, $line_user, $action_value, $uuid_value);
         } else if (isset(LineUsersQuestion::CHANGE_DATE[$action_value])) {
             $this->change_date->invoke($event, $line_user, $action_value, $uuid_value);
-        } else if ($action_value === 'CHECK_TODO') {
+        } else if (isset(LineUsersQuestion::CHECK_TODO[$action_value])) {
+            $this->check_todo->invoke($event, $line_user, $action_value, $uuid_value);
         }
         return;
     }
