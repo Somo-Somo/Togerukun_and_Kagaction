@@ -66,7 +66,7 @@ class CheckTodo
 
         $todo_carousel_columns = [];
         foreach ($todo_list as $todo) {
-            if ($todo->accomplish === NULL) {
+            if (count($todo->accomplish) === 0) {
                 $todo_carousel_columns[] = Todo::createCheckTodoCarouselColumn($todo);
             }
         }
@@ -76,18 +76,21 @@ class CheckTodo
             }
         }
 
-        $todo_carousels = new CarouselTemplateBuilder($todo_carousel_columns);
-        $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-
-        $message = Todo::createTodoListTitleMessage($line_user, $action_type, $todo_list);
-        $todo_carousels = new CarouselTemplateBuilder($todo_carousel_columns);
-        $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-        $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message));
-        $builder->add(new TemplateMessageBuilder('振り返り', $todo_carousels));
+        $message = Todo::createTodoListTitleMessage($line_user, $action_type, $todo_carousel_columns);
+        // 該当のTodoがある場合
+        if (count($todo_carousel_columns) > 0) {
+            $todo_carousels = new CarouselTemplateBuilder($todo_carousel_columns);
+            $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+            $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text']));
+            $builder->add(new TemplateMessageBuilder('振り返り', $todo_carousels));
+        } else {
+            $builder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text']);
+        }
         $this->bot->replyMessage(
             $event->getReplyToken(),
             $builder
         );
+
 
         return;
     }
