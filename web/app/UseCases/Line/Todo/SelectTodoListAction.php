@@ -46,14 +46,10 @@ class SelectTodoListAction
             $todo_list = $line_user->todo;
         } else if ($action_value === 'WEEKLY_TODO_LIST') {
             $today_date_time = new DateTime();
-            // $today = $today_date_time->format('Y-m-d');
             $next_week_date_time = $today_date_time->modify('+1 week');
             $next_week = $next_week_date_time->format('Y-m-d');
-            // Log::debug($next_week);
             $todo_list = Todo::where('user_uuid', $line_user->uuid)
                 ->where('date', '<', $next_week)->get();
-            Log::debug($todo_list);
-            // $todo_list = $line_user->todo::where('date', '<', $next_week)->get();
         } else {
             $todo_list = [];
         }
