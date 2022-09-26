@@ -294,30 +294,23 @@ class Todo extends Model
      */
     public static function createTodoListTitleMessage(User $line_user, string $action_value, object $todo_list)
     {
-        if ($action_value === 'ALL_TODO_LIST') {
+        if (
+            $action_value === 'ALL_TODO_LIST' ||
+            $action_value === 'SELECT_TODO_LIST_TO_CHECK'
+        ) {
             $title = '「' . $line_user->question->project->name . '」のやること一覧';
             $text =   'プロジェクト:「' . $line_user->question->project->name . '」のやることは' . count($line_user->todo) . '件あります';
-        } else if ($action_value === 'WEEKLY_TODO_LIST') {
+        } else if (
+            $action_value === 'WEEKLY_TODO_LIST' ||
+            $action_value === 'CHECK_TODO_BY_THIS_WEEK'
+        ) {
             $title = $line_user->name . 'さんの今週までにやること一覧';
             $text = $line_user->name . 'さんの今週までにやることは' . count($todo_list) . '件あります';
+        } else if ($action_value === 'CHECK_TODO_BY_TODAY') {
+            $title = $line_user->name . 'さんの今日までにやること一覧';
+            $text = $line_user->name . 'さんの今日までにやることは' . count($todo_list) . '件あります';
         }
-
-        $builder =
-            new TemplateMessageBuilder(
-                'やること', // チャット一覧に表示される
-                new ButtonTemplateBuilder(
-                    $title, // title
-                    $text, // text
-                    null, // 画像url
-                    [
-                        new PostbackTemplateActionBuilder(
-                            '新しくゴールを追加',
-                            'action=CREATE_GOAL&project_uuid=' . $line_user->question->project_uuid
-                        )
-                    ]
-                )
-            );
-        return $builder;
+        return ['title' => $title, 'text' => $text];
     }
 
     /**
@@ -339,6 +332,29 @@ class Todo extends Model
         $actions = [
             new PostbackTemplateActionBuilder('名前・期限の変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
+        ];
+        $builder = new CarouselColumnTemplateBuilder($title, $parent, null, $actions);
+        return $builder;
+    }
+
+    /**
+     * CheckTodoのカルーセル
+     *
+     * @param object $todo
+     * @return LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
+     */
+    public static function createCheckTodoCarouselColumn(object $todo)
+    {
+        if ($todo->depth === "0") {
+            $parent = 'プロジェクト:「' . $todo->project->name . '」のゴール';
+        } else {
+            $parentTodo = Todo::where('uuid', $todo->parent_uuid)->first();
+            $parent = '「' . $parentTodo->name . '」のためにやること';
+        }
+        $accomplish = $todo->accomplish ? '【達成】' : '【未達成】';
+        $title = $accomplish . $todo->name;
+        $actions = [
             new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
         ];
         $builder = new CarouselColumnTemplateBuilder($title, $parent, null, $actions);

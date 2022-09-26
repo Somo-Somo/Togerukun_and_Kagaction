@@ -9,6 +9,8 @@ use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
+use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use DateTime;
 use function Psy\debug;
 
@@ -58,9 +60,25 @@ class SelectTodoListAction
         foreach ($todo_list as $todo) {
             $todo_carousel_columns[] = Todo::createTodoCarouselColumn($todo);
         }
+        $message = Todo::createTodoListTitleMessage($line_user, $action_value, $todo_list);
         $todo_carousels = new CarouselTemplateBuilder($todo_carousel_columns);
         $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-        $builder->add(Todo::createTodoListTitleMessage($line_user, $action_value, $todo_list));
+        $builder->add(
+            new TemplateMessageBuilder(
+                'やること', // チャット一覧に表示される
+                new ButtonTemplateBuilder(
+                    $message['title'], // title
+                    $message['text'], // text
+                    null, // 画像url
+                    [
+                        new PostbackTemplateActionBuilder(
+                            '新しくゴールを追加',
+                            'action=CREATE_GOAL&project_uuid=' . $line_user->question->project_uuid
+                        )
+                    ]
+                )
+            )
+        );
         $builder->add(new TemplateMessageBuilder('やること一覧', $todo_carousels));
         $this->bot->replyMessage(
             $event->getReplyToken(),
