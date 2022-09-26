@@ -46,6 +46,24 @@ class Todo extends Model
     }
 
     /**
+     * 達成したTodo
+     *
+     */
+    public function accomplish()
+    {
+        return $this->hasMany(AccomplishTodo::class, 'todo_uuid', 'uuid');
+    }
+
+    /**
+     * 振り返りを行なったTodo
+     *
+     */
+    public function checked()
+    {
+        return $this->hasMany(CheckedTodo::class, 'todo_uuid', 'uuid');
+    }
+
+    /**
      * プロジェクトのゴールを聞く
      *
      * @param string $user_name

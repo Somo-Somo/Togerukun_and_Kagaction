@@ -111,6 +111,7 @@ class PostbackReceivedAction
             $this->delete_todo->invoke($event, $line_user, $action_value, $uuid_value);
         } else if (isset(LineUsersQuestion::CHANGE_DATE[$action_value])) {
             $this->change_date->invoke($event, $line_user, $action_value, $uuid_value);
+        } else if ($action_value === 'CHECK_TODO') {
         }
         return;
     }
