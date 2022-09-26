@@ -33,6 +33,11 @@ class LineUsersQuestion extends Model
         'ASK_RESCHEDULE' => true,
         'RESCHEDULE' => true,
     ];
+    const CHECK_TODO = [
+        'CHECK_TODO_BY_TODAY' => true,
+        'CHECK_TODO_BY_THIS_WEEK' => true,
+        'SELECT_TODO_LIST_TO_CHECK' => true,
+    ];
 
     /**
      * The attributes that are mass assignable.

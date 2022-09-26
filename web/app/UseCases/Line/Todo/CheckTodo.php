@@ -47,8 +47,13 @@ class CheckTodo
      */
     public function invoke(object $event, User $line_user, string $action_type, string $todo_uuid)
     {
-
-
+        if ($action_type === 'CHECK_TODO_BY_TODAY') {
+            # code...
+        } else if ($action_type === 'CHECK_TODO_BY_THIS_WEEK') {
+            # code...
+        } else if ($action_type === 'SELECT_TODO_LIST_TO_CHECK') {
+            # code...
+        }
 
         return;
     }
