@@ -12,6 +12,7 @@ use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
+use SebastianBergmann\Template\Template;
 
 use function Psy\debug;
 
@@ -202,6 +203,28 @@ class Todo extends Model
     }
 
     /**
+     * どのTodoたちを振り返るか尋ねる
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
+     */
+    public static function askIfTodoHasBeenAccomplished(Todo $todo)
+    {
+        $text = '「' . $todo->name . '」を達成できましたか？';
+        $builder = new TemplateMessageBuilder(
+            'askAccomplished',
+            new ConfirmTemplateBuilder(
+                $text,
+                [
+                    new PostbackTemplateActionBuilder('はい', 'action=ACOMMPLISHED_TODO&todo_uuid=' . $todo->uuid),
+                    new PostbackTemplateActionBuilder('いいえ', 'action=NOT_ACOMMPLISHED_TODO&todo_uuid=' . $todo->uuid)
+                ]
+            )
+        );
+        return $builder;
+    }
+
+    /**
      * 名前の変更を確認する
      *
      * @param Todo $todo
@@ -332,7 +355,7 @@ class Todo extends Model
         $actions = [
             new PostbackTemplateActionBuilder('名前・期限の変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
-            new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('振り返る', 'action=SELECT_CHECK_TODO&todo_uuid=' . $todo->uuid),
         ];
         $builder = new CarouselColumnTemplateBuilder($title, $parent, null, $actions);
         return $builder;

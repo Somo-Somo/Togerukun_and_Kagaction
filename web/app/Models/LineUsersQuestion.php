@@ -34,9 +34,13 @@ class LineUsersQuestion extends Model
         'RESCHEDULE' => true,
     ];
     const CHECK_TODO = [
+        'SELECT_CHECK_TODO' => true,
         'CHECK_TODO_BY_TODAY' => true,
         'CHECK_TODO_BY_THIS_WEEK' => true,
         'SELECT_TODO_LIST_TO_CHECK' => true,
+        'CHECK_TODO' => true,
+        'ACCOMPLISHED_TODO' => true,
+        'NOT_ACCOMPLISHED_TODO' => true,
     ];
 
     /**
