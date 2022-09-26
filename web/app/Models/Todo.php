@@ -287,19 +287,19 @@ class Todo extends Model
     public static function createTodoCarouselColumn(object $todo)
     {
         if ($todo->depth === "0") {
-            $parentTitle = 'プロジェクト:「' . $todo->project->name . '」のゴール';
+            $parent = 'プロジェクト:「' . $todo->project->name . '」のゴール';
         } else {
             $parentTodo = Todo::where('uuid', $todo->parent_uuid)->first();
-            $parentTitle = '「' . $parentTodo->name . '」のためにやること';
+            $parent = '「' . $parentTodo->name . '」のためにやること';
         }
         $accomplish = $todo->accomplish ? '【達成】' : '【未達成】';
-        $title = $accomplish . $parentTitle;
+        $title = $accomplish . $todo->name;
         $actions = [
             new PostbackTemplateActionBuilder('名前・期限の変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
         ];
-        $builder = new CarouselColumnTemplateBuilder($todo->name, $title, null, $actions);
+        $builder = new CarouselColumnTemplateBuilder($title, $parent, null, $actions);
         return $builder;
     }
 
