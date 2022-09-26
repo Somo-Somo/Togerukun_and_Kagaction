@@ -21,7 +21,7 @@ class CreateTodosTable extends Migration
             $table->string('project_uuid');
             $table->string('parent_uuid');
             $table->date('date')->nullable();
-            $table->boolean('accomplish')->nullable();
+            $table->boolean('accomplish')->default(false);
             $table->integer('depth');
             $table->timestamps();
             $table->foreign('user_uuid')->references('uuid')->on('users');

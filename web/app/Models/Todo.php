@@ -292,12 +292,14 @@ class Todo extends Model
             $parentTodo = Todo::where('uuid', $todo->parent_uuid)->first();
             $parentTitle = '「' . $parentTodo->name . '」のためにやること';
         }
+        $accomplish = $todo->accomplish ? '【達成】' : '【未達成】';
+        $title = $accomplish . $parentTitle;
         $actions = [
             new PostbackTemplateActionBuilder('名前・期限の変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
         ];
-        $builder = new CarouselColumnTemplateBuilder($todo->name, $parentTitle, null, $actions);
+        $builder = new CarouselColumnTemplateBuilder($todo->name, $title, null, $actions);
         return $builder;
     }
 
