@@ -160,6 +160,31 @@ class Todo extends Model
     }
 
     /**
+     * どのTodoたちを振り返るか尋ねる
+     *
+     * @param string $line_user_name
+     * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
+     */
+    public static function askWhichCheckTodo(string $line_user_name)
+    {
+        $builder =
+            new TemplateMessageBuilder(
+                '振り返り', // チャット一覧に表示される
+                new ButtonTemplateBuilder(
+                    'どちらのやることを振り返りますか？', // title
+                    '選択してください', // text
+                    null, // 画像url
+                    [
+                        new PostbackTemplateActionBuilder('今日までにやること', 'action=CHECK_TODO_BY_TODAY&project_uuid='),
+                        new PostbackTemplateActionBuilder('今週までにやること', 'action=CHECK_TODO_BY_THIS_WEEK&todo_uuid='),
+                        new PostbackTemplateActionBuilder('やること一覧から選択', 'action=SELECT_TODO_LIST_TO_CHECK&todo_uuid='),
+                    ]
+                )
+            );
+        return $builder;
+    }
+
+    /**
      * 名前の変更を確認する
      *
      * @param Todo $todo
