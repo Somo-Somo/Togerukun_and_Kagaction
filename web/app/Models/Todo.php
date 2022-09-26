@@ -206,21 +206,46 @@ class Todo extends Model
      * どのTodoたちを振り返るか尋ねる
      *
      * @param Todo $todo
-     * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
+     * @return \LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder
      */
     public static function askIfTodoHasBeenAccomplished(Todo $todo)
     {
-        $text = '「' . $todo->name . '」を達成できましたか？';
-        $builder = new TemplateMessageBuilder(
-            'askAccomplished',
+        $text = '「' . $todo->name . '」について達成できましたか？';
+        $builder =
             new ConfirmTemplateBuilder(
                 $text,
                 [
                     new PostbackTemplateActionBuilder('はい', 'action=ACOMMPLISHED_TODO&todo_uuid=' . $todo->uuid),
                     new PostbackTemplateActionBuilder('いいえ', 'action=NOT_ACOMMPLISHED_TODO&todo_uuid=' . $todo->uuid)
                 ]
-            )
-        );
+            );
+        return $builder;
+    }
+
+    /**
+     * 振り返りを続けるかどうか
+     *
+     * @param LineUsersQuestion $question
+     * @param string $action_type
+     * @return \LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder
+     */
+    public static function askContinueCheckTodo(LineUsersQuestion $question, string $action_type)
+    {
+        if ($question->question_number === LineUsersQuestion::CHECK_TODO['CHECK_TODO_BY_TODAY']) {
+            $title = '今日までにやることの振り返りを続けますか？';
+        } else if ($question->question_number === LineUsersQuestion::CHECK_TODO['CHECK_TODO_BY_TODAY']) {
+            $title = '今週までにやることの振り返りを続けますか？';
+        } else {
+            $title = '振り返りを続けますか？';
+        }
+        $builder =
+            new ConfirmTemplateBuilder(
+                $title . 'を続けますか？', // text
+                [
+                    new PostbackTemplateActionBuilder('続ける', 'action=' . $action_type . '&todo_uuid='),
+                    new PostbackTemplateActionBuilder('終了する', 'action=FINISH_CHECK_TODOK&todo_uuid='),
+                ]
+            );
         return $builder;
     }
 

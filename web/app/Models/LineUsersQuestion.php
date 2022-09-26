@@ -12,10 +12,10 @@ class LineUsersQuestion extends Model
 
     // question_numberに対するクラス定数
     const NO_QUESTION = 0;
-    const PROJECT = 10;
-    const GOAL = 20;
-    const TODO = 30;
-    const DATE = 40;
+    const PROJECT = 1;
+    const GOAL = 2;
+    const TODO = 3;
+    const DATE = 4;
     const RENAME_TODO = 31;
     const TODO_LIST = [
         'ALL_TODO_LIST' => true,
@@ -35,9 +35,9 @@ class LineUsersQuestion extends Model
     ];
     const CHECK_TODO = [
         'SELECT_CHECK_TODO' => true,
-        'CHECK_TODO_BY_TODAY' => true,
-        'CHECK_TODO_BY_THIS_WEEK' => true,
-        'SELECT_TODO_LIST_TO_CHECK' => true,
+        'CHECK_TODO_BY_TODAY' => 51,
+        'CHECK_TODO_BY_THIS_WEEK' => 52,
+        'SELECT_TODO_LIST_TO_CHECK' => 53,
         'CHECK_TODO' => true,
         'ACCOMPLISHED_TODO' => true,
         'NOT_ACCOMPLISHED_TODO' => true,
