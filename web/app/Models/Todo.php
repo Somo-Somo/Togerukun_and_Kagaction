@@ -58,7 +58,7 @@ class Todo extends Model
     }
 
     /**
-     * プロジェクトのゴールを聞く
+     * Todoの名前を聞く
      *
      * @param Todo $todo
      * @return string $reply_message
@@ -66,6 +66,32 @@ class Todo extends Model
     public static function askTodoName(Todo $todo)
     {
         return '「' . $todo->name . '」を達成するためにやることを教えてください！';
+    }
+
+
+    /**
+     * Todoの一覧を見るか、それとも新しくTodoを追加するか尋ねる
+     *
+     * @param string $line_user_name
+     * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
+     */
+    public static function askAddOrList(string $line_user_name)
+    {
+        $builder =
+            new TemplateMessageBuilder(
+                'やること', // チャット一覧に表示される
+                new ButtonTemplateBuilder(
+                    $line_user_name . 'さんのやること', // title
+                    '選択してください', // text
+                    null, // 画像url
+                    [
+                        new PostbackTemplateActionBuilder('一覧を見る', 'action=ALL_TODO_LIST&project_uuid='),
+                        new PostbackTemplateActionBuilder('今週までにやることをみる', 'action=WEEKLY_TODO_LIST&todo_uuid='),
+                    ]
+                )
+
+            );
+        return $builder;
     }
 
     /**
@@ -134,6 +160,18 @@ class Todo extends Model
     }
 
     /**
+     * 名前の変更を確認する
+     *
+     * @param Todo $todo
+     * @param DateTime $date
+     * @return string $reply_message
+     */
+    public static function reportNewTodoName(Todo $todo, string $new_todo_name)
+    {
+        return '「' . $todo->name . '」から「' . $new_todo_name . '」へ変更が完了しました';
+    }
+
+    /**
      * 日付を確認する
      *
      * @param Todo $todo
@@ -148,7 +186,7 @@ class Todo extends Model
     }
 
     /**
-     * 日付を確認する
+     * 変更後の日付を報告する
      *
      * @param Todo $todo
      * @param DateTime $date
@@ -161,19 +199,7 @@ class Todo extends Model
     }
 
     /**
-     * 名前の変更を確認する
-     *
-     * @param Todo $todo
-     * @param DateTime $date
-     * @return string $reply_message
-     */
-    public static function reportNewTodoName(Todo $todo, string $new_todo_name)
-    {
-        return '「' . $todo->name . '」から「' . $new_todo_name . '」へ変更が完了しました';
-    }
-
-    /**
-     * 日付を確認する
+     * 日付の削除を確認する
      *
      * @param Todo $todo
      * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
@@ -217,32 +243,7 @@ class Todo extends Model
     }
 
     /**
-     * Todoの一覧を見るか、それとも新しくTodoを追加するか
-     *
-     * @param string $line_user_name
-     * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
-     */
-    public static function askAddOrList(string $line_user_name)
-    {
-        $builder =
-            new TemplateMessageBuilder(
-                'やること', // チャット一覧に表示される
-                new ButtonTemplateBuilder(
-                    $line_user_name . 'さんのやること', // title
-                    '選択してください', // text
-                    null, // 画像url
-                    [
-                        new PostbackTemplateActionBuilder('一覧を見る', 'action=ALL_TODO_LIST&project_uuid='),
-                        new PostbackTemplateActionBuilder('今週までにやることをみる', 'action=WEEKLY_TODO_LIST&todo_uuid='),
-                    ]
-                )
-
-            );
-        return $builder;
-    }
-
-    /**
-     * Todoの一覧を見るか、それとも新しくTodoを追加するか
+     * Todoの一覧表示
      *
      * @param User $line_user
      * @param string $action_value
@@ -278,7 +279,7 @@ class Todo extends Model
     }
 
     /**
-     * Todoの一覧を見るか、それとも新しくTodoを追加するか
+     * Todoのカルーセル
      *
      * @param object $todo
      * @return LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
@@ -333,7 +334,7 @@ class Todo extends Model
     }
 
     /**
-     * 引き続き親TodoのTodoを追加する
+     * TodoListに戻る
      *
      * @param object $project
      * @return LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
@@ -349,7 +350,7 @@ class Todo extends Model
     }
 
     /**
-     * 引き続き親TodoのTodoを追加する
+     * Todoを変更する
      *
      * @param Todo $todo
      * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
