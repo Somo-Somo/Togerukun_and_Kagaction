@@ -17,6 +17,7 @@ class CreateLineUsersQuestionsTable extends Migration
             $table->id();
             $table->string('line_user_id')->unique()->nullable(false);
             $table->integer('question_number');
+            $table->integer('checked_todo')->nullable();
             $table->string('parent_uuid')->nullable();
             $table->string('project_uuid')->nullable();
             $table->timestamps();

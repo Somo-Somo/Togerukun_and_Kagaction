@@ -95,6 +95,9 @@ class DateResponseAction
             $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
             $builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
             $builder->add(new TemplateMessageBuilder('選択', $carousel));
+            if ($line_user->question->checked_todo) {
+                $builder->add(new TemplateMessageBuilder('振り返り', Todo::askContinueCheckTodo($line_user->question)));
+            }
             $this->bot->replyMessage(
                 $event->getReplyToken(),
                 $builder

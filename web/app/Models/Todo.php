@@ -226,17 +226,19 @@ class Todo extends Model
      * 振り返りを続けるかどうか
      *
      * @param LineUsersQuestion $question
-     * @param string $action_type
      * @return \LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder
      */
-    public static function askContinueCheckTodo(LineUsersQuestion $question, string $action_type)
+    public static function askContinueCheckTodo(LineUsersQuestion $question)
     {
-        if ($question->question_number === LineUsersQuestion::CHECK_TODO['CHECK_TODO_BY_TODAY']) {
+        if ($question->checked_todo === LineUsersQuestion::CHECK_TODO['CHECK_TODO_BY_TODAY']) {
             $title = '今日までにやることの振り返りを続けますか？';
-        } else if ($question->question_number === LineUsersQuestion::CHECK_TODO['CHECK_TODO_BY_TODAY']) {
+            $action_type = 'CHECK_TODO_BY_TODAY';
+        } else if ($question->checked_todo === LineUsersQuestion::CHECK_TODO['CHECK_TODO_BY_THIS_WEEK']) {
             $title = '今週までにやることの振り返りを続けますか？';
+            $action_type = 'CHECK_TODO_BY_THIS_WEEK';
         } else {
             $title = '振り返りを続けますか？';
+            $action_type = 'SELECT_TODO_LIST_TO_CHECK';
         }
         $builder =
             new ConfirmTemplateBuilder(
@@ -244,6 +246,26 @@ class Todo extends Model
                 [
                     new PostbackTemplateActionBuilder('続ける', 'action=' . $action_type . '&todo_uuid='),
                     new PostbackTemplateActionBuilder('終了する', 'action=FINISH_CHECK_TODOK&todo_uuid='),
+                ]
+            );
+        return $builder;
+    }
+
+    /**
+     * どのTodoたちを振り返るか尋ねる
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder
+     */
+    public static function addTodoAfterCheckTodo(Todo $todo)
+    {
+        $text = '「' . $todo->name . '」を達成するためにやることを新しく追加しますか?';
+        $builder =
+            new ConfirmTemplateBuilder(
+                $text,
+                [
+                    new PostbackTemplateActionBuilder('はい', 'action=ADD_TODO_AFTER_CHECK_TODO&todo_uuid=' . $todo->uuid),
+                    new PostbackTemplateActionBuilder('いいえ', 'action=NOT_ADD_TODO_AFTER_CHECK_TODO&todo_uuid=' . $todo->uuid)
                 ]
             );
         return $builder;

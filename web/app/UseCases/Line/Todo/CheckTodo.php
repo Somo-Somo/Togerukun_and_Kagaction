@@ -51,7 +51,7 @@ class CheckTodo
     public function invoke(object $event, User $line_user, string $action_type, string $todo_uuid)
     {
         // Todoセレクト前
-        if ($todo_uuid) {
+        if (!$todo_uuid) {
             $today_date_time = new DateTime();
             $today = $today_date_time->format('Y-m-d');
             if ($action_type === 'CHECK_TODO_BY_TODAY') {
@@ -97,7 +97,7 @@ class CheckTodo
 
             // なんの振り返りをしているか記憶しておく
             $line_user->quetion->update([
-                'question_number',
+                'checked_todo',
                 LineUsersQuestion::CHECK_TODO[$action_type]
             ]);
         } else {
@@ -109,6 +109,11 @@ class CheckTodo
                 $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('「' . $todo->name . '」の達成おめでとうございます！'));
                 $builder->add(new TemplateMessageBuilder('振り返り', Todo::askContinueCheckTodo($line_user->question, $action_type)));
             } else if ($action_type === 'NOT_ACOMMPLISHED_TODO') {
+                $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+                $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('引き続き「' . $todo->name . '」の達成に向けて頑張っていきましょう！'));
+            } else if ($action_type === 'ADD_TODO_AFTER_CHECK_TODO') {
+            } else if ($action_type === 'NOT_ADD_TODO_AFTER_CHECK_TODO') {
+                $builder = new TemplateMessageBuilder('振り返り', Todo::askContinueCheckTodo($line_user->question, $action_type));
             }
             $this->bot->replyMessage(
                 $event->getReplyToken(),
