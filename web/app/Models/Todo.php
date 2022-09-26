@@ -180,10 +180,9 @@ class Todo extends Model
     /**
      * どのTodoたちを振り返るか尋ねる
      *
-     * @param string $line_user_name
      * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
      */
-    public static function askWhichCheckTodo(string $line_user_name)
+    public static function askWhichCheckTodo()
     {
         $builder =
             new TemplateMessageBuilder(
