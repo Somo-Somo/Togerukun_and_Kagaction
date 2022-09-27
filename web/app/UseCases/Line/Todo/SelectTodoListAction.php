@@ -60,24 +60,11 @@ class SelectTodoListAction
         foreach ($todo_list as $todo) {
             $todo_carousel_columns[] = Todo::createTodoCarouselColumn($todo);
         }
-        $message = Todo::createTodoListTitleMessage($line_user, $action_value, $todo_list);
+        $message = Todo::createTodoListTitleMessage($line_user, $action_value, $todo_carousel_columns);
         $todo_carousels = new CarouselTemplateBuilder($todo_carousel_columns);
         $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
         $builder->add(
-            new TemplateMessageBuilder(
-                'やること', // チャット一覧に表示される
-                new ButtonTemplateBuilder(
-                    $message['title'], // title
-                    $message['text'], // text
-                    null, // 画像url
-                    [
-                        new PostbackTemplateActionBuilder(
-                            '新しくゴールを追加',
-                            'action=CREATE_GOAL&project_uuid=' . $line_user->question->project_uuid
-                        )
-                    ]
-                )
-            )
+            new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text'])
         );
         $builder->add(new TemplateMessageBuilder('やること一覧', $todo_carousels));
         $this->bot->replyMessage(
