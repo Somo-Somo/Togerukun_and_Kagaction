@@ -111,7 +111,9 @@ class CheckTodo
             } else if ($action_type === 'NOT_ACOMMPLISHED_TODO') {
                 $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
                 $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('引き続き「' . $todo->name . '」の達成に向けて頑張っていきましょう！'));
+                $builder->add(new TemplateMessageBuilder('やることの追加', Todo::addTodoAfterCheckTodo($todo)));
             } else if ($action_type === 'ADD_TODO_AFTER_CHECK_TODO') {
+                $builder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder(Todo::askTodoName($todo));
             } else if ($action_type === 'NOT_ADD_TODO_AFTER_CHECK_TODO') {
                 $builder = new TemplateMessageBuilder('振り返り', Todo::askContinueCheckTodo($line_user->question, $action_type));
             }
