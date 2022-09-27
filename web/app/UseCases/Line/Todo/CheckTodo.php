@@ -5,6 +5,7 @@ namespace App\UseCases\Line\Todo;
 use App\Models\User;
 use App\Models\Todo;
 use App\Models\CheckedTodo;
+use App\Models\LineUsersQuestion;
 use App\Repositories\Date\DateRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -114,6 +115,11 @@ class CheckTodo
                 $builder->add(new TemplateMessageBuilder('やることの追加', Todo::addTodoAfterCheckTodo($todo)));
             } else if ($action_type === 'ADD_TODO_AFTER_CHECK_TODO') {
                 $builder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder(Todo::askTodoName($todo));
+                // なんの振り返りをしているか記憶しておく
+                $line_user->question->update([
+                    'question_number' => LineUsersQuestion::TODO,
+                    'parent_uuid' => $todo->parent_uuid,
+                ]);
             } else if ($action_type === 'NOT_ADD_TODO_AFTER_CHECK_TODO') {
                 $builder = new TemplateMessageBuilder('振り返り', Todo::askContinueCheckTodo($line_user->question, $action_type));
             }
