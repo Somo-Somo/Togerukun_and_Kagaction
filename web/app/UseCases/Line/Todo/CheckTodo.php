@@ -58,9 +58,11 @@ class CheckTodo
                 $todo_list = Todo::where('user_uuid', $line_user->uuid)
                     ->where('date', $today)->get();
             } elseif ($action_type === 'CHECK_TODO_BY_THIS_WEEK') {
+                $next_week = $today_date_time->modify('+1 week')->format('Y-m-d');
                 $todo_list = Todo::where('user_uuid', $line_user->uuid)
-                    ->whereBetween('date', [$today_date_time->modify('+1 week')->format('Y-m-d'), $today])
+                    ->whereBetween('date', [$today, $next_week])
                     ->get();
+                Log::debug($todo_list);
             } elseif ($action_type === 'SELECT_TODO_LIST_TO_CHECK') {
                 $todo_list = $line_user->todo;
             }
