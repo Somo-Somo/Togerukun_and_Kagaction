@@ -89,8 +89,8 @@ class DateResponseAction
             $carousel_columns = [
                 Todo::continueAddTodoOfTodo($todo),
                 Todo::continueAddTodoOfParentTodo($parent_todo),
-                Todo::comeBackTodoList($todo->project)
             ];
+            if (!$line_user->question->checked_todo) $carousel_columns[] = Todo::comeBackTodoList($todo->project);
             $carousel = new CarouselTemplateBuilder($carousel_columns);
             $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
             $builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
