@@ -2,6 +2,7 @@
 
 namespace App\UseCases\Line;
 
+use App\Models\CheckedTodo;
 use App\Models\User;
 use App\Models\Todo;
 use App\Models\LineUsersQuestion;
@@ -69,7 +70,7 @@ class MessageReceivedAction
         if ($event->getText() === '振り返る') {
             $this->bot->replyMessage(
                 $event->getReplyToken(),
-                Todo::askWhichCheckTodo()
+                CheckedTodo::askWhichCheckTodo()
             );
         } else if ($event->getText() === 'やること') {
             // リッチメニューからやることを選択
