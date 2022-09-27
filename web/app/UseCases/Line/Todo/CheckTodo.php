@@ -62,7 +62,6 @@ class CheckTodo
                 $todo_list = Todo::where('user_uuid', $line_user->uuid)
                     ->whereBetween('date', [$today, $next_week])
                     ->get();
-                Log::debug($todo_list);
             } elseif ($action_type === 'SELECT_TODO_LIST_TO_CHECK') {
                 $todo_list = $line_user->todo;
             }
@@ -103,7 +102,7 @@ class CheckTodo
                 LineUsersQuestion::CHECK_TODO[$action_type]
             ]);
         } else {
-            $todo = Todo::where('uuid' . $todo_uuid)->first();
+            $todo = Todo::where('uuid', $todo_uuid)->first();
             if ($action_type === 'CHECK_TODO') {
                 $builder = new TemplateMessageBuilder('振り返り', Todo::askIfTodoHasBeenAccomplished($todo));
             } else if ($action_type === 'ACOMMPLISHED_TODO') {
