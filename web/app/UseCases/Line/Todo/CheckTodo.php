@@ -52,7 +52,7 @@ class CheckTodo
     public function invoke(object $event, User $line_user, string $action_type, string $todo_uuid)
     {
         if ($action_type === 'FINISH_CHECK_TODO') {
-            $message = Todo::getTextMessageOfFinishCheckTodo($line_user->question);
+            $message = CheckedTodo::getTextMessageOfFinishCheckTodo($line_user->question);
             $this->bot->replyText($event->getReplyToken(), $message);
             $line_user->question->update([
                 'checked_todo' => null,
@@ -80,7 +80,7 @@ class CheckTodo
             $todo_carousel_columns = [];
             foreach ($todo_list as $todo) {
                 if (count($todo->accomplish) === 0) {
-                    $todo_carousel_columns[] = Todo::createCheckTodoCarouselColumn($todo);
+                    $todo_carousel_columns[] = CheckedTodo::createCheckTodoCarouselColumn($todo);
                 }
             }
 
@@ -88,7 +88,7 @@ class CheckTodo
                 ->where('date', '<', $today);
             foreach ($over_due_todo_list as $over_due_todo) {
                 if ($over_due_todo->accomplish === null) {
-                    $todo_carousel_columns[] = Todo::createCheckTodoCarouselColumn($over_due_todo);
+                    $todo_carousel_columns[] = CheckedTodo::createCheckTodoCarouselColumn($over_due_todo);
                 }
             }
 
@@ -114,15 +114,15 @@ class CheckTodo
         } else {
             $todo = Todo::where('uuid', $todo_uuid)->first();
             if ($action_type === 'CHECK_TODO') {
-                $builder = new TemplateMessageBuilder('振り返り', Todo::askIfTodoHasBeenAccomplished($todo));
+                $builder = new TemplateMessageBuilder('振り返り', CheckedTodo::askIfTodoHasBeenAccomplished($todo));
             } else if ($action_type === 'ACOMMPLISHED_TODO') {
                 $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
                 $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('「' . $todo->name . '」の達成おめでとうございます！'));
-                $builder->add(new TemplateMessageBuilder('振り返り', Todo::askContinueCheckTodo($line_user->question, $action_type)));
+                $builder->add(new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question, $action_type)));
             } else if ($action_type === 'NOT_ACCOMPLISHED_TODO') {
                 $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
                 $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('引き続き「' . $todo->name . '」の達成に向けて頑張っていきましょう！'));
-                $builder->add(new TemplateMessageBuilder('やることの追加', Todo::addTodoAfterCheckTodo($todo)));
+                $builder->add(new TemplateMessageBuilder('やることの追加', CheckedTodo::addTodoAfterCheckTodo($todo)));
             } else if ($action_type === 'ADD_TODO_AFTER_CHECK_TODO') {
                 $builder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder(Todo::askTodoName($todo));
                 // なんの振り返りをしているか記憶しておく
@@ -131,7 +131,7 @@ class CheckTodo
                     'parent_uuid' => $todo->parent_uuid,
                 ]);
             } else if ($action_type === 'NOT_ADD_TODO_AFTER_CHECK_TODO') {
-                $builder = new TemplateMessageBuilder('振り返り', Todo::askContinueCheckTodo($line_user->question, $action_type));
+                $builder = new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question, $action_type));
             }
             $this->bot->replyMessage(
                 $event->getReplyToken(),

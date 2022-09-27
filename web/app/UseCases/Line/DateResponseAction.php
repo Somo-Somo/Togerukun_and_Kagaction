@@ -80,8 +80,8 @@ class DateResponseAction
             $this->bot->replyText(
                 $event->getReplyToken(),
                 Todo::confirmDate($todo, new DateTime($date['date'])),
-                Todo::callForAdditionalTodo(),
-                Todo::explainSettingOfCheck()
+                Onboarding::callForAdditionalTodo(),
+                Onboarding::explainSettingOfCheck()
             );
             $not_completed_onboarding->delete();
         } else {
