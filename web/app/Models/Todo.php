@@ -359,10 +359,10 @@ class Todo extends Model
      *
      * @param User $line_user
      * @param string $action_value
-     * @param object $todo_list
+     * @param array $todo_carousel_columns
      * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
      */
-    public static function createTodoListTitleMessage(User $line_user, string $action_value, array $todo_list)
+    public static function createTodoListTitleMessage(User $line_user, string $action_value, array $todo_carousel_columns)
     {
         if (
             $action_value === 'ALL_TODO_LIST' ||
@@ -375,10 +375,10 @@ class Todo extends Model
             $action_value === 'CHECK_TODO_BY_THIS_WEEK'
         ) {
             $title = $line_user->name . 'さんの今週までにやること一覧';
-            $text = $line_user->name . 'さんの今週までにやることは' . count($todo_list) . '件です';
+            $text = $line_user->name . 'さんの今週までにやることは' . count($todo_carousel_columns) . '件です';
         } else if ($action_value === 'CHECK_TODO_BY_TODAY') {
             $title = $line_user->name . 'さんの今日までにやること一覧';
-            $text = $line_user->name . 'さんの今日までにやることは' . count($todo_list) . '件です';
+            $text = $line_user->name . 'さんの今日までにやることは' . count($todo_carousel_columns) . '件です';
         }
         return ['title' => $title, 'text' => $text];
     }
