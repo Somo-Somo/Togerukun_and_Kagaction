@@ -216,7 +216,7 @@ class Todo extends Model
                 $text,
                 [
                     new PostbackTemplateActionBuilder('はい', 'action=ACOMMPLISHED_TODO&todo_uuid=' . $todo->uuid),
-                    new PostbackTemplateActionBuilder('いいえ', 'action=NOT_ACOMMPLISHED_TODO&todo_uuid=' . $todo->uuid)
+                    new PostbackTemplateActionBuilder('いいえ', 'action=NOT_ACCOMPLISHED_TODO&todo_uuid=' . $todo->uuid)
                 ]
             );
         return $builder;
@@ -230,10 +230,10 @@ class Todo extends Model
      */
     public static function askContinueCheckTodo(LineUsersQuestion $question)
     {
-        if ($question->checked_todo === LineUsersQuestion::CHECK_TODO['CHECK_TODO_BY_TODAY']) {
+        if ($question->checked_todo === CheckedTodo::CHECK_TODO['CHECK_TODO_BY_TODAY']) {
             $title = '今日までにやることの振り返りを続けますか？';
             $action_type = 'CHECK_TODO_BY_TODAY';
-        } else if ($question->checked_todo === LineUsersQuestion::CHECK_TODO['CHECK_TODO_BY_THIS_WEEK']) {
+        } else if ($question->checked_todo === CheckedTodo::CHECK_TODO['CHECK_TODO_BY_THIS_WEEK']) {
             $title = '今週までにやることの振り返りを続けますか？';
             $action_type = 'CHECK_TODO_BY_THIS_WEEK';
         } else {

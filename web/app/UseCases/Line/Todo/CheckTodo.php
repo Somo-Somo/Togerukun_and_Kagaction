@@ -4,7 +4,7 @@ namespace App\UseCases\Line\Todo;
 
 use App\Models\User;
 use App\Models\Todo;
-use App\Models\LineUsersQuestion;
+use App\Models\CheckedTodo;
 use App\Repositories\Date\DateRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -99,7 +99,7 @@ class CheckTodo
             // なんの振り返りをしているか記憶しておく
             $line_user->quetion->update([
                 'checked_todo',
-                LineUsersQuestion::CHECK_TODO[$action_type]
+                CheckedTodo::CHECK_TODO[$action_type]
             ]);
         } else {
             $todo = Todo::where('uuid', $todo_uuid)->first();
@@ -109,7 +109,7 @@ class CheckTodo
                 $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
                 $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('「' . $todo->name . '」の達成おめでとうございます！'));
                 $builder->add(new TemplateMessageBuilder('振り返り', Todo::askContinueCheckTodo($line_user->question, $action_type)));
-            } else if ($action_type === 'NOT_ACOMMPLISHED_TODO') {
+            } else if ($action_type === 'NOT_ACCOMPLISHED_TODO') {
                 $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
                 $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('引き続き「' . $todo->name . '」の達成に向けて頑張っていきましょう！'));
                 $builder->add(new TemplateMessageBuilder('やることの追加', Todo::addTodoAfterCheckTodo($todo)));

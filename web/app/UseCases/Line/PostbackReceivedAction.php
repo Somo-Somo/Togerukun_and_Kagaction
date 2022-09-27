@@ -2,6 +2,7 @@
 
 namespace App\UseCases\Line;
 
+use App\Models\CheckedTodo;
 use App\Models\User;
 use App\Models\Todo;
 use App\Models\LineUsersQuestion;
@@ -119,7 +120,7 @@ class PostbackReceivedAction
             $this->delete_todo->invoke($event, $line_user, $action_value, $uuid_value);
         } else if (isset(LineUsersQuestion::CHANGE_DATE[$action_value])) {
             $this->change_date->invoke($event, $line_user, $action_value, $uuid_value);
-        } else if (isset(LineUsersQuestion::CHECK_TODO[$action_value])) {
+        } else if (isset(CheckedTodo::CHECK_TODO[$action_value])) {
             $this->check_todo->invoke($event, $line_user, $action_value, $uuid_value);
         }
         return;
