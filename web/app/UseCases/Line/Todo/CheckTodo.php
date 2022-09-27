@@ -51,6 +51,16 @@ class CheckTodo
      */
     public function invoke(object $event, User $line_user, string $action_type, string $todo_uuid)
     {
+        if ($action_type === 'FINISH_CHECK_TODO') {
+            $message = Todo::getTextMessageOfFinishCheckTodo($line_user->question);
+            $this->bot->replyText($event->getReplyToken(), $message);
+            $line_user->question->update([
+                'checked_todo' => null,
+                'parent_uuid' => null,
+            ]);
+            return;
+        }
+
         // Todoセレクト前
         if (!$todo_uuid) {
             $today_date_time = new DateTime();

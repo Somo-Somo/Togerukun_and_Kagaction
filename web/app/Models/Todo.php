@@ -245,10 +245,28 @@ class Todo extends Model
                 $title, // text
                 [
                     new PostbackTemplateActionBuilder('続ける', 'action=' . $action_type . '&todo_uuid='),
-                    new PostbackTemplateActionBuilder('終了する', 'action=FINISH_CHECK_TODOK&todo_uuid='),
+                    new PostbackTemplateActionBuilder('終了する', 'action=FINISH_CHECK_TODO&todo_uuid='),
                 ]
             );
         return $builder;
+    }
+
+    /**
+     * 振り返りを続けるかどうか
+     *
+     * @param LineUsersQuestion $question
+     * @return string $text
+     */
+    public static function getTextMessageOfFinishCheckTodo(LineUsersQuestion $question)
+    {
+        if ($question->checked_todo === CheckedTodo::CHECK_TODO['CHECK_TODO_BY_TODAY']) {
+            $text = '今日までにやることの振り返りを終了しました。';
+        } else if ($question->checked_todo === CheckedTodo::CHECK_TODO['CHECK_TODO_BY_THIS_WEEK']) {
+            $text = '今週までにやることの振り返りを終了しました。';
+        } else if ($question->checked_todo === CheckedTodo::CHECK_TODO['SELECT_TODO_LIST_TO_CHECK']) {
+            $text = '振り返りを終了しました。';
+        }
+        return $text;
     }
 
     /**
