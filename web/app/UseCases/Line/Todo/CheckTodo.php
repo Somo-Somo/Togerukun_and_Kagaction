@@ -97,9 +97,8 @@ class CheckTodo
             );
 
             // なんの振り返りをしているか記憶しておく
-            $line_user->quetion->update([
-                'checked_todo',
-                CheckedTodo::CHECK_TODO[$action_type]
+            $line_user->question->update([
+                'checked_todo' => CheckedTodo::CHECK_TODO[$action_type]
             ]);
         } else {
             $todo = Todo::where('uuid', $todo_uuid)->first();

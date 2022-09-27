@@ -236,13 +236,13 @@ class Todo extends Model
         } else if ($question->checked_todo === CheckedTodo::CHECK_TODO['CHECK_TODO_BY_THIS_WEEK']) {
             $title = '今週までにやることの振り返りを続けますか？';
             $action_type = 'CHECK_TODO_BY_THIS_WEEK';
-        } else {
+        } else if ($question->checked_todo === CheckedTodo::CHECK_TODO['SELECT_TODO_LIST_TO_CHECK']) {
             $title = '振り返りを続けますか？';
             $action_type = 'SELECT_TODO_LIST_TO_CHECK';
         }
         $builder =
             new ConfirmTemplateBuilder(
-                $title . 'を続けますか？', // text
+                $title, // text
                 [
                     new PostbackTemplateActionBuilder('続ける', 'action=' . $action_type . '&todo_uuid='),
                     new PostbackTemplateActionBuilder('終了する', 'action=FINISH_CHECK_TODOK&todo_uuid='),

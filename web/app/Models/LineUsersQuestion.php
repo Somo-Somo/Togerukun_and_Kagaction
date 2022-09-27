@@ -39,7 +39,7 @@ class LineUsersQuestion extends Model
      *
      * @var array<string,integer,string>
      */
-    protected $fillable = ['line_user_id', 'question_number', 'parent_uuid', 'project_uuid'];
+    protected $fillable = ['line_user_id', 'question_number', 'parent_uuid', 'project_uuid', 'checked_todo'];
 
     /**
      * The attributes that should be casted to native types.
@@ -47,7 +47,8 @@ class LineUsersQuestion extends Model
      * @var array
      */
     protected $casts = [
-        'question_number' => 'integer'
+        'question_number' => 'integer',
+        'checked_todo' => 'integer',
     ];
 
     /**
