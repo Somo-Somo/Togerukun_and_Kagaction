@@ -17,6 +17,8 @@ class CheckedTodo extends Model
         'CHECK_TODO' => true,
         'ACCOMPLISHED_TODO' => true,
         'NOT_ACCOMPLISHED_TODO' => true,
+        'ADD_TODO_AFTER_CHECK_TODO' => true,
+        'NOT_ADD_TODO_AFTER_CHECK_TODO' => true,
     ];
 
     /**
