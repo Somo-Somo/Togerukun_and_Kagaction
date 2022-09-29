@@ -20,10 +20,12 @@ use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BlockStyleBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
 
 use SebastianBergmann\Template\Template;
 
 use function Psy\debug;
+use Illuminate\Support\Facades\Log;
 
 class Todo extends Model
 {
@@ -434,6 +436,11 @@ class Todo extends Model
      */
     public static function createBubbleContainer(Todo $todo)
     {
+        $bubble_container = new BubbleContainerBuilder();
+        $bubble_container->setHeader(Todo::createHeaderComponent($todo));
+        $bubble_container->setBody(Todo::createBodyComponent($todo));
+        $bubble_container->setStyles(Todo::createBubbleStyles($todo));
+        return $bubble_container;
     }
 
     /**
@@ -495,13 +502,14 @@ class Todo extends Model
      * @param Todo $todo
      * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
      */
-    private function createSubtitleTextComponent(Todo $todo)
+    private static function createSubtitleTextComponent(Todo $todo)
     {
-        if ($todo->depth === "0") {
+        Log::debug((array)$todo);
+        if ($todo->depth === 0) {
             $subtitle_text = 'プロジェクト:「' . $todo->project->name . '」のゴール';
         } else {
-            $parentTodo = Todo::where('uuid', $todo->parent_uuid)->first();
-            $subtitle_text = '「' . $parentTodo->name . '」のためにやること';
+            $parent_todo = Todo::where('uuid', $todo->parent_uuid)->first();
+            $subtitle_text = '「' . $parent_todo->name . '」のためにやること';
         }
         $subtitle_text_component = new TextComponentBuilder($subtitle_text);
         $subtitle_text_component->setSize("xss");
@@ -659,7 +667,7 @@ class Todo extends Model
      * @param Todo $todo
      * @return string $accomplished_percentage
      */
-    private function calcAccomplishedPercentage(Todo $todo)
+    private static function calcAccomplishedPercentage(Todo $todo)
     {
         $child_todo = Todo::where('parent_uuid', $todo->uuid)->pluck('uuid');
         $accomplished_child_todo_num = AccomplishTodo::where('todo_uuid', $child_todo)->count();
@@ -714,10 +722,9 @@ class Todo extends Model
     /**
      * Body部分のセパレーターを作る
      *
-     * @param Todo $todo
-     * @return \LINE\LINEBot\MessageBuilder\Flex\
+     * @return \LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder
      */
-    public static function setBubbleStyles(Todo $todo)
+    public static function createBubbleStyles()
     {
         $block_styles = new BlockStyleBuilder(null, true, null);
         $bubble_styles = new BubbleStylesBuilder();
