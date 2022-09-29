@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use DateTime;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
@@ -12,7 +13,9 @@ use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder;
 use SebastianBergmann\Template\Template;
 
 use function Psy\debug;
@@ -456,10 +459,16 @@ class Todo extends Model
      * Boxのコンポーネント生成ビルダー
      *
      * @param Todo $todo
-     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder
      */
     public static function createSubtitleBoxComponent(Todo $todo)
     {
+        $subtitle_text_component = Todo::createSubtitleTextComponent($todo);
+        $subtitle_icon_component = Todo::createSubtitleIconComponent($todo);
+        return new BoxComponentBuilder(
+            'baseline',
+            [$subtitle_text_component, $subtitle_icon_component]
+        );
     }
 
     /**
@@ -468,7 +477,7 @@ class Todo extends Model
      * @param Todo $todo
      * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
      */
-    public static function createSubtitleTextComponent(Todo $todo)
+    private function createSubtitleTextComponent(Todo $todo)
     {
         if ($todo->depth === "0") {
             $subtitle_text = 'プロジェクト:「' . $todo->project->name . '」のゴール';
@@ -486,10 +495,17 @@ class Todo extends Model
      * Todoのサブタイトル（親Todo）のアイコンのコンポーネント生成ビルダー
      *
      * @param Todo $todo
-     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder
      */
     public static function createSubtitleIconComponent(Todo $todo)
     {
+        $url = $todo->depth === 0 ? '/web/public/svg/goal-flag.svg' : '/web/public/svg/todo-tree.svg';
+        return new IconComponentBuilder(
+            $url, // 画像URL
+            "xs", // margin
+            "xxs", // size
+            null // aspectoRatio
+        );
     }
 
     /**
