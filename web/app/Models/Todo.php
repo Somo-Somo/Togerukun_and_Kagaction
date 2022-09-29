@@ -594,6 +594,12 @@ class Todo extends Model
      */
     public static function createTitleComponent(Todo $todo)
     {
+        $title_component = new TextComponentBuilder($todo->name);
+        $title_component->setSize('xl');
+        $title_component->setMargin('sm');
+        $title_component->setWrap(true);
+        $title_component->setWeight('bold');
+        return $title_component;
     }
 
     /**
