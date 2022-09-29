@@ -519,10 +519,18 @@ class Todo extends Model
      * Boxコンポーネント生成ビルダー
      *
      * @param Todo $todo
-     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder
      */
     public static function createDateBoxComponent(Todo $todo)
     {
+        $date_text_component = Todo::createDateTextComponent($todo);
+        $date_icon_component = Todo::createDateIconComponent($todo);
+        $date_box_component = new BoxComponentBuilder(
+            'baseline',
+            [$date_text_component, $date_icon_component]
+        );
+        $date_box_component->setMargin('md');
+        return $date_box_component;
     }
 
     /**
@@ -584,7 +592,7 @@ class Todo extends Model
      * @param Todo $todo
      * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
      */
-    public static function createFilterComponent(Todo $todo)
+    public static function createTitleComponent(Todo $todo)
     {
     }
 
