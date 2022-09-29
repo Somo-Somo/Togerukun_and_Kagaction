@@ -6,6 +6,7 @@ use DateTime;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use LINE\LINEBot\Constant\Flex\ComponentMargin;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\TemplateActionBuilder\DatetimePickerTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
@@ -16,6 +17,7 @@ use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder;
 use SebastianBergmann\Template\Template;
 
 use function Psy\debug;
@@ -442,10 +444,23 @@ class Todo extends Model
      * ヘッダーに必要なコンポーネント総集め。Headerコンポーネントの生成ビルダー
      *
      * @param Todo $todo
-     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder
      */
     public static function createHeaderComponent(Todo $todo)
     {
+        $header_array = [
+            Todo::createSubtitleBoxComponent($todo),
+            Todo::createDateBoxComponent($todo),
+            Todo::createTitleComponent($todo),
+            Todo::createAccomplishGageComponent($todo),
+        ];
+        $header_component = new BoxComponentBuilder('vertical', $header_array);
+        $header_component->setBackgroundColor('#ffffff');
+        $header_component->setPaddingTop('24px');
+        $header_component->setPaddingAll('12px');
+        $header_component->setPaddingBottom('24px');
+
+        return $header_component;
     }
 
     /**
@@ -663,15 +678,27 @@ class Todo extends Model
      */
     public static function createBodyComponent(Todo $todo)
     {
-    }
+        $change_todo_btn = new ButtonComponentBuilder(
+            new PostbackTemplateActionBuilder('名前・期限の変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid)
+        );
+        $change_todo_btn->setHeight('sm');
+        $add_todo_btn = new ButtonComponentBuilder(
+            new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid)
+        );
+        $add_todo_btn->setHeight('sm');
+        $add_todo_btn->setMargin('md');
 
-    /**
-     * Postbackなボタンのコンポーネント生成ビルダー
-     *
-     * @param Todo $todo
-     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
-     */
-    public static function createPostBackButtonComponent(Todo $todo)
-    {
+        $check_todo_btn = new ButtonComponentBuilder(
+            new PostbackTemplateActionBuilder('振り返る', 'action=SELECT_CHECK_TODO&todo_uuid=' . $todo->uuid)
+        );
+        $check_todo_btn->setHeight('sm');
+        $check_todo_btn->setMargin('md');
+
+        $postback_box = new BoxComponentBuilder('vertical', [
+            $change_todo_btn, $add_todo_btn, $check_todo_btn
+        ]);
+        $postback_box->setSpacing('md');
+        $postback_box->setPaddingAll('12px');
+        return $postback_box;
     }
 }
