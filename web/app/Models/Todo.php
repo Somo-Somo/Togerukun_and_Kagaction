@@ -556,10 +556,26 @@ class Todo extends Model
      * 日付メッセージのアイコンのコンポーネント生成ビルダー
      *
      * @param Todo $todo
-     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder
      */
     public static function createDateIconComponent(Todo $todo)
     {
+        $date = new Carbon($todo->date);
+        if ($todo->accomplish()) {
+            $icon_path = '/web/public/svg/calender-check.svg';
+        } else if ($date->isToday()) {
+            $icon_path = '/web/public/svg/calender-today.svg';
+        } else if ($date->lte(Carbon::today()->addWeek()) && $date->gte(Carbon::today())) {
+            $icon_path = '/web/public/svg/calender-week.svg';
+        } else if ($date->lt(Carbon::today())) {
+            $icon_path = '/web/public/svg/calender-overdue.svg';
+        } else {
+            $icon_path = '/web/public/svg/calender.svg';
+        }
+        $icon_component = new IconComponentBuilder($icon_path);
+        $icon_component->setSize('md');
+        $icon_component->setOffsetTop('1.5px');
+        return $icon_component;
     }
 
     /**
