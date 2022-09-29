@@ -502,9 +502,8 @@ class Todo extends Model
      * @param Todo $todo
      * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
      */
-    private static function createSubtitleTextComponent(Todo $todo)
+    public static function createSubtitleTextComponent(Todo $todo)
     {
-        Log::debug((array)$todo);
         if ($todo->depth === 0) {
             $subtitle_text = 'プロジェクト:「' . $todo->project->name . '」のゴール';
         } else {
@@ -667,12 +666,22 @@ class Todo extends Model
      * @param Todo $todo
      * @return string $accomplished_percentage
      */
-    private static function calcAccomplishedPercentage(Todo $todo)
+    public static function calcAccomplishedPercentage(Todo $todo)
     {
         $child_todo = Todo::where('parent_uuid', $todo->uuid)->pluck('uuid');
-        $accomplished_child_todo_num = AccomplishTodo::where('todo_uuid', $child_todo)->count();
-        $accomplished_percentage = round($accomplished_child_todo_num / count($child_todo) * 100, 0);
-        return $accomplished_percentage . '%';
+        if ($child_todo->count() > 0) {
+            $accomplished_child_todo_num = AccomplishTodo::whereIn('todo_uuid', $child_todo)->get();
+            Log::debug($accomplished_child_todo_num);
+            $accomplished_percentage = $accomplished_child_todo_num ?
+                round(count($accomplished_child_todo_num) / count($child_todo) * 100, 0) . '%' : '0%';
+        } else {
+            $accomplished_percentage = '0%';
+        }
+
+
+
+
+        return $accomplished_percentage;
     }
 
     /**
@@ -685,7 +694,7 @@ class Todo extends Model
      * Body部分のコンポーネント生成ビルダー
      *
      * @param Todo $todo
-     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder
      */
     public static function createBodyComponent(Todo $todo)
     {
