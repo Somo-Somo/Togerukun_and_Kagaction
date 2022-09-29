@@ -18,6 +18,9 @@ use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\BlockStyleBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
+
 use SebastianBergmann\Template\Template;
 
 use function Psy\debug;
@@ -700,5 +703,25 @@ class Todo extends Model
         $postback_box->setSpacing('md');
         $postback_box->setPaddingAll('12px');
         return $postback_box;
+    }
+
+    /**
+     *
+     * Separator
+     *
+     **/
+
+    /**
+     * Body部分のセパレーターを作る
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\
+     */
+    public static function setBubbleStyles(Todo $todo)
+    {
+        $block_styles = new BlockStyleBuilder(null, true, null);
+        $bubble_styles = new BubbleStylesBuilder();
+        $bubble_styles->setBody($block_styles);
+        return $block_styles;
     }
 }
