@@ -610,21 +610,43 @@ class Todo extends Model
      */
     public static function createAccomplishGageComponent(Todo $todo)
     {
+        $accomplished_percentage = Todo::calcAccomplishedPercentage($todo);
+
+        $accomplished_percentage_text = new TextComponentBuilder($accomplished_percentage);
+        $accomplished_percentage_text->setSize('xs');
+        $accomplished_percentage_text->setAlign('end');
+
+        $accomplished_gage = new BoxComponentBuilder('vertical', []);
+        $accomplished_gage->setWidth($accomplished_percentage . '%');
+        $accomplished_gage->setBackgroundColor('#0D8186');
+        $accomplished_gage->setHeight('6px');
+
+        $accomplish_gage = new BoxComponentBuilder('vertical', [$accomplished_gage]);
+        $accomplish_gage->setBackgroundColor('#9FD8E36E');
+        $accomplish_gage->setHeight('6px');
+        $accomplish_gage->setMargin('sm');
+
+        $accomplish_gage_component = new BoxComponentBuilder(
+            'vertical',
+            [$accomplished_percentage_text, $accomplish_gage]
+        );
+        $accomplish_gage_component->setMargin('sm');
+
+        return $accomplish_gage_component;
+    }
+
+    /**
+     * Todoの完了のゲージのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return string $accomplished_percentage
+     */
+    private function calcAccomplishedPercentage(Todo $todo)
+    {
         $child_todo = Todo::where('parent_uuid', $todo->uuid)->pluck('uuid');
         $accomplished_child_todo_num = AccomplishTodo::where('todo_uuid', $child_todo)->count();
         $accomplished_percentage = round($accomplished_child_todo_num / count($child_todo) * 100, 0);
-
-        $accomplished_gage_component = new BoxComponentBuilder('vertical', []);
-        $accomplished_gage_component->setWidth($accomplished_percentage . '%');
-        $accomplished_gage_component->setBackgroundColor('#0D8186');
-        $accomplished_gage_component->setHeight('6px');
-
-        $accomplish_gage_component = new BoxComponentBuilder('vertical', [$accomplished_gage_component]);
-        $accomplish_gage_component->setBackgroundColor('#9FD8E36E');
-        $accomplish_gage_component->setHeight('6px');
-        $accomplish_gage_component->setMargin('lg');
-
-        return $accomplish_gage_component;
+        return $accomplished_percentage . '%';
     }
 
     /**
