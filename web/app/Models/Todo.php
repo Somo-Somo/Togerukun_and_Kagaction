@@ -12,6 +12,7 @@ use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use SebastianBergmann\Template\Template;
 
 use function Psy\debug;
@@ -397,5 +398,161 @@ class Todo extends Model
                 )
             );
         return $builder;
+    }
+
+    /**
+     *
+     *
+     * Flexメッセージのカラム
+     *
+     *
+     */
+
+    /**
+     *
+     * コンポーネントをひとまとめ。BubbleContainerの生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createBubbleContainer(Todo $todo)
+    {
+    }
+
+    /**
+     *
+     * Header
+     *
+     **/
+
+    /**
+     *
+     * ヘッダーに必要なコンポーネント総集め。Headerコンポーネントの生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createHeaderComponent(Todo $todo)
+    {
+    }
+
+    /**
+     *
+     * サブタイトル
+     *
+     **/
+
+    /**
+     * Todoのサブタイトル（親Todo）をひとまとめ。
+     * Boxのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createSubtitleBoxComponent(Todo $todo)
+    {
+    }
+
+    /**
+     * Todoのサブタイトル（親Todo）のテキストコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createSubtitleTextComponent(Todo $todo)
+    {
+    }
+
+    /**
+     * Todoのサブタイトル（親Todo）のアイコンのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createSubtitleIconComponent(Todo $todo)
+    {
+    }
+
+    /**
+     *
+     * 日付
+     *
+     **/
+
+    /**
+     * 日付をひとまとめ
+     * Boxコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createDateBoxComponent(Todo $todo)
+    {
+    }
+
+    /**
+     * 日付タイトルの日付のコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createDateTextComponent(Todo $todo)
+    {
+    }
+
+    /**
+     * 日付メッセージのアイコンのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createDateIconComponent(Todo $todo)
+    {
+    }
+
+    /**
+     * Todoのタイトルのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createFilterComponent(Todo $todo)
+    {
+    }
+
+    /**
+     * Todoの完了のゲージのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createAccomplishGageComponent(Todo $todo)
+    {
+    }
+
+    /**
+     *
+     * Body
+     *
+     **/
+
+    /**
+     * Body部分のコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createBodyComponent(Todo $todo)
+    {
+    }
+
+    /**
+     * Postbackなボタンのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createPostBackButtonComponent(Todo $todo)
+    {
     }
 }
