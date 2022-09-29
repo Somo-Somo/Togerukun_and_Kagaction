@@ -606,10 +606,25 @@ class Todo extends Model
      * Todoの完了のゲージのコンポーネント生成ビルダー
      *
      * @param Todo $todo
-     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder
      */
     public static function createAccomplishGageComponent(Todo $todo)
     {
+        $child_todo = Todo::where('parent_uuid', $todo->uuid)->pluck('uuid');
+        $accomplished_child_todo_num = AccomplishTodo::where('todo_uuid', $child_todo)->count();
+        $accomplished_percentage = round($accomplished_child_todo_num / count($child_todo) * 100, 0);
+
+        $accomplished_gage_component = new BoxComponentBuilder('vertical', []);
+        $accomplished_gage_component->setWidth($accomplished_percentage . '%');
+        $accomplished_gage_component->setBackgroundColor('#0D8186');
+        $accomplished_gage_component->setHeight('6px');
+
+        $accomplish_gage_component = new BoxComponentBuilder('vertical', [$accomplished_gage_component]);
+        $accomplish_gage_component->setBackgroundColor('#9FD8E36E');
+        $accomplish_gage_component->setHeight('6px');
+        $accomplish_gage_component->setMargin('lg');
+
+        return $accomplish_gage_component;
     }
 
     /**
