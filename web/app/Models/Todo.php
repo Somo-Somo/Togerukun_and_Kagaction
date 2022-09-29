@@ -39,6 +39,15 @@ class Todo extends Model
     ];
 
     /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'depth' => 'integer',
+    ];
+
+    /**
      * Todoに紐づくProject
      *
      */
@@ -461,6 +470,16 @@ class Todo extends Model
      */
     public static function createSubtitleTextComponent(Todo $todo)
     {
+        if ($todo->depth === "0") {
+            $subtitle_text = 'プロジェクト:「' . $todo->project->name . '」のゴール';
+        } else {
+            $parentTodo = Todo::where('uuid', $todo->parent_uuid)->first();
+            $subtitle_text = '「' . $parentTodo->name . '」のためにやること';
+        }
+        $subtitle_text_component = new TextComponentBuilder($subtitle_text);
+        $subtitle_text_component->setSize("xss");
+        $subtitle_text_component->setColor("#aaaaaa");
+        return $subtitle_text_component;
     }
 
     /**
