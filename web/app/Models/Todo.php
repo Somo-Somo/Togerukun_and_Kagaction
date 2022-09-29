@@ -533,6 +533,23 @@ class Todo extends Model
      */
     public static function createDateTextComponent(Todo $todo)
     {
+        $date = new Carbon($todo->date);
+        if ($date->isToday()) {
+            $date_text = "今日まで";
+        } else if ($date->isTomorrow()) {
+            $date_text = "明日まで";
+        } else if ($date->isPast()) {
+            $date_text = $date->diffInDays(Carbon::now()) . "日経過";
+        } else if ($date->isFuture()) {
+            $date_text = "残り" . $date->diffInDays(Carbon::now()) . "日";
+        } else {
+            $date_text = "日付:未設定";
+        }
+        $date_text_component = new TextComponentBuilder($date_text);
+        $date_text_component->setMargin('6px');
+        $date_text_component->setSize('sm');
+        $date_text_component->setColor('#555555');
+        $date_text_component->setWeight('bold');
     }
 
     /**
