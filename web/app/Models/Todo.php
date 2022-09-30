@@ -643,7 +643,6 @@ class Todo extends Model
     public static function createAccomplishGageComponent(Todo $todo)
     {
         $accomplished_percentage = Todo::calcAccomplishedPercentage($todo);
-        Log::debug($accomplished_percentage);
 
         $accomplished_percentage_text = new TextComponentBuilder($accomplished_percentage);
         $accomplished_percentage_text->setSize('xs');

@@ -121,13 +121,10 @@ class CheckTodo
                 $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('「' . $todo->name . '」の達成おめでとうございます！'));
                 $builder->add(new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question)));
                 $this->bot->replyMessage($event->getReplyToken(), $builder);
-                AccomplishTodo::updateOrCreate([
-                    ['todo_uuid', $todo_uuid],
-                    [
-                        'user_uuid' => $line_user->uuid,
-                        'todo_uuid' => $todo_uuid
-                    ]
-                ]);
+                AccomplishTodo::updateOrCreate(
+                    ['todo_uuid' => $todo_uuid],
+                    ['user_uuid' => $line_user->uuid]
+                );
                 $this->todo_repository->updateAccomplish(
                     ['uuid' => $todo_uuid, 'user_uuid' => $line_user->uuid]
                 );
