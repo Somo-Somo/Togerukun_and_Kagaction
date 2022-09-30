@@ -545,20 +545,23 @@ class Todo extends Model
      */
     public static function createDateTextComponent(Todo $todo)
     {
-        $date = new Carbon($todo->date);
-        if (count($todo->accomplish) > 0) {
-            $date_text = "達成";
-        } else if ($date->isToday()) {
-            $date_text = "今日まで";
-        } else if ($date->isTomorrow()) {
-            $date_text = "明日まで";
-        } else if ($date->isPast()) {
-            $date_text = $date->diffInDays(Carbon::now()) . "日経過";
-        } else if ($date->isFuture()) {
-            $date_text = "残り" . $date->diffInDays(Carbon::now()) . "日";
+        if ($todo->date) {
+            $date = new Carbon($todo->date);
+            if (count($todo->accomplish) > 0) {
+                $date_text = "達成";
+            } else if ($date->isToday()) {
+                $date_text = "今日まで";
+            } else if ($date->isTomorrow()) {
+                $date_text = "明日まで";
+            } else if ($date->isPast()) {
+                $date_text = $date->diffInDays(Carbon::now()) . "日経過";
+            } else if ($date->isFuture()) {
+                $date_text = "残り" . $date->diffInDays(Carbon::now()) . "日";
+            }
         } else {
             $date_text = "日付:未設定";
         }
+
         $date_text_component = new TextComponentBuilder($date_text);
         $date_text_component->setMargin('4px');
         $date_text_component->setSize('sm');
@@ -575,18 +578,23 @@ class Todo extends Model
      */
     public static function createDateIconComponent(Todo $todo)
     {
-        $date = new Carbon($todo->date);
-        if (count($todo->accomplish) > 0) {
-            $icon_path = LineBotSvg::CALENDER_CHECK;
-        } else if ($date->isToday()) {
-            $icon_path = LineBotSvg::CALENDER_TODAY;
-        } else if ($date->lte(Carbon::today()->addWeek()) && $date->gte(Carbon::today())) {
-            $icon_path = LineBotSvg::CALENDER_WEEK;
-        } else if ($date->lt(Carbon::today())) {
-            $icon_path = LineBotSvg::CALENDER_OVERDUE;
+        if ($todo->date) {
+            $date = new Carbon($todo->date);
+            if (count($todo->accomplish) > 0) {
+                $icon_path = LineBotSvg::CALENDER_CHECK;
+            } else if ($date->isToday()) {
+                $icon_path = LineBotSvg::CALENDER_TODAY;
+            } else if ($date->lte(Carbon::today()->addWeek()) && $date->gte(Carbon::today())) {
+                $icon_path = LineBotSvg::CALENDER_WEEK;
+            } else if ($date->lt(Carbon::today())) {
+                $icon_path = LineBotSvg::CALENDER_OVERDUE;
+            } else {
+                $icon_path = LineBotSvg::CALENDER;
+            }
         } else {
             $icon_path = LineBotSvg::CALENDER;
         }
+
         $icon_component = new IconComponentBuilder($icon_path);
         $icon_component->setSize('lg');
         $icon_component->setOffsetTop('5px');
