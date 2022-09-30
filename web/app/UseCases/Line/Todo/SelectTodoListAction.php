@@ -60,16 +60,10 @@ class SelectTodoListAction
 
         $todo_carousel_columns = [];
         foreach ($todo_list as $todo) {
-            // $todo_carousel_columns[] = Todo::createTodoCarouselColumn($todo);
             $todo_carousel_columns[] = Todo::createBubbleContainer($todo);
         }
         $message = Todo::createTodoListTitleMessage($line_user, $action_value, $todo_carousel_columns);
-        // $todo_carousels = new CarouselTemplateBuilder($todo_carousel_columns);
-        // $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-        // $builder->add(
-        //     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text'])
-        // );
-        // $builder->add(new TemplateMessageBuilder('やること一覧', $todo_carousels));
+
         $todo_carousels = new CarouselContainerBuilder($todo_carousel_columns);
         $flex_message = new FlexMessageBuilder(
             'やること一覧',
@@ -77,16 +71,15 @@ class SelectTodoListAction
         );
 
         $multi_message = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-        // $multi_message->add(
-        //     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text'])
-        // );
+        $multi_message->add(
+            new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text'])
+        );
         $multi_message->add($flex_message);
 
-        $test = $this->bot->replyMessage(
+        $this->bot->replyMessage(
             $event->getReplyToken(),
             $multi_message
         );
-        Log::debug((array)$test);
         return;
     }
 }
