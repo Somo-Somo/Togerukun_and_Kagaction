@@ -79,6 +79,10 @@ class MessageReceivedAction
                 Todo::askAddOrList($line_user->name)
             );
         } else if ($event->getText() === '使い方') {
+            $this->bot->replyText(
+                $event->getReplyToken(),
+                'ごめんなさい！まだ使い方の説明を実装してないです！'
+            );
         } else if ($question_number === LineUsersQuestion::NO_QUESTION) {
             // 質問がない場合
         } else if ($question_number === LineUsersQuestion::PROJECT) {

@@ -77,13 +77,9 @@ class DateResponseAction
         $not_completed_onboarding = Onboarding::where('user_uuid', $line_user->uuid)->first();
 
         if ($not_completed_onboarding) {
-            // オンボーディングが終わっていない場合
-            $this->bot->replyText(
-                $event->getReplyToken(),
-                Todo::confirmDate($todo, new DateTime($date['date'])),
-                Onboarding::callForAdditionalTodo(),
-                Onboarding::explainSettingOfCheck()
-            );
+            $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+            $builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
+            $builder->add(Onboarding::callForAdditionalTodo());
             $not_completed_onboarding->delete();
         } else {
             $parent_todo = Todo::where('uuid', $todo->parent_uuid)->first();
@@ -99,11 +95,12 @@ class DateResponseAction
             if ($line_user->question->checked_todo) {
                 $builder->add(new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question)));
             }
-            $this->bot->replyMessage(
-                $event->getReplyToken(),
-                $builder
-            );
         }
+        $res = $this->bot->replyMessage(
+            $event->getReplyToken(),
+            $builder
+        );
+        Log::debug((array)$res);
 
         // Todoに日付の期限を授ける
         Todo::where('uuid', $date['uuid'])
