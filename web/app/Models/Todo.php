@@ -439,7 +439,7 @@ class Todo extends Model
         $bubble_container = new BubbleContainerBuilder();
         $bubble_container->setHeader(Todo::createHeaderComponent($todo));
         $bubble_container->setBody(Todo::createBodyComponent($todo));
-        $bubble_container->setStyles(Todo::createBubbleStyles($todo));
+        // $bubble_container->setStyles(Todo::createBubbleStyles($todo));
         return $bubble_container;
     }
 
@@ -492,7 +492,7 @@ class Todo extends Model
         $subtitle_icon_component = Todo::createSubtitleIconComponent($todo);
         return new BoxComponentBuilder(
             'baseline',
-            [$subtitle_text_component, $subtitle_icon_component]
+            [$subtitle_icon_component, $subtitle_text_component]
         );
     }
 
@@ -511,7 +511,7 @@ class Todo extends Model
             $subtitle_text = '「' . $parent_todo->name . '」のためにやること';
         }
         $subtitle_text_component = new TextComponentBuilder($subtitle_text);
-        $subtitle_text_component->setSize("xss");
+        $subtitle_text_component->setSize("xxs");
         $subtitle_text_component->setColor("#aaaaaa");
         return $subtitle_text_component;
     }
@@ -525,10 +525,11 @@ class Todo extends Model
     public static function createSubtitleIconComponent(Todo $todo)
     {
         $url = $todo->depth === 0 ? '/web/public/svg/goal-flag.svg' : '/web/public/svg/todo-tree.svg';
+        $url = 'https://s4.aconvert.com/convert/p3r68-cdx67/aa09r-1keg0.png';
         return new IconComponentBuilder(
             $url, // 画像URL
-            "xs", // margin
-            "xxs", // size
+            null, // margin
+            "lg", // size
             null // aspectoRatio
         );
     }
@@ -552,7 +553,7 @@ class Todo extends Model
         $date_icon_component = Todo::createDateIconComponent($todo);
         $date_box_component = new BoxComponentBuilder(
             'baseline',
-            [$date_text_component, $date_icon_component]
+            [$date_icon_component, $date_text_component]
         );
         $date_box_component->setMargin('md');
         return $date_box_component;
@@ -583,10 +584,11 @@ class Todo extends Model
         $date_text_component->setSize('sm');
         $date_text_component->setColor('#555555');
         $date_text_component->setWeight('bold');
+        return $date_text_component;
     }
 
     /**
-     * 日付メッセージのアイコンのコンポーネント生成ビルダー
+     * 日付メッセージのアイコンのコンポーネント生成ビルダーz
      *
      * @param Todo $todo
      * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder
@@ -605,9 +607,10 @@ class Todo extends Model
         } else {
             $icon_path = '/web/public/svg/calender.svg';
         }
+        $icon_path = 'https://s4.aconvert.com/convert/p3r68-cdx67/a4fn1-mcvpm.png';
         $icon_component = new IconComponentBuilder($icon_path);
-        $icon_component->setSize('md');
-        $icon_component->setOffsetTop('1.5px');
+        $icon_component->setSize('lg');
+        $icon_component->setOffsetTop('5px');
         return $icon_component;
     }
 
@@ -636,13 +639,14 @@ class Todo extends Model
     public static function createAccomplishGageComponent(Todo $todo)
     {
         $accomplished_percentage = Todo::calcAccomplishedPercentage($todo);
+        Log::debug($accomplished_percentage);
 
         $accomplished_percentage_text = new TextComponentBuilder($accomplished_percentage);
         $accomplished_percentage_text->setSize('xs');
         $accomplished_percentage_text->setAlign('end');
 
         $accomplished_gage = new BoxComponentBuilder('vertical', []);
-        $accomplished_gage->setWidth($accomplished_percentage . '%');
+        $accomplished_gage->setWidth($accomplished_percentage);
         $accomplished_gage->setBackgroundColor('#0D8186');
         $accomplished_gage->setHeight('6px');
 
@@ -671,16 +675,11 @@ class Todo extends Model
         $child_todo = Todo::where('parent_uuid', $todo->uuid)->pluck('uuid');
         if ($child_todo->count() > 0) {
             $accomplished_child_todo_num = AccomplishTodo::whereIn('todo_uuid', $child_todo)->get();
-            Log::debug($accomplished_child_todo_num);
             $accomplished_percentage = $accomplished_child_todo_num ?
                 round(count($accomplished_child_todo_num) / count($child_todo) * 100, 0) . '%' : '0%';
         } else {
             $accomplished_percentage = '0%';
         }
-
-
-
-
         return $accomplished_percentage;
     }
 
