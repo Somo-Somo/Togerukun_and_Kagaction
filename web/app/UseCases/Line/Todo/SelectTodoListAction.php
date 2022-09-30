@@ -72,7 +72,7 @@ class SelectTodoListAction
         // $builder->add(new TemplateMessageBuilder('やること一覧', $todo_carousels));
         $todo_carousels = new CarouselContainerBuilder($todo_carousel_columns);
         $flex_message = new FlexMessageBuilder(
-            'flex message',
+            'やること一覧',
             $todo_carousels
         );
 
