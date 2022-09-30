@@ -11,8 +11,9 @@ use App\Repositories\Todo\TodoRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
+use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
 use DateTime;
 
 class CheckTodo
@@ -80,7 +81,7 @@ class CheckTodo
             $todo_carousel_columns = [];
             foreach ($todo_list as $todo) {
                 if (count($todo->accomplish) === 0) {
-                    $todo_carousel_columns[] = CheckedTodo::createCheckTodoCarouselColumn($todo);
+                    $todo_carousel_columns[] = Todo::createBubbleContainer($todo, $action_type);
                 }
             }
 
@@ -88,17 +89,23 @@ class CheckTodo
                 ->where('date', '<', $today);
             foreach ($over_due_todo_list as $over_due_todo) {
                 if ($over_due_todo->accomplish === null) {
-                    $todo_carousel_columns[] = CheckedTodo::createCheckTodoCarouselColumn($over_due_todo);
+                    $todo_carousel_columns[] = Todo::createBubbleContainer($over_due_todo, $action_type);
                 }
             }
-
             $message = Todo::createTodoListTitleMessage($line_user, $action_type, $todo_carousel_columns);
+
             // 該当のTodoがある場合
             if (count($todo_carousel_columns) > 0) {
-                $todo_carousels = new CarouselTemplateBuilder($todo_carousel_columns);
+                $todo_carousels = new CarouselContainerBuilder($todo_carousel_columns);
+                $flex_message = new FlexMessageBuilder(
+                    'やること一覧',
+                    $todo_carousels
+                );
                 $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-                $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text']));
-                $builder->add(new TemplateMessageBuilder('振り返り', $todo_carousels));
+                $builder->add(
+                    new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text'])
+                );
+                $builder->add($flex_message);
             } else {
                 $builder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text']);
             }

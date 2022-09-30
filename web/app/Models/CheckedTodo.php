@@ -63,29 +63,6 @@ class CheckedTodo extends Model
     }
 
     /**
-     * CheckTodoのカルーセル
-     *
-     * @param object $todo
-     * @return LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
-     */
-    public static function createCheckTodoCarouselColumn(object $todo)
-    {
-        if ($todo->depth === 0) {
-            $parent = 'プロジェクト:「' . $todo->project->name . '」のゴール';
-        } else {
-            $parentTodo = Todo::where('uuid', $todo->parent_uuid)->first();
-            $parent = '「' . $parentTodo->name . '」のためにやること';
-        }
-        $accomplish = count($todo->accomplish) > 0  ? '【達成】' : '【未達成】';
-        $title = $accomplish . $todo->name;
-        $actions = [
-            new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
-        ];
-        $builder = new CarouselColumnTemplateBuilder($title, $parent, null, $actions);
-        return $builder;
-    }
-
-    /**
      * Todoが達成したかどうか
      *
      * @param Todo $todo

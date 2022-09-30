@@ -7,14 +7,9 @@ use App\Models\Todo;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
-use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
 use DateTime;
-use function Psy\debug;
 
 class SelectTodoListAction
 {
@@ -60,25 +55,29 @@ class SelectTodoListAction
 
         $todo_carousel_columns = [];
         foreach ($todo_list as $todo) {
-            $todo_carousel_columns[] = Todo::createBubbleContainer($todo);
+            $todo_carousel_columns[] = Todo::createBubbleContainer($todo, $action_value);
         }
         $message = Todo::createTodoListTitleMessage($line_user, $action_value, $todo_carousel_columns);
 
-        $todo_carousels = new CarouselContainerBuilder($todo_carousel_columns);
-        $flex_message = new FlexMessageBuilder(
-            'やること一覧',
-            $todo_carousels
-        );
+        if (count($todo_carousel_columns) > 0) {
+            $todo_carousels = new CarouselContainerBuilder($todo_carousel_columns);
+            $flex_message = new FlexMessageBuilder(
+                'やること一覧',
+                $todo_carousels
+            );
+            $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+            $builder->add(
+                new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text'])
+            );
+            $builder->add($flex_message);
+        } else {
+            $builder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text']);
+        }
 
-        $multi_message = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-        $multi_message->add(
-            new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text'])
-        );
-        $multi_message->add($flex_message);
 
         $this->bot->replyMessage(
             $event->getReplyToken(),
-            $multi_message
+            $builder
         );
         return;
     }

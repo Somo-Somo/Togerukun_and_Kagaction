@@ -147,31 +147,6 @@ class Todo extends Model
     }
 
     /**
-     * Todoのカルーセル
-     *
-     * @param object $todo
-     * @return LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
-     */
-    public static function createTodoCarouselColumn(object $todo)
-    {
-        if ($todo->depth === "0") {
-            $parent = 'プロジェクト:「' . $todo->project->name . '」のゴール';
-        } else {
-            $parentTodo = Todo::where('uuid', $todo->parent_uuid)->first();
-            $parent = '「' . $parentTodo->name . '」のためにやること';
-        }
-        $accomplish = count($todo->accomplish) > 0 ? '【達成】' : '【未達成】';
-        $title = $accomplish . $todo->name;
-        $actions = [
-            new PostbackTemplateActionBuilder('名前・期限の変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid),
-            new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
-            new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
-        ];
-        $builder = new CarouselColumnTemplateBuilder($title, $parent, null, $actions);
-        return $builder;
-    }
-
-    /**
      * 作ったTodoのTodoを新しく追加する
      *
      * @param object $todo
@@ -432,14 +407,14 @@ class Todo extends Model
      * コンポーネントをひとまとめ。BubbleContainerの生成ビルダー
      *
      * @param Todo $todo
+     * @param string $action_type
      * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
      */
-    public static function createBubbleContainer(Todo $todo)
+    public static function createBubbleContainer(Todo $todo, string $action_type)
     {
         $bubble_container = new BubbleContainerBuilder();
         $bubble_container->setHeader(Todo::createHeaderComponent($todo));
-        $bubble_container->setBody(Todo::createBodyComponent($todo));
-        // $bubble_container->setStyles(Todo::createBubbleStyles($todo));
+        $bubble_container->setBody(Todo::createBodyComponent($todo, $action_type));
         return $bubble_container;
     }
 
@@ -696,23 +671,34 @@ class Todo extends Model
      * Body部分のコンポーネント生成ビルダー
      *
      * @param Todo $todo
+     * @param string $action_type
      * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder
      */
-    public static function createBodyComponent(Todo $todo)
+    public static function createBodyComponent(Todo $todo, string $action_type)
     {
-        $change_todo_btn = new ButtonComponentBuilder(
-            new PostbackTemplateActionBuilder('名前・期限の変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid)
-        );
-        $change_todo_btn->setHeight('sm');
-        $add_todo_btn = new ButtonComponentBuilder(
-            new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid)
-        );
-        $add_todo_btn->setHeight('sm');
-        $add_todo_btn->setMargin('md');
+        $actions = [];
 
-        $postback_box = new BoxComponentBuilder('vertical', [
-            $change_todo_btn, $add_todo_btn
-        ]);
+        if (isset(CheckedTodo::CHECK_TODO[$action_type])) {
+            $check_todo_btn = new ButtonComponentBuilder(
+                new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
+            );
+            $check_todo_btn->setHeight('sm');
+            $actions[] = $check_todo_btn;
+        } else {
+            $change_todo_btn = new ButtonComponentBuilder(
+                new PostbackTemplateActionBuilder('名前・期限の変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid)
+            );
+            $change_todo_btn->setHeight('sm');
+            $actions[] = $change_todo_btn;
+            $add_todo_btn = new ButtonComponentBuilder(
+                new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid)
+            );
+            $add_todo_btn->setHeight('sm');
+            $add_todo_btn->setMargin('md');
+            $actions[] = $add_todo_btn;
+        }
+
+        $postback_box = new BoxComponentBuilder('vertical', $actions);
         $postback_box->setSpacing('md');
         $postback_box->setPaddingAll('12px');
         return $postback_box;
