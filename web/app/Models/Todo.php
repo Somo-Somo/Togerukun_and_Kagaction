@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use App\Models\LineBotSvg;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use LINE\LINEBot\Constant\Flex\ComponentMargin;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\TemplateActionBuilder\DatetimePickerTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
@@ -166,7 +165,7 @@ class Todo extends Model
         $actions = [
             new PostbackTemplateActionBuilder('名前・期限の変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid),
             new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
-            new PostbackTemplateActionBuilder('振り返る', 'action=SELECT_CHECK_TODO&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('振り返る', 'action=CHECK_TODO&todo_uuid=' . $todo->uuid),
         ];
         $builder = new CarouselColumnTemplateBuilder($title, $parent, null, $actions);
         return $builder;
@@ -572,7 +571,9 @@ class Todo extends Model
     public static function createDateTextComponent(Todo $todo)
     {
         $date = new Carbon($todo->date);
-        if ($date->isToday()) {
+        if (count($todo->accomplish) > 0) {
+            $date_text = "達成";
+        } else if ($date->isToday()) {
             $date_text = "今日まで";
         } else if ($date->isTomorrow()) {
             $date_text = "明日まで";
@@ -710,14 +711,8 @@ class Todo extends Model
         $add_todo_btn->setHeight('sm');
         $add_todo_btn->setMargin('md');
 
-        $check_todo_btn = new ButtonComponentBuilder(
-            new PostbackTemplateActionBuilder('振り返る', 'action=SELECT_CHECK_TODO&todo_uuid=' . $todo->uuid)
-        );
-        $check_todo_btn->setHeight('sm');
-        $check_todo_btn->setMargin('md');
-
         $postback_box = new BoxComponentBuilder('vertical', [
-            $change_todo_btn, $add_todo_btn, $check_todo_btn
+            $change_todo_btn, $add_todo_btn
         ]);
         $postback_box->setSpacing('md');
         $postback_box->setPaddingAll('12px');

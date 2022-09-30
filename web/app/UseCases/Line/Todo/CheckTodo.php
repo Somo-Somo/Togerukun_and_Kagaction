@@ -2,11 +2,12 @@
 
 namespace App\UseCases\Line\Todo;
 
+use App\Models\AccomplishTodo;
 use App\Models\User;
 use App\Models\Todo;
 use App\Models\CheckedTodo;
 use App\Models\LineUsersQuestion;
-use App\Repositories\Date\DateRepositoryInterface;
+use App\Repositories\Todo\TodoRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
@@ -27,14 +28,14 @@ class CheckTodo
     protected $bot;
 
     /**
-     * @param App\Repositories\Date\DateRepositoryInterface
+     * @param App\Repositories\Todo\TodoRepositoryInterface
      */
     protected $todo_repository;
 
     /**
-     * @param App\Repositories\Date\DateRepositoryInterface $todo_repository_interface
+     * @param App\Repositories\Todo\TodoRepositoryInterface $todo_repository_interface
      */
-    public function __construct(DateRepositoryInterface $todo_repository_interface)
+    public function __construct(TodoRepositoryInterface $todo_repository_interface)
     {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
@@ -60,7 +61,6 @@ class CheckTodo
             ]);
             return;
         }
-
         // Todoセレクト前
         if (!$todo_uuid) {
             $today_date_time = new DateTime();
@@ -115,16 +115,30 @@ class CheckTodo
             $todo = Todo::where('uuid', $todo_uuid)->first();
             if ($action_type === 'CHECK_TODO') {
                 $builder = new TemplateMessageBuilder('振り返り', CheckedTodo::askIfTodoHasBeenAccomplished($todo));
-            } else if ($action_type === 'ACOMMPLISHED_TODO') {
+                $this->bot->replyMessage($event->getReplyToken(), $builder);
+            } else if ($action_type === 'ACCOMPLISHED_TODO') {
                 $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
                 $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('「' . $todo->name . '」の達成おめでとうございます！'));
-                $builder->add(new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question, $action_type)));
+                $builder->add(new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question)));
+                $this->bot->replyMessage($event->getReplyToken(), $builder);
+                AccomplishTodo::updateOrCreate([
+                    ['todo_uuid', $todo_uuid],
+                    [
+                        'user_uuid' => $line_user->uuid,
+                        'todo_uuid' => $todo_uuid
+                    ]
+                ]);
+                $this->todo_repository->updateAccomplish(
+                    ['uuid' => $todo_uuid, 'user_uuid' => $line_user->uuid]
+                );
             } else if ($action_type === 'NOT_ACCOMPLISHED_TODO') {
                 $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
                 $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('引き続き「' . $todo->name . '」の達成に向けて頑張っていきましょう！'));
                 $builder->add(new TemplateMessageBuilder('やることの追加', CheckedTodo::addTodoAfterCheckTodo($todo)));
+                $this->bot->replyMessage($event->getReplyToken(), $builder);
             } else if ($action_type === 'ADD_TODO_AFTER_CHECK_TODO') {
                 $builder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder(Todo::askTodoName($todo));
+                $this->bot->replyMessage($event->getReplyToken(), $builder);
                 // なんの振り返りをしているか記憶しておく
                 $line_user->question->update([
                     'question_number' => LineUsersQuestion::TODO,
@@ -132,13 +146,9 @@ class CheckTodo
                 ]);
             } else if ($action_type === 'NOT_ADD_TODO_AFTER_CHECK_TODO') {
                 $builder = new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question, $action_type));
+                $this->bot->replyMessage($event->getReplyToken(), $builder);
             }
-            $this->bot->replyMessage(
-                $event->getReplyToken(),
-                $builder
-            );
         }
-
         return;
     }
 }
