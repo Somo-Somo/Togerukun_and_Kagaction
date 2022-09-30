@@ -70,7 +70,7 @@ class CheckedTodo extends Model
      */
     public static function createCheckTodoCarouselColumn(object $todo)
     {
-        if ($todo->depth === "0") {
+        if ($todo->depth === 0) {
             $parent = 'プロジェクト:「' . $todo->project->name . '」のゴール';
         } else {
             $parentTodo = Todo::where('uuid', $todo->parent_uuid)->first();
@@ -98,7 +98,7 @@ class CheckedTodo extends Model
             new ConfirmTemplateBuilder(
                 $text,
                 [
-                    new PostbackTemplateActionBuilder('はい', 'action=ACOMMPLISHED_TODO&todo_uuid=' . $todo->uuid),
+                    new PostbackTemplateActionBuilder('はい', 'action=ACCOMPLISHED_TODO&todo_uuid=' . $todo->uuid),
                     new PostbackTemplateActionBuilder('いいえ', 'action=NOT_ACCOMPLISHED_TODO&todo_uuid=' . $todo->uuid)
                 ]
             );
