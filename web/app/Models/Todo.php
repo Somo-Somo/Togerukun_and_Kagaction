@@ -514,6 +514,8 @@ class Todo extends Model
         $subtitle_text_component = new TextComponentBuilder($subtitle_text);
         $subtitle_text_component->setSize("xxs");
         $subtitle_text_component->setColor("#aaaaaa");
+        $subtitle_text_component->setMargin("4px");
+
         return $subtitle_text_component;
     }
 
@@ -526,12 +528,14 @@ class Todo extends Model
     public static function createSubtitleIconComponent(Todo $todo)
     {
         $url = $todo->depth === 0 ? LineBotSvg::GOAL_FLAG : LineBotSvg::TODO_TREE;
-        return new IconComponentBuilder(
+        $icon_component_builder = new IconComponentBuilder(
             $url, // 画像URL
             null, // margin
             "lg", // size
             null // aspectoRatio
         );
+        $icon_component_builder->setOffsetTop('5px');
+        return $icon_component_builder;
     }
 
     /**
