@@ -4,6 +4,7 @@ namespace App\Models;
 
 use DateTime;
 use Carbon\Carbon;
+use App\Models\LineBotSvg;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use LINE\LINEBot\Constant\Flex\ComponentMargin;
@@ -524,8 +525,7 @@ class Todo extends Model
      */
     public static function createSubtitleIconComponent(Todo $todo)
     {
-        $url = $todo->depth === 0 ? '/web/public/svg/goal-flag.svg' : '/web/public/svg/todo-tree.svg';
-        $url = 'https://s4.aconvert.com/convert/p3r68-cdx67/aa09r-1keg0.png';
+        $url = $todo->depth === 0 ? LineBotSvg::GOAL_FLAG : LineBotSvg::TODO_TREE;
         return new IconComponentBuilder(
             $url, // 画像URL
             null, // margin
@@ -596,18 +596,17 @@ class Todo extends Model
     public static function createDateIconComponent(Todo $todo)
     {
         $date = new Carbon($todo->date);
-        if ($todo->accomplish()) {
-            $icon_path = '/web/public/svg/calender-check.svg';
+        if (count($todo->accomplish) > 0) {
+            $icon_path = LineBotSvg::CALENDER_CHECK;
         } else if ($date->isToday()) {
-            $icon_path = '/web/public/svg/calender-today.svg';
+            $icon_path = LineBotSvg::CALENDER_TODAY;
         } else if ($date->lte(Carbon::today()->addWeek()) && $date->gte(Carbon::today())) {
-            $icon_path = '/web/public/svg/calender-week.svg';
+            $icon_path = LineBotSvg::CALENDER_WEEK;
         } else if ($date->lt(Carbon::today())) {
-            $icon_path = '/web/public/svg/calender-overdue.svg';
+            $icon_path = LineBotSvg::CALENDER_OVERDUE;
         } else {
-            $icon_path = '/web/public/svg/calender.svg';
+            $icon_path = LineBotSvg::CALENDER;
         }
-        $icon_path = 'https://s4.aconvert.com/convert/p3r68-cdx67/a4fn1-mcvpm.png';
         $icon_component = new IconComponentBuilder($icon_path);
         $icon_component->setSize('lg');
         $icon_component->setOffsetTop('5px');

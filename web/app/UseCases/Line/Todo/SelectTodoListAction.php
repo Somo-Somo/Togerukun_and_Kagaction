@@ -81,7 +81,6 @@ class SelectTodoListAction
         //     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text'])
         // );
         $multi_message->add($flex_message);
-        Log::debug((array)$multi_message);
 
         $test = $this->bot->replyMessage(
             $event->getReplyToken(),
