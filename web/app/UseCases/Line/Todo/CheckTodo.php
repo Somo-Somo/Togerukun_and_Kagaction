@@ -139,14 +139,14 @@ class CheckTodo
                 $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
                 $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('引き続き「' . $todo->name . '」の達成に向けて頑張っていきましょう！'));
                 $builder->add(new TemplateMessageBuilder('やることの追加', CheckedTodo::addTodoAfterCheckTodo($todo)));
-                $this->bot->replyMessage($event->getReplyToken(), $builder);
+                $this->bot->replyMessage($event->getReplyToken(), $builder);;
             } else if ($action_type === 'ADD_TODO_AFTER_CHECK_TODO') {
                 $builder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder(Todo::askTodoName($todo));
                 $this->bot->replyMessage($event->getReplyToken(), $builder);
-                // なんの振り返りをしているか記憶しておく
+                // なんのTodoのためのTodoを追加するか記憶しておく
                 $line_user->question->update([
                     'question_number' => LineUsersQuestion::TODO,
-                    'parent_uuid' => $todo->parent_uuid,
+                    'parent_uuid' => $todo->uuid,
                 ]);
             } else if ($action_type === 'NOT_ADD_TODO_AFTER_CHECK_TODO') {
                 $builder = new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question, $action_type));

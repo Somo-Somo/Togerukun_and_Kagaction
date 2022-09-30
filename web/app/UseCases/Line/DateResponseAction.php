@@ -4,6 +4,7 @@ namespace App\UseCases\Line;
 
 use App\Models\User;
 use App\Models\Todo;
+use App\Models\CheckedTodo;
 use App\Models\LineUsersQuestion;
 use App\Models\Onboarding;
 use App\Repositories\Date\DateRepositoryInterface;
@@ -96,7 +97,7 @@ class DateResponseAction
             $builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
             $builder->add(new TemplateMessageBuilder('選択', $carousel));
             if ($line_user->question->checked_todo) {
-                $builder->add(new TemplateMessageBuilder('振り返り', Todo::askContinueCheckTodo($line_user->question)));
+                $builder->add(new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question)));
             }
             $this->bot->replyMessage(
                 $event->getReplyToken(),
