@@ -467,7 +467,7 @@ class Todo extends Model
         ];
         $header_component = new BoxComponentBuilder('vertical', $header_array);
         $header_component->setBackgroundColor('#ffffff');
-        $header_component->setPaddingTop('24px');
+        $header_component->setPaddingTop('16px');
         $header_component->setPaddingAll('12px');
         $header_component->setPaddingBottom('24px');
 
@@ -559,7 +559,7 @@ class Todo extends Model
             'baseline',
             [$date_icon_component, $date_text_component]
         );
-        $date_box_component->setMargin('md');
+        $date_box_component->setMargin('6px');
         return $date_box_component;
     }
 
@@ -584,7 +584,7 @@ class Todo extends Model
             $date_text = "日付:未設定";
         }
         $date_text_component = new TextComponentBuilder($date_text);
-        $date_text_component->setMargin('6px');
+        $date_text_component->setMargin('4px');
         $date_text_component->setSize('sm');
         $date_text_component->setColor('#555555');
         $date_text_component->setWeight('bold');
@@ -627,7 +627,7 @@ class Todo extends Model
     {
         $title_component = new TextComponentBuilder($todo->name);
         $title_component->setSize('xl');
-        $title_component->setMargin('sm');
+        $title_component->setMargin('6px');
         $title_component->setWrap(true);
         $title_component->setWeight('bold');
         return $title_component;
