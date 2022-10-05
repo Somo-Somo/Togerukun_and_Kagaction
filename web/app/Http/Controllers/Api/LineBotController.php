@@ -3,18 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\LineUsersQuestion;
 use App\Services\LineBotService;
-use App\Usecases\Line\FollowAction;
-use App\Usecases\Line\MessageReceivedAction;
+use App\UseCases\Line\FollowAction;
+use App\UseCases\Line\MessageReceivedAction;
+use App\UseCases\Line\PostbackReceivedAction;
 use App\Repositories\Line\LineBotRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
-use LINE\LINEBot\Event\FollowEvent;
-use LINE\LINEBot\Event\MessageEvent\TextMessage;
 
 class LineBotController extends Controller
 {
@@ -57,10 +54,14 @@ class LineBotController extends Controller
      * Lineの公式アカウントにメッセージが送られたときに
      * LINE Web HookにてAPIがCallされこのメソッドが呼ばれる
      *
-     * @param Request
+     * @param Request $request
      */
-    public function reply(Request $request, FollowAction $follow_action, MessageReceivedAction $message_received_action)
-    {
+    public function reply(
+        Request $request,
+        FollowAction $follow_action,
+        MessageReceivedAction $message_received_action,
+        PostbackReceivedAction $postback_received_action,
+    ) {
         $status_code = $this->line_bot_service->eventHandler($request);
 
         // リクエストをEventオブジェクトに変換する
@@ -69,10 +70,10 @@ class LineBotController extends Controller
         foreach ($events as $event) {
             if ($event->getType() === 'follow') {
                 $follow_action->invoke($event->getUserId());
-            } else if (
-                $event->getType() === 'message' || $event->getType() === 'postback'
-            ) {
+            } else if ($event->getType() === 'message') {
                 $message_received_action->invoke($event);
+            } elseif ($event->getType() === 'postback') {
+                $postback_received_action->invoke($event);
             }
         }
 

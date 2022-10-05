@@ -2,11 +2,11 @@
 
 namespace App\UseCases\Line;
 
+use App\Models\CheckedTodo;
 use App\Models\User;
 use App\Models\Todo;
 use App\Models\LineUsersQuestion;
 use App\UseCases\Line\ProjectResponseAction;
-use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 
@@ -24,11 +24,6 @@ class MessageReceivedAction
     protected $bot;
 
     /**
-     * @param App\Repositories\Todo\DateRepositoryInterface
-     */
-    protected $date_repository;
-
-    /**
      * @param App\UseCases\Line\ProjectResponseAction
      */
     protected $project_response_action;
@@ -39,27 +34,25 @@ class MessageReceivedAction
     protected $todo_response_action;
 
     /**
-     * @param App\UseCases\Line\DateResponseAction
+     * @param \App\UseCases\Line\Todo\RenameTodo
      */
-    protected $date_response_action;
+    protected $rename_todo;
 
     /**
-     * @param App\Repositories\Line\LineRepositoryInterface $line_repository_interface
-     * @param App\Repositories\Date\DateRepositoryInterface $date_repository_interface
      * @param App\UseCases\LINE\ProjectResponseAction $project_response_action
      * @param App\UseCases\LINE\TodoResponseAction $todo_response_action
-     * @param App\UseCases\LINE\DateResponseAction $date_response_action
+     * @param \App\UseCases\Line\Todo\RenameTodo $rename_todo
      */
     public function __construct(
         ProjectResponseAction $project_response_action,
         TodoResponseAction $todo_response_action,
-        DateResponseAction $date_response_action,
+        \App\UseCases\Line\Todo\RenameTodo $rename_todo,
     ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
         $this->project_response_action = $project_response_action;
         $this->todo_response_action = $todo_response_action;
-        $this->date_response_action = $date_response_action;
+        $this->rename_todo = $rename_todo;
     }
 
     /**
@@ -74,8 +67,23 @@ class MessageReceivedAction
         $line_user = User::where('line_user_id', $event->getUserId())->first();
 
         $question_number = $line_user->question->question_number;
-
-        if ($question_number === LineUsersQuestion::NO_QUESTION) {
+        if ($event->getText() === '振り返る') {
+            $this->bot->replyMessage(
+                $event->getReplyToken(),
+                CheckedTodo::askWhichCheckTodo()
+            );
+        } else if ($event->getText() === 'やること') {
+            // リッチメニューからやることを選択
+            $this->bot->replyMessage(
+                $event->getReplyToken(),
+                Todo::askAddOrList($line_user->name)
+            );
+        } else if ($event->getText() === '使い方') {
+            $this->bot->replyText(
+                $event->getReplyToken(),
+                'ごめんなさい！まだ使い方の説明を実装してないです！'
+            );
+        } else if ($question_number === LineUsersQuestion::NO_QUESTION) {
             // 質問がない場合
         } else if ($question_number === LineUsersQuestion::PROJECT) {
             // プロジェクトに関する質問の場合
@@ -86,9 +94,8 @@ class MessageReceivedAction
         ) {
             // TodoやGOALに関する質問の場合
             $this->todo_response_action->invoke($event, $line_user, $question_number);
-        } else if ($question_number === LineUsersQuestion::DATE) {
-            // 日付に関する質問の場合
-            $this->date_response_action->invoke($event, $line_user);
+        } else if ($question_number === LineUsersQuestion::RENAME_TODO) {
+            $this->rename_todo->invoke($event, $line_user, $line_user->question->parent_uuid);
         }
         return;
     }

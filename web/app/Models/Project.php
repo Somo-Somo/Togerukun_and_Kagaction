@@ -19,6 +19,15 @@ class Project extends Model
     ];
 
     /**
+     * プロジェクトに紐づくTodo全て
+     *
+     */
+    public function todo()
+    {
+        return $this->hasMany(Todo::class, 'uuid', 'project_uuid');
+    }
+
+    /**
      * プロジェクトを確認する
      *
      * @param string $user_name

@@ -105,23 +105,28 @@ class TodoRepository implements TodoRepositoryInterface
      * Todoとユーザーを結ぶリレーションを削除
      *
      * @param array $todo
+     * @return array $delete_child
      */
     public function destroy(array $todo)
     {
-        $this->client->run(
+        $delete_child = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { uuid : $user_uuid }), (todo:Todo{ uuid :$uuid }) - [r] -> (parent)
+                MATCH (user:User { uuid : $user_uuid }), (child:Todo) - [*] -> (todo:Todo{ uuid :$uuid }) - [r] -> (parent)
                 CREATE (user)-[
                             :DELETED{at:localdatetime({timezone: 'Asia/Tokyo'})}
                         ]->(todo)
+                CREATE (user)-[
+                            :DELETED{at:localdatetime({timezone: 'Asia/Tokyo'})}
+                        ]->(child)
                 DELETE r
-                RETURN todo
+                RETURN child
                 CYPHER,
             [
                 'uuid' => $todo['uuid'],
                 'user_uuid' => $todo['user_uuid'],
             ]
         );
+        return $delete_child->toArray();
     }
 
     /**

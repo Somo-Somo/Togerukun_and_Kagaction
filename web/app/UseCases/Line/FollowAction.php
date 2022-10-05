@@ -4,6 +4,7 @@ namespace App\UseCases\Line;
 
 use App\Models\User;
 use App\Models\LineUsersQuestion;
+use App\Models\Onboarding;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Str;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -57,6 +58,10 @@ class FollowAction
                 'question_number' => LineUsersQuestion::PROJECT
             ]);
 
+            Onboarding::create([
+                'user_uuid' => $user['uuid']
+            ]);
+
             // userをneo4jのDBにも登録
             if ($user) {
                 $this->user_repository->register($user);
@@ -68,6 +73,7 @@ class FollowAction
             $has_line_user_account->update([
                 'question_number' => LineUsersQuestion::PROJECT,
                 'parent_uuid' => null,
+                'project_uuid' => null,
             ]);
         }
         return;

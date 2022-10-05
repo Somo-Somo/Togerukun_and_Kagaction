@@ -4,14 +4,18 @@ namespace App\UseCases\Line;
 
 use App\Models\User;
 use App\Models\Todo;
+use App\Models\CheckedTodo;
 use App\Models\LineUsersQuestion;
+use App\Models\Onboarding;
 use App\Repositories\Date\DateRepositoryInterface;
 use App\Repositories\Line\LineBotRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 use DateTime;
-
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 
 class DateResponseAction
 {
@@ -53,23 +57,50 @@ class DateResponseAction
      * 受け取ったメッセージを場合分けしていく
      *
      * @param object $event
+     * @param User $line_user
+     * @param string $uuid_value
      * @return
      */
-    public function invoke(object $event, User $line_user)
+    public function invoke(object $event, User $line_user, string $uuid_value)
     {
         // 日付に関する質問の場合
         $date = [
-            'uuid' => $line_user->question->parent_uuid,
+            'uuid' => $uuid_value,
             'user_uuid' => $line_user->uuid,
             'date' => $event->getPostbackParams()['date']
         ];
 
-        $this->bot->replyText(
+        // 紐づいているTodo
+        $todo = Todo::where('uuid', $uuid_value)->first();
+
+        // オンボーディングが終わっているか確認
+        $not_completed_onboarding = Onboarding::where('user_uuid', $line_user->uuid)->first();
+
+        if ($not_completed_onboarding) {
+            $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+            $builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
+            $builder->add(Onboarding::callForAdditionalTodo());
+            $not_completed_onboarding->delete();
+        } else {
+            $parent_todo = Todo::where('uuid', $todo->parent_uuid)->first();
+            $carousel_columns = [
+                Todo::continueAddTodoOfTodo($todo),
+                Todo::continueAddTodoOfParentTodo($parent_todo),
+            ];
+            if (!$line_user->question->checked_todo) $carousel_columns[] = Todo::comeBackTodoList($todo->project);
+            $carousel = new CarouselTemplateBuilder($carousel_columns);
+            $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+            $builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
+            $builder->add(new TemplateMessageBuilder('選択', $carousel));
+            if ($line_user->question->checked_todo) {
+                $builder->add(new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question)));
+            }
+        }
+        $res = $this->bot->replyMessage(
             $event->getReplyToken(),
-            Todo::confirmDate(new DateTime($date['date'])),
-            Todo::callForAdditionalTodo(),
-            Todo::explainSettingOfCheck()
+            $builder
         );
+        Log::debug((array)$res);
 
         // Todoに日付の期限を授ける
         Todo::where('uuid', $date['uuid'])
