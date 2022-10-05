@@ -111,14 +111,11 @@ class TodoRepository implements TodoRepositoryInterface
     {
         $delete_child = $this->client->run(
             <<<'CYPHER'
-                MATCH (user:User { uuid : $user_uuid }), (child:Todo) - [*] -> (todo:Todo{ uuid :$uuid }) - [r] -> (parent)
-                CREATE (user)-[
-                            :DELETED{at:localdatetime({timezone: 'Asia/Tokyo'})}
-                        ]->(todo)
-                CREATE (user)-[
-                            :DELETED{at:localdatetime({timezone: 'Asia/Tokyo'})}
-                        ]->(child)
-                DELETE r
+                MATCH (user:User { uuid : $user_uuid }) - [r1] -> (todo:Todo{ uuid :$uuid }) ,
+                 (child:Todo) - [*] -> (todo) - [r2] -> (parent),
+                 (todo) - [r3] - (),
+                 (child) - [r4] - ()
+                DELETE r1, r2, r3, r4, todo, child
                 RETURN child
                 CYPHER,
             [
