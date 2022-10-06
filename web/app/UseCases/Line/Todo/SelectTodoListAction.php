@@ -24,12 +24,19 @@ class SelectTodoListAction
     protected $bot;
 
     /**
-     *
+     * @param \App\UseCases\Line\Todo\CreateTodoListCarouselColumns
      */
-    public function __construct()
-    {
+    protected $create_todo_list_carousel;
+
+    /**
+     * @param \App\UseCases\Line\Todo\CreateTodoListCarouselColumns  $create_todo_list_carousel
+     */
+    public function __construct(
+        \App\UseCases\Line\Todo\CreateTodoListCarouselColumns $create_todo_list_carousel
+    ) {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
+        $this->create_todo_list_carousel = $create_todo_list_carousel;
     }
 
     /**
@@ -60,40 +67,12 @@ class SelectTodoListAction
             $todo_list = [];
         }
 
-        $todo_carousel_columns = [];
-        foreach ($todo_list as $todo) {
-            if (count($todo->accomplish) === 0) {
-                $todo_carousel_columns[] = Todo::createBubbleContainer($todo, $action_value);
-            }
-        }
-
-        if ($action_value === 'WEEKLY_TODO_LIST') {
-            $over_due_todo_list = Todo::where('user_uuid', $line_user->uuid)
-                ->where('date', '<', $today)
-                ->orderBy('date', 'asc')
-                ->get();
-            foreach ($over_due_todo_list as $over_due_todo) {
-                if (count($over_due_todo->accomplish) === 0) {
-                    $todo_carousel_columns[] = Todo::createBubbleContainer($over_due_todo, $action_value);
-                }
-            }
-        }
-
-        $count_todo_carousel_column = count($todo_carousel_columns);
-
-        // Todoが8件以上ある時
-        if ($count_todo_carousel_column > 9) {
-            $todo_carousel_limit = $current_page === 1 ? 9 : 10;
-            $slice_start = $current_page === 1 ? 0 : 9 + (($current_page - 2) * 10);
-            $todo_carousel_columns = array_slice($todo_carousel_columns, $slice_start, $todo_carousel_limit);
-            $todo_carousel_columns[] = Todo::createViewMoreBubbleContainer($todo_carousel_limit, $current_page, $count_todo_carousel_column, $action_value);
-        }
-
-        // Todoが何件あるか報告するメッセージ
-        if ($current_page === 1) {
-            $report_message = Todo::createCountTodoBubbleContainer($line_user, $action_value, $count_todo_carousel_column);
-            array_unshift($todo_carousel_columns, $report_message);
-        }
+        $todo_carousel_columns = $this->create_todo_list_carousel->invoke(
+            $line_user,
+            $todo_list,
+            $action_value,
+            $current_page
+        );
 
         $todo_carousels = new CarouselContainerBuilder($todo_carousel_columns);
         $flex_message = new FlexMessageBuilder(
