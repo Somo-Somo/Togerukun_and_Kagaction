@@ -805,7 +805,7 @@ class Todo extends Model
      */
     public static function createViewMoreBubbleContainer(int $todo_carousel_limit, int $current_page, int $count_todo_list, $action_value)
     {
-        $last_page = ceil($count_todo_list / $todo_carousel_limit);
+        $last_page = intval(ceil($count_todo_list / $todo_carousel_limit));
 
         $contents = [];
         if ($current_page !== 1) {
@@ -829,7 +829,7 @@ class Todo extends Model
 
         if ($current_page !== $last_page) {
             // ラストページ以外の時
-            $next_todo_num = intval($last_page) === intval($current_page + 1) ? $count_todo_list - $todo_carousel_limit : $todo_carousel_limit;
+            $next_todo_num = intval($last_page) === intval($current_page + 1) ? $count_todo_list -  (9 + (($current_page - 1) * 10)) : $todo_carousel_limit;
             $text = '次の' . $next_todo_num . '件を見る';
             $next_btn = new ButtonComponentBuilder(
                 new PostbackTemplateActionBuilder(
