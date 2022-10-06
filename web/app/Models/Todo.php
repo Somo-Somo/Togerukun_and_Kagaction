@@ -554,9 +554,9 @@ class Todo extends Model
             } else if ($date->isTomorrow()) {
                 $date_text = "明日まで";
             } else if ($date->isPast()) {
-                $date_text = $date->diffInDays(Carbon::now()) . "日経過";
+                $date_text = $date->diffInDays(Carbon::now()->setTime(0, 0, 0)) . "日経過";
             } else if ($date->isFuture()) {
-                $date_text = "残り" . $date->diffInDays(Carbon::now()) . "日";
+                $date_text = "残り" . $date->diffInDays(Carbon::now()->setTime(0, 0, 0)) . "日";
             }
         } else {
             $date_text = "日付:未設定";
