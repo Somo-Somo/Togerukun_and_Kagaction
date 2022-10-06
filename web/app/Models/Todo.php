@@ -817,17 +817,17 @@ class Todo extends Model
                 1 //flex
             );
             $prev_btn->setGravity('center');
-            $content[] = $prev_btn;
+            $contents[] = $prev_btn;
         }
 
         if ($current_page !== 1 && $current_page !== $last_page) {
             # 1ページ目でも最後のページでもない時
-            $content[] = new SeparatorComponentBuilder();
+            $contents[] = new SeparatorComponentBuilder();
         }
 
         if ($current_page !== $last_page) {
             // ラストページ以外の時
-            $next_todo_num = $last_page === $current_page + 1 ? $count_todo_list - $todo_carousel_limit : $todo_carousel_limit;
+            $next_todo_num = intval($last_page) === intval($current_page + 1) ? $count_todo_list - $todo_carousel_limit : $todo_carousel_limit;
             $text = '次の' . $next_todo_num . '件を見る';
             $next_btn = new ButtonComponentBuilder(
                 new PostbackTemplateActionBuilder(
@@ -837,7 +837,7 @@ class Todo extends Model
                 1 // flex
             );
             $next_btn->setGravity('center');
-            $content[] = $next_btn;
+            $contents[] = $next_btn;
         }
 
         $body_box = new BoxComponentBuilder('vertical', $contents);
