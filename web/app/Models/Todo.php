@@ -797,11 +797,13 @@ class Todo extends Model
      *
      * Todoをカウントした結果の数を表示するBubbleContainer
      *
+     * @param int $todo_carousel_limit
      * @param int $current_page
      * @param int $count_todo_list
+     * @param string $action_value
      * @return \LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
      */
-    public static function createViewMoreBubbleContainer(int $todo_carousel_limit, int $current_page, int $count_todo_list)
+    public static function createViewMoreBubbleContainer(int $todo_carousel_limit, int $current_page, int $count_todo_list, $action_value)
     {
         $last_page = ceil($count_todo_list / $todo_carousel_limit);
 
@@ -812,7 +814,7 @@ class Todo extends Model
             $prev_btn = new ButtonComponentBuilder(
                 new PostbackTemplateActionBuilder(
                     $text,
-                    'action=PREV_TODO_LIST&page=' . $current_page - 1
+                    'action=' . $action_value . '&page=' . $current_page - 1
                 ),
                 1 //flex
             );
@@ -832,7 +834,7 @@ class Todo extends Model
             $next_btn = new ButtonComponentBuilder(
                 new PostbackTemplateActionBuilder(
                     $text,
-                    'action=NEXT_TODO_LIST&page=' . $current_page + 1
+                    'action=' . $action_value . '&page=' . $current_page + 1
                 ),
                 1 // flex
             );

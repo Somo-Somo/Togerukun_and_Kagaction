@@ -84,14 +84,16 @@ class SelectTodoListAction
         // Todoが8件以上ある時
         if ($count_todo_carousel_column > 9) {
             $todo_carousel_limit = $current_page === 1 ? 9 : 10;
-            $slice_start = $current_page === 1 ? 0 : ($todo_carousel_limit - 1) + (($current_page - 1) * 10);
+            $slice_start = $current_page === 1 ? 0 : 9 + (($current_page - 2) * 10);
             $todo_carousel_columns = array_slice($todo_carousel_columns, $slice_start, $todo_carousel_limit);
-            $todo_carousel_columns[] = Todo::createViewMoreBubbleContainer($todo_carousel_limit, $current_page, $count_todo_carousel_column);
+            $todo_carousel_columns[] = Todo::createViewMoreBubbleContainer($todo_carousel_limit, $current_page, $count_todo_carousel_column, $action_value);
         }
 
         // Todoが何件あるか報告するメッセージ
-        $report_message = Todo::createCountTodoBubbleContainer($line_user, $action_value, $count_todo_carousel_column);
-        array_unshift($todo_carousel_columns, $report_message);
+        if ($current_page === 1) {
+            $report_message = Todo::createCountTodoBubbleContainer($line_user, $action_value, $count_todo_carousel_column);
+            array_unshift($todo_carousel_columns, $report_message);
+        }
 
         $todo_carousels = new CarouselContainerBuilder($todo_carousel_columns);
         $flex_message = new FlexMessageBuilder(
