@@ -95,8 +95,6 @@ class PostbackReceivedAction
         [$action_key, $action_value] = explode("=", $action_data);
         [$second_key, $second_value] = explode("=", $uuid_data);
 
-        Log::debug($action_value);
-        Log::debug($second_value);
         if (isset(LineUsersQuestion::TODO_LIST[$action_value])) {
             $this->select_todo_list_action->invoke($event, $line_user, $action_value, $second_value);
         } else if ($action_value === 'ADD_TODO') {

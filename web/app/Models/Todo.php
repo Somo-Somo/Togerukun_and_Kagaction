@@ -420,10 +420,12 @@ class Todo extends Model
      */
     public static function createCountTodoBubbleContainer(User $line_user, string $action_type, int $count_todo_list)
     {
-        if ($action_type === 'ALL_TODO_LIST') {
+        if ($action_type === 'ALL_TODO_LIST' || $action_type === 'SELECT_TODO_LIST_TO_CHECK') {
             $todo_type = 'プロジェクト:「' . $line_user->question->project->name . '」のやること';
-        } elseif ($action_type === 'WEEKLY_TODO_LIST') {
+        } elseif ($action_type === 'WEEKLY_TODO_LIST' || 'CHECK_TODO_BY_THIS_WEEK') {
             $todo_type = '今週までにやること';
+        } elseif ($action_type === 'CHECK_TODO_BY_TODAY') {
+            $todo_type = '今日までにやること';
         }
 
         $result_count_todo_list_text = '📝' . ' ' . $count_todo_list;
