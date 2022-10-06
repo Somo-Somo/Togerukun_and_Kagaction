@@ -44,7 +44,7 @@ class SelectTodoListAction
         $today = $today_date_time->format('Y-m-d');
         if ($action_value === 'ALL_TODO_LIST') {
             $todo_list = $line_user->todo;
-        } else if ($action_value === 'WEEKLY_TODO_LIST') {
+        } elseif ($action_value === 'WEEKLY_TODO_LIST') {
             $next_week_date_time = $today_date_time->modify('+1 week');
             $next_week = $next_week_date_time->format('Y-m-d');
             $todo_list = Todo::where('user_uuid', $line_user->uuid)
@@ -75,28 +75,19 @@ class SelectTodoListAction
         }
 
         // Todoが何件あるか報告するメッセージ
-        $message = Todo::createTodoListTitleMessage($line_user, $action_value, $todo_carousel_columns);
+        $report_message = Todo::createCountTodoBubbleContainer($line_user, $action_value, count($todo_carousel_columns));
+        array_unshift($todo_carousel_columns, $report_message);
 
-        if (count($todo_carousel_columns) > 0) {
-            $todo_carousels = new CarouselContainerBuilder($todo_carousel_columns);
-            $flex_message = new FlexMessageBuilder(
-                'やること一覧',
-                $todo_carousels
-            );
-            $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-            $builder->add(
-                new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text'])
-            );
-            $builder->add($flex_message);
-        } else {
-            $builder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message['text']);
-        }
-
-
-        $this->bot->replyMessage(
-            $event->getReplyToken(),
-            $builder
+        $todo_carousels = new CarouselContainerBuilder($todo_carousel_columns);
+        $flex_message = new FlexMessageBuilder(
+            'やること一覧',
+            $todo_carousels
         );
+        $log = $this->bot->replyMessage(
+            $event->getReplyToken(),
+            $flex_message
+        );
+        Log::debug((array)$log);
         return;
     }
 }

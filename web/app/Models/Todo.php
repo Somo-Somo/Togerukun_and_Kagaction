@@ -412,26 +412,36 @@ class Todo extends Model
      *
      * Todoをカウントした結果の数を表示するBubbleContainer
      *
+     * @param User $line_user
      * @param string $todo_type
      * @param int $count_todo_list
      * @return \LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
      */
-    public static function createCountTodoBubbleContainer(string $todo_type, int $count_todo_list)
+    public static function createCountTodoBubbleContainer(User $line_user, string $action_type, int $count_todo_list)
     {
+        if ($action_type === 'ALL_TODO_LIST') {
+            $todo_type = 'プロジェクト:「' . $line_user->question->project->name . '」のやること';
+        } elseif ($action_type === 'WEEKLY_TODO_LIST') {
+            $todo_type = '今週までにやること';
+        }
+
         $result_count_todo_list_text = '📝' . ' ' . $count_todo_list;
         $result_count_todo_list_text_component  = new TextComponentBuilder($result_count_todo_list_text, 1);
-        $result_count_todo_list_text_component->setGravity('buttom');
+        $result_count_todo_list_text_component->setGravity('bottom');
         $result_count_todo_list_text_component->setAlign('center');
         $result_count_todo_list_text_component->setSize('5xl');
         $result_count_todo_list_text_component->setOffsetBottom('8px');
 
-        $report_count_todo_list_text = $todo_type . 'が' . "\n" . $count_todo_list . '件見つかりました';
+        $report_count_todo_list_text = $todo_type . 'が' . $count_todo_list . '件見つかりました';
         $report_count_todo_list_text_component  = new TextComponentBuilder($report_count_todo_list_text, 1);
         $report_count_todo_list_text_component->setAlign('center');
         $report_count_todo_list_text_component->setWeight('bold');
         $report_count_todo_list_text_component->setWrap(true);
 
-        $texts = [$result_count_todo_list_text, $report_count_todo_list_text];
+        $texts = [
+            $result_count_todo_list_text_component,
+            $report_count_todo_list_text_component
+        ];
         $body_box = new BoxComponentBuilder('vertical', $texts);
         $body_box->setSpacing('lg');
 
