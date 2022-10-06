@@ -18,6 +18,7 @@ use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SeparatorComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BlockStyleBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
@@ -227,8 +228,8 @@ class Todo extends Model
                     '選択してください', // text
                     null, // 画像url
                     [
-                        new PostbackTemplateActionBuilder('一覧を見る', 'action=ALL_TODO_LIST&project_uuid='),
-                        new PostbackTemplateActionBuilder('今週までにやることをみる', 'action=WEEKLY_TODO_LIST&todo_uuid='),
+                        new PostbackTemplateActionBuilder('一覧を見る', 'action=ALL_TODO_LIST&page=1'),
+                        new PostbackTemplateActionBuilder('今週までにやることをみる', 'action=WEEKLY_TODO_LIST&page=1'),
                     ]
                 )
 
@@ -784,5 +785,66 @@ class Todo extends Model
         $bubble_styles = new BubbleStylesBuilder();
         $bubble_styles->setBody($block_styles);
         return $block_styles;
+    }
+
+    /**
+     *
+     * カルーセルカラムが9(10)件超えた時
+     *
+     **/
+
+    /**
+     *
+     * Todoをカウントした結果の数を表示するBubbleContainer
+     *
+     * @param int $current_page
+     * @param int $count_todo_list
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
+     */
+    public static function createViewMoreBubbleContainer(int $todo_carousel_limit, int $current_page, int $count_todo_list)
+    {
+        $last_page = ceil($count_todo_list / $todo_carousel_limit);
+
+        $contents = [];
+        if ($current_page !== 1) {
+            // 最初のページ以外の時
+            $text = '前の' . $todo_carousel_limit . '件を見る';
+            $prev_btn = new ButtonComponentBuilder(
+                new PostbackTemplateActionBuilder(
+                    $text,
+                    'action=PREV_TODO_LIST&page=' . $current_page - 1
+                ),
+                1 //flex
+            );
+            $prev_btn->setGravity('center');
+            $content[] = $prev_btn;
+        }
+
+        if ($current_page !== 1 && $current_page !== $last_page) {
+            # 1ページ目でも最後のページでもない時
+            $content[] = new SeparatorComponentBuilder();
+        }
+
+        if ($current_page !== $last_page) {
+            // ラストページ以外の時
+            $next_todo_num = $last_page === $current_page + 1 ? $count_todo_list - $todo_carousel_limit : $todo_carousel_limit;
+            $text = '次の' . $next_todo_num . '件を見る';
+            $next_btn = new ButtonComponentBuilder(
+                new PostbackTemplateActionBuilder(
+                    $text,
+                    'action=NEXT_TODO_LIST&page=' . $current_page + 1
+                ),
+                1 // flex
+            );
+            $next_btn->setGravity('center');
+            $content[] = $next_btn;
+        }
+
+        $body_box = new BoxComponentBuilder('vertical', $contents);
+        $body_box->setSpacing('sm');
+
+        $bubble_container = new BubbleContainerBuilder();
+        $bubble_container->setBody($body_box);
+        return $bubble_container;
     }
 }
