@@ -51,14 +51,15 @@ class SelectTodoListAction
                 ->whereBetween('date', [$today, $next_week])
                 ->orderBy('date', 'asc')
                 ->get();
-            Log::debug((array)$todo_list);
         } else {
             $todo_list = [];
         }
 
         $todo_carousel_columns = [];
         foreach ($todo_list as $todo) {
-            $todo_carousel_columns[] = Todo::createBubbleContainer($todo, $action_value);
+            if (count($todo->accomplish) === 0) {
+                $todo_carousel_columns[] = Todo::createBubbleContainer($todo, $action_value);
+            }
         }
 
         if ($action_value === 'WEEKLY_TODO_LIST') {
@@ -73,7 +74,6 @@ class SelectTodoListAction
             }
         }
 
-        Log::debug($todo_carousel_columns);
         // Todoが何件あるか報告するメッセージ
         $message = Todo::createTodoListTitleMessage($line_user, $action_value, $todo_carousel_columns);
 

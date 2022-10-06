@@ -73,6 +73,7 @@ class CheckTodo
                 $next_week = $today_date_time->modify('+1 week')->format('Y-m-d');
                 $todo_list = Todo::where('user_uuid', $line_user->uuid)
                     ->whereBetween('date', [$today, $next_week])
+                    ->orderBy('date', 'asc')
                     ->get();
             } elseif ($action_type === 'SELECT_TODO_LIST_TO_CHECK') {
                 $todo_list = $line_user->todo;
@@ -85,13 +86,18 @@ class CheckTodo
                 }
             }
 
-            $over_due_todo_list = Todo::where('user_uuid', $line_user->uuid)
-                ->where('date', '<', $today);
-            foreach ($over_due_todo_list as $over_due_todo) {
-                if ($over_due_todo->accomplish === null) {
-                    $todo_carousel_columns[] = Todo::createBubbleContainer($over_due_todo, $action_type);
+            if (
+                $action_type === 'CHECK_TODO_BY_TODAY' || $action_type === 'CHECK_TODO_BY_THIS_WEEK'
+            ) {
+                $over_due_todo_list = Todo::where('user_uuid', $line_user->uuid)
+                    ->where('date', '<', $today);
+                foreach ($over_due_todo_list as $over_due_todo) {
+                    if (count($over_due_todo->accomplish) === 0) {
+                        $todo_carousel_columns[] = Todo::createBubbleContainer($over_due_todo, $action_type);
+                    }
                 }
             }
+
             $message = Todo::createTodoListTitleMessage($line_user, $action_type, $todo_carousel_columns);
 
             // 該当のTodoがある場合
