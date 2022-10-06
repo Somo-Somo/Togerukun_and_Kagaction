@@ -40,15 +40,18 @@ class SelectTodoListAction
      */
     public function invoke(object $event, User $line_user, string $action_value)
     {
-
+        $today_date_time = new DateTime();
+        $today = $today_date_time->format('Y-m-d');
         if ($action_value === 'ALL_TODO_LIST') {
             $todo_list = $line_user->todo;
         } else if ($action_value === 'WEEKLY_TODO_LIST') {
-            $today_date_time = new DateTime();
             $next_week_date_time = $today_date_time->modify('+1 week');
             $next_week = $next_week_date_time->format('Y-m-d');
             $todo_list = Todo::where('user_uuid', $line_user->uuid)
-                ->where('date', '<', $next_week)->get();
+                ->whereBetween('date', [$today, $next_week])
+                ->orderBy('date', 'asc')
+                ->get();
+            Log::debug((array)$todo_list);
         } else {
             $todo_list = [];
         }
@@ -57,6 +60,21 @@ class SelectTodoListAction
         foreach ($todo_list as $todo) {
             $todo_carousel_columns[] = Todo::createBubbleContainer($todo, $action_value);
         }
+
+        if ($action_value === 'WEEKLY_TODO_LIST') {
+            $over_due_todo_list = Todo::where('user_uuid', $line_user->uuid)
+                ->where('date', '<', $today)
+                ->orderBy('date', 'asc')
+                ->get();
+            foreach ($over_due_todo_list as $over_due_todo) {
+                if (count($over_due_todo->accomplish) === 0) {
+                    $todo_carousel_columns[] = Todo::createBubbleContainer($over_due_todo, $action_value);
+                }
+            }
+        }
+
+        Log::debug($todo_carousel_columns);
+        // Todoが何件あるか報告するメッセージ
         $message = Todo::createTodoListTitleMessage($line_user, $action_value, $todo_carousel_columns);
 
         if (count($todo_carousel_columns) > 0) {
