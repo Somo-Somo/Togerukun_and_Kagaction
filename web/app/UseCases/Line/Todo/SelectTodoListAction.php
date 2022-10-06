@@ -100,11 +100,10 @@ class SelectTodoListAction
             'やること一覧',
             $todo_carousels
         );
-        $log = $this->bot->replyMessage(
+        $this->bot->replyMessage(
             $event->getReplyToken(),
             $flex_message
         );
-        Log::debug((array)$log);
         return;
     }
 }
