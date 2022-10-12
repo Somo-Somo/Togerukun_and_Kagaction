@@ -14,7 +14,7 @@ use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
-use phpDocumentor\Reflection\Types\Boolean;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder;
 
 class CheckedTodo extends Model
 {
@@ -249,30 +249,29 @@ class CheckedTodo extends Model
      *
      * 振り返りのメッセージカラムのFooter部分
      *
-     * @param string $reflection_titlw
-     * @param string $reflection_text
-     * @param int $flex
+     * @param string $carousel_type
      * @return LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
      *
      */
-    public static function createReflectionFooterContainer(string $reflection_title, string $reflection_text, int $flex)
+    public static function createReflectionFooterContainer(string $carousel_type)
     {
-        $reflection_title_component = new TextComponentBuilder($reflection_title, $flex);
-        $reflection_title_component->setWeight('bold');
-        $reflection_title_component->setAlign('center');
-        $reflection_title_component->setSize('5xl');
-        $reflection_title_component->setOffsetBottom('8px');
-        $reflection_title_component->setGravity('bottom');
-
-        $reflection_text_component = new TextComponentBuilder($reflection_text, 1);
-        $reflection_text_component->setWeight('bold');
-        $reflection_text_component->setAlign('center');
-        $reflection_text_component->setSize('xl');
-
-        $body_texts = [$reflection_title_component, $reflection_text_component];
-        $body_box = new BoxComponentBuilder('vertical', $body_texts);
-        $body_box->setSpacing('xl');
-        $body_box->setHeight('280px');
-        return $body_box;
+        if ($carousel_type === '今日') {
+            $label = '振り返る';
+            $data = 'action=CHECK_TODO_BY_TODAY&page=1';
+        } else if ($carousel_type === '今週') {
+            $label = '振り返る';
+            $data = 'action=CHECK_TODO_BY_THIS_WEEK&page=1';
+        } else if ($carousel_type === '全て') {
+            $label = '振り返る';
+            $data = 'action=SELECT_TODO_LIST_TO_CHECK&page=1';
+        } else if ($carousel_type === '通知') {
+            $label = '通知';
+            $data = 'action=CHECK_TODO_NOTIFICATION&uuid=';
+        }
+        $footer_button = new ButtonComponentBuilder(
+            new PostbackTemplateActionBuilder($label, $data),
+        );
+        $footer_box = new BoxComponentBuilder('vertical', [$footer_button]);
+        return $footer_box;
     }
 }
