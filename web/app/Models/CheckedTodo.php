@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\UseCases\Line\Todo\CheckTodo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
@@ -9,6 +10,10 @@ use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
 
 class CheckedTodo extends Model
 {
@@ -149,5 +154,55 @@ class CheckedTodo extends Model
             $text = '振り返りを終了しました。';
         }
         return $text;
+    }
+
+    /**
+     *
+     *
+     * Flexメッセージのカラム
+     *
+     *
+     */
+
+    /**
+     *
+     * 振り返りのメッセージカラムたちののBubble部分
+     *
+     * @return LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
+     *
+     */
+    public static function createReflectionBubblesContainer()
+    {
+    }
+
+
+    /**
+     *
+     * 振り返りのメッセージカラムのbody部分
+     *
+     * @return LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
+     *
+     */
+    public static function createReflectionBodyContainer()
+    {
+        $reflection_title = '✅';
+        $reflection_title_component = new TextComponentBuilder($reflection_title, 1);
+        $reflection_title_component->setWeight('bold');
+        $reflection_title_component->setAlign('center');
+        $reflection_title_component->setSize('5xl');
+        $reflection_title_component->setOffsetBottom('8px');
+        $reflection_title_component->setGravity('bottom');
+
+        $reflection_text = '振り返る';
+        $reflection_text_component = new TextComponentBuilder($reflection_text, 1);
+        $reflection_text_component->setWeight('bold');
+        $reflection_text_component->setAlign('center');
+        $reflection_text_component->setSize('xl');
+
+        $body_texts = [$reflection_title_component, $reflection_text_component];
+        $body_box = new BoxComponentBuilder('vertical', $body_texts);
+        $body_box->setSpacing('xl');
+        $body_box->setHeight('280px');
+        return $body_box;
     }
 }
