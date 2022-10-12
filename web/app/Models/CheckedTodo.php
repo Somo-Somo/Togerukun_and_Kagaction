@@ -182,16 +182,13 @@ class CheckedTodo extends Model
      *
      * 振り返りのメッセージカラムのBubble部分
      *
-     * @param string $reflection_titlw
-     * @param string $reflection_text
-     * @param int $flex
-     * @param Boolean $footer
+     * @param string $carousel_type
      * @return LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
      *
      */
-    public static function createReflectionBubbleContainer(string $reflection_title, string $reflection_text, int $flex, Boolean $footer)
+    public static function createReflectionBubbleContainer(string $carousel_type)
     {
-        $reflection_body = CheckedTodo::createReflectionBodyContainer($reflection_title, $reflection_text, $flex);
+        $reflection_body = CheckedTodo::createReflectionBodyContainer($carousel_type);
         $bubble_container = new BubbleContainerBuilder();
         $bubble_container->setBody($reflection_body);
     }
@@ -201,13 +198,64 @@ class CheckedTodo extends Model
      *
      * 振り返りのメッセージカラムのbody部分
      *
+     * @param string $carousel_type
+     * @return LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
+     *
+     */
+    public static function createReflectionBodyContainer(string $carousel_type)
+    {
+        if ($carousel_type === '振り返る') {
+            $reflection_title = '✅';
+            $reflection_text = $carousel_type;
+            $reflection_title_component_flex = 1;
+        } else if ($carousel_type === '今日') {
+            $reflection_title = '📘' . ' ' . $carousel_type;
+            $reflection_text = '今日までにやること';
+            $reflection_title_component_flex = 2;
+        } else if ($carousel_type === '今週') {
+            $reflection_title = '📙' . ' ' . $carousel_type;
+            $reflection_text = '今週までにやること';
+            $reflection_title_component_flex = 2;
+        } else if ($carousel_type === '全て') {
+            $reflection_title = '📚' . ' ' . $carousel_type;
+            $reflection_text = 'やること一覧から選択';
+            $reflection_title_component_flex = 2;
+        } else if ($carousel_type === '通知') {
+            $reflection_title = '⏰' . ' ' . $carousel_type;
+            $reflection_text = '振り返りの通知設定';
+            $reflection_title_component_flex = 2;
+        }
+
+        $reflection_title_component = new TextComponentBuilder($reflection_title, $reflection_title_component_flex);
+        $reflection_title_component->setWeight('bold');
+        $reflection_title_component->setAlign('center');
+        $reflection_title_component->setSize('5xl');
+        $reflection_title_component->setOffsetBottom('8px');
+        $reflection_title_component->setGravity('bottom');
+
+        $reflection_text_component = new TextComponentBuilder($reflection_text, 1);
+        $reflection_text_component->setWeight('bold');
+        $reflection_text_component->setAlign('center');
+        $reflection_text_component->setSize('xl');
+
+        $body_texts = [$reflection_title_component, $reflection_text_component];
+        $body_box = new BoxComponentBuilder('vertical', $body_texts);
+        $body_box->setSpacing('xl');
+        $body_box->setHeight('280px');
+        return $body_box;
+    }
+
+    /**
+     *
+     * 振り返りのメッセージカラムのFooter部分
+     *
      * @param string $reflection_titlw
      * @param string $reflection_text
      * @param int $flex
      * @return LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
      *
      */
-    public static function createReflectionBodyContainer(string $reflection_title, string $reflection_text, int $flex)
+    public static function createReflectionFooterContainer(string $reflection_title, string $reflection_text, int $flex)
     {
         $reflection_title_component = new TextComponentBuilder($reflection_title, $flex);
         $reflection_title_component->setWeight('bold');
