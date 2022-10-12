@@ -69,11 +69,10 @@ class MessageReceivedAction
 
         $question_number = $line_user->question->question_number;
         if ($event->getText() === '振り返る') {
-            $test = $this->bot->replyMessage(
+            $this->bot->replyMessage(
                 $event->getReplyToken(),
                 CheckedTodo::createCheckTodoFlexMessage()
             );
-            Log::debug((array)$test);
         } else if ($event->getText() === 'やること') {
             // リッチメニューからやることを選択
             $this->bot->replyMessage(
