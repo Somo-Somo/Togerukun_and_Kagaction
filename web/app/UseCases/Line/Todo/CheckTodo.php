@@ -72,12 +72,6 @@ class CheckTodo
             $todo_uuid = $second_value :
             $current_page = intval($second_value);
 
-        Log::debug($action_type);
-        Log::debug($second_value);
-        Log::debug(mb_strlen($second_value));
-        Log::debug(mb_strlen($todo_uuid));
-        Log::debug(mb_strlen($current_page));
-
         if ($action_type === 'FINISH_CHECK_TODO') {
             $message = CheckedTodo::getTextMessageOfFinishCheckTodo($line_user->question);
             $this->bot->replyText($event->getReplyToken(), $message);

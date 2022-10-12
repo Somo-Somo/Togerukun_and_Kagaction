@@ -189,8 +189,10 @@ class CheckedTodo extends Model
     public static function createReflectionBubbleContainer(string $carousel_type)
     {
         $reflection_body = CheckedTodo::createReflectionBodyContainer($carousel_type);
+        $reflection_footer = CheckedTodo::createReflectionFooterContainer($carousel_type);
         $bubble_container = new BubbleContainerBuilder();
         $bubble_container->setBody($reflection_body);
+        $bubble_container->setFooter($reflection_footer);
     }
 
 
