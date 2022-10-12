@@ -9,6 +9,7 @@ use App\Models\LineUsersQuestion;
 use App\UseCases\Line\ProjectResponseAction;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
+use Illuminate\Support\Facades\Log;
 
 
 class MessageReceivedAction
@@ -68,10 +69,11 @@ class MessageReceivedAction
 
         $question_number = $line_user->question->question_number;
         if ($event->getText() === '振り返る') {
-            $this->bot->replyMessage(
+            $test = $this->bot->replyMessage(
                 $event->getReplyToken(),
-                CheckedTodo::askWhichCheckTodo()
+                CheckedTodo::createCheckTodoFlexMessage()
             );
+            Log::debug((array)$test);
         } else if ($event->getText() === 'やること') {
             // リッチメニューからやることを選択
             $this->bot->replyMessage(

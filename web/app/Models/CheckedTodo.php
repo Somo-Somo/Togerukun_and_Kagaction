@@ -9,12 +9,14 @@ use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
-use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\BlockStyleBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
+use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 
 class CheckedTodo extends Model
 {
@@ -167,13 +169,22 @@ class CheckedTodo extends Model
 
     /**
      *
-     * 振り返りのメッセージカラムたちののBubble部分
+     * 振り返りのフレックスメッセージ
      *
-     * @return LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
+     * @return \LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
      *
      */
-    public static function createReflectionBubblesContainer()
+    public static function createCheckTodoFlexMessage()
     {
+        $check_todo_carousel_columns = [
+            CheckedTodo::createReflectionBubbleContainer('振り返る'),
+            CheckedTodo::createReflectionBubbleContainer('今日'),
+            CheckedTodo::createReflectionBubbleContainer('今週'),
+            CheckedTodo::createReflectionBubbleContainer('一覧'),
+            CheckedTodo::createReflectionBubbleContainer('通知'),
+        ];
+        $check_todo_carousels = new CarouselContainerBuilder($check_todo_carousel_columns);
+        return new FlexMessageBuilder('振り返る',  $check_todo_carousels);
     }
 
 
@@ -183,16 +194,21 @@ class CheckedTodo extends Model
      * 振り返りのメッセージカラムのBubble部分
      *
      * @param string $carousel_type
-     * @return LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
      *
      */
     public static function createReflectionBubbleContainer(string $carousel_type)
     {
         $reflection_body = CheckedTodo::createReflectionBodyContainer($carousel_type);
-        $reflection_footer = CheckedTodo::createReflectionFooterContainer($carousel_type);
         $bubble_container = new BubbleContainerBuilder();
         $bubble_container->setBody($reflection_body);
-        $bubble_container->setFooter($reflection_footer);
+        if ($carousel_type !== '振り返る') {
+            $footer_style_builder = new BubbleStylesBuilder(null, null, null, new BlockStyleBuilder(null, true, null));
+            $bubble_container->setStyles($footer_style_builder);
+            $reflection_footer = CheckedTodo::createReflectionFooterContainer($carousel_type);
+            $bubble_container->setFooter($reflection_footer);
+        }
+        return $bubble_container;
     }
 
 
@@ -201,7 +217,7 @@ class CheckedTodo extends Model
      * 振り返りのメッセージカラムのbody部分
      *
      * @param string $carousel_type
-     * @return LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
      *
      */
     public static function createReflectionBodyContainer(string $carousel_type)
@@ -210,40 +226,41 @@ class CheckedTodo extends Model
             $reflection_title = '✅';
             $reflection_text = $carousel_type;
             $reflection_title_component_flex = 1;
-        } else if ($carousel_type === '今日') {
-            $reflection_title = '📘' . ' ' . $carousel_type;
-            $reflection_text = '今日までにやること';
+            $text_size = 'xl';
+        } else {
+            $text_size = 'md';
             $reflection_title_component_flex = 2;
-        } else if ($carousel_type === '今週') {
-            $reflection_title = '📙' . ' ' . $carousel_type;
-            $reflection_text = '今週までにやること';
-            $reflection_title_component_flex = 2;
-        } else if ($carousel_type === '全て') {
-            $reflection_title = '📚' . ' ' . $carousel_type;
-            $reflection_text = 'やること一覧から選択';
-            $reflection_title_component_flex = 2;
-        } else if ($carousel_type === '通知') {
-            $reflection_title = '⏰' . ' ' . $carousel_type;
-            $reflection_text = '振り返りの通知設定';
-            $reflection_title_component_flex = 2;
+            if ($carousel_type === '今日') {
+                $reflection_title = '📘' . ' ' . $carousel_type;
+                $reflection_text = '今日までにやること';
+            } else if ($carousel_type === '今週') {
+                $reflection_title = '📙' . ' ' . $carousel_type;
+                $reflection_text = '今週までにやること';
+            } else if ($carousel_type === '一覧') {
+                $reflection_title = '📚' . ' ' . $carousel_type;
+                $reflection_text = 'やること一覧から選択';
+            } else if ($carousel_type === '通知') {
+                $reflection_title = '⏰' . ' ' . $carousel_type;
+                $reflection_text = '振り返りの通知設定';
+            }
         }
 
         $reflection_title_component = new TextComponentBuilder($reflection_title, $reflection_title_component_flex);
         $reflection_title_component->setWeight('bold');
         $reflection_title_component->setAlign('center');
-        $reflection_title_component->setSize('5xl');
+        $reflection_title_component->setSize('4xl');
         $reflection_title_component->setOffsetBottom('8px');
         $reflection_title_component->setGravity('bottom');
 
         $reflection_text_component = new TextComponentBuilder($reflection_text, 1);
         $reflection_text_component->setWeight('bold');
         $reflection_text_component->setAlign('center');
-        $reflection_text_component->setSize('xl');
+        $reflection_text_component->setSize($text_size);
 
         $body_texts = [$reflection_title_component, $reflection_text_component];
         $body_box = new BoxComponentBuilder('vertical', $body_texts);
         $body_box->setSpacing('xl');
-        $body_box->setHeight('280px');
+        $body_box->setHeight('180px');
         return $body_box;
     }
 
@@ -252,7 +269,7 @@ class CheckedTodo extends Model
      * 振り返りのメッセージカラムのFooter部分
      *
      * @param string $carousel_type
-     * @return LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
      *
      */
     public static function createReflectionFooterContainer(string $carousel_type)
@@ -263,11 +280,11 @@ class CheckedTodo extends Model
         } else if ($carousel_type === '今週') {
             $label = '振り返る';
             $data = 'action=CHECK_TODO_BY_THIS_WEEK&page=1';
-        } else if ($carousel_type === '全て') {
+        } else if ($carousel_type === '一覧') {
             $label = '振り返る';
             $data = 'action=SELECT_TODO_LIST_TO_CHECK&page=1';
         } else if ($carousel_type === '通知') {
-            $label = '通知';
+            $label = '変更する';
             $data = 'action=CHECK_TODO_NOTIFICATION&uuid=';
         }
         $footer_button = new ButtonComponentBuilder(
