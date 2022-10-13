@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
+use LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder;
+use LINE\LINEBot\MessageBuilder\Imagemap\BaseSizeBuilder;
+use LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder;
+use LINE\LINEBot\ImagemapActionBuilder\AreaBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
@@ -17,6 +21,8 @@ use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BlockStyleBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
+use Illuminate\Support\Facades\Log;
+
 
 class CheckedTodo extends Model
 {
@@ -285,12 +291,59 @@ class CheckedTodo extends Model
             $data = 'action=SELECT_TODO_LIST_TO_CHECK&page=1';
         } else if ($carousel_type === '通知') {
             $label = '変更する';
-            $data = 'action=CHECK_TODO_NOTIFICATION&uuid=';
+            $data = 'action=CHANGE_NOTIFICATION_CHECK_TODO&value=';
         }
         $footer_button = new ButtonComponentBuilder(
             new PostbackTemplateActionBuilder($label, $data),
         );
         $footer_box = new BoxComponentBuilder('vertical', [$footer_button]);
         return $footer_box;
+    }
+
+    /**
+     *
+     *
+     * 通知設定の中のイメージマップ
+     *
+     *
+     */
+
+    /**
+     *
+     * 振り返り通知の設定の変更
+     *
+     * @return \LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder;
+     *
+     */
+    public static function createImagemapMessageBuilder()
+    {
+        $base_url = 'https://d.kuku.lu/df20b9e88';
+        $base_size_builder = new BaseSizeBuilder(480, 1040);
+        $imagemap_action_builders = CheckedTodo::createDateOfWeekImagemapActionUriBuilder();
+        $imagemap_message_builder = new ImagemapMessageBuilder(
+            $base_url,
+            '振り返り通知の変更',
+            $base_size_builder,
+            $imagemap_action_builders
+        );
+        Log::debug((array)$imagemap_message_builder);
+        return $imagemap_message_builder;
+    }
+
+    /**
+     *
+     * 振り返り通知の設定の変更
+     *
+     * @return LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder[];
+     *
+     */
+    public static function createDateOfWeekImagemapActionUriBuilder()
+    {
+        $monday = new ImagemapMessageActionBuilder('月曜日', new AreaBuilder(0, 0, 270, 240));
+
+
+        return [
+            $monday
+        ];
     }
 }
