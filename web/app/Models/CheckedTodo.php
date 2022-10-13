@@ -22,7 +22,8 @@ use LINE\LINEBot\MessageBuilder\Flex\BlockStyleBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 use Illuminate\Support\Facades\Log;
-
+use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 
 class CheckedTodo extends Model
 {
@@ -290,7 +291,7 @@ class CheckedTodo extends Model
             $label = '振り返る';
             $data = 'action=SELECT_TODO_LIST_TO_CHECK&page=1';
         } else if ($carousel_type === '通知') {
-            $label = '変更する';
+            $label = '設定する';
             $data = 'action=CHANGE_NOTIFICATION_CHECK_TODO&value=';
         }
         $footer_button = new ButtonComponentBuilder(
@@ -299,6 +300,57 @@ class CheckedTodo extends Model
         $footer_box = new BoxComponentBuilder('vertical', [$footer_button]);
         return $footer_box;
     }
+
+    /**
+     *
+     *
+     * 通知設定
+     *
+     *
+     */
+
+    /**
+     * 曜日設定するときのメッセージ
+     *
+     * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder
+     */
+    public static function createSettingDayOfWeekMessageBuilder()
+    {
+        $day_of_weeks = ['月', '火', '水', '木', '金', '土', '日'];
+
+        $actions = [];
+
+        foreach ($day_of_weeks as $day_of_week) {
+            $day_of_week_text_component  = new TextComponentBuilder($day_of_week, 1);
+            $day_of_week_text_component->setWeight('bold');
+            $day_of_week_text_component->setGravity('center');
+            $day_of_week_text_component->setAlign('center');
+            $text_component = [$day_of_week_text_component];
+            $post_back_template_action = new PostbackTemplateActionBuilder($day_of_week, 'action=CHECK_TODO&todo_uuid=' . $day_of_week);
+            $day_of_week_box_component = new BoxComponentBuilder('vertical', $text_component);
+            $day_of_week_box_component->setAction($post_back_template_action);
+            $day_of_week_box_component->setHeight('80px');
+            $day_of_week_bubble_container = new BubbleContainerBuilder();
+            $day_of_week_bubble_container->setBody($day_of_week_box_component);
+            $day_of_week_bubble_container->setSize('nano');
+            $actions[] = $day_of_week_bubble_container;
+        }
+
+        $day_of_week_carousels = new CarouselContainerBuilder($actions);
+        $flex_message = new FlexMessageBuilder(
+            '曜日設定',
+            $day_of_week_carousels
+        );
+
+        $please_select_day_of_week_text = new TextMessageBuilder('曜日を選択してください');
+
+        $multi_message_builder = new MultiMessageBuilder();
+        $multi_message_builder->add($please_select_day_of_week_text);
+        $multi_message_builder->add($flex_message);
+
+        return $multi_message_builder;
+    }
+
 
     /**
      *
@@ -339,11 +391,5 @@ class CheckedTodo extends Model
      */
     public static function createDateOfWeekImagemapActionUriBuilder()
     {
-        $monday = new ImagemapMessageActionBuilder('月曜日', new AreaBuilder(0, 0, 270, 240));
-
-
-        return [
-            $monday
-        ];
     }
 }

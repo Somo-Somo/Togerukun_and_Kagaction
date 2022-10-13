@@ -46,8 +46,11 @@ class NotifyCheckTodo
         Log::debug((array)$notification_date_value);
         if (!$notification_date_value) {
             Log::debug('aaa');
-            $imagemap_message_builder = CheckedTodo::createImagemapMessageBuilder();
-            $test = $this->bot->replyMessage($event->getReplyToken(), $imagemap_message_builder);
+            $setting_day_of_week_message_builder = CheckedTodo::createSettingDayOfWeekMessageBuilder();
+            $test = $this->bot->replyMessage(
+                $event->getReplyToken(),
+                $setting_day_of_week_message_builder
+            );
             Log::debug((array)$test);
         }
         return;
