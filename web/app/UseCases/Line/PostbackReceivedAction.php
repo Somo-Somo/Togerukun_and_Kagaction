@@ -122,8 +122,7 @@ class PostbackReceivedAction
             $this->change_date->invoke($event, $line_user, $action_type, $second_value);
         } else if (isset(CheckedTodo::CHECK_TODO[$action_type])) {
             $this->check_todo->invoke($event, $line_user, $action_type, $second_value);
-        } else if ($action_type === 'CHANGE_NOTIFICATION_CHECK_TODO') {
-            Log::debug('bbb');
+        } else if (isset(CheckedTodo::NOTIFY_CHECKED_TODO[$action_type])) {
             $notify_check_todo = new NotifyCheckTodo();
             $notify_check_todo->invoke($event, $line_user, $action_type, $second_value);
         }

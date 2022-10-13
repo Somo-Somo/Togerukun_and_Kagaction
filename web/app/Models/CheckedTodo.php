@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
+use LINE\LINEBot\TemplateActionBuilder\DatetimePickerTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder;
 use LINE\LINEBot\MessageBuilder\Imagemap\BaseSizeBuilder;
@@ -40,6 +41,12 @@ class CheckedTodo extends Model
         'ADD_TODO_AFTER_CHECK_TODO' => true,
         'NOT_ADD_TODO_AFTER_CHECK_TODO' => true,
         'FINISH_CHECK_TODO' => true,
+    ];
+
+    const NOTIFY_CHECKED_TODO = [
+        'SETTING_NOTIFICATION_CHECK_TODO' => true,
+        'SETTING_NOTIFY_DAY_OF_WEEK' => true,
+        'SETTING_NOTIFY_DATETIME' => true,
     ];
 
     /**
@@ -292,7 +299,7 @@ class CheckedTodo extends Model
             $data = 'action=SELECT_TODO_LIST_TO_CHECK&page=1';
         } else if ($carousel_type === '通知') {
             $label = '設定する';
-            $data = 'action=CHANGE_NOTIFICATION_CHECK_TODO&value=';
+            $data = 'action=SETTING_NOTIFICATION_CHECK_TODO&value=';
         }
         $footer_button = new ButtonComponentBuilder(
             new PostbackTemplateActionBuilder($label, $data),
@@ -326,7 +333,7 @@ class CheckedTodo extends Model
             $day_of_week_text_component->setGravity('center');
             $day_of_week_text_component->setAlign('center');
             $text_component = [$day_of_week_text_component];
-            $post_back_template_action = new PostbackTemplateActionBuilder($day_of_week, 'action=CHECK_TODO&todo_uuid=' . $day_of_week);
+            $post_back_template_action = new PostbackTemplateActionBuilder($day_of_week, 'action=SETTING_NOTIFY_DAY_OF_WEEK&value=' . $day_of_week);
             $day_of_week_box_component = new BoxComponentBuilder('vertical', $text_component);
             $day_of_week_box_component->setAction($post_back_template_action);
             $day_of_week_box_component->setHeight('80px');
@@ -349,6 +356,27 @@ class CheckedTodo extends Model
         $multi_message_builder->add($flex_message);
 
         return $multi_message_builder;
+    }
+
+    /**
+     *
+     * 日時設定するときのメッセージ
+     *
+     * @param string $day_of_week
+     * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder
+     */
+    public static function createSettingTimeMessageBuilder(string $day_of_week)
+    {
+        $title = '振り返りの通知の時間の設定';
+        return new TemplateMessageBuilder(
+            $title,
+            new ButtonTemplateBuilder(
+                $title,
+                '毎週' . $day_of_week . '曜日の何時に振り返りの通知を受け取りますか？',
+                null,
+                [new DatetimePickerTemplateActionBuilder('日時を選択', 'action=SETTING_NOTIFY_DATETIME&value=', 'time')]
+            )
+        );
     }
 
 

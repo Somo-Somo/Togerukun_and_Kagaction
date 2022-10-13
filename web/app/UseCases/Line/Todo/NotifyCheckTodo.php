@@ -41,15 +41,19 @@ class NotifyCheckTodo
         object $event,
         User $line_user,
         string $action_type,
-        string $notification_date_value
+        string $notify_setting_value
     ) {
-        Log::debug((array)$notification_date_value);
-        if (!$notification_date_value) {
-            Log::debug('aaa');
+        if ($action_type === 'SETTING_NOTIFICATION_CHECK_TODO') {
             $setting_day_of_week_message_builder = CheckedTodo::createSettingDayOfWeekMessageBuilder();
-            $test = $this->bot->replyMessage(
+            $this->bot->replyMessage(
                 $event->getReplyToken(),
                 $setting_day_of_week_message_builder
+            );
+        } else if ($action_type === 'SETTING_NOTIFY_DAY_OF_WEEK') {
+            $setting_time_message_builder = CheckedTodo::createSettingTimeMessageBuilder($notify_setting_value);
+            $test = $this->bot->replyMessage(
+                $event->getReplyToken(),
+                $setting_time_message_builder
             );
             Log::debug((array)$test);
         }
