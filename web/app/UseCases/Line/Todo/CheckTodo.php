@@ -68,9 +68,9 @@ class CheckTodo
     ) {
         $todo_uuid = null;
         $current_page = null;
-        mb_strlen($second_value) === 32 ?
+        mb_strlen($second_value) === 36 ?
             $todo_uuid = $second_value :
-            $current_page = intval($second_value);
+            $current_page = $second_value ? intval($second_value) : 1;
 
         if ($action_type === 'FINISH_CHECK_TODO') {
             $message = CheckedTodo::getTextMessageOfFinishCheckTodo($line_user->question);
