@@ -43,12 +43,6 @@ class CheckedTodo extends Model
         'FINISH_CHECK_TODO' => true,
     ];
 
-    const NOTIFY_CHECKED_TODO = [
-        'SETTING_NOTIFICATION_CHECK_TODO' => true,
-        'SETTING_NOTIFY_DAY_OF_WEEK' => true,
-        'SETTING_NOTIFY_DATETIME' => true,
-    ];
-
     /**
      * The attributes that are mass assignable.
      *
@@ -406,7 +400,6 @@ class CheckedTodo extends Model
             $base_size_builder,
             $imagemap_action_builders
         );
-        Log::debug((array)$imagemap_message_builder);
         return $imagemap_message_builder;
     }
 

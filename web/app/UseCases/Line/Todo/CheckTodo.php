@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
-use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
-use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
 use DateTime;
 
 class CheckTodo
@@ -98,21 +96,16 @@ class CheckTodo
                 $todo_list = $line_user->todo;
             }
 
-            $todo_carousel_columns = $this->create_todo_list_carousel->invoke(
+            $todo_carousel_flex_message = $this->create_todo_list_carousel->invoke(
                 $line_user,
                 $todo_list,
                 $action_type,
                 $current_page
             );
 
-            $todo_carousels = new CarouselContainerBuilder($todo_carousel_columns);
-            $flex_message = new FlexMessageBuilder(
-                'やること一覧',
-                $todo_carousels
-            );
             $this->bot->replyMessage(
                 $event->getReplyToken(),
-                $flex_message
+                $todo_carousel_flex_message
             );
 
             // なんの振り返りをしているか記憶しておく

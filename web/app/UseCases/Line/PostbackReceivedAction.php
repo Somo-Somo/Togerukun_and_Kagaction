@@ -6,7 +6,8 @@ use App\Models\CheckedTodo;
 use App\Models\User;
 use App\Models\Todo;
 use App\Models\LineUsersQuestion;
-use App\UseCases\Line\Todo\NotifyCheckTodo;
+use App\Models\TodoCheckNotificationDateTime;
+use App\UseCases\Line\Todo\Notification\SetupNotificationForTodoCheck;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 use Illuminate\Support\Facades\Log;
@@ -122,9 +123,11 @@ class PostbackReceivedAction
             $this->change_date->invoke($event, $line_user, $action_type, $second_value);
         } else if (isset(CheckedTodo::CHECK_TODO[$action_type])) {
             $this->check_todo->invoke($event, $line_user, $action_type, $second_value);
-        } else if (isset(CheckedTodo::NOTIFY_CHECKED_TODO[$action_type])) {
-            $notify_check_todo = new NotifyCheckTodo();
+        } else if (isset(TodoCheckNotificationDateTime::SETTING_NOTIFICATION_FOR_TODO_CHECK[$action_type])) {
+            $notify_check_todo = new SetupNotificationForTodoCheck();
             $notify_check_todo->invoke($event, $line_user, $action_type, $second_value);
+        } else if (isset(TodoCheckNotificationDateTime::NOTIFY_TODO_CHECK[$action_type])) {
+            # code...
         }
         return;
     }
