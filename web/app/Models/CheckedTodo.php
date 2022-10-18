@@ -11,14 +11,13 @@ use LINE\LINEBot\TemplateActionBuilder\DatetimePickerTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder;
 use LINE\LINEBot\MessageBuilder\Imagemap\BaseSizeBuilder;
-use LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder;
-use LINE\LINEBot\ImagemapActionBuilder\AreaBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SeparatorComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BlockStyleBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
@@ -361,16 +360,44 @@ class CheckedTodo extends Model
      */
     public static function createSettingTimeMessageBuilder(string $day_of_week)
     {
-        $title = '振り返りの通知の時間の設定';
-        return new TemplateMessageBuilder(
-            $title,
-            new ButtonTemplateBuilder(
-                $title,
-                '毎週' . $day_of_week . '曜日の何時に振り返りの通知を受け取りますか？',
-                null,
-                [new DatetimePickerTemplateActionBuilder('日時を選択', 'action=SETTING_NOTIFY_DATETIME&value=', 'time')]
-            )
+        // header
+        $header_text_builder = new TextComponentBuilder('時間を選択してください');
+        $header_text_builder->setWeight('bold');
+        $header_text_builder->setAlign('center');
+        $header_text_builder->setOffsetTop('12px');
+        $header_box = new BoxComponentBuilder('vertical', [$header_text_builder]);
+
+        // body
+        $box_contents = [];
+        for ($t = 0; $t < 6; $t++) {
+            $box_contents[] = new SeparatorComponentBuilder();
+            $rows = [];
+            for ($column = 0; $column < 2; $column++) {
+                $time = $column === 0 ? $t . ':00' : (int)$t + 6 . ':00';
+                $data =  'action=CONFIRM_SETTING_NOTIFICATION_CHECK_TODO&value=' . $day_of_week . '-' . $time;
+                $button_component =  new ButtonComponentBuilder(
+                    new PostbackTemplateActionBuilder($time, $data),
+                );
+                $button_component->setColor('#87cefa');
+                $rows[] = $button_component;
+                $column === 0 ? $rows[] = new SeparatorComponentBuilder() : false;
+            }
+            $box_contents[] = new BoxComponentBuilder('horizontal', $rows);
+        }
+        $body_box = new BoxComponentBuilder('vertical', $box_contents);
+
+        //bubble
+        $time_bubble_container = new BubbleContainerBuilder();
+        $time_bubble_container->setHeader($header_box);
+        $time_bubble_container->setBody($body_box);
+        $time_bubble_container->setSize('giga');
+
+        // flex message
+        $flex_message = new FlexMessageBuilder(
+            '通知時間の設定',
+            new CarouselContainerBuilder([$time_bubble_container])
         );
+        return $flex_message;
     }
 
 
