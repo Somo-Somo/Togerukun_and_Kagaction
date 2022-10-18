@@ -2,28 +2,22 @@
 
 namespace App\Models;
 
-use App\UseCases\Line\Todo\CheckTodo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
-use LINE\LINEBot\TemplateActionBuilder\DatetimePickerTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
-use LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder;
-use LINE\LINEBot\MessageBuilder\Imagemap\BaseSizeBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
-use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SeparatorComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BlockStyleBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 use Illuminate\Support\Facades\Log;
-use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
-use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+
 
 class CheckedTodo extends Model
 {
@@ -299,145 +293,5 @@ class CheckedTodo extends Model
         );
         $footer_box = new BoxComponentBuilder('vertical', [$footer_button]);
         return $footer_box;
-    }
-
-    /**
-     *
-     *
-     * 通知設定
-     *
-     *
-     */
-
-    /**
-     * 曜日設定するときのメッセージ
-     *
-     * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder
-     */
-    public static function createSettingDayOfWeekMessageBuilder()
-    {
-        $day_of_weeks = ['月', '火', '水', '木', '金', '土', '日'];
-
-        $actions = [];
-
-        foreach ($day_of_weeks as $day_of_week) {
-            $day_of_week_text_component  = new TextComponentBuilder($day_of_week, 1);
-            $day_of_week_text_component->setWeight('bold');
-            $day_of_week_text_component->setGravity('center');
-            $day_of_week_text_component->setAlign('center');
-            $text_component = [$day_of_week_text_component];
-            $post_back_template_action = new PostbackTemplateActionBuilder($day_of_week, 'action=SETTING_NOTIFY_DAY_OF_WEEK&value=' . $day_of_week);
-            $day_of_week_box_component = new BoxComponentBuilder('vertical', $text_component);
-            $day_of_week_box_component->setAction($post_back_template_action);
-            $day_of_week_box_component->setHeight('80px');
-            $day_of_week_bubble_container = new BubbleContainerBuilder();
-            $day_of_week_bubble_container->setBody($day_of_week_box_component);
-            $day_of_week_bubble_container->setSize('nano');
-            $actions[] = $day_of_week_bubble_container;
-        }
-
-        $day_of_week_carousels = new CarouselContainerBuilder($actions);
-        $flex_message = new FlexMessageBuilder(
-            '曜日設定',
-            $day_of_week_carousels
-        );
-
-        $please_select_day_of_week_text = new TextMessageBuilder('曜日を選択してください');
-
-        $multi_message_builder = new MultiMessageBuilder();
-        $multi_message_builder->add($please_select_day_of_week_text);
-        $multi_message_builder->add($flex_message);
-
-        return $multi_message_builder;
-    }
-
-    /**
-     *
-     * 日時設定するときのメッセージ
-     *
-     * @param string $day_of_week
-     * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder
-     */
-    public static function createSettingTimeMessageBuilder(string $day_of_week)
-    {
-        // header
-        $header_text_builder = new TextComponentBuilder('時間を選択してください');
-        $header_text_builder->setWeight('bold');
-        $header_text_builder->setAlign('center');
-        $header_text_builder->setOffsetTop('12px');
-        $header_box = new BoxComponentBuilder('vertical', [$header_text_builder]);
-
-        // body
-        $box_contents = [];
-        for ($t = 0; $t < 6; $t++) {
-            $box_contents[] = new SeparatorComponentBuilder();
-            $rows = [];
-            for ($column = 0; $column < 2; $column++) {
-                $time = $column === 0 ? $t . ':00' : (int)$t + 6 . ':00';
-                $data =  'action=CONFIRM_SETTING_NOTIFICATION_CHECK_TODO&value=' . $day_of_week . '-' . $time;
-                $button_component =  new ButtonComponentBuilder(
-                    new PostbackTemplateActionBuilder($time, $data),
-                );
-                $button_component->setColor('#87cefa');
-                $rows[] = $button_component;
-                $column === 0 ? $rows[] = new SeparatorComponentBuilder() : false;
-            }
-            $box_contents[] = new BoxComponentBuilder('horizontal', $rows);
-        }
-        $body_box = new BoxComponentBuilder('vertical', $box_contents);
-
-        //bubble
-        $time_bubble_container = new BubbleContainerBuilder();
-        $time_bubble_container->setHeader($header_box);
-        $time_bubble_container->setBody($body_box);
-        $time_bubble_container->setSize('giga');
-
-        // flex message
-        $flex_message = new FlexMessageBuilder(
-            '通知時間の設定',
-            new CarouselContainerBuilder([$time_bubble_container])
-        );
-        return $flex_message;
-    }
-
-
-    /**
-     *
-     *
-     * 通知設定の中のイメージマップ
-     *
-     *
-     */
-
-    /**
-     *
-     * 振り返り通知の設定の変更
-     *
-     * @return \LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder;
-     *
-     */
-    public static function createImagemapMessageBuilder()
-    {
-        $base_url = 'https://d.kuku.lu/df20b9e88';
-        $base_size_builder = new BaseSizeBuilder(480, 1040);
-        $imagemap_action_builders = CheckedTodo::createDateOfWeekImagemapActionUriBuilder();
-        $imagemap_message_builder = new ImagemapMessageBuilder(
-            $base_url,
-            '振り返り通知の変更',
-            $base_size_builder,
-            $imagemap_action_builders
-        );
-        return $imagemap_message_builder;
-    }
-
-    /**
-     *
-     * 振り返り通知の設定の変更
-     *
-     * @return LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder[];
-     *
-     */
-    public static function createDateOfWeekImagemapActionUriBuilder()
-    {
     }
 }
