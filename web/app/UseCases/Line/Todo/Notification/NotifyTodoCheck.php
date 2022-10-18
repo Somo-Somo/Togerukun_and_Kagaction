@@ -80,10 +80,10 @@ class NotifyTodoCheck
                 $multi_message_builder->add($second_message);
                 Log::debug($recive_notification_user->user_uuid);
                 // $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
-                $this->bot->pushMessage(
-                    $recive_notification_user->users->line_user_id,
-                    $multi_message_builder
-                );
+                // $this->bot->pushMessage(
+                //     $recive_notification_user->users->line_user_id,
+                //     $multi_message_builder
+                // );
             }
         }
         return;
