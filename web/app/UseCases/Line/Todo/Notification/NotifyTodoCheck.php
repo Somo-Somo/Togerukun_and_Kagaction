@@ -39,7 +39,7 @@ class NotifyTodoCheck
      *
      * @return
      */
-    public function invoke($event)
+    public function invoke()
     {
         $datetime = new DateTime();
         $time = $datetime->format('H') . ':00:00';
@@ -78,12 +78,12 @@ class NotifyTodoCheck
                 $multi_message_builder = new MultiMessageBuilder();
                 $multi_message_builder->add(new TextMessageBuilder($notify_todo_check_message));
                 $multi_message_builder->add($second_message);
-
+                Log::debug($recive_notification_user->user_uuid);
                 // $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
-                // $this->bot->pushMessage(
-                //     $recive_notification_user->user_uuid,
-                //     $multi_message_builder
-                // );
+                $this->bot->pushMessage(
+                    $recive_notification_user->users->line_user_id,
+                    $multi_message_builder
+                );
             }
         }
         return;
