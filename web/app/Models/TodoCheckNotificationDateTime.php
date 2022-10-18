@@ -21,6 +21,6 @@ class TodoCheckNotificationDateTime extends Model
 
     public function users()
     {
-        return $this->belongsTo(User::class, 'uuid', 'user_uuid');
+        return $this->belongsTo(User::class, 'user_uuid', 'uuid');
     }
 }

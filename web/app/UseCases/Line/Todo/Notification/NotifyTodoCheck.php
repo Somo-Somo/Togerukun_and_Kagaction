@@ -39,39 +39,51 @@ class NotifyTodoCheck
      *
      * @return
      */
-    public function invoke()
+    public function invoke($event)
     {
         $datetime = new DateTime();
         $time = $datetime->format('H') . ':00:00';
         $day_of_week = date('w');
-        $at_this_time_user = TodoCheckNotificationDateTime::where('notification_time', $time);
-        $at_this_time_on_this_day_of_week_user = $at_this_time_user->where('notification_date', $day_of_week)->get();
-        $at_this_time_on_every_day_user = $at_this_time_user->where('notification_date', 7)->get();
-        $recive_notification_users = array_merge($at_this_time_on_this_day_of_week_user, $at_this_time_on_every_day_user);
+        $recive_notification_users = TodoCheckNotificationDateTime::where('notification_time', $time)
+            ->where('notification_time', $time)
+            ->where(function ($query) use ($day_of_week) {
+                $query->orwhere('notification_date', 7)
+                    ->orwhere('notification_date', $day_of_week);
+            })->get();
         if (count($recive_notification_users) > 0) {
             foreach ($recive_notification_users as  $recive_notification_user) {
-                $notify_todo_check_message =
-                    '振り返りの時間です。' . "\n" . $recive_notification_user->users->name . 'さんが今日までにやるもの一覧です。' . "\n" . '頑張って振り返っていきましょう!';
                 $today_date_time = new DateTime();
                 $today = $today_date_time->format('Y-m-d');
                 $todo_list = Todo::where('user_uuid', $recive_notification_user->user_uuid)
                     ->where('date', '<=', $today)
                     ->orderBy('date', 'desc')
                     ->get();
-                $create_todo_list_carousel_columns_action = new TodoCreateTodoListCarouselColumns();
-                $todo_list_carousel_flex_message = $create_todo_list_carousel_columns_action->invoke(
-                    $recive_notification_user->users,
-                    $todo_list,
-                    $action_type = 'NOTIFY_TODO_CHECK',
-                    $current_page = 1
-                );
+                Log::debug(count($todo_list));
+                if (count($todo_list) > 0) {
+                    $notify_todo_check_message =
+                        '振り返りの時間です。' . "\n" . $recive_notification_user->users->name . 'さんが今日までにやるもの一覧です。' . "\n" . '頑張って振り返っていきましょう!';
+                    $create_todo_list_carousel_columns_action = new TodoCreateTodoListCarouselColumns();
+                    $second_message = $create_todo_list_carousel_columns_action->invoke(
+                        $recive_notification_user->users,
+                        $todo_list,
+                        $action_type = 'NOTIFY_TODO_CHECK',
+                        $current_page = 1
+                    );
+                } else {
+                    $notify_todo_check_message =
+                        '振り返りの時間です。' . "\n" . $recive_notification_user->users->name . 'さんが今日までにやることは0件です。' . "\n" . '目標達成のためにやることを追加していきましょう！';
+                    $second_message = new TextMessageBuilder('後で実装');
+                }
+
                 $multi_message_builder = new MultiMessageBuilder();
                 $multi_message_builder->add(new TextMessageBuilder($notify_todo_check_message));
-                $multi_message_builder->add($todo_list_carousel_flex_message);
-                $this->bot->pushMessage(
-                    $recive_notification_user->user_uuid,
-                    $multi_message_builder
-                );
+                $multi_message_builder->add($second_message);
+
+                // $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
+                // $this->bot->pushMessage(
+                //     $recive_notification_user->user_uuid,
+                //     $multi_message_builder
+                // );
             }
         }
         return;
