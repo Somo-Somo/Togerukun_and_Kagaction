@@ -35,6 +35,15 @@ class TodoCheckNotificationDateTime extends Model
         'created_at'
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<integer>
+     */
+    protected $casts = [
+        'notification_date' => 'integer',
+    ];
+
     public function users()
     {
         return $this->belongsTo(User::class, 'user_uuid', 'uuid');
@@ -45,7 +54,8 @@ class TodoCheckNotificationDateTime extends Model
         'SETTING_NOTIFY_DAY_OF_WEEK' => true,
         'SETTING_NOTIFY_MERIDIEM' => true,
         'SETTING_NOTIFY_DATETIME' => true,
-        'CONFIRM_SETTING_NOTIFICATION_CHECK_TODO' => true,
+        'FINISH_SETTING_NOTIFICATION_CHECK_TODO' => true,
+        'STOP_SETTING_NOTIFICATION_CHECK_TODO' => true,
         'QUIT_SETTING_NOTIFICATION_CHECK_TODO' => true,
     ];
 
@@ -68,25 +78,27 @@ class TodoCheckNotificationDateTime extends Model
      * @param $notification_date_time
      * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
      */
-    public static function createConfirmDoYouWantToSetUpBuilder($notification_date_time)
+    public static function createConfirmDoYouWantToSetUpBuilder($line_user)
     {
-        if (count($notification_date_time) > 0) {
-            $week_day = ['日', '月', '火', '水', '木', '金', '土'];
+        if ($line_user->todo_check_notifications) {
+            $notification_date_time = $line_user->todo_check_notifications;
+            Log::debug($notification_date_time->notification_date);
+
+            $week_day = ['日', '月', '火', '水', '木', '金', '土', '毎日'];
             $notification_date = $notification_date_time->notification_date === 7 ?
                 "毎日" : "毎週" . $week_day[$notification_date_time->notification_date] . "曜日";
             $notification_time = $notification_date_time->notification_time;
-            $title = "振り返りの時間:" . $notification_date . " " . $notification_time;
-            $text = "現在振り返りの時間を" . $notification_date . " " . $notification_time . "に設定されています。";
+            $title = "振り返りの時間: " . $notification_date  . $notification_time;
+            $text = "現在振り返りの時間を" . $notification_date  . $notification_time . "に設定されています。";
             $actions = [
                 new PostbackTemplateActionBuilder("振り返りの曜日・時間の変更", 'action=SETTING_NOTIFY_DAY_OF_WEEK&value='),
                 new PostbackTemplateActionBuilder("振り返りの通知の停止", 'action=STOP_SETTING_NOTIFICATION_CHECK_TODO&value='),
             ];
         } else {
             $title = "振り返りの時間:未設定";
-            $text = "現在振り返りの時間を設定していません。新しく設定しますか？";
+            $text = "現在振り返りの時間を設定していません。";
             $actions = [
-                new PostbackTemplateActionBuilder("はい", 'action=SETTING_NOTIFY_DAY_OF_WEEK&value='),
-                new PostbackTemplateActionBuilder("いいえ", 'action=QUIT_SETTING_NOTIFICATION_CHECK_TODO&value='),
+                new PostbackTemplateActionBuilder("振り返りの時間を設定する", 'action=SETTING_NOTIFY_DAY_OF_WEEK&value='),
             ];
         }
         return new TemplateMessageBuilder(
@@ -145,8 +157,13 @@ class TodoCheckNotificationDateTime extends Model
             $body_box_contents[] = new SeparatorComponentBuilder();
             $rows = [];
             for ($row = 0; $row < 2; $row++) {
-                $time = (int)$meridiem === 0 ? $column + (6 * $row) . ':00' : $column + 12 + (6 * $row) . ':00';
-                $data =  'action=CONFIRM_SETTING_NOTIFICATION_CHECK_TODO&value=' . $notify_setting_value . '-' . $time;
+                if ((int)$meridiem === 0) {
+                    $time =  $column + (6 * $row) < 10 ?
+                        '0' . $column + (6 * $row) . ':00' : $column + (6 * $row) . ':00';
+                } else {
+                    $time =  $column + 12 + (6 * $row) . ':00';
+                }
+                $data =  'action=FINISH_SETTING_NOTIFICATION_CHECK_TODO&value=' . $day_of_week . '-' . $time;
                 $button_component =  new ButtonComponentBuilder(
                     new PostbackTemplateActionBuilder($time, $data),
                 );
@@ -183,7 +200,7 @@ class TodoCheckNotificationDateTime extends Model
         $time_bubble_container = new BubbleContainerBuilder();
         $time_bubble_container->setHeader($header_box);
         $time_bubble_container->setBody($body_box);
-        $time_bubble_container->setSize('giga');
+        $time_bubble_container->setSize('kilo');
 
         // flex message
         $flex_message = new FlexMessageBuilder(
@@ -214,7 +231,7 @@ class TodoCheckNotificationDateTime extends Model
             $text_component = [$meridiem_text_component];
             $post_back_template_action = new PostbackTemplateActionBuilder(
                 $meridiem,
-                'action=SETTING_NOTIFY_DAY_OF_WEEK&value=' . $day_of_week . '-' . $meridiem_key
+                'action=SETTING_NOTIFY_DATETIME&value=' . $day_of_week . '-' . $meridiem_key
             );
             $meridiem_box_component = new BoxComponentBuilder('vertical', $text_component);
             $meridiem_box_component->setAction($post_back_template_action);
@@ -230,7 +247,7 @@ class TodoCheckNotificationDateTime extends Model
             $meridiem_carousels
         );
 
-        $please_select_meridiem_text = new TextMessageBuilder('振り返る時間帯を選択してください!');
+        $please_select_meridiem_text = new TextMessageBuilder('振り返る時間帯を選択してください。');
 
         $multi_message_builder = new MultiMessageBuilder();
         $multi_message_builder->add($please_select_meridiem_text);
@@ -253,8 +270,8 @@ class TodoCheckNotificationDateTime extends Model
             new ConfirmTemplateBuilder(
                 $text,
                 [
-                    new PostbackTemplateActionBuilder("はい", 'action=QUIT_SETTING_NOTIFICATION_CHECK_TODO&value=true'),
-                    new PostbackTemplateActionBuilder("いいえ", 'action=QUIT_SETTING_NOTIFICATION_CHECK_TODO&value=false'),
+                    new PostbackTemplateActionBuilder("はい", 'action=STOP_SETTING_NOTIFICATION_CHECK_TODO&value=STOP'),
+                    new PostbackTemplateActionBuilder("いいえ", 'action=STOP_SETTING_NOTIFICATION_CHECK_TODO&value=CANCEL'),
                 ]
             )
         );
