@@ -77,11 +77,10 @@ class NotifyTodoCheck
                 $multi_message_builder = new MultiMessageBuilder();
                 $multi_message_builder->add(new TextMessageBuilder($notify_todo_check_message));
                 $multi_message_builder->add($second_message);
-                // $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
-                // $this->bot->pushMessage(
-                //     $recive_notification_user->users->line_user_id,
-                //     $multi_message_builder
-                // );
+                $this->bot->pushMessage(
+                    $recive_notification_user->users->line_user_id,
+                    $multi_message_builder
+                );
             }
         }
         return;
