@@ -52,26 +52,23 @@ class SetupNotificationForTodoCheck
             );
         } else if ($action_type === 'STOP_SETTING_NOTIFICATION_CHECK_TODO') {
             if (!$notify_setting_value) {
-                $test = $this->bot->replyMessage(
+                $this->bot->replyMessage(
                     $event->getReplyToken(),
                     TodoCheckNotificationDateTime::createConfirmYouStopNotificationBuilder()
                 );
-                Log::debug((array)$test);
             } else if ($notify_setting_value === 'STOP') {
                 TodoCheckNotificationDateTime::where('user_uuid', $line_user->uuid)->delete();
                 // 通知のSTOP
-                $test = $this->bot->replyMessage(
+                $this->bot->replyMessage(
                     $event->getReplyToken(),
                     new TextMessageBuilder('振り返りの時間の通知を停止しました。')
                 );
-                Log::debug((array)$test);
             } else if ($notify_setting_value === 'CANCEL') {
                 // キャンセル
-                $test = $this->bot->replyMessage(
+                $this->bot->replyMessage(
                     $event->getReplyToken(),
                     new TextMessageBuilder('振り返りの時間の通知を停止キャンセルしました。')
                 );
-                Log::debug((array)$test);
             }
         } else if ($action_type === 'SETTING_NOTIFY_DAY_OF_WEEK') {
             $setting_day_of_week_message_builder = TodoCheckNotificationDateTime::createSettingDayOfWeekMessageBuilder();
@@ -81,18 +78,16 @@ class SetupNotificationForTodoCheck
             );
         } else if ($action_type === 'SETTING_NOTIFY_MERIDIEM') {
             $setting_meridiem_builder = TodoCheckNotificationDateTime::selectMeridiemCarouselMessageBuilder($notify_setting_value);
-            $test = $this->bot->replyMessage(
+            $this->bot->replyMessage(
                 $event->getReplyToken(),
                 $setting_meridiem_builder
             );
-            Log::debug((array)$test);
         } else if ($action_type === 'SETTING_NOTIFY_DATETIME') {
             $setting_time_message_builder = TodoCheckNotificationDateTime::createSettingTimeMessageBuilder($notify_setting_value);
-            $test = $this->bot->replyMessage(
+            $this->bot->replyMessage(
                 $event->getReplyToken(),
                 $setting_time_message_builder
             );
-            Log::debug((array)$test);
         } else if ($action_type === 'FINISH_SETTING_NOTIFICATION_CHECK_TODO') {
             $day_of_weeks = ['日', '月', '火', '水', '木', '金', '土', '毎日'];
             [$day_of_week, $time] = explode("-", $notify_setting_value);
@@ -110,7 +105,6 @@ class SetupNotificationForTodoCheck
                     'notification_time' => $time
                 ]
             );
-            Log::debug($notify_setting_value);
         }
         return;
     }

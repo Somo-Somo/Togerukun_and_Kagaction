@@ -82,8 +82,6 @@ class TodoCheckNotificationDateTime extends Model
     {
         if ($line_user->todo_check_notifications) {
             $notification_date_time = $line_user->todo_check_notifications;
-            Log::debug($notification_date_time->notification_date);
-
             $week_day = ['日', '月', '火', '水', '木', '金', '土', '毎日'];
             $notification_date = $notification_date_time->notification_date === 7 ?
                 "毎日" : "毎週" . $week_day[$notification_date_time->notification_date] . "曜日";
