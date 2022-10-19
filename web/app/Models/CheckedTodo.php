@@ -242,7 +242,7 @@ class CheckedTodo extends Model
                 $reflection_text = 'やること一覧から選択';
             } else if ($carousel_type === '通知') {
                 $reflection_title = '⏰' . ' ' . $carousel_type;
-                $reflection_text = '振り返りの通知設定';
+                $reflection_text = '振り返りの時間の設定';
             }
         }
 
