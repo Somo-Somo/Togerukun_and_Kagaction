@@ -70,7 +70,7 @@ class MessageReceivedAction
 
         $question_number = $line_user->question->question_number;
         if ($event->getText() === '振り返る') {
-            $this->bot->replyMessage(
+            $test = $this->bot->replyMessage(
                 $event->getReplyToken(),
                 CheckedTodo::createCheckTodoFlexMessage()
             );

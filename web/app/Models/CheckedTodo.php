@@ -286,7 +286,7 @@ class CheckedTodo extends Model
             $data = 'action=SELECT_TODO_LIST_TO_CHECK&page=1';
         } else if ($carousel_type === '通知') {
             $label = '設定する';
-            $data = 'action=SETTING_NOTIFICATION_CHECK_TODO&value=';
+            $data = 'action=IF_YOU_WANT_TO_SET_UP_NOTIFY_CHECK_TODO&value=';
         }
         $footer_button = new ButtonComponentBuilder(
             new PostbackTemplateActionBuilder($label, $data),

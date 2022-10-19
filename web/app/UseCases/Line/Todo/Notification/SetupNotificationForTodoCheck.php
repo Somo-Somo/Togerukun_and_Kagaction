@@ -8,7 +8,7 @@ use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 use Illuminate\Support\Facades\Log;
 use DateTime;
-
+use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 
 class SetupNotificationForTodoCheck
 {
@@ -44,7 +44,33 @@ class SetupNotificationForTodoCheck
         string $action_type,
         string $notify_setting_value
     ) {
-        if ($action_type === 'SETTING_NOTIFICATION_CHECK_TODO') {
+        if ($action_type === 'IF_YOU_WANT_TO_SET_UP_NOTIFY_CHECK_TODO') {
+            $notification_date_time = TodoCheckNotificationDateTime::where('user_uuid', $line_user->uuid)->get();
+            $template_message_builder = TodoCheckNotificationDateTime::createConfirmDoYouWantToSetUpBuilder($notification_date_time);
+            $this->bot->replyMessage(
+                $event->getReplyToken(),
+                $template_message_builder
+            );
+        } else if ($action_type === 'STOP_SETTING_NOTIFICATION_CHECK_TODO') {
+            if (!$notify_setting_value) {
+                $this->bot->replyMessage(
+                    $event->getReplyToken(),
+                    TodoCheckNotificationDateTime::createConfirmYouStopNotificationBuilder()
+                );
+            } else if ($notify_setting_value === true) {
+                // 通知のSTOP
+                $this->bot->replyMessage(
+                    $event->getReplyToken(),
+                    new TextMessageBuilder('振り返りの時間の通知を停止しました。')
+                );
+            } else if ($notify_setting_value === false) {
+                // キャンセル
+                $this->bot->replyMessage(
+                    $event->getReplyToken(),
+                    new TextMessageBuilder('振り返りの時間の通知を停止キャンセルしました。')
+                );
+            }
+        } else if ($action_type === 'SETTING_NOTIFICATION_CHECK_TODO') {
             $setting_day_of_week_message_builder = TodoCheckNotificationDateTime::createSettingDayOfWeekMessageBuilder();
             $this->bot->replyMessage(
                 $event->getReplyToken(),

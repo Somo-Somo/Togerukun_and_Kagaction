@@ -14,28 +14,45 @@ use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SeparatorComponentBuilder;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 
 class TodoCheckNotificationDateTime extends Model
 {
     use HasFactory;
 
-    const SETTING_NOTIFICATION_FOR_TODO_CHECK = [
-        'SETTING_NOTIFICATION_CHECK_TODO' => true,
-        'SETTING_NOTIFY_DAY_OF_WEEK' => true,
-        'SETTING_NOTIFY_MERIDIEM' => true,
-        'SETTING_NOTIFY_DATETIME' => true,
-        'CONFIRM_SETTING_NOTIFICATION_CHECK_TODO' => true
-    ];
-
-    const NOTIFY_TODO_CHECK = [
-        'NOTIFY_TODO_CHECK' => true,
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string, integer, time, datetime>
+     */
+    protected $fillable = [
+        'user_uuid',
+        'notification_date',
+        'notification_time',
+        'created_at'
     ];
 
     public function users()
     {
         return $this->belongsTo(User::class, 'user_uuid', 'uuid');
     }
+
+    const SETTING_NOTIFICATION_FOR_TODO_CHECK = [
+        'IF_YOU_WANT_TO_SET_UP_NOTIFY_CHECK_TODO' => true,
+        'SETTING_NOTIFICATION_CHECK_TODO' => true,
+        'SETTING_NOTIFY_DAY_OF_WEEK' => true,
+        'SETTING_NOTIFY_MERIDIEM' => true,
+        'SETTING_NOTIFY_DATETIME' => true,
+        'CONFIRM_SETTING_NOTIFICATION_CHECK_TODO' => true,
+        'QUIT_SETTING_NOTIFICATION_CHECK_TODO' => true,
+    ];
+
+    const NOTIFY_TODO_CHECK = [
+        'NOTIFY_TODO_CHECK' => true,
+    ];
 
     /**
      *
@@ -44,6 +61,41 @@ class TodoCheckNotificationDateTime extends Model
      *
      *
      */
+
+    /**
+     *
+     * 通知設定を行うか確認する
+     *
+     * @param $notification_date_time
+     * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
+     */
+    public static function createConfirmDoYouWantToSetUpBuilder($notification_date_time)
+    {
+        if (count($notification_date_time) > 0) {
+            $week_day = ['日', '月', '火', '水', '木', '金', '土'];
+            $notification_date = $notification_date_time->notification_date === 7 ?
+                "毎日" : "毎週" . $week_day[$notification_date_time->notification_date] . "曜日";
+            $notification_time = $notification_date_time->notification_time;
+            $title = "振り返りの時間:" . $notification_date . " " . $notification_time;
+            $text = "現在振り返りの時間を" . $notification_date . " " . $notification_time . "に設定されています。";
+            $actions = [
+                new PostbackTemplateActionBuilder("振り返りの曜日・時間の変更", 'action=SETTING_NOTIFICATION_CHECK_TODO&value='),
+                new PostbackTemplateActionBuilder("振り返りの通知の停止", 'action=STOP_SETTING_NOTIFICATION_CHECK_TODO&value='),
+            ];
+        } else {
+            $title = "振り返りの時間:未設定";
+            $text = "現在振り返りの時間を設定していません。新しく設定しますか？";
+            $actions = [
+                new PostbackTemplateActionBuilder("はい", 'action=SETTING_NOTIFICATION_CHECK_TODO&value='),
+                new PostbackTemplateActionBuilder("いいえ", 'action=QUIT_SETTING_NOTIFICATION_CHECK_TODO&value='),
+            ];
+        }
+        return new TemplateMessageBuilder(
+            $title,
+            new ButtonTemplateBuilder($title, $text, null, $actions)
+        );
+    }
+
 
     /**
      * 曜日設定するときのメッセージ
@@ -185,5 +237,26 @@ class TodoCheckNotificationDateTime extends Model
         $multi_message_builder->add($flex_message);
 
         return $multi_message_builder;
+    }
+
+    /**
+     *
+     * 通知停止するか確認
+     *
+     * @return \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder
+     */
+    public static function createConfirmYouStopNotificationBuilder()
+    {
+        $text = '本当に振り返りの時間の通知を停止してもよろしいですか？';
+        return new TemplateMessageBuilder(
+            $text,
+            new ConfirmTemplateBuilder(
+                $text,
+                [
+                    new PostbackTemplateActionBuilder("はい", 'action=QUIT_SETTING_NOTIFICATION_CHECK_TODO&value=true'),
+                    new PostbackTemplateActionBuilder("いいえ", 'action=QUIT_SETTING_NOTIFICATION_CHECK_TODO&value=false'),
+                ]
+            )
+        );
     }
 }
