@@ -42,7 +42,6 @@ class TodoCheckNotificationDateTime extends Model
 
     const SETTING_NOTIFICATION_FOR_TODO_CHECK = [
         'IF_YOU_WANT_TO_SET_UP_NOTIFY_CHECK_TODO' => true,
-        'SETTING_NOTIFICATION_CHECK_TODO' => true,
         'SETTING_NOTIFY_DAY_OF_WEEK' => true,
         'SETTING_NOTIFY_MERIDIEM' => true,
         'SETTING_NOTIFY_DATETIME' => true,
@@ -79,14 +78,14 @@ class TodoCheckNotificationDateTime extends Model
             $title = "振り返りの時間:" . $notification_date . " " . $notification_time;
             $text = "現在振り返りの時間を" . $notification_date . " " . $notification_time . "に設定されています。";
             $actions = [
-                new PostbackTemplateActionBuilder("振り返りの曜日・時間の変更", 'action=SETTING_NOTIFICATION_CHECK_TODO&value='),
+                new PostbackTemplateActionBuilder("振り返りの曜日・時間の変更", 'action=SETTING_NOTIFY_DAY_OF_WEEK&value='),
                 new PostbackTemplateActionBuilder("振り返りの通知の停止", 'action=STOP_SETTING_NOTIFICATION_CHECK_TODO&value='),
             ];
         } else {
             $title = "振り返りの時間:未設定";
             $text = "現在振り返りの時間を設定していません。新しく設定しますか？";
             $actions = [
-                new PostbackTemplateActionBuilder("はい", 'action=SETTING_NOTIFICATION_CHECK_TODO&value='),
+                new PostbackTemplateActionBuilder("はい", 'action=SETTING_NOTIFY_DAY_OF_WEEK&value='),
                 new PostbackTemplateActionBuilder("いいえ", 'action=QUIT_SETTING_NOTIFICATION_CHECK_TODO&value='),
             ];
         }
@@ -137,16 +136,17 @@ class TodoCheckNotificationDateTime extends Model
      * @param string $day_of_week
      * @return \LINE\LINEBot\MessageBuilder\FlexMessageBuilder
      */
-    public static function createSettingTimeMessageBuilder(string $day_of_week)
+    public static function createSettingTimeMessageBuilder(string $notify_setting_value)
     {
+        [$day_of_week, $meridiem] = explode("-", $notify_setting_value);
         // body
         $body_box_contents = [];
         for ($column = 0; $column < 6; $column++) {
             $body_box_contents[] = new SeparatorComponentBuilder();
             $rows = [];
             for ($row = 0; $row < 2; $row++) {
-                $time = $column + (6 * $row) . ':00';
-                $data =  'action=CONFIRM_SETTING_NOTIFICATION_CHECK_TODO&value=' . $day_of_week . '-' . $time;
+                $time = (int)$meridiem === 0 ? $column + (6 * $row) . ':00' : $column + 12 + (6 * $row) . ':00';
+                $data =  'action=CONFIRM_SETTING_NOTIFICATION_CHECK_TODO&value=' . $notify_setting_value . '-' . $time;
                 $button_component =  new ButtonComponentBuilder(
                     new PostbackTemplateActionBuilder($time, $data),
                 );

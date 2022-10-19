@@ -70,24 +70,24 @@ class SetupNotificationForTodoCheck
                     new TextMessageBuilder('振り返りの時間の通知を停止キャンセルしました。')
                 );
             }
-        } else if ($action_type === 'SETTING_NOTIFICATION_CHECK_TODO') {
+        } else if ($action_type === 'SETTING_NOTIFY_DAY_OF_WEEK') {
             $setting_day_of_week_message_builder = TodoCheckNotificationDateTime::createSettingDayOfWeekMessageBuilder();
             $this->bot->replyMessage(
                 $event->getReplyToken(),
                 $setting_day_of_week_message_builder
             );
-        } else if ($action_type === 'SETTING_NOTIFY_DAY_OF_WEEK') {
-            $setting_time_message_builder = TodoCheckNotificationDateTime::createSettingTimeMessageBuilder($notify_setting_value);
-            $test = $this->bot->replyMessage(
-                $event->getReplyToken(),
-                $setting_time_message_builder
-            );
-            Log::debug((array)$test);
         } else if ($action_type === 'SETTING_NOTIFY_MERIDIEM') {
             $setting_meridiem_builder = TodoCheckNotificationDateTime::selectMeridiemCarouselMessageBuilder($notify_setting_value);
             $test = $this->bot->replyMessage(
                 $event->getReplyToken(),
                 $setting_meridiem_builder
+            );
+            Log::debug((array)$test);
+        } else if ($action_type === 'SETTING_NOTIFY_DATETIME') {
+            $setting_time_message_builder = TodoCheckNotificationDateTime::createSettingTimeMessageBuilder($notify_setting_value);
+            $test = $this->bot->replyMessage(
+                $event->getReplyToken(),
+                $setting_time_message_builder
             );
             Log::debug((array)$test);
         } else if ($action_type === 'CONFIRM_SETTING_NOTIFICATION_CHECK_TODO') {
