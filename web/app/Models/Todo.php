@@ -173,14 +173,13 @@ class Todo extends Model
      *
      * 習慣を追加するのかやることを追加するのか聞く
      *
-     * @param string $todo_uuid
+     * @param Todo $parent_todo
      * @return \LINE\LINEBot\MessageBuilder\FlexMessageBuilder
      */
-    public static function selectWhetherToAddTodoOrHabitMessageBuilder(string $parent_todo_uuid)
+    public static function selectWhetherToAddTodoOrHabitMessageBuilder(string $parent_todo)
     {
         $actions = [];
         $todo_or_habit = ['やること', '習慣'];
-        $parent_todo = Todo::where('uuid', $parent_todo_uuid)->first();
 
         foreach ($todo_or_habit as $key => $select_type) {
             $text_component  = new TextComponentBuilder($select_type, 1);
@@ -191,7 +190,7 @@ class Todo extends Model
             $action = $select_type === 'やること' ? 'ADD_TODO' : 'ADD_HABIT';
             $post_back_template_action = new PostbackTemplateActionBuilder(
                 $select_type,
-                'action=' . $action . '&todo_uuid=' . $parent_todo_uuid
+                'action=' . $action . '&todo_uuid=' . $parent_todo->uuid
             );
             $box_component = new BoxComponentBuilder('vertical', $text_component_builders);
             $box_component->setAction($post_back_template_action);

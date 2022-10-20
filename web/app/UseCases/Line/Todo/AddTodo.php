@@ -4,6 +4,7 @@ namespace App\UseCases\Line\Todo;
 
 use App\Models\User;
 use App\Models\Todo;
+use App\Models\LineUsersQuestion;
 use App\Repositories\Todo\TodoRepositoryInterface;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
@@ -46,11 +47,18 @@ class AddTodo
      */
     public function invoke(object $event, User $line_user, string $action_type, string $todo_uuid)
     {
+        $parent_todo = Todo::where('uuid', $todo_uuid)->first();
         if ($action_type === 'SELECT_WHETHER_TO_ADD_TODO_OR_HABIT') {
-            $multi_message_builder = Todo::selectWhetherToAddTodoOrHabitMessageBuilder($todo_uuid);
+            $multi_message_builder = Todo::selectWhetherToAddTodoOrHabitMessageBuilder($parent_todo);
             $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
         } else if ($action_type === 'ADD_TODO') {
-            # code...
+            // 返信メッセージ
+            $this->bot->replyText($event->getReplyToken(), Todo::askTodoName($parent_todo));
+            //質問の更新
+            $line_user->question->update([
+                'question_number' => LineUsersQuestion::TODO,
+                'parent_uuid' => $todo_uuid,
+            ]);
         } else if ($action_type === 'ADD_HABIT') {
             # code...
         }

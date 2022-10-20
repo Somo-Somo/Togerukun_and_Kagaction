@@ -108,16 +108,6 @@ class PostbackReceivedAction
             $this->select_todo_list_action->invoke($event, $line_user, $action_type, $second_value);
         } else if (isset(Todo::ADD_TODO[$action_type])) {
             $this->add_todo->invoke($event, $line_user, $action_type, $second_value);
-            // if ($second_value) {
-            //     $parent_todo = Todo::where('uuid', $second_value)->first();
-            //     // 返信メッセージ
-            //     $this->bot->replyText($event->getReplyToken(), Todo::askTodoName($parent_todo));
-            //     //質問の更新
-            //     $line_user->question->update([
-            //         'question_number' => LineUsersQuestion::TODO,
-            //         'parent_uuid' => $second_value,
-            //     ]);
-            // }
         } else if ($action_type === 'LIMIT_DATE') {
             // 日付に関する質問の場合
             $this->date_response_action->invoke($event, $line_user, $second_value);
