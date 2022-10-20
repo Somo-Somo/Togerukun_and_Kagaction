@@ -94,6 +94,11 @@ class Todo extends Model
         return $this->hasMany(Habit::class, 'todo_uuid', 'uuid');
     }
 
+    const ADD_TODO = [
+        'SELECT_WHETHER_TO_ADD_TODO_OR_HABIT' => true,
+        'ADD_TODO' => true,
+        'ADD_HABIT' => true,
+    ];
 
     /**
      *
