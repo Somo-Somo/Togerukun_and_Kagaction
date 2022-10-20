@@ -766,7 +766,7 @@ class Todo extends Model
             $change_todo_btn->setHeight('sm');
             $actions[] = $change_todo_btn;
             $add_todo_btn = new ButtonComponentBuilder(
-                new PostbackTemplateActionBuilder('やることの追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid)
+                new PostbackTemplateActionBuilder('やること・習慣の追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid)
             );
             $add_todo_btn->setHeight('sm');
             $add_todo_btn->setMargin('md');
