@@ -22,10 +22,10 @@ use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SeparatorComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BlockStyleBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
+use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
+use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 
-use SebastianBergmann\Template\Template;
-
-use function Psy\debug;
 use Illuminate\Support\Facades\Log;
 
 class Todo extends Model
@@ -159,6 +159,56 @@ class Todo extends Model
     public static function reportNewTodoName(Todo $todo, string $new_todo_name)
     {
         return '「' . $todo->name . '」から「' . $new_todo_name . '」へ変更が完了しました';
+    }
+
+    /**
+     *
+     *
+     * やることの追加 AddTodo
+     *
+     *
+     */
+
+    /**
+     *
+     * 習慣を追加するのかやることを追加するのか聞く
+     *
+     * @param string $todo_uuid
+     * @return \LINE\LINEBot\MessageBuilder\FlexMessageBuilder
+     */
+    public static function selectWhetherToAddTodoOrHabitMessageBuilder(string $parent_todo_uuid)
+    {
+        $actions = [];
+        $todo_or_habit = ['やること', '習慣'];
+        $parent_todo = Todo::where('uuid', $parent_todo_uuid)->first();
+
+        foreach ($todo_or_habit as $key => $select_type) {
+            $text_component  = new TextComponentBuilder($select_type, 1);
+            $text_component->setWeight('bold');
+            $text_component->setGravity('center');
+            $text_component->setAlign('center');
+            $text_component_builders = [$text_component];
+            $action = $select_type === 'やること' ? 'ADD_TODO' : 'ADD_HABIT';
+            $post_back_template_action = new PostbackTemplateActionBuilder(
+                $select_type,
+                'action=' . $action . '&todo_uuid=' . $parent_todo_uuid
+            );
+            $box_component = new BoxComponentBuilder('vertical', $text_component_builders);
+            $box_component->setAction($post_back_template_action);
+            $box_component->setHeight('80px');
+            $bubble_container = new BubbleContainerBuilder();
+            $bubble_container->setBody($box_component);
+            $bubble_container->setSize('nano');
+            $actions[] = $bubble_container;
+        }
+        $carousels = new CarouselContainerBuilder($actions);
+        $question_message = '「' . $parent_todo->name . '」を達成するために「やること」と「習慣」どちらを追加しますか？';
+
+        $multi_message_builder = new MultiMessageBuilder();
+        $multi_message_builder->add(new TextMessageBuilder($question_message));
+        $multi_message_builder->add(new FlexMessageBuilder($question_message, $carousels));
+
+        return $multi_message_builder;
     }
 
     /**
@@ -771,7 +821,7 @@ class Todo extends Model
             $change_todo_btn->setHeight('sm');
             $actions[] = $change_todo_btn;
             $add_todo_btn = new ButtonComponentBuilder(
-                new PostbackTemplateActionBuilder('やること・習慣の追加', 'action=ADD_TODO&todo_uuid=' . $todo->uuid)
+                new PostbackTemplateActionBuilder('やること・習慣の追加', 'action=SELECT_WHETHER_TO_ADD_TODO_OR_HABIT&todo_uuid=' . $todo->uuid)
             );
             $add_todo_btn->setHeight('sm');
             $add_todo_btn->setMargin('md');

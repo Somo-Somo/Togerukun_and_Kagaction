@@ -40,6 +40,11 @@ class PostbackReceivedAction
     protected $rename_todo;
 
     /**
+     * @param \App\UseCases\Line\Todo\AddTodo
+     */
+    protected $add_todo;
+
+    /**
      * @param \App\UseCases\Line\Todo\DeleteTodo
      */
     protected $delete_todo;
@@ -58,6 +63,7 @@ class PostbackReceivedAction
      * @param App\UseCases\Line\DateResponseAction $date_response_action
      * @param App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action
      * @param \App\UseCases\Line\Todo\RenameTodo $rename_todo
+     * @param \App\UseCases\Line\Todo\AddTodo $add_todo
      * @param \App\UseCases\Line\Todo\DeleteTodo $delete_todo
      * @param \App\UseCases\Line\Todo\CheckTodo $check_todo
      * @param \App\UseCases\Line\Todo\ChangeDate $change_date
@@ -66,6 +72,7 @@ class PostbackReceivedAction
         DateResponseAction $date_response_action,
         \App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action,
         \App\UseCases\Line\Todo\RenameTodo $rename_todo,
+        \App\UseCases\Line\Todo\AddTodo $add_todo,
         \App\UseCases\Line\Todo\DeleteTodo $delete_todo,
         \App\UseCases\Line\Todo\CheckTodo $check_todo,
         \App\UseCases\Line\Todo\ChangeDate $change_date,
@@ -75,6 +82,7 @@ class PostbackReceivedAction
         $this->date_response_action = $date_response_action;
         $this->select_todo_list_action = $select_todo_list_action;
         $this->rename_todo = $rename_todo;
+        $this->add_todo = $add_todo;
         $this->delete_todo = $delete_todo;
         $this->check_todo = $check_todo;
         $this->change_date = $change_date;
@@ -98,17 +106,18 @@ class PostbackReceivedAction
 
         if (isset(LineUsersQuestion::TODO_LIST[$action_type])) {
             $this->select_todo_list_action->invoke($event, $line_user, $action_type, $second_value);
-        } else if ($action_type === 'ADD_TODO') {
-            if ($second_value) {
-                $parent_todo = Todo::where('uuid', $second_value)->first();
-                // 返信メッセージ
-                $this->bot->replyText($event->getReplyToken(), Todo::askTodoName($parent_todo));
-                //質問の更新
-                $line_user->question->update([
-                    'question_number' => LineUsersQuestion::TODO,
-                    'parent_uuid' => $second_value,
-                ]);
-            }
+        } else if (isset(Todo::ADD_TODO[$action_type])) {
+            $this->add_todo->invoke($event, $line_user, $action_type, $second_value);
+            // if ($second_value) {
+            //     $parent_todo = Todo::where('uuid', $second_value)->first();
+            //     // 返信メッセージ
+            //     $this->bot->replyText($event->getReplyToken(), Todo::askTodoName($parent_todo));
+            //     //質問の更新
+            //     $line_user->question->update([
+            //         'question_number' => LineUsersQuestion::TODO,
+            //         'parent_uuid' => $second_value,
+            //     ]);
+            // }
         } else if ($action_type === 'LIMIT_DATE') {
             // 日付に関する質問の場合
             $this->date_response_action->invoke($event, $line_user, $second_value);
