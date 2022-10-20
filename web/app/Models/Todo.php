@@ -85,6 +85,15 @@ class Todo extends Model
         return $this->hasMany(CheckedTodo::class, 'todo_uuid', 'uuid');
     }
 
+    /**
+     * Todoに紐づく習慣
+     *
+     */
+    public function habit()
+    {
+        return $this->hasMany(Habit::class, 'todo_uuid', 'uuid');
+    }
+
 
     /**
      *
