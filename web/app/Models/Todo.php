@@ -94,10 +94,20 @@ class Todo extends Model
         return $this->hasMany(Habit::class, 'todo_uuid', 'uuid');
     }
 
+    /**
+     * Todo追加
+     */
     const ADD_TODO = [
         'SELECT_WHETHER_TO_ADD_TODO_OR_HABIT' => true,
         'ADD_TODO' => true,
         'ADD_HABIT' => true,
+    ];
+
+    /**
+     * 日付をつける
+     */
+    const DATE = [
+        'ASK_DATE_LIMIT' => true,
     ];
 
     /**
@@ -377,7 +387,7 @@ class Todo extends Model
                     'いつまでに達成したいか考えてみよう！', // text
                     null, // 画像url
                     [
-                        new DatetimePickerTemplateActionBuilder('期日を選択', 'action=LIMIT_DATE&todo_uuid=' . $todo['uuid'], 'date')
+                        new DatetimePickerTemplateActionBuilder('期日を選択', 'action=ASK_DATE_LIMIT&todo_uuid=' . $todo['uuid'], 'date')
                     ]
                 )
             )

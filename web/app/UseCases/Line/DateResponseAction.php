@@ -58,10 +58,11 @@ class DateResponseAction
      *
      * @param object $event
      * @param User $line_user
+     * @param string $action_type
      * @param string $uuid_value
      * @return
      */
-    public function invoke(object $event, User $line_user, string $uuid_value)
+    public function invoke(object $event, User $line_user, string $action_type, string $uuid_value)
     {
         // 日付に関する質問の場合
         $date = [
@@ -100,7 +101,6 @@ class DateResponseAction
             $event->getReplyToken(),
             $builder
         );
-        Log::debug((array)$res);
 
         // Todoに日付の期限を授ける
         Todo::where('uuid', $date['uuid'])

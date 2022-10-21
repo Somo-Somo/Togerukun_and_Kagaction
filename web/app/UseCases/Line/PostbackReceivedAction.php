@@ -108,9 +108,9 @@ class PostbackReceivedAction
             $this->select_todo_list_action->invoke($event, $line_user, $action_type, $second_value);
         } else if (isset(Todo::ADD_TODO[$action_type])) {
             $this->add_todo->invoke($event, $line_user, $action_type, $second_value);
-        } else if ($action_type === 'LIMIT_DATE') {
+        } else if (isset(Todo::DATE[$action_type])) {
             // 日付に関する質問の場合
-            $this->date_response_action->invoke($event, $line_user, $second_value);
+            $this->date_response_action->invoke($event, $line_user, $action_type, $second_value);
         } else if ($action_type === 'CHANGE_TODO') {
             $builder = Todo::changeTodo(Todo::where('uuid', $second_value)->first());
             $this->bot->replyMessage($event->getReplyToken(), $builder);
