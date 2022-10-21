@@ -14,6 +14,7 @@ use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder;
@@ -220,6 +221,25 @@ class Todo extends Model
         $multi_message_builder->add(new FlexMessageBuilder($question_message, $carousels));
 
         return $multi_message_builder;
+    }
+
+    /**
+     * Todo追加した後どうするか
+     *
+     * @param Todo $todo
+     * @param User $line_user
+     * @param string $date
+     * @return \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder
+     */
+    public static function createWhatToDoAfterAddingTodoCarousel(Todo $todo, User $line_user)
+    {
+        $parent_todo = Todo::where('uuid', $todo->parent_uuid)->first();
+        $carousel_columns = [
+            Todo::continueAddTodoOfTodo($todo),
+            Todo::continueAddTodoOfParentTodo($parent_todo),
+        ];
+        if (!$line_user->question->checked_todo) $carousel_columns[] = Todo::comeBackTodoList($todo->project);
+        return new CarouselTemplateBuilder($carousel_columns);
     }
 
     /**

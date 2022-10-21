@@ -73,9 +73,11 @@ class Habit extends Model
         '毎日' => 0,
         '毎週' => 1,
         '毎月' => 2,
-        '平日のみ' => 3,
-        '休日のみ' => 4,
+        '平日' => 3,
+        '週末' => 4,
     ];
+
+    const DAY_OF_WEEK_ENGLISH = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
     /**
      * どのくらいの頻度でやるか聞く
@@ -87,7 +89,7 @@ class Habit extends Model
     public static function askFrequencyHabit(string $user_name, array $todo)
     {
         $actions = [];
-        $frequencies = ['毎日', '毎週', '毎月', '平日のみ', '休日のみ'];
+        $frequencies = ['毎日', '毎週', '毎月', '平日', '週末'];
 
         foreach ($frequencies as $key => $frequency) {
             $text_component  = new TextComponentBuilder($frequency, 1);
@@ -124,11 +126,10 @@ class Habit extends Model
      * @param string $frequency
      * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder()
      */
-    public static function selectDayOfWeek(string $todo_uuid, string $frequency)
+    public static function selectDayOfWeek(Todo $todo, string $frequency)
     {
         $actions = [];
         $day_of_weeks = ['日', '月', '火', '水', '木', '金', '土'];
-        $todo = Todo::where('uuid', $todo_uuid)->first();
 
         foreach ($day_of_weeks as $key => $day_of_week) {
             $text_component  = new TextComponentBuilder($day_of_week, 1);
@@ -138,7 +139,7 @@ class Habit extends Model
             $text_component_builders = [$text_component];
             $post_back_template_action = new PostbackTemplateActionBuilder(
                 $day_of_week,
-                'action=ASK_ABOUT_FREQUENCY&value=' . $todo_uuid . '-' . $frequency . '-' . $key
+                'action=ASK_ABOUT_FREQUENCY&value=' . $todo->uuid . '-' . $frequency . '-' . $key
             );
             $box_component = new BoxComponentBuilder('vertical', $text_component_builders);
             $box_component->setAction($post_back_template_action);
@@ -165,10 +166,8 @@ class Habit extends Model
      * @param string $frequency
      * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder()
      */
-    public static function selectDayOfMonth(string $todo_uuid, string $frequency)
+    public static function selectDayOfMonth(Todo $todo, string $frequency)
     {
-        $todo = Todo::where('uuid', $todo_uuid)->first();
-
         // 一つ目の質問メッセージ
         $question_message = '「' . $todo->name . '」を毎月何日に行いますか？';
 
@@ -186,7 +185,7 @@ class Habit extends Model
             for ($column = 1; $column < 6; $column++) {
                 $date = $row * $column;
                 if ($date < 33) {
-                    $data = 'action=ASK_ABOUT_FREQUENCY&value=' . $todo_uuid . '-' . $frequency . '-' . $date;
+                    $data = 'action=ASK_ABOUT_FREQUENCY&value=' . $todo->uuid . '-' . $frequency . '-' . $date;
                     $font_color = $date === 32 ? '#5f9ea0' : '#5f9ea0';
                     $button_component = new ButtonComponentBuilder(
                         new PostbackTemplateActionBuilder($date, $data),
@@ -217,5 +216,23 @@ class Habit extends Model
         $multi_message_builder->add($flex_message);
 
         return $multi_message_builder;
+    }
+
+    /**
+     * 毎月何日にやるか選ぶ
+     *
+     * @param Todo $todo
+     * @param string $frequency
+     * @param string $day || null
+     * @return string
+     *
+     **/
+    public static function confirmHabit(Todo $todo, string $frequency, string $day = null)
+    {
+        $frequency_text = array_keys(Habit::FREQUENCY, $frequency);
+        $habit_date = $frequency_text . $day;
+        $confirm =  '「' . $habit_date . '」ですね！';
+        $fighting =  '「' . $todo->name . '」が' . '継続して達成できるように頑張っていきましょう！';
+        return $confirm . "\n" . $fighting;
     }
 }

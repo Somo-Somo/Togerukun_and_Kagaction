@@ -10,10 +10,12 @@ use App\Models\LineUsersQuestion;
 use App\Models\Onboarding;
 use App\Repositories\Date\DateRepositoryInterface;
 use App\Repositories\Line\LineBotRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 use DateTime;
+use DateTimeImmutable;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
@@ -65,13 +67,64 @@ class HabitSettingResponseAction
      */
     public function invoke(object $event, User $line_user, string $action_type, string $postback_value)
     {
-        [$todo_uuid, $frequency] = explode("-", $postback_value);
-        if ($frequency === Habit::FREQUENCY['毎週']) {
-            $multi_message_builder = Habit::selectDayOfWeek($todo_uuid, $frequency);
+        [$todo_uuid, $frequency, $day] = explode("-", $postback_value);
+        $todo = Todo::where('uuid', $todo_uuid)->first();
+        if (!$day && $frequency === Habit::FREQUENCY['毎週']) {
+            $multi_message_builder = Habit::selectDayOfWeek($todo, $frequency);
             $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
-        } else if ($frequency === Habit::FREQUENCY['毎月']) {
-            $multi_message_builder = Habit::selectDayOfMonth($todo_uuid, $frequency);
+        } else if (!$day && $frequency === Habit::FREQUENCY['毎月']) {
+            $multi_message_builder = Habit::selectDayOfMonth($todo, $frequency);
             $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
+        } else {
+            $carousel = Todo::createWhatToDoAfterAddingTodoCarousel($todo, $line_user);
+            $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+            $builder->add(new TextMessageBuilder(Habit::confirmHabit($todo, $frequency, $day)));
+            $builder->add(new TemplateMessageBuilder('選択', $carousel));
+            $this->bot->replyMessage($event->getReplyToken(), $builder);
+            // データの更新
+            Habit::updateOrCreate(
+                ['todo_uuid', $todo_uuid],
+                [
+                    'interval' => $frequency,
+                    'day' => $day
+                ]
+            );
+            $today_date = new DateTimeImmutable();
+            $carbon = Carbon::now();
+            if ($frequency === Habit::FREQUENCY['毎日']) {
+                $todo_date = $today_date->format('Y-m-d');
+            } else if ($frequency === Habit::FREQUENCY['毎週']) {
+                $day_of_week_english = Habit::DAY_OF_WEEK_ENGLISH[$day];
+                if ($frequency === $today_date->format('w')) {
+                    $todo_date = $today_date->format('Y-m-d');
+                } else {
+                    $todo_date = $today_date->add($day_of_week_english)->format('Y-m-d');
+                }
+            } else if ($frequency === Habit::FREQUENCY['毎月']) {
+                $this_month_date = $carbon->copy()->setDate($carbon->year(), $carbon->month(), $day);
+                $todo_date = $carbon->lt($this_month_date) ? $this_month_date : $this_month_date->addMonthsNoOverflow();
+            } else if ($frequency === Habit::FREQUENCY['平日']) {
+                $todo_date = $carbon->isWeekday() ?
+                    $carbon->copy()->format('Y-m-d') : $carbon->copy()->next(Carbon::MONDAY)->format('Y-m-d');
+            } else if ($frequency === Habit::FREQUENCY['平日']) {
+                $todo_date = $carbon->isWeekend() ?
+                    $carbon->copy()->format('Y-m-d') : $carbon->copy()->next(Carbon::SATURDAY)->format('Y-m-d');
+            }
+            Todo::where('uuid', $todo_uuid)->update(['date' => $todo_date]);
+            // 質問の更新
+            $line_user->question->update([
+                'question_number' => LineUsersQuestion::NO_QUESTION,
+                'parent_uuid' => null
+            ]);
+            $create_habit = [
+                'uuid' => $todo_uuid,
+                'user_uuid' => $line_user->uuid,
+                'date' => $todo_date,
+                'interval' => $frequency,
+                'habit_day_no' => $day,
+            ];
+            $this->todo_repository->updateHabit($create_habit);
+            $this->date_repository->updateDate($create_habit);
         }
         return;
     }

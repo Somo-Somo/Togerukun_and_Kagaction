@@ -78,18 +78,12 @@ class DateResponseAction
         $not_completed_onboarding = Onboarding::where('user_uuid', $line_user->uuid)->first();
 
         if ($not_completed_onboarding) {
-            $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-            $builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
-            $builder->add(Onboarding::callForAdditionalTodo());
+            $multi_message_builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+            $multi_message_builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
+            $multi_message_builder->add(Onboarding::callForAdditionalTodo());
             $not_completed_onboarding->delete();
         } else {
-            $parent_todo = Todo::where('uuid', $todo->parent_uuid)->first();
-            $carousel_columns = [
-                Todo::continueAddTodoOfTodo($todo),
-                Todo::continueAddTodoOfParentTodo($parent_todo),
-            ];
-            if (!$line_user->question->checked_todo) $carousel_columns[] = Todo::comeBackTodoList($todo->project);
-            $carousel = new CarouselTemplateBuilder($carousel_columns);
+            $carousel = Todo::createWhatToDoAfterAddingTodoCarousel($todo, $line_user);
             $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
             $builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
             $builder->add(new TemplateMessageBuilder('選択', $carousel));
@@ -99,7 +93,7 @@ class DateResponseAction
         }
         $res = $this->bot->replyMessage(
             $event->getReplyToken(),
-            $builder
+            $multi_message_builder
         );
 
         // Todoに日付の期限を授ける
