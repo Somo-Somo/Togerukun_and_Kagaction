@@ -25,7 +25,7 @@ class PostbackReceivedAction
     protected $bot;
 
     /**
-     * @param App\UseCases\Line\DateResponseAction
+     * @param \App\UseCases\Line\Todo\DateResponseAction
      */
     protected $date_response_action;
 
@@ -60,7 +60,7 @@ class PostbackReceivedAction
     protected $change_date;
 
     /**
-     * @param App\UseCases\Line\DateResponseAction $date_response_action
+     * @param \App\UseCases\Line\Todo\DateResponseAction $date_response_action
      * @param App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action
      * @param \App\UseCases\Line\Todo\RenameTodo $rename_todo
      * @param \App\UseCases\Line\Todo\AddTodo $add_todo
@@ -69,7 +69,7 @@ class PostbackReceivedAction
      * @param \App\UseCases\Line\Todo\ChangeDate $change_date
      */
     public function __construct(
-        DateResponseAction $date_response_action,
+        \App\UseCases\Line\Todo\DateResponseAction $date_response_action,
         \App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action,
         \App\UseCases\Line\Todo\RenameTodo $rename_todo,
         \App\UseCases\Line\Todo\AddTodo $add_todo,

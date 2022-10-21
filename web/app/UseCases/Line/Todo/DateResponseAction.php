@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UseCases\Line;
+namespace App\UseCases\Line\Todo;
 
 use App\Models\User;
 use App\Models\Todo;
