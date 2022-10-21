@@ -3,6 +3,7 @@
 namespace App\UseCases\Line;
 
 use App\Models\CheckedTodo;
+use App\Models\Habit;
 use App\Models\User;
 use App\Models\Todo;
 use App\Models\LineUsersQuestion;
@@ -28,6 +29,11 @@ class PostbackReceivedAction
      * @param \App\UseCases\Line\Todo\DateResponseAction
      */
     protected $date_response_action;
+
+    /**
+     * @param \App\UseCases\Line\Todo\HabitSettingResponseAction
+     */
+    protected $habit_setting_response_action;
 
     /**
      * @param App\UseCases\Line\Todo\SelectTodoListAction
@@ -61,6 +67,7 @@ class PostbackReceivedAction
 
     /**
      * @param \App\UseCases\Line\Todo\DateResponseAction $date_response_action
+     * @param \App\UseCases\Line\Todo\HabitSettingResponseAction $date_response_action
      * @param App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action
      * @param \App\UseCases\Line\Todo\RenameTodo $rename_todo
      * @param \App\UseCases\Line\Todo\AddTodo $add_todo
@@ -70,6 +77,7 @@ class PostbackReceivedAction
      */
     public function __construct(
         \App\UseCases\Line\Todo\DateResponseAction $date_response_action,
+        \App\UseCases\Line\Todo\HabitSettingResponseAction $habit_setting_response_action,
         \App\UseCases\Line\Todo\SelectTodoListAction $select_todo_list_action,
         \App\UseCases\Line\Todo\RenameTodo $rename_todo,
         \App\UseCases\Line\Todo\AddTodo $add_todo,
@@ -80,6 +88,7 @@ class PostbackReceivedAction
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
         $this->date_response_action = $date_response_action;
+        $this->habit_setting_response_action = $habit_setting_response_action;
         $this->select_todo_list_action = $select_todo_list_action;
         $this->rename_todo = $rename_todo;
         $this->add_todo = $add_todo;
@@ -111,6 +120,8 @@ class PostbackReceivedAction
         } else if (isset(Todo::DATE[$action_type])) {
             // 日付に関する質問の場合
             $this->date_response_action->invoke($event, $line_user, $action_type, $second_value);
+        } else if (isset(Habit::HABIT[$action_type])) {
+            $this->habit_setting_response_action->invoke($event, $line_user, $action_type, $second_value);
         } else if ($action_type === 'CHANGE_TODO') {
             $builder = Todo::changeTodo(Todo::where('uuid', $second_value)->first());
             $this->bot->replyMessage($event->getReplyToken(), $builder);

@@ -4,6 +4,7 @@ namespace App\UseCases\Line;
 
 use App\Models\User;
 use App\Models\Todo;
+use App\Models\Habit;
 use App\Models\LineUsersQuestion;
 use App\Repositories\Goal\GoalRepositoryInterface;
 use App\Repositories\Todo\TodoRepositoryInterface;
@@ -81,7 +82,7 @@ class TodoResponseAction
         ];
 
         $message_builder = $question_number === LineUsersQuestion::HABIT ?
-            Todo::askTodoLimited($line_user->name, $todo) : Todo::askTodoLimited($line_user->name, $todo);
+            Habit::askFrequencyHabit($line_user->name, $todo) : Todo::askTodoLimited($line_user->name, $todo);
 
         // 返信メッセージ(日付)
         $this->bot->replyMessage($event->getReplyToken(), $message_builder);
@@ -91,7 +92,7 @@ class TodoResponseAction
 
         //質問の消す
         $line_user->question->update([
-            'question_number' => null,
+            'question_number' => LineUsersQuestion::NO_QUESTION,
             'parent_uuid' => null
         ]);
 
