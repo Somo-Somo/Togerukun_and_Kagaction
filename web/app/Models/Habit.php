@@ -4,8 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
+use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
+use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
+use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
+
 
 
 class Habit extends Model
@@ -60,23 +67,23 @@ class Habit extends Model
      * どのくらいの頻度でやるか聞く
      *
      * @param string $user_name
-     * @param array $todo
+     * @param Todo $parent_todo
      * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder()
      */
-    public static function askHowOftenHabit(string $user_name, array $todo)
+    public static function askFrequencHabit(string $user_name, Todo $parent_todo)
     {
         $actions = [];
-        $oftens = ['毎日', '毎週', '毎月', '平日のみ', '休日のみ'];
+        $frequencies = ['毎日', '毎週', '毎月', '平日のみ', '休日のみ'];
 
-        foreach ($oftens as $key => $often) {
-            $text_component  = new TextComponentBuilder($often, 1);
+        foreach ($frequencies as $key => $frequency) {
+            $text_component  = new TextComponentBuilder($frequency, 1);
             $text_component->setWeight('bold');
             $text_component->setGravity('center');
             $text_component->setAlign('center');
             $text_component_builders = [$text_component];
             $post_back_template_action = new PostbackTemplateActionBuilder(
-                $often,
-                'action=' . $action . '&todo_uuid=' . $parent_todo->uuid
+                $frequency,
+                'action=&todo_uuid=' . $parent_todo->uuid
             );
             $box_component = new BoxComponentBuilder('vertical', $text_component_builders);
             $box_component->setAction($post_back_template_action);
