@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SeparatorComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
 use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
@@ -116,7 +118,7 @@ class Habit extends Model
     }
 
     /**
-     * 何曜日にやるか聞く
+     * 何曜日にやるか選ぶ
      *
      * @param string $todo_uuid
      * @param string $frequency
@@ -152,6 +154,67 @@ class Habit extends Model
         $multi_message_builder = new MultiMessageBuilder();
         $multi_message_builder->add(new TextMessageBuilder($question_message));
         $multi_message_builder->add(new FlexMessageBuilder($question_message, $carousels));
+
+        return $multi_message_builder;
+    }
+
+    /**
+     * 毎月何日にやるか選ぶ
+     *
+     * @param string $todo_uuid
+     * @param string $frequency
+     * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder()
+     */
+    public static function selectDayOfMonth(string $todo_uuid, string $frequency)
+    {
+        $todo = Todo::where('uuid', $todo_uuid)->first();
+
+        // 一つ目の質問メッセージ
+        $question_message = '「' . $todo->name . '」を毎月何日に行いますか？';
+
+        // header
+        $header_text_builder = new TextComponentBuilder('日付を選択してください');
+        $header_text_builder->setWeight('bold');
+        $header_text_builder->setAlign('center');
+        $header_text_builder->setOffsetTop('12px');
+        $header_box = new BoxComponentBuilder('vertical', [$header_text_builder]);
+
+        $body_box_contents = [];
+        for ($row = 1; $row < 8; $row++) {
+            $body_box_contents[] = new SeparatorComponentBuilder();
+            $row_box = [];
+            for ($column = 1; $column < 6; $column++) {
+                $date = $row * $column;
+                if ($date < 33) {
+                    $data = 'action=ASK_ABOUT_FREQUENCY&value=' . $todo_uuid . '-' . $frequency . '-' . $date;
+                    $font_color = $date === 32 ? '#5f9ea0' : '#5f9ea0';
+                    $button_component = new ButtonComponentBuilder(
+                        new PostbackTemplateActionBuilder($date, $data),
+                    );
+                    $button_component->setColor($font_color);
+                    $row_box[] = $button_component;
+                    $row_box[] = new SeparatorComponentBuilder();
+                }
+            }
+            $body_box_contents[] = new BoxComponentBuilder('horizontal', $row_box);
+        }
+        $body_box = new BoxComponentBuilder('vertical', $body_box_contents);
+
+        //bubble
+        $date_bubble_container = new BubbleContainerBuilder();
+        $date_bubble_container->setHeader($header_box);
+        $date_bubble_container->setBody($body_box);
+        $date_bubble_container->setSize('mega');
+
+        // flex message
+        $flex_message = new FlexMessageBuilder(
+            '日付を選択してください',
+            new CarouselContainerBuilder([$date_bubble_container])
+        );
+
+        $multi_message_builder = new MultiMessageBuilder();
+        $multi_message_builder->add(new TextMessageBuilder($question_message));
+        $multi_message_builder->add($flex_message);
 
         return $multi_message_builder;
     }

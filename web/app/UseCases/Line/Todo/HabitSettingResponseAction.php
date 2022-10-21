@@ -70,9 +70,9 @@ class HabitSettingResponseAction
             $multi_message_builder = Habit::selectDayOfWeek($todo_uuid, $frequency);
             $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
         } else if ($frequency === Habit::FREQUENCY['毎月']) {
+            $multi_message_builder = Habit::selectDayOfMonth($todo_uuid, $frequency);
+            $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
         }
-        Log::debug($todo_uuid);
-        Log::debug($frequency);
         return;
     }
 }

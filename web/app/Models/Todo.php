@@ -188,7 +188,7 @@ class Todo extends Model
      * @param Todo $parent_todo
      * @return \LINE\LINEBot\MessageBuilder\FlexMessageBuilder
      */
-    public static function selectWhetherToAddTodoOrHabitMessageBuilder(string $parent_todo)
+    public static function selectWhetherToAddTodoOrHabitMessageBuilder(Todo $parent_todo)
     {
         $actions = [];
         $todo_or_habit = ['やること', '習慣'];
