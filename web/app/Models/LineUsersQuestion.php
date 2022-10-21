@@ -15,7 +15,8 @@ class LineUsersQuestion extends Model
     const PROJECT = 1;
     const GOAL = 2;
     const TODO = 3;
-    const DATE = 4;
+    const HABIT = 4;
+    const DATE = 5;
     const RENAME_TODO = 31;
     const TODO_LIST = [
         'ALL_TODO_LIST' => true,
