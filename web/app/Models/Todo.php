@@ -131,11 +131,13 @@ class Todo extends Model
      * Todoの名前を聞く
      *
      * @param Todo $todo
+     * @param string $action_type
      * @return string $reply_message
      */
-    public static function askTodoName(Todo $todo)
+    public static function askTodoName(Todo $todo, string $action_type)
     {
-        return '「' . $todo->name . '」を達成するためにやることを教えてください！';
+        $to_achieve = $action_type === 'ADD_TODO' ? 'こと' : '習慣';
+        return '「' . $todo->name . '」を達成するためにやる' . $to_achieve . 'を教えてください！';
     }
 
     /**

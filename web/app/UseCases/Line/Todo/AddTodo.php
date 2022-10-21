@@ -51,16 +51,15 @@ class AddTodo
         if ($action_type === 'SELECT_WHETHER_TO_ADD_TODO_OR_HABIT') {
             $multi_message_builder = Todo::selectWhetherToAddTodoOrHabitMessageBuilder($parent_todo);
             $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
-        } else if ($action_type === 'ADD_TODO') {
+        } else {
             // 返信メッセージ
-            $this->bot->replyText($event->getReplyToken(), Todo::askTodoName($parent_todo));
+            $this->bot->replyText($event->getReplyToken(), Todo::askTodoName($parent_todo, $action_type));
+            $question_num = $action_type === 'ADD_TODO' ? LineUsersQuestion::TODO : LineUsersQuestion::HABIT;
             //質問の更新
             $line_user->question->update([
-                'question_number' => LineUsersQuestion::TODO,
+                'question_number' => $question_num,
                 'parent_uuid' => $todo_uuid,
             ]);
-        } else if ($action_type === 'ADD_HABIT') {
-            # code...
         }
 
         return;
