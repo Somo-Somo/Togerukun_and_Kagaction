@@ -127,9 +127,9 @@ class PostbackReceivedAction
             $this->bot->replyMessage($event->getReplyToken(), $builder);
         } else if ($action_type === 'RENAME_TODO') {
             $this->rename_todo->invoke($event, $line_user, $second_value);
-        } else if (isset(LineUsersQuestion::DELETE_TODO[$action_type])) {
+        } else if (isset(Todo::DELETE_TODO[$action_type])) {
             $this->delete_todo->invoke($event, $line_user, $action_type, $second_value);
-        } else if (isset(LineUsersQuestion::CHANGE_DATE[$action_type])) {
+        } else if (isset(Todo::CHANGE_DATE[$action_type])) {
             $this->change_date->invoke($event, $line_user, $action_type, $second_value);
         } else if (isset(CheckedTodo::CHECK_TODO[$action_type])) {
             $this->check_todo->invoke($event, $line_user, $action_type, $second_value);

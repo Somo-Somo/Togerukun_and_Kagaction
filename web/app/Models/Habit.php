@@ -87,16 +87,15 @@ class Habit extends Model
     /**
      * どのくらいの頻度でやるか聞く
      *
-     * @param string $user_name
      * @param array $parent_todo
      * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder()
      */
-    public static function askFrequencyHabit(string $user_name, array $todo)
+    public static function askFrequencyHabit(array $todo)
     {
         $actions = [];
         $frequencies = ['毎日', '毎週', '毎月', '平日', '週末'];
 
-        foreach ($frequencies as $key => $frequency) {
+        foreach ($frequencies as $frequency) {
             $text_component  = new TextComponentBuilder($frequency, 1);
             $text_component->setWeight('bold');
             $text_component->setGravity('center');

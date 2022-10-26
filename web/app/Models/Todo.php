@@ -111,6 +111,19 @@ class Todo extends Model
         'ASK_DATE_LIMIT' => true,
     ];
 
+    const DELETE_TODO = [
+        'DELETE_TODO' => true,
+        'OK_DELETE_TODO' => true,
+        'NOT_DELETE_TODO' => true
+    ];
+
+    const CHANGE_DATE = [
+        'ASK_RESCHEDULE' => true,
+        'RESCHEDULE' => true,
+        'ASK_CHANGE_INTERVAL' => true,
+        'CHANGE_INTERVAL' => true,
+    ];
+
     /**
      *
      * ゴール Goal
@@ -284,6 +297,9 @@ class Todo extends Model
     public static function changeTodo(Todo $todo)
     {
         $title =  '「' . $todo->name . '」';
+        $change_date_postback = count($todo->habit) > 0 ?
+            new PostbackTemplateActionBuilder('習慣の変更', 'action=ASK_CHANGE_INTERVAL&todo_uuid=' . $todo->uuid) :
+            new PostbackTemplateActionBuilder('期限の変更', 'action=ASK_RESCHEDULE&todo_uuid=' . $todo->uuid);
         return new TemplateMessageBuilder(
             $title,
             new ButtonTemplateBuilder(
@@ -293,7 +309,7 @@ class Todo extends Model
                 [
                     new PostbackTemplateActionBuilder("名前の変更", 'action=RENAME_TODO&todo_uuid=' . $todo->uuid),
                     new PostbackTemplateActionBuilder('やることの削除', 'action=DELETE_TODO&todo_uuid=' . $todo->uuid),
-                    new PostbackTemplateActionBuilder('期限の変更', 'action=ASK_RESCHEDULE&todo_uuid=' . $todo->uuid),
+                    $change_date_postback
                 ]
             )
         );
@@ -861,7 +877,7 @@ class Todo extends Model
             $actions[] = $check_todo_btn;
         } else {
             $change_todo_btn = new ButtonComponentBuilder(
-                new PostbackTemplateActionBuilder('名前・期限の変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid)
+                new PostbackTemplateActionBuilder('名前・期限などの変更/削除', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid)
             );
             $change_todo_btn->setHeight('sm');
             $actions[] = $change_todo_btn;

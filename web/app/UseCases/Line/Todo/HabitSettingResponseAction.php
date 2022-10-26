@@ -80,8 +80,7 @@ class HabitSettingResponseAction
             $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
         } else if (!$day && $frequency === Habit::FREQUENCY['毎月']) {
             $multi_message_builder = Habit::selectDayOfMonth($todo, $frequency);
-            $test = $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
-            Log::debug((array)$test);
+            $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
         } else {
             $carousel = Todo::createWhatToDoAfterAddingTodoCarousel($todo, $line_user);
             $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
