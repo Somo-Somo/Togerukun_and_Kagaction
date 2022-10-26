@@ -636,7 +636,8 @@ class Todo extends Model
             $subtitle_text = 'プロジェクト:「' . $todo->project->name . '」のゴール';
         } else {
             $parent_todo = Todo::where('uuid', $todo->parent_uuid)->first();
-            $subtitle_text = '「' . $parent_todo->name . '」のためにやること';
+            $todo_or_habit = $todo->habit() ? '習慣' : 'こと';
+            $subtitle_text = '「' . $parent_todo->name . '」のためにやる' . $todo_or_habit . 'こと';
         }
         $subtitle_text_component = new TextComponentBuilder($subtitle_text);
         $subtitle_text_component->setSize("xxs");
@@ -713,6 +714,19 @@ class Todo extends Model
             }
         } else {
             $date_text = "日付:未設定";
+        }
+
+        $habit = Habit::where('todo_uuid', $todo->uuid)->first();
+        if ($habit) {
+            if ($habit->day && Habit::FREQUENCY['毎週'] === $habit->frequency) {
+                $date_text = $date_text . '（毎週' . Habit::DAY_OF_WEEK_JA[$habit->day] . '曜日）';
+            } else if ($habit->day && Habit::FREQUENCY['毎月'] === $habit->frequency) {
+                $date_text = $habit->day !== 32 ?
+                    $date_text . '（毎月' . Habit::DAY_OF_WEEK_JA[$habit->day] . '日）' :
+                    $date_text . '（毎月末日）';
+            } else {
+                $date_text = $date_text . '（' . array_keys(Habit::FREQUENCY, $habit->frequency)[0] . '）';
+            }
         }
 
         $date_text_component = new TextComponentBuilder($date_text);

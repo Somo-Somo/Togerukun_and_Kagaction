@@ -84,14 +84,14 @@ class DateResponseAction
             $not_completed_onboarding->delete();
         } else {
             $carousel = Todo::createWhatToDoAfterAddingTodoCarousel($todo, $line_user);
-            $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
-            $builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
-            $builder->add(new TemplateMessageBuilder('選択', $carousel));
+            $multi_message_builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+            $multi_message_builder->add(new TextMessageBuilder(Todo::confirmDate($todo, new DateTime($date['date']))));
+            $multi_message_builder->add(new TemplateMessageBuilder('選択', $carousel));
             if ($line_user->question->checked_todo) {
-                $builder->add(new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question)));
+                $multi_message_builder->add(new TemplateMessageBuilder('振り返り', CheckedTodo::askContinueCheckTodo($line_user->question)));
             }
         }
-        $res = $this->bot->replyMessage(
+        $this->bot->replyMessage(
             $event->getReplyToken(),
             $multi_message_builder
         );
