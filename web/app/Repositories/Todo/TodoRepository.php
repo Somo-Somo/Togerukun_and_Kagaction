@@ -202,8 +202,7 @@ class TodoRepository implements TodoRepositoryInterface
             <<<'CYPHER'
                     MATCH (user:User { uuid : $user_uuid }), (todo:Todo { uuid: $uuid })
                     SET todo.interval = $interval,
-                    todo.habit_date = $habit_date,
-                    todo.consecutive_days = $consecutive_days
+                    todo.habit_date = $habit_day_no
                     WITH user,todo
                     OPTIONAL MATCH x = (user)-[updated:UPDATED]->(todo)
                     WHERE x IS NOT NULL
@@ -218,7 +217,6 @@ class TodoRepository implements TodoRepositoryInterface
                 'user_uuid' => $todo['user_uuid'],
                 'interval' => $todo['interval'],
                 'habit_day_no' => $todo['habit_day_no'],
-                'consecutive_days' => $todo['consecutive_days']
             ]
         );
     }

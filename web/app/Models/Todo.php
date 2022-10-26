@@ -252,7 +252,7 @@ class Todo extends Model
     {
         $carouselText =  '「' . $todo->name . '」を達成するためにやることを新しく追加しますか?';
         $actions = [
-            new PostbackTemplateActionBuilder('追加する', 'action=ADD_TODO&todo_uuid=' . $todo->uuid),
+            new PostbackTemplateActionBuilder('追加する', 'action=SELECT_WHETHER_TO_ADD_TODO_OR_HABIT&todo_uuid=' . $todo->uuid),
         ];
         $builder = new CarouselColumnTemplateBuilder(null, $carouselText, null, $actions);
         return $builder;
@@ -268,7 +268,7 @@ class Todo extends Model
     {
         $carouselText =  '「' . $parent_todo->name . '」を達成するためにやることを引き続き追加しますか?';
         $actions = [
-            new PostbackTemplateActionBuilder('追加する', 'action=ADD_TODO&todo_uuid=' . $parent_todo->uuid),
+            new PostbackTemplateActionBuilder('追加する', 'action=SELECT_WHETHER_TO_ADD_TODO_OR_HABIT&todo_uuid=' . $parent_todo->uuid),
         ];
         $builder = new CarouselColumnTemplateBuilder(null, $carouselText, null, $actions);
         return $builder;
