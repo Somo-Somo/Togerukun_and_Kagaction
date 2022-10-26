@@ -718,14 +718,14 @@ class Todo extends Model
 
         $habit = Habit::where('todo_uuid', $todo->uuid)->first();
         if ($habit) {
-            if ($habit->day && Habit::FREQUENCY['毎週'] === $habit->frequency) {
+            if ($habit->day && Habit::FREQUENCY['毎週'] === $habit->interval) {
                 $date_text = $date_text . '（毎週' . Habit::DAY_OF_WEEK_JA[$habit->day] . '曜日）';
-            } else if ($habit->day && Habit::FREQUENCY['毎月'] === $habit->frequency) {
+            } else if ($habit->day && Habit::FREQUENCY['毎月'] === $habit->interval) {
                 $date_text = $habit->day !== 32 ?
-                    $date_text . '（毎月' . Habit::DAY_OF_WEEK_JA[$habit->day] . '日）' :
+                    $date_text . '（毎月' . $habit->day . '日）' :
                     $date_text . '（毎月末日）';
             } else {
-                $date_text = $date_text . '（' . array_keys(Habit::FREQUENCY, $habit->frequency)[0] . '）';
+                $date_text = $date_text . '（' . array_keys(Habit::FREQUENCY, $habit->interval)[0] . '）';
             }
         }
 

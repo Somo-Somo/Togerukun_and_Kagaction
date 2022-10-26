@@ -4,10 +4,8 @@ namespace App\UseCases\Line\Todo;
 
 use App\Models\User;
 use App\Models\Todo;
-use App\Models\CheckedTodo;
 use App\Models\Habit;
 use App\Models\LineUsersQuestion;
-use App\Models\Onboarding;
 use App\Repositories\Todo\TodoRepositoryInterface;
 use App\Repositories\Date\DateRepositoryInterface;
 use App\Repositories\Line\LineBotRepositoryInterface;
@@ -73,8 +71,9 @@ class HabitSettingResponseAction
      */
     public function invoke(object $event, User $line_user, string $action_type, string $postback_value)
     {
-        [$todo_uuid, $frequency_str, $day] = explode(",", $postback_value);
+        [$todo_uuid, $frequency_str, $day_str] = explode(",", $postback_value);
         $frequency = (int)$frequency_str;
+        $day = (int)$day_str;
         $todo = Todo::where('uuid', $todo_uuid)->first();
         if (!$day && $frequency === Habit::FREQUENCY['毎週']) {
             $multi_message_builder = Habit::selectDayOfWeek($todo, $frequency);
@@ -103,16 +102,18 @@ class HabitSettingResponseAction
             if ($frequency === Habit::FREQUENCY['毎日']) {
                 $todo_date = $carbon->copy()->format('Y-m-d');
             } else if ($frequency === Habit::FREQUENCY['毎週']) {
-                $day_of_week_english = Habit::DAY_OF_WEEK_ENGLISH[$day];
-                Log::debug($day_of_week_english);
                 if ($frequency === $carbon->copy()->format('w')) {
                     $todo_date = $carbon->copy()->format('Y-m-d');
                 } else {
                     $todo_date = $carbon->copy()->next(Habit::DAY_OF_WEEK_CARBON[$day])->format('Y-m-d');
                 }
             } else if ($frequency === Habit::FREQUENCY['毎月']) {
-                $this_month_date = $carbon->copy()->setDate($carbon->year, $carbon->month, $day);
-                $todo_date = $carbon->lt($this_month_date) ? $this_month_date : $this_month_date->addMonthsNoOverflow();
+                if ($day === 32) {
+                    $todo_date = $carbon->copy()->lastOfMonth();
+                } else {
+                    $this_month_date = $carbon->copy()->setDate($carbon->year, $carbon->month, $day);
+                    $todo_date = $carbon->lt($this_month_date) ? $this_month_date : $this_month_date->addMonthsNoOverflow();
+                }
             } else if ($frequency === Habit::FREQUENCY['平日']) {
                 $todo_date = $carbon->isWeekday() ?
                     $carbon->copy()->format('Y-m-d') : $carbon->copy()->next(Carbon::MONDAY)->format('Y-m-d');

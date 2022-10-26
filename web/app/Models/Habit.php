@@ -233,16 +233,16 @@ class Habit extends Model
      *
      * @param Todo $todo
      * @param int $frequency
-     * @param string $day || null
+     * @param int $day || null
      * @return string
      *
      **/
-    public static function confirmHabit(Todo $todo, int $frequency, string $day = null)
+    public static function confirmHabit(Todo $todo, int $frequency, int $day = null)
     {
         if ($frequency === Habit::FREQUENCY['毎週']) {
             $day_text = Habit::DAY_OF_WEEK_JA[$day] . '曜日';
         } else if ($frequency === Habit::FREQUENCY['毎月']) {
-            $day_text = $day . '日';
+            $day_text = $day !== 32 ? $day  . '日' : '末日';
         } else {
             $day_text = $day;
         }
