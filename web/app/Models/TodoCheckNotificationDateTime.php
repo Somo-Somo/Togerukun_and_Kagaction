@@ -148,7 +148,7 @@ class TodoCheckNotificationDateTime extends Model
      */
     public static function createSettingTimeMessageBuilder(string $notify_setting_value)
     {
-        [$day_of_week, $meridiem] = explode("-", $notify_setting_value);
+        [$day_of_week, $meridiem] = explode(",", $notify_setting_value);
         // body
         $body_box_contents = [];
         for ($column = 0; $column < 6; $column++) {
