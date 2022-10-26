@@ -107,12 +107,8 @@ class HabitSettingResponseAction
                     $todo_date = $carbon->copy()->next(Habit::DAY_OF_WEEK_CARBON[$day])->format('Y-m-d');
                 }
             } else if ($frequency === Habit::FREQUENCY['毎月']) {
-                if ($day === 32) {
-                    $todo_date = $carbon->copy()->lastOfMonth();
-                } else {
-                    $this_month_date = $carbon->copy()->setDate($carbon->year, $carbon->month, $day);
-                    $todo_date = $carbon->lt($this_month_date) ? $this_month_date->format('Y-m-d') : $this_month_date->addMonthsNoOverflow()->format('Y-m-d');
-                }
+                $this_month_date = $carbon->copy()->setDate($carbon->year, $carbon->month, $day);
+                $todo_date = $carbon->lt($this_month_date) ? $this_month_date->format('Y-m-d') : $this_month_date->addMonthsNoOverflow()->format('Y-m-d');
             } else if ($frequency === Habit::FREQUENCY['平日']) {
                 $todo_date = $carbon->isWeekday() ?
                     $carbon->copy()->format('Y-m-d') : $carbon->copy()->next(Carbon::MONDAY)->format('Y-m-d');
