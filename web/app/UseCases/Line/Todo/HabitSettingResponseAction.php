@@ -76,7 +76,6 @@ class HabitSettingResponseAction
         [$todo_uuid, $frequency_str, $day] = explode(",", $postback_value);
         $frequency = (int)$frequency_str;
         $todo = Todo::where('uuid', $todo_uuid)->first();
-        Log::debug((array)$day);
         if (!$day && $frequency === Habit::FREQUENCY['毎週']) {
             $multi_message_builder = Habit::selectDayOfWeek($todo, $frequency);
             $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
@@ -91,7 +90,7 @@ class HabitSettingResponseAction
             $builder->add(new TemplateMessageBuilder('選択', $carousel));
             $this->bot->replyMessage($event->getReplyToken(), $builder);
             // データの更新
-            $res = Habit::updateOrCreate(
+            Habit::updateOrCreate(
                 ['todo_uuid' => $todo_uuid],
                 [
                     'user_uuid' => $line_user->uuid,
