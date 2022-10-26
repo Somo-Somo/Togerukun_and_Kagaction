@@ -78,6 +78,7 @@ class ChangeDate
             $multi_message_builder = Habit::askFrequencyHabit(['uuid' => $todo->uuid, 'name' => $todo->name]);
             $this->bot->replyMessage($event->getReplyToken(), $multi_message_builder);
         }
+
         return;
     }
 }
