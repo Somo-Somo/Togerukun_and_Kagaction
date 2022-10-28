@@ -25,11 +25,6 @@ class Contact extends Model
         'created_at'
     ];
 
-    const CONTACT = [
-        'SELECT_CONTACT' => true,
-        'SELECT_FEEDBACK' => true
-    ];
-
     /**
      * ユーザーに紐づく習慣
      *
@@ -41,7 +36,7 @@ class Contact extends Model
     }
 
     /**
-     * どのくらいの頻度でやるか聞く
+     * お問い合わせかフィードバックか選んでもらう
      *
      * @return \LINE\LINEBot\MessageBuilder\MultiMessageBuilder()
      */
@@ -81,5 +76,15 @@ class Contact extends Model
         $multi_message_builder->add(new TextMessageBuilder($select_message));
         $multi_message_builder->add(new FlexMessageBuilder($select_message, $carousels));
         return $multi_message_builder;
+    }
+
+    /**
+     * お問い合わせかフィードバックか選んでもらう
+     *
+     * @return stirng
+     */
+    public static function askFeedback()
+    {
+        return '感想または要望などを教えてください！';
     }
 }
