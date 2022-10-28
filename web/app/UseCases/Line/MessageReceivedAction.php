@@ -6,6 +6,7 @@ use App\Models\CheckedTodo;
 use App\Models\User;
 use App\Models\Todo;
 use App\Models\LineUsersQuestion;
+use App\Models\Contact;
 use App\UseCases\Line\ProjectResponseAction;
 use App\UseCases\Line\Todo\Notification\NotifyTodoCheck;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -82,15 +83,12 @@ class MessageReceivedAction
                 Todo::askAddOrList($line_user->name)
             );
             if ($line_user->question->checked_todo) $line_user->question->update(['checked_todo' => null, 'parent_uuid' => null]);
-        } else if ($event->getText() === '使い方') {
-            $this->bot->replyText(
+        } else if ($event->getText() === 'お問い合わせ') {
+            $this->bot->replyMessage(
                 $event->getReplyToken(),
-                'ごめんなさい！まだ使い方の説明を実装してないです！'
+                Contact::createContactOrFeedbackMessageBuilder()
             );
             if ($line_user->question->checked_todo) $line_user->question->update(['checked_todo' => null, 'parent_uuid' => null]);
-        } else if ($event->getText() === 'テスト') {
-            $notify_todo_check = new NotifyTodoCheck();
-            $notify_todo_check->invoke($event);
         } else if ($question_number === LineUsersQuestion::NO_QUESTION) {
             // 質問がない場合
         } else if ($question_number === LineUsersQuestion::PROJECT) {
