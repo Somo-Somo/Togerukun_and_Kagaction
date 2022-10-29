@@ -101,7 +101,7 @@ class HabitSettingResponseAction
             if ($frequency === Habit::FREQUENCY['毎日']) {
                 $todo_date = $carbon->copy()->format('Y-m-d');
             } else if ($frequency === Habit::FREQUENCY['毎週']) {
-                if ($frequency === $carbon->copy()->format('w')) {
+                if ($day === (int)$carbon->copy()->format('w')) {
                     $todo_date = $carbon->copy()->format('Y-m-d');
                 } else {
                     $todo_date = $carbon->copy()->next(Habit::DAY_OF_WEEK_CARBON[$day])->format('Y-m-d');
