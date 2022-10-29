@@ -83,7 +83,7 @@ class NotifyTodoCheck
                     $create_todo_list_carousel_columns_action = new TodoCreateTodoListCarouselColumns();
                     $second_message = $create_todo_list_carousel_columns_action->invoke(
                         $recive_notification_user->users,
-                        Todo::where('user_uuid', $recive_notification_user->uuid)->get(),
+                        Todo::where('user_uuid', $recive_notification_user->users->uuid)->get(),
                         'ALL_TODO_LIST',
                         $current_page = 1
                     );
