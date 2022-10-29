@@ -70,7 +70,7 @@ class MessageReceivedAction
         $line_user = User::where('line_user_id', $event->getUserId())->first();
 
         $question_number = $line_user->question->question_number;
-        if ($event->getText() === '振り返る') {
+        if ($event->getText() === '振り返り') {
             $test = $this->bot->replyMessage(
                 $event->getReplyToken(),
                 CheckedTodo::createCheckTodoFlexMessage()
@@ -103,6 +103,9 @@ class MessageReceivedAction
             $this->todo_response_action->invoke($event, $line_user, $question_number);
         } else if ($question_number === LineUsersQuestion::RENAME_TODO) {
             $this->rename_todo->invoke($event, $line_user, $line_user->question->parent_uuid);
+        } else if ($question_number === LineUsersQuestion::CONTACT) {
+            $this->bot->replyText($event->getReplyToken(), Contact::thanksMessage());
+            Contact::create(['user_uuid' => $line_user->uuid, 'text' => $event->getText()]);
         }
         return;
     }

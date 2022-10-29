@@ -87,4 +87,14 @@ class Contact extends Model
     {
         return '感想または要望などを教えてください！';
     }
+
+    /**
+     * お問い合わせかフィードバックか選んでもらう
+     *
+     * @return stirng
+     */
+    public static function thanksMessage()
+    {
+        return '感想・要望等ありがとうございます！' . "\n" . '引き続きもくサポくんの方をよろしくお願いします！';
+    }
 }
