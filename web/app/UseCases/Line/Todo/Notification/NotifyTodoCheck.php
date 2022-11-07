@@ -3,6 +3,7 @@
 namespace App\UseCases\Line\Todo\Notification;
 
 use App\Models\CheckedTodo;
+use App\Models\LineUsersQuestion;
 use App\Models\Todo;
 use App\Models\TodoCheckNotificationDateTime;
 use App\UseCases\Line\Todo\CreateTodoListCarouselColumns as TodoCreateTodoListCarouselColumns;
@@ -71,7 +72,7 @@ class NotifyTodoCheck
                         $action_type,
                         $current_page = 1
                     );
-                    $recive_notification_user->question->update([
+                    LineUsersQuestion::where('user_uuid', $recive_notification_user->users->uuid)->update([
                         'checked_todo' => CheckedTodo::CHECK_TODO[$action_type]
                     ]);
                 } else {
@@ -89,7 +90,7 @@ class NotifyTodoCheck
                 $multi_message_builder = new MultiMessageBuilder();
                 $multi_message_builder->add(new TextMessageBuilder($notify_todo_check_message));
                 $multi_message_builder->add($second_message);
-                $log = $this->bot->pushMessage(
+                $this->bot->pushMessage(
                     $recive_notification_user->users->line_user_id,
                     $multi_message_builder
                 );
