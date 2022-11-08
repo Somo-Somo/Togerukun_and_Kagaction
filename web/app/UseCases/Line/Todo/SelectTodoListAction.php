@@ -2,6 +2,7 @@
 
 namespace App\UseCases\Line\Todo;
 
+use App\Models\LineUsersQuestion;
 use App\Models\User;
 use App\Models\Todo;
 use Illuminate\Support\Facades\Log;
@@ -72,9 +73,28 @@ class SelectTodoListAction
             $current_page
         );
 
+        $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+        $builder->add($flex_message);
+
+        if (count($todo_list) === 0) {
+            $user_todo = Todo::where('user_uuid', $line_user->uuid)->first();
+            if ($user_todo) {
+            } else {
+                $ask_goal_text = '「' . $line_user->project->first()->name . '」のゴールがありません！' . "\n" . '「' . $line_user->project->first()->name . '」で達成したいゴールを教えてください!';
+                $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($ask_goal_text));
+                LineUsersQuestion::where('user_uuid', $line_user->uuid)->update(
+                    [
+                        'question_number' => LineUsersQuestion::GOAL,
+                        'parent_uuid' => $line_user->project->first()->uuid,
+                        'project_uuid' => $line_user->project->first()->uuid
+                    ]
+                );
+            }
+        }
+
         $this->bot->replyMessage(
             $event->getReplyToken(),
-            $flex_message
+            $builder
         );
         return;
     }
