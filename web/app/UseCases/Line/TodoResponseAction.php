@@ -12,9 +12,6 @@ use App\Repositories\Line\LineBotRepositoryInterface;
 use Illuminate\Support\Str;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
-use DateTime;
-use Illuminate\Support\Facades\Log;
-
 
 class TodoResponseAction
 {
