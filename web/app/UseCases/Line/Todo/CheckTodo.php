@@ -103,15 +103,31 @@ class CheckTodo
                 $current_page
             );
 
-            $this->bot->replyMessage(
-                $event->getReplyToken(),
-                $todo_carousel_flex_message
-            );
+            $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+            $builder->add($todo_carousel_flex_message);
 
-            // なんの振り返りをしているか記憶しておく
-            $line_user->question->update([
-                'checked_todo' => CheckedTodo::CHECK_TODO[$action_type]
-            ]);
+            if (count($todo_list) === 0) {
+                $user_todo = Todo::where('user_uuid', $line_user->uuid)->first();
+                if ($user_todo) {
+                } else {
+                    $ask_goal_text = '「' . $line_user->project->first()->name . '」のゴールがありません！' . "\n" . '「' . $line_user->project->first()->name . '」で達成したいゴールを教えてください!';
+                    $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($ask_goal_text));
+                    $this->bot->replyMessage($event->getReplyToken(), $builder);
+                    LineUsersQuestion::where('user_uuid', $line_user->uuid)->update(
+                        [
+                            'question_number' => LineUsersQuestion::GOAL,
+                            'parent_uuid' => $line_user->project->first()->uuid,
+                            'project_uuid' => $line_user->project->first()->uuid
+                        ]
+                    );
+                }
+            } else {
+                $this->bot->replyMessage($event->getReplyToken(), $builder);
+                // なんの振り返りをしているか記憶しておく
+                $line_user->question->update([
+                    'checked_todo' => CheckedTodo::CHECK_TODO[$action_type]
+                ]);
+            }
         } else {
             $todo = Todo::where('uuid', $todo_uuid)->first();
             if ($action_type === 'CHECK_TODO') {
