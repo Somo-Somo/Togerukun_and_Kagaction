@@ -4,6 +4,7 @@ namespace App\Services\CarouselContainerBuilder;
 
 use Carbon\Carbon;
 use App\Models\Todo;
+use App\Models\AccomplishTodo;
 use App\Models\Habit;
 use App\Models\LineBotSvg;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
@@ -87,8 +88,8 @@ class TodoCarouselContainerBuilder
         $header_array = [
             TodoCarouselContainerBuilder::createSubtitleBoxComponent($todo),
             TodoCarouselContainerBuilder::createDateBoxComponent($todo),
-            Todo::createTitleComponent($todo),
-            Todo::createAccomplishGageComponent($todo),
+            TodoCarouselContainerBuilder::createTitleComponent($todo),
+            TodoCarouselContainerBuilder::createAccomplishGageComponent($todo),
         ];
         $header_component = new BoxComponentBuilder('vertical', $header_array);
         $header_component->setBackgroundColor('#ffffff');
@@ -270,5 +271,86 @@ class TodoCarouselContainerBuilder
         $icon_component->setSize('lg');
         $icon_component->setOffsetTop('5px');
         return $icon_component;
+    }
+
+    /**
+     *
+     * タイトル
+     *
+     **/
+
+    /**
+     * Todoのタイトルのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createTitleComponent(Todo $todo)
+    {
+        $title_component = new TextComponentBuilder($todo->name);
+        $title_component->setSize('xl');
+        $title_component->setMargin('6px');
+        $title_component->setWrap(true);
+        $title_component->setWeight('bold');
+        return $title_component;
+    }
+
+
+    /**
+     *
+     * 達成度ゲージ
+     *
+     **/
+
+    /**
+     * Todoの完了のゲージのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder
+     */
+    public static function createAccomplishGageComponent(Todo $todo)
+    {
+        $accomplished_percentage = TodoCarouselContainerBuilder::calcAccomplishedPercentage($todo);
+
+        $accomplished_percentage_text = new TextComponentBuilder($accomplished_percentage);
+        $accomplished_percentage_text->setSize('xs');
+        $accomplished_percentage_text->setAlign('end');
+
+        $accomplished_gage = new BoxComponentBuilder('vertical', []);
+        $accomplished_gage->setWidth($accomplished_percentage);
+        $accomplished_gage->setBackgroundColor('#0D8186');
+        $accomplished_gage->setHeight('6px');
+
+        $accomplish_gage = new BoxComponentBuilder('vertical', [$accomplished_gage]);
+        $accomplish_gage->setBackgroundColor('#9FD8E36E');
+        $accomplish_gage->setHeight('6px');
+        $accomplish_gage->setMargin('sm');
+
+        $accomplish_gage_component = new BoxComponentBuilder(
+            'vertical',
+            [$accomplished_percentage_text, $accomplish_gage]
+        );
+        $accomplish_gage_component->setMargin('sm');
+
+        return $accomplish_gage_component;
+    }
+
+    /**
+     * Todoの完了のゲージのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return string $accomplished_percentage
+     */
+    public static function calcAccomplishedPercentage(Todo $todo)
+    {
+        $child_todo = Todo::where('parent_uuid', $todo->uuid)->pluck('uuid');
+        if ($child_todo->count() > 0) {
+            $accomplished_child_todo_num = AccomplishTodo::whereIn('todo_uuid', $child_todo)->get();
+            $accomplished_percentage = $accomplished_child_todo_num ?
+                round(count($accomplished_child_todo_num) / count($child_todo) * 100, 0) . '%' : '0%';
+        } else {
+            $accomplished_percentage = '0%';
+        }
+        return $accomplished_percentage;
     }
 }
