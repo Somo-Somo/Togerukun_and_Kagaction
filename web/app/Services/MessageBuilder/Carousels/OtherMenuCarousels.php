@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Carousels\MessageBuilder;
+namespace App\Services\MessageBuilder\Carousels;
 
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
@@ -17,7 +17,7 @@ class OtherMenuCarousels
     const OTHER_MENUS = [
         [
             'text' => '🛠️ 使い方',
-            'postback_data' => ''
+            'postback_data' => 'action=&value='
         ],
         [
             'text' => '🔔 通知の設定',
@@ -25,7 +25,7 @@ class OtherMenuCarousels
         ],
         [
             'text' => '📭 お問い合わせ',
-            'postback_data' => 'action=CONTACT_OR_FEEDBACKvalue='
+            'postback_data' => 'action=CONTACT_OR_FEEDBACK&value='
         ]
     ];
 
