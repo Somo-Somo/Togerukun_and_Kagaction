@@ -27,4 +27,15 @@ use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
  */
 class OtherMenuCarousels
 {
+    public static function createFlexMessageBuilder()
+    {
+    }
+
+    public static function createCrouselContainerBuilder()
+    {
+    }
+
+    public static function createBubbleContainerBuilder()
+    {
+    }
 }
