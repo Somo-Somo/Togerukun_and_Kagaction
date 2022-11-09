@@ -3,9 +3,11 @@
 namespace App\Services\CarouselContainerBuilder;
 
 use App\Models\Todo;
+use App\Models\LineBotSvg;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
+use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
@@ -81,7 +83,7 @@ class TodoCarouselContainerBuilder
     public static function createHeaderComponent(Todo $todo)
     {
         $header_array = [
-            Todo::createSubtitleBoxComponent($todo),
+            TodoCarouselContainerBuilder::createSubtitleBoxComponent($todo),
             Todo::createDateBoxComponent($todo),
             Todo::createTitleComponent($todo),
             Todo::createAccomplishGageComponent($todo),
@@ -93,5 +95,70 @@ class TodoCarouselContainerBuilder
         $header_component->setPaddingBottom('24px');
 
         return $header_component;
+    }
+
+    /**
+     *
+     * サブタイトル
+     *
+     **/
+
+    /**
+     * Todoのサブタイトル（親Todo）をひとまとめ。
+     * Boxのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder
+     */
+    public static function createSubtitleBoxComponent(Todo $todo)
+    {
+        $subtitle_text_component = TodoCarouselContainerBuilder::createSubtitleTextComponent($todo);
+        $subtitle_icon_component = TodoCarouselContainerBuilder::createSubtitleIconComponent($todo);
+        return new BoxComponentBuilder(
+            'baseline',
+            [$subtitle_icon_component, $subtitle_text_component]
+        );
+    }
+
+    /**
+     * Todoのサブタイトル（親Todo）のテキストコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createSubtitleTextComponent(Todo $todo)
+    {
+        if ($todo->depth === 0) {
+            $subtitle_text = 'プロジェクト:「' . $todo->project->name . '」のゴール';
+        } else {
+            $parent_todo = Todo::where('uuid', $todo->parent_uuid)->first();
+            $todo_or_habit = count($todo->habit) > 0 ? '習慣' : 'こと';
+            $subtitle_text = '「' . $parent_todo->name . '」のためにやる' . $todo_or_habit;
+        }
+        $subtitle_text_component = new TextComponentBuilder($subtitle_text);
+        $subtitle_text_component->setSize("xxs");
+        $subtitle_text_component->setColor("#aaaaaa");
+        $subtitle_text_component->setMargin("4px");
+
+        return $subtitle_text_component;
+    }
+
+    /**
+     * Todoのサブタイトル（親Todo）のアイコンのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder
+     */
+    public static function createSubtitleIconComponent(Todo $todo)
+    {
+        $url = $todo->depth === 0 ? LineBotSvg::GOAL_FLAG : LineBotSvg::TODO_TREE;
+        $icon_component_builder = new IconComponentBuilder(
+            $url, // 画像URL
+            null, // margin
+            "lg", // size
+            null // aspectoRatio
+        );
+        $icon_component_builder->setOffsetTop('5px');
+        return $icon_component_builder;
     }
 }
