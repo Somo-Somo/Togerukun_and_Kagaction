@@ -2,7 +2,9 @@
 
 namespace App\Services\CarouselContainerBuilder;
 
+use Carbon\Carbon;
 use App\Models\Todo;
+use App\Models\Habit;
 use App\Models\LineBotSvg;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
@@ -84,7 +86,7 @@ class TodoCarouselContainerBuilder
     {
         $header_array = [
             TodoCarouselContainerBuilder::createSubtitleBoxComponent($todo),
-            Todo::createDateBoxComponent($todo),
+            TodoCarouselContainerBuilder::createDateBoxComponent($todo),
             Todo::createTitleComponent($todo),
             Todo::createAccomplishGageComponent($todo),
         ];
@@ -160,5 +162,113 @@ class TodoCarouselContainerBuilder
         );
         $icon_component_builder->setOffsetTop('5px');
         return $icon_component_builder;
+    }
+
+    /**
+     *
+     * 日付
+     *
+     **/
+
+    /**
+     * 日付をひとまとめ
+     * Boxコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder
+     */
+    public static function createDateBoxComponent(Todo $todo)
+    {
+        $date_text_component = TodoCarouselContainerBuilder::createDateTextComponent($todo);
+        $date_icon_component = TodoCarouselContainerBuilder::createDateIconComponent($todo);
+        $date_box_component = new BoxComponentBuilder(
+            'baseline',
+            [$date_icon_component, $date_text_component]
+        );
+        $date_box_component->setMargin('6px');
+        return $date_box_component;
+    }
+
+    /**
+     * 日付タイトルの日付のコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder
+     */
+    public static function createDateTextComponent(Todo $todo)
+    {
+        if ($todo->date) {
+            $date = new Carbon($todo->date);
+            if (
+                count($todo->accomplish) > 0 &&
+                !($todo->accomplish->where('created_at', '<', date('Y-m-d'))->first() && count($todo->habit) > 0)
+            ) {
+                $date_text = "達成";
+            } else if ($date->isToday()) {
+                $date_text = "今日まで";
+            } else if ($date->isTomorrow()) {
+                $date_text = "明日まで";
+            } else if ($date->isPast()) {
+                $date_text = $date->diffInDays(Carbon::now()->setTime(0, 0, 0)) . "日経過";
+            } else if ($date->isFuture()) {
+                $date_text = "残り" . $date->diffInDays(Carbon::now()->setTime(0, 0, 0)) . "日";
+            }
+        } else {
+            $date_text = "日付:未設定";
+        }
+
+        $habit = Habit::where('todo_uuid', $todo->uuid)->first();
+        if ($habit) {
+            if ($habit->day && Habit::FREQUENCY['毎週'] === $habit->interval) {
+                $date_text = $date_text . '（毎週' . Habit::DAY_OF_WEEK_JA[$habit->day] . '曜日）';
+            } else if ($habit->day && Habit::FREQUENCY['毎月'] === $habit->interval) {
+                $date_text = $habit->day !== 32 ?
+                    $date_text . '（毎月' . $habit->day . '日）' :
+                    $date_text . '（毎月末日）';
+            } else {
+                $date_text = $date_text . '（' . array_keys(Habit::FREQUENCY, $habit->interval)[0] . '）';
+            }
+        }
+
+        $date_text_component = new TextComponentBuilder($date_text);
+        $date_text_component->setMargin('4px');
+        $date_text_component->setSize('sm');
+        $date_text_component->setColor('#555555');
+        $date_text_component->setWeight('bold');
+        return $date_text_component;
+    }
+
+    /**
+     * 日付メッセージのアイコンのコンポーネント生成ビルダーz
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder
+     */
+    public static function createDateIconComponent(Todo $todo)
+    {
+        if ($todo->date) {
+            $date = new Carbon($todo->date);
+            if (
+                count($todo->accomplish) > 0 &&
+                !($todo->accomplish->where('created_at', '<', date('Y-m-d'))->first() && count($todo->habit) > 0)
+            ) {
+                $icon_path = LineBotSvg::CALENDER_CHECK;
+            } else if ($date->isToday()) {
+                $icon_path = LineBotSvg::CALENDER_TODAY;
+            } else if ($date->lte(Carbon::today()->addWeek()) && $date->gte(Carbon::today())) {
+                $icon_path = LineBotSvg::CALENDER_WEEK;
+            } else if ($date->lt(Carbon::today())) {
+                $icon_path = LineBotSvg::CALENDER_OVERDUE;
+            } else {
+                $icon_path = LineBotSvg::CALENDER;
+            }
+        } else {
+            $icon_path = LineBotSvg::CALENDER;
+        }
+
+        $icon_component = new IconComponentBuilder($icon_path);
+        $icon_component->setSize('lg');
+        $icon_component->setOffsetTop('5px');
+        return $icon_component;
     }
 }
