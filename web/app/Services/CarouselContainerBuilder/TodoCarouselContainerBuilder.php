@@ -2,6 +2,7 @@
 
 namespace App\Services\CarouselContainerBuilder;
 
+use App\Models\Todo;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
@@ -53,13 +54,44 @@ class TodoCarouselContainerBuilder
      *
      * コンポーネントをひとまとめ。BubbleContainerの生成ビルダー
      *
+     * @param Todo $todo
      * @return \LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
      */
-    public static function createTodoBubbleContainer()
+    public static function createTodoBubbleContainer(Todo $todo)
     {
         $bubble_container = new BubbleContainerBuilder();
-        $bubble_container->setHeader();
+        $bubble_container->setHeader(TodoCarouselContainerBuilder::createHeaderComponent($todo));
         $bubble_container->setBody();
         return $bubble_container;
+    }
+
+    /**
+     *
+     * Header
+     *
+     **/
+
+    /**
+     *
+     * ヘッダーに必要なコンポーネント総集め。Headerコンポーネントの生成ビルダー
+     *
+     * @param Todo $todo
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder
+     */
+    public static function createHeaderComponent(Todo $todo)
+    {
+        $header_array = [
+            Todo::createSubtitleBoxComponent($todo),
+            Todo::createDateBoxComponent($todo),
+            Todo::createTitleComponent($todo),
+            Todo::createAccomplishGageComponent($todo),
+        ];
+        $header_component = new BoxComponentBuilder('vertical', $header_array);
+        $header_component->setBackgroundColor('#ffffff');
+        $header_component->setPaddingTop('16px');
+        $header_component->setPaddingAll('12px');
+        $header_component->setPaddingBottom('24px');
+
+        return $header_component;
     }
 }
