@@ -31,11 +31,11 @@ class OtherMenuCarousels
 
     public static function createFlexMessageBuilder()
     {
-        $carousel_container_builder = OtherMenuCarousels::createCrouselContainerBuilder();
+        $carousel_container_builder = OtherMenuCarousels::createCarouselContainerBuilder();
         return new FlexMessageBuilder('メニュー：その他', $carousel_container_builder);
     }
 
-    public static function createCrouselContainerBuilder()
+    public static function createCarouselContainerBuilder()
     {
         $bubble_container_builders = [];
         for ($num = 0; $num < count(OtherMenuCarousels::OTHER_MENUS); $num++) {
