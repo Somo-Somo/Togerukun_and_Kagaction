@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Carousels\MessageBuilder;
 
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;

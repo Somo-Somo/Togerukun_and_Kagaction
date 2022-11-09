@@ -7,8 +7,8 @@ use App\Models\User;
 use App\Models\Todo;
 use App\Models\LineUsersQuestion;
 use App\Models\Contact;
+use App\Services\Carousels\MessageBuilder\OtherMenuCarousels;
 use App\UseCases\Line\ProjectResponseAction;
-use App\UseCases\Line\Todo\Notification\NotifyTodoCheck;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 use Illuminate\Support\Facades\Log;
@@ -71,7 +71,7 @@ class MessageReceivedAction
 
         $question_number = $line_user->question->question_number;
         if ($event->getText() === '振り返り') {
-            $test = $this->bot->replyMessage(
+            $this->bot->replyMessage(
                 $event->getReplyToken(),
                 CheckedTodo::createCheckTodoFlexMessage()
             );
@@ -83,10 +83,10 @@ class MessageReceivedAction
                 Todo::askAddOrList($line_user->name)
             );
             if ($line_user->question->checked_todo) $line_user->question->update(['checked_todo' => null, 'parent_uuid' => null]);
-        } else if ($event->getText() === 'お問い合わせ') {
+        } else if ($event->getText() === 'その他') {
             $this->bot->replyMessage(
                 $event->getReplyToken(),
-                Contact::createContactOrFeedbackMessageBuilder()
+                OtherMenuCarousels::createFlexMessageBuilder()
             );
             if ($line_user->question->checked_todo) $line_user->question->update(['checked_todo' => null, 'parent_uuid' => null]);
         } else if ($question_number === LineUsersQuestion::NO_QUESTION) {
