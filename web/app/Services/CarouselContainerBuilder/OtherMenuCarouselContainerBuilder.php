@@ -10,7 +10,7 @@ use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 
 /**
- * Neo4jのDBを呼び出す処理をFacadeを使って共通化
+ * メニュー:その他を押すと表示されるカルーセルの生成クラス
  */
 class OtherMenuCarouselContainerBuilder
 {
