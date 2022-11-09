@@ -48,4 +48,18 @@ class TodoCarouselContainerBuilder
         $bubble_container->setBody($body_box);
         return $bubble_container;
     }
+
+    /**
+     *
+     * コンポーネントをひとまとめ。BubbleContainerの生成ビルダー
+     *
+     * @return \LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
+     */
+    public static function createTodoBubbleContainer()
+    {
+        $bubble_container = new BubbleContainerBuilder();
+        $bubble_container->setHeader();
+        $bubble_container->setBody();
+        return $bubble_container;
+    }
 }
