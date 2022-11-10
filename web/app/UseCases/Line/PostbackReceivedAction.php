@@ -124,7 +124,7 @@ class PostbackReceivedAction
             return $this->bot->replyMessage($event->getReplyToken(), $builder);
         }
 
-        if (isset(LineUsersQuestion::TODO_LIST[$action_type])) {
+        if (isset(Todo::TODO_LIST[$action_type])) {
             $this->select_todo_list_action->invoke($event, $line_user, $action_type, $second_value);
         } else if (isset(Todo::ADD_TODO[$action_type])) {
             $this->add_todo->invoke($event, $line_user, $action_type, $second_value);

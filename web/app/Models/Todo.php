@@ -95,6 +95,13 @@ class Todo extends Model
         return $this->hasMany(Habit::class, 'todo_uuid', 'uuid');
     }
 
+    // TodoList 表示系
+    const TODO_LIST = [
+        'ALL_TODO_LIST' => true,
+        'WEEKLY_TODO_LIST' => true,
+        'SHOW_TODO_LIST_TO_ADD_TODO' => true
+    ];
+
     /**
      * Todo追加
      */
