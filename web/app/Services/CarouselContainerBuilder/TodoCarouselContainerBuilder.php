@@ -67,7 +67,7 @@ class TodoCarouselContainerBuilder
     {
         $bubble_container = new BubbleContainerBuilder();
         $bubble_container->setHeader(TodoCarouselContainerBuilder::createHeaderComponent($todo));
-        $bubble_container->setBody(TodoCarouselContainerBuilder::createBodyComponent($todo, $actions));
+        $bubble_container->setBody(new BoxComponentBuilder('vertical', $actions));
         return $bubble_container;
     }
 
@@ -353,26 +353,5 @@ class TodoCarouselContainerBuilder
             $accomplished_percentage = '0%';
         }
         return $accomplished_percentage;
-    }
-
-    /**
-     *
-     * Body
-     *
-     **/
-
-    /**
-     * Todoの完了のゲージのコンポーネント生成ビルダー
-     *
-     * @param Todo $todo
-     * @param array $actions
-     * @return string $accomplished_percentage
-     */
-    public static function createBodyComponent(Todo $todo, array $actions)
-    {
-        $body_box = new BoxComponentBuilder('vertical', $actions);
-        $body_box->setSpacing('md');
-        $body_box->setPaddingAll('12px');
-        return $body_box;
     }
 }
