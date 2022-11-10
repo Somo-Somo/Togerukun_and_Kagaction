@@ -315,7 +315,6 @@ class Todo extends Model
                 null,
                 [
                     new PostbackTemplateActionBuilder("名前の変更", 'action=RENAME_TODO&todo_uuid=' . $todo->uuid),
-                    new PostbackTemplateActionBuilder('やることの削除', 'action=DELETE_TODO&todo_uuid=' . $todo->uuid),
                     $change_date_postback
                 ]
             )

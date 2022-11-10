@@ -9,7 +9,7 @@ use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 /**
  * Todoのカル-セル生成クラス
  */
-class AddTodoButtonComponentBuilder
+class ChangeAndDeleteTodoButtonComponentBuilder
 {
     /**
      * Todoのサブタイトル（親Todo）のテキストコンポーネント生成ビルダー
@@ -17,15 +17,20 @@ class AddTodoButtonComponentBuilder
      * @param Todo $todo
      * @return LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder[]
      */
-    public static function createAddTodoComponentButton(Todo $todo)
+    public static function createChangeAndDeleteTodoComponentButton(Todo $todo)
     {
-        $actions = [];
+        $change_todo_btn = new ButtonComponentBuilder(
+            new PostbackTemplateActionBuilder('名前・期限の変更', 'action=CHANGE_TODO&todo_uuid=' . $todo->uuid)
+        );
+        $change_todo_btn->setHeight('sm');
+        $actions[] = $change_todo_btn;
         $add_todo_btn = new ButtonComponentBuilder(
-            new PostbackTemplateActionBuilder('やること・習慣の追加', 'action=SELECT_WHETHER_TO_ADD_TODO_OR_HABIT&todo_uuid=' . $todo->uuid)
+            new PostbackTemplateActionBuilder('やることの削除', 'action=DELETE_TODO&todo_uuid=' . $todo->uuid)
         );
         $add_todo_btn->setHeight('sm');
         $add_todo_btn->setMargin('md');
-        $actions[] = $add_todo_btn;
+        $add_todo_btn->setColor('#ff0000');
+        $actions = [$change_todo_btn, $add_todo_btn];
         return $actions;
     }
 }
