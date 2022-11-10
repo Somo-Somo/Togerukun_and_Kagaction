@@ -7,14 +7,10 @@ use App\Models\Todo;
 use App\Models\AccomplishTodo;
 use App\Models\Habit;
 use App\Models\LineBotSvg;
-use App\Services\TemplateActionBuilder\AddTodoButtonTemplateActionBuilder;
-use Illuminate\Support\Arr;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
-use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
-use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 
 /**
  * Todoのカル-セル生成クラス
