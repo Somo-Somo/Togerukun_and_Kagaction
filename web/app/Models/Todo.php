@@ -347,7 +347,7 @@ class Todo extends Model
                     null, // 画像url
                     [
                         new PostbackTemplateActionBuilder('一覧を見る', 'action=ALL_TODO_LIST&page=1'),
-                        new PostbackTemplateActionBuilder('やることを追加する', 'action=&page=1'),
+                        new PostbackTemplateActionBuilder('やることを追加する', 'action=SHOW_TODO_LIST_TO_ADD_TODO&page=1'),
                     ]
                 )
 
