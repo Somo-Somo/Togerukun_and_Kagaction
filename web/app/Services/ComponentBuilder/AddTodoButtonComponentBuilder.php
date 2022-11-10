@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\TemplateActionBuilder;
+namespace App\Services\ComponentBuilder;
 
 use App\Models\Todo;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ButtonComponentBuilder;
@@ -9,7 +9,7 @@ use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 /**
  * Todoのカル-セル生成クラス
  */
-class AddTodoButtonTemplateActionBuilder
+class AddTodoButtonComponentBuilder
 {
     /**
      * Todoのサブタイトル（親Todo）のテキストコンポーネント生成ビルダー
