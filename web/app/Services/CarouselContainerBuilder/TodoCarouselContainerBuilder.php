@@ -7,7 +7,8 @@ use App\Models\Todo;
 use App\Models\AccomplishTodo;
 use App\Models\Habit;
 use App\Models\LineBotSvg;
-use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
+use App\Services\TemplateActionBuilder\AddTodoButtonTemplateActionBuilder;
+use Illuminate\Support\Arr;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\BoxComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder;
@@ -62,11 +63,11 @@ class TodoCarouselContainerBuilder
      * @param Todo $todo
      * @return \LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
      */
-    public static function createTodoBubbleContainer(Todo $todo)
+    public static function createTodoBubbleContainer(Todo $todo, array $actions)
     {
         $bubble_container = new BubbleContainerBuilder();
         $bubble_container->setHeader(TodoCarouselContainerBuilder::createHeaderComponent($todo));
-        $bubble_container->setBody();
+        $bubble_container->setBody(TodoCarouselContainerBuilder::createBodyComponent($todo, $actions));
         return $bubble_container;
     }
 
@@ -352,5 +353,26 @@ class TodoCarouselContainerBuilder
             $accomplished_percentage = '0%';
         }
         return $accomplished_percentage;
+    }
+
+    /**
+     *
+     * Body
+     *
+     **/
+
+    /**
+     * Todoの完了のゲージのコンポーネント生成ビルダー
+     *
+     * @param Todo $todo
+     * @param array $actions
+     * @return string $accomplished_percentage
+     */
+    public static function createBodyComponent(Todo $todo, array $actions)
+    {
+        $body_box = new BoxComponentBuilder('vertical', $actions);
+        $body_box->setSpacing('md');
+        $body_box->setPaddingAll('12px');
+        return $body_box;
     }
 }
