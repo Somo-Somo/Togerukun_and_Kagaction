@@ -6,7 +6,7 @@ use App\Models\CheckedTodo;
 use App\Models\LineUsersQuestion;
 use App\Models\Todo;
 use App\Models\TodoCheckNotificationDateTime;
-use App\UseCases\Line\Todo\CreateTodoListCarouselColumns as TodoCreateTodoListCarouselColumns;
+use App\UseCases\Line\Todo\CreateTodoListCarouselColumns;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot;
 use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
@@ -27,13 +27,18 @@ class NotifyTodoCheck
      */
     protected $bot;
 
+    /**
+     * @param App\UseCases\Line\Todo\CreateTodoListCarouselColumns
+     */
+    protected $create_todo_list_carousel_columns;
 
     /**
      */
-    public function __construct()
+    public function __construct(CreateTodoListCarouselColumns $create_todo_list_carousel_columns)
     {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
+        $this->create_todo_list_carousel_columns = $create_todo_list_carousel_columns;
     }
 
     /**
@@ -64,9 +69,8 @@ class NotifyTodoCheck
                 if (count($todo_list) > 0) {
                     $notify_todo_check_message =
                         '振り返りの時間です。' . "\n" . $recive_notification_user->users->name . 'さんが今日までにやるもの一覧です。' . "\n" . '頑張って振り返っていきましょう!';
-                    $create_todo_list_carousel_columns_action = new TodoCreateTodoListCarouselColumns();
                     $action_type = 'CHECK_TODO_BY_TODAY';
-                    $second_message = $create_todo_list_carousel_columns_action->invoke(
+                    $second_message = $this->create_todo_list_carousel_columns->invoke(
                         $recive_notification_user->users,
                         $todo_list,
                         $action_type,
@@ -78,11 +82,10 @@ class NotifyTodoCheck
                 } else {
                     $notify_todo_check_message =
                         '振り返りの時間です。' . "\n" . $recive_notification_user->users->name . 'さんが今日までにやることは0件です。' . "\n" . '目標達成のためにやることを追加していきましょう！';
-                    $create_todo_list_carousel_columns_action = new TodoCreateTodoListCarouselColumns();
-                    $second_message = $create_todo_list_carousel_columns_action->invoke(
+                    $second_message = $this->create_todo_list_carousel_columns->invoke(
                         $recive_notification_user->users,
                         Todo::where('user_uuid', $recive_notification_user->users->uuid)->get(),
-                        'ALL_TODO_LIST',
+                        'SHOW_TODO_LIST_TO_ADD_TODO', // $action_type
                         $current_page = 1
                     );
                 }
