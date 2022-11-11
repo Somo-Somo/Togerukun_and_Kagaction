@@ -81,9 +81,9 @@ class CreateTodoListCarouselColumns
         // Todoが何件あるか報告するメッセージ
         if ($current_page === 1) {
             if ($action_type === 'CHECK_TODO_BY_TODAY' || $action_type ===  'NOTIFY_TODO_CHECK') {
-                $todo_type = '今日までに遂げること';
+                $todo_type = '今日までに振り返ること';
             } elseif ($action_type === 'CHECK_TODO_BY_THIS_WEEK') {
-                $todo_type = '今週までに遂げること';
+                $todo_type = '今週までに振り返ること';
             } else {
                 $todo_type = 'プロジェクト:「' . $line_user->question->project->name . '」の遂げること';
             }
