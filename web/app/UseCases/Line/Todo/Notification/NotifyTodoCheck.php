@@ -34,11 +34,11 @@ class NotifyTodoCheck
 
     /**
      */
-    public function __construct(CreateTodoListCarouselColumns $create_todo_list_carousel_columns)
+    public function __construct()
     {
         $this->httpClient = new CurlHTTPClient(config('app.line_channel_access_token'));
         $this->bot = new LINEBot($this->httpClient, ['channelSecret' => config('app.line_channel_secret')]);
-        $this->create_todo_list_carousel_columns = $create_todo_list_carousel_columns;
+        $this->create_todo_list_carousel_columns = new CreateTodoListCarouselColumns();
     }
 
     /**
@@ -57,6 +57,8 @@ class NotifyTodoCheck
                 $query->orwhere('notification_date', 7)
                     ->orwhere('notification_date', $day_of_week);
             })->get();
+
+        Log::info((array)$recive_notification_users);
         if (count($recive_notification_users) > 0) {
             Log::info('has');
             foreach ($recive_notification_users as  $recive_notification_user) {
