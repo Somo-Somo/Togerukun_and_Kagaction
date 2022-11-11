@@ -15,10 +15,10 @@ use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 class OtherMenuCarouselContainerBuilder
 {
     const OTHER_MENUS = [
-        [
-            'text' => '🛠️ 使い方',
-            'postback_data' => 'action=&value='
-        ],
+        // [
+        //     'text' => '🛠️ 使い方',
+        //     'postback_data' => 'action=&value='
+        // ],
         [
             'text' => '🔔 通知の設定',
             'postback_data' => 'action=IF_YOU_WANT_TO_SET_UP_NOTIFY_CHECK_TODO&value='
