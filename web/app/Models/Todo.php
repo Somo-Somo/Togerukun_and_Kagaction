@@ -413,8 +413,8 @@ class Todo extends Model
      */
     public static function askTodoLimited(string $user_name, array $todo)
     {
-        $title = '「' . $todo['name'] . '」を遂げたか振り返る日';
-        $text = 'それでは' . $user_name . 'さんはいつ「' . $todo['name'] . '」を遂げたか振り返りますか?';
+        $title = '「' . $todo['name'] . '」を遂げることができたか振り返る日';
+        $text = 'それでは' . $user_name . 'さんはいつ「' . $todo['name'] . '」を遂げることができたか振り返りますか?';
         $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
         $builder->add(new TextMessageBuilder($text));
         $builder->add(
