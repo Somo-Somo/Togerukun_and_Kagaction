@@ -82,7 +82,7 @@ class CreateTodoListCarouselColumns
         if ($current_page === 1) {
             if ($action_type === 'CHECK_TODO_BY_TODAY' || $action_type ===  'NOTIFY_TODO_CHECK') {
                 $todo_type = '今日までに遂げること';
-            } elseif ($action_type === 'WEEKLY_TODO_LIST' ||  $action_type === 'CHECK_TODO_BY_THIS_WEEK') {
+            } elseif ($action_type === 'CHECK_TODO_BY_THIS_WEEK') {
                 $todo_type = '今週までに遂げること';
             } else {
                 $todo_type = 'プロジェクト:「' . $line_user->question->project->name . '」の遂げること';

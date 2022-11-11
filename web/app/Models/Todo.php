@@ -98,7 +98,6 @@ class Todo extends Model
     // TodoList 表示系
     const TODO_LIST = [
         'ALL_TODO_LIST' => true,
-        'WEEKLY_TODO_LIST' => true,
         'SHOW_TODO_LIST_TO_ADD_TODO' => true
     ];
 
@@ -370,15 +369,12 @@ class Todo extends Model
         ) {
             $title = '「' . $line_user->question->project->name . '」の遂げること一覧';
             $text =   'プロジェクト:「' . $line_user->question->project->name . '」の遂げることは' . count($line_user->todo) . '件です';
-        } else if (
-            $action_value === 'WEEKLY_TODO_LIST' ||
-            $action_value === 'CHECK_TODO_BY_THIS_WEEK'
-        ) {
-            $title = $line_user->name . 'さんの今週までに遂げること一覧';
-            $text = $line_user->name . 'さんの今週までに遂げることは' . count($todo_carousel_columns) . '件です';
+        } else if ($action_value === 'CHECK_TODO_BY_THIS_WEEK') {
+            $title = $line_user->name . 'さんの今週までに振り返ること一覧';
+            $text = $line_user->name . 'さんの今週までに振り返ることは' . count($todo_carousel_columns) . '件です';
         } else if ($action_value === 'CHECK_TODO_BY_TODAY') {
-            $title = $line_user->name . 'さんの今日までに遂げること一覧';
-            $text = $line_user->name . 'さんの今日までに遂げることは' . count($todo_carousel_columns) . '件です';
+            $title = $line_user->name . 'さんの今日までに振り返ること一覧';
+            $text = $line_user->name . 'さんの今日までに振り返ることは' . count($todo_carousel_columns) . '件です';
         }
         return ['title' => $title, 'text' => $text];
     }
@@ -539,10 +535,10 @@ class Todo extends Model
     {
         if ($action_type === 'ALL_TODO_LIST' || $action_type === 'SELECT_TODO_LIST_TO_CHECK') {
             $todo_type = 'プロジェクト:「' . $line_user->question->project->name . '」の遂げること';
-        } elseif ($action_type === 'WEEKLY_TODO_LIST' ||  $action_type === 'CHECK_TODO_BY_THIS_WEEK') {
-            $todo_type = '今週までに遂げること';
+        } elseif ($action_type === 'CHECK_TODO_BY_THIS_WEEK') {
+            $todo_type = '今週までに振り返ること';
         } elseif ($action_type === 'CHECK_TODO_BY_TODAY' || $action_type ===  'NOTIFY_TODO_CHECK') {
-            $todo_type = '今日までに遂げること';
+            $todo_type = '今日までに振り返ること';
         }
 
         $result_count_todo_list_text = '📝' . ' ' . $count_todo_list;
