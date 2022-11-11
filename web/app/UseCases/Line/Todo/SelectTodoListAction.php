@@ -80,25 +80,15 @@ class SelectTodoListAction
         $builder->add($flex_message);
 
         if (count($todo_list) === 0) {
-            $user_todo = Todo::where('user_uuid', $line_user->uuid)->first();
-            if ($user_todo) {
-                $carousel_text = '今週までにやることがありません。やること一覧からやることを追加してみてください！';
-                $actions = [
-                    new \LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder('やること一覧へ', 'action=ALL_TODO_LIST&page=1'),
-                ];
-                $carousel_column_template_builder = [new CarouselColumnTemplateBuilder(null, $carousel_text, null, $actions)];
-                $builder->add(new TemplateMessageBuilder('やること一覧へ', new CarouselTemplateBuilder($carousel_column_template_builder)));
-            } else {
-                $ask_goal_text = '「' . $line_user->project->first()->name . '」のゴールがありません！' . "\n" . '「' . $line_user->project->first()->name . '」で達成したいゴールを教えてください!';
-                $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($ask_goal_text));
-                $line_user->question->update(
-                    [
-                        'question_number' => LineUsersQuestion::GOAL,
-                        'parent_uuid' => $line_user->project->first()->uuid,
-                        'project_uuid' => $line_user->project->first()->uuid
-                    ]
-                );
-            }
+            $ask_goal_text = '「' . $line_user->project->first()->name . '」のゴールがありません！' . "\n" . '「' . $line_user->project->first()->name . '」で達成したいゴールを教えてください!';
+            $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($ask_goal_text));
+            $line_user->question->update(
+                [
+                    'question_number' => LineUsersQuestion::GOAL,
+                    'parent_uuid' => $line_user->project->first()->uuid,
+                    'project_uuid' => $line_user->project->first()->uuid
+                ]
+            );
         }
 
         $this->bot->replyMessage(

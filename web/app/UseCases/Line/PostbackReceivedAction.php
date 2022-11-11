@@ -116,7 +116,7 @@ class PostbackReceivedAction
 
         // まだプロジェクトが追加されていない場合
         if (count($line_user->project) === 0) {
-            $cannot_move_text = $line_user->name . "さんが現在取り組んでいること、またはこれから取り組もうとしていることを教えて頂かないとこの操作はできません。";
+            $cannot_move_text = $line_user->name . "さんが現在取り組んでいること、またはこれから取り組もうとしていることを教えて頂かないとこの操作はできません！";
             $ask_question_text = "現在、" . $line_user->name . "が取り組んでいること、またはこれから取り組もうとしていることを一つ教えてください！" . "\n" . "\n" . "例: 筋トレ";
             $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
             $builder->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($cannot_move_text));

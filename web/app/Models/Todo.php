@@ -393,7 +393,7 @@ class Todo extends Model
     {
         $carouselText =  '「' . $project->name . '」のやること一覧に戻りますか？';
         $actions = [
-            new PostbackTemplateActionBuilder('戻る', 'action=ALL_TODO_LIST&page=1'),
+            new PostbackTemplateActionBuilder('戻る', 'action=SHOW_TODO_LIST_TO_ADD_TODO&page=1'),
         ];
         $builder = new CarouselColumnTemplateBuilder(null, $carouselText, null, $actions);
         return $builder;
