@@ -5,6 +5,7 @@ namespace App\UseCases\Line\Todo;
 use App\Models\User;
 use App\Models\Todo;
 use App\Services\ComponentBuilder\AddTodoButtonComponentBuilder;
+use App\Services\ComponentBuilder\CheckTodoButtonComponentBuilder;
 use App\Services\ComponentBuilder\ChangeAndDeleteTodoButtonComponentBuilder;
 
 class IdentifyTodoCarouselButton
@@ -29,6 +30,10 @@ class IdentifyTodoCarouselButton
             $actions = ChangeAndDeleteTodoButtonComponentBuilder::createChangeAndDeleteTodoComponentButton($todo);
         } else if ($action_type === 'SHOW_TODO_LIST_TO_ADD_TODO') {
             $actions = AddTodoButtonComponentBuilder::createAddTodoComponentButton($todo);
+        } else if (
+            $action_type === 'CHECK_TODO_BY_TODAY' || $action_type === 'CHECK_TODO_BY_THIS_WEEK'
+        ) {
+            $actions = CheckTodoButtonComponentBuilder::createCheckTodoComponentButton($todo);
         }
         return $actions;
     }

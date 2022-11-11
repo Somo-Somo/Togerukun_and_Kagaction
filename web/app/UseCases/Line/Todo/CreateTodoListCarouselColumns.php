@@ -56,7 +56,6 @@ class CreateTodoListCarouselColumns
         }
 
         if (
-            $action_type === 'WEEKLY_TODO_LIST' ||
             $action_type === 'CHECK_TODO_BY_TODAY' ||
             $action_type === 'CHECK_TODO_BY_THIS_WEEK'
         ) {
@@ -66,7 +65,8 @@ class CreateTodoListCarouselColumns
                 ->get();
             foreach ($over_due_todo_list as $over_due_todo) {
                 if (count($over_due_todo->accomplish) === 0) {
-                    $todo_carousel_columns[] = Todo::createBubbleContainer($over_due_todo, $action_type);
+                    $actions = $this->identify_todo_carousel_button->invoke($over_due_todo, $action_type);
+                    $todo_carousel_columns[] = TodoCarouselContainerBuilder::createTodoBubbleContainer($over_due_todo, $actions);
                 }
             }
         }
