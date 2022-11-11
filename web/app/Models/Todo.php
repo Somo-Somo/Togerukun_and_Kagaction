@@ -346,7 +346,7 @@ class Todo extends Model
                     null, // 画像url
                     [
                         new PostbackTemplateActionBuilder('一覧を見る', 'action=ALL_TODO_LIST&page=1'),
-                        new PostbackTemplateActionBuilder('やることを追加する', 'action=SHOW_TODO_LIST_TO_ADD_TODO&page=1'),
+                        new PostbackTemplateActionBuilder('遂げることを追加する', 'action=SHOW_TODO_LIST_TO_ADD_TODO&page=1'),
                     ]
                 )
 
@@ -497,7 +497,7 @@ class Todo extends Model
      */
     public static function confirmDeleteTodo(Todo $todo)
     {
-        $text = '遂げること:「' . $todo->name . '」を削除してもよろしいですか？' . "\n" . '「' . $todo->name . '」を遂げるために設定したやることも全て削除されてしまいます。';
+        $text = '遂げること:「' . $todo->name . '」を削除してもよろしいですか？' . "\n" . '「' . $todo->name . '」を遂げるために設定した遂げることも全て削除されてしまいます。';
         $builder =
             new TemplateMessageBuilder(
                 '削除の確認',
