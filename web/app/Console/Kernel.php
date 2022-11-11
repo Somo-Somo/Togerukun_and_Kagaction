@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('command:running-heroku-and-neo4j')->hourlyAt('8');
+        $schedule->command('command:running-heroku-and-neo4j')->everyFifteenMinutes();
         $schedule->command('batch:line-bot-schedule')->hourly();
         $schedule->command('batch:update-habit-date')->daily();
     }
