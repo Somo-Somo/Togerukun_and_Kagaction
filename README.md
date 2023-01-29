@@ -42,5 +42,30 @@
 - 達成したい目標に対してやることをツリー上で管理できる
 - LINEでリマインドして日付も管理できる
 
+
+
 ![名称未設定のデザイン](https://user-images.githubusercontent.com/98217749/215308359-804d794d-7c07-430d-94fa-8a4ac72c2903.png)
+
+## 使用技術
+
+- Laravel@8.83.11
+- PostgreSQL 13.7
+- Neo4j DB Aura ver.4
+- Docker/Docker-compose
+- nginx 3.9
+
+* DBの構造はKagactionと同様
+
+
+
+## 機能一覧
+
+- ゴール作成・編集・削除
+- Todo 作成・編集・削除
+- 達成or未達成
+- 日付の設定
+- 今日まで・今週まで・未達成のTodoそれぞれ表示
+- リマインドの設定
+
+
 
